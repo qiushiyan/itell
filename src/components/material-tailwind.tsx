@@ -10,6 +10,11 @@ import {
 	Accordion,
 	AccordionHeader,
 	AccordionBody,
+	Avatar,
+	Menu,
+	MenuItem,
+	MenuList,
+	MenuHandler,
 } from "@material-tailwind/react";
 
 export {
@@ -22,4 +27,9 @@ export {
 	Accordion,
 	AccordionHeader,
 	AccordionBody,
+	Avatar,
+	Menu,
+	MenuItem,
+	MenuList,
+	MenuHandler,
 };

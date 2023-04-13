@@ -5,7 +5,6 @@ import { Button, Typography } from "@/components/material-tailwind";
 import Accordion from "@/components/ui/Accordion";
 import { cn, getYoutubeLinkFromEmbed } from "@/lib/utils";
 import Balancer from "react-wrap-balancer";
-import { BalancerProvider } from "./providers";
 import Steps from "./ui/Steps";
 
 const CustomLink = (props) => {
@@ -267,10 +266,8 @@ export function Mdx({ code }: MdxProps) {
 	const Component = useMDXComponent(code);
 
 	return (
-		<BalancerProvider>
-			<article className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none">
-				<Component components={components} />
-			</article>
-		</BalancerProvider>
+		<article className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none">
+			<Component components={components} />
+		</article>
 	);
 }

@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import SummaryDescription from "./SummaryDescription";
 import SummaryInput from "./SummaryInput";
 

@@ -1,5 +1,5 @@
 export interface ILocation {
-	module: number | undefined;
+	module: number;
 	chapter: number | undefined;
 	section: number | undefined;
 }

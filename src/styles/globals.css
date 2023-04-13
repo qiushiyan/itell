@@ -5,6 +5,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 p {
   @apply mb-4;
 }
@@ -42,3 +46,9 @@ table tr {
   @apply hover:bg-gray-100;
 }
 
+a[data-level="three"] {
+  padding-left: 8px;
+}
+a[data-level="four"] {
+  padding-left: 16px;
+}

@@ -15,8 +15,8 @@ export default function LeftSidebar({ moduleSections }: Props) {
 				{moduleSections.map((section) => {
 					return (
 						<li
-							className={cn("p-2 duration-100 transition-all", {
-								"rounded-md hover:bg-gray-100 hover:shadow-md":
+							className={cn("pl-2 py-2 transition ease-in-out duration-200", {
+								"rounded-md  hover:bg-gray-100 hover:shadow-md":
 									section.section !== undefined,
 								"hover:text-blue-600": section.section === undefined,
 							})}
@@ -25,9 +25,7 @@ export default function LeftSidebar({ moduleSections }: Props) {
 							<a href={`/${section.url}`}>
 								<Typography
 									variant={section.section === undefined ? "h6" : "small"}
-									className={cn("m-0 p-0", {
-										"pl-2": section.section !== undefined,
-									})}
+									className={"m-0 p-0"}
 								>
 									<Balancer>
 										{section.section

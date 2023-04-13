@@ -29,7 +29,10 @@ export default function CustomAccordion({ items }: Props) {
 		<Fragment>
 			{items.map((item, index) => (
 				<Accordion open={openedItems.includes(index)} key={item.title}>
-					<AccordionHeader onClick={() => handleOpen(index)}>
+					<AccordionHeader
+						onClick={() => handleOpen(index)}
+						className="text-left text-lg"
+					>
 						{item.title}
 					</AccordionHeader>
 					<AccordionBody>

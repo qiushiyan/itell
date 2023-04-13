@@ -1,13 +1,15 @@
+import { Metadata } from "next";
 import "../styles/globals.css";
 
-import { Metadata } from "next";
-import { ThemeProvider } from "@/components/material-tailwind";
-import SiteHeader from "@/components/SiteHeader";
-import { env } from "@/env.mjs";
+import AppProvider from "@/components/providers";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-	title: env.NEXT_PUBLIC_SITE_TITLE,
-	description: env.NEXT_PUBLIC_SITE_DESCRIPTION,
+	title: {
+		default: siteConfig.title,
+		template: `%s | ${siteConfig.title}`,
+	},
+	description: siteConfig.description,
 };
 
 export default function RootLayout({
@@ -25,10 +27,9 @@ export default function RootLayout({
 				/>
 			</head>
 			<body>
-				<SiteHeader />
-				<main className="px-6 md:px-10 lg:px-16">
-					<ThemeProvider>{children}</ThemeProvider>
-				</main>
+				<AppProvider>
+					<main>{children}</main>
+				</AppProvider>
 			</body>
 		</html>
 	);

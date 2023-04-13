@@ -1,6 +1,4 @@
-import { ILocation } from "@/types/location";
 import { Section } from "contentlayer/generated";
-import { groupby } from "./utils";
 import { SidebarSection } from "@/types/section";
 
 export default async function getModuleSections({

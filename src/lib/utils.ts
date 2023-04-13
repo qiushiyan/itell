@@ -1,3 +1,4 @@
+import { ILocation } from "@/types/location";
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -19,16 +20,35 @@ export const getYoutubeLinkFromEmbed = (url: string) => {
 	return url;
 };
 
-export const groupby = <T extends Object>(
-	arr: T[],
-	selector: (item: T) => string,
-): Record<string, T[]> => {
-	return arr.reduce((acc, cur) => {
-		const group = selector(cur);
-		if (!acc[group]) {
-			acc[group] = [];
-		}
-		acc[group].push(cur);
-		return acc;
-	}, {} as Record<string, T[]>);
+export const groupby = <
+	TData extends Object,
+	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+	TTransformer extends (arg: TData) => any = (arg: TData) => TData,
+>(
+	data: TData[],
+	selector: (item: TData) => string,
+	transformer?: TTransformer,
+) =>
+	data.reduce(
+		(acc, cur) => ({
+			...acc,
+			[selector(cur)]: (acc[selector(cur)] ?? []).concat(
+				transformer ? transformer(cur) : cur,
+			),
+		}),
+		{} as Record<string, ReturnType<TTransformer>[]>,
+	);
+
+const getSingleLocation = (s: string | undefined) => {
+	if (!s) return undefined;
+	const [_, number] = s.split("-");
+	return number ? Number(number) : undefined;
+};
+export const getLocationFromPathname = (path: string): Partial<ILocation> => {
+	const pathname = path.split("/");
+
+	const module = getSingleLocation(pathname[1]);
+	const chapter = getSingleLocation(pathname[2]);
+	const section = getSingleLocation(pathname[3]);
+	return { module, chapter, section };
 };
