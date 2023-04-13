@@ -6,6 +6,7 @@ import Accordion from "@/components/ui/Accordion";
 import { cn, getYoutubeLinkFromEmbed } from "@/lib/utils";
 import Balancer from "react-wrap-balancer";
 import Steps from "./ui/Steps";
+import { MotionDiv } from "./motion";
 
 const CustomLink = (props) => {
 	const href = props.href;
@@ -266,8 +267,14 @@ export function Mdx({ code }: MdxProps) {
 	const Component = useMDXComponent(code);
 
 	return (
-		<article className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none">
-			<Component components={components} />
-		</article>
+		<MotionDiv
+			initial={{ opacity: 0, y: 20 }}
+			animate={{ opacity: 1, y: 0 }}
+			exit={{ opacity: 0, y: 20 }}
+		>
+			<article className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none">
+				<Component components={components} />
+			</article>
+		</MotionDiv>
 	);
 }

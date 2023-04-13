@@ -9,6 +9,7 @@ import { ILocation } from "@/types/location";
 import { Fragment } from "react";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
+import { motion } from "framer-motion";
 
 export const generateStaticParams = async () => {
 	return allSections.map((section) => {
@@ -53,6 +54,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 							<Balancer className="text-3xl">{section.title}</Balancer>
 						</Typography>
 					</div>
+
 					<Mdx code={section.body.code} />
 				</section>
 
