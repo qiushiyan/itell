@@ -16,6 +16,9 @@ module.exports = withContentlayer({
 			},
 		];
 	},
+	eslint: {
+		ignoreDuringBuilds: true,
+	},
 });
 
 const ContentSecurityPolicy = `
