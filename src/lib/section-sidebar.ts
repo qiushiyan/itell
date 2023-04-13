@@ -1,5 +1,6 @@
 import { Section } from "contentlayer/generated";
 import { SidebarSection } from "@/types/section";
+import { sortSections } from "./utils";
 
 export default async function getModuleSections({
 	allSections,
@@ -18,5 +19,7 @@ export default async function getModuleSections({
 			url: section.url,
 		}));
 
-	return sections;
+	const sectionsSorted = sortSections(sections);
+
+	return sectionsSorted;
 }

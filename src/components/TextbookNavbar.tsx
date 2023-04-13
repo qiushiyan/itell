@@ -78,10 +78,13 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 			{modules.map((module) => {
 				const active = location && location.module === Number(module);
 				const firstChapter = moduleChapters[module][0].chapter;
+				const chapters = moduleChapters[module].sort(
+					(a, b) => a.chapter - b.chapter,
+				);
 				return (
 					<Dropdown
 						items={[
-							...moduleChapters[module].map((chapter) => ({
+							...chapters.map((chapter) => ({
 								label: `${chapter.chapter}. ${chapter.title}`,
 								url: chapter.url,
 							})),

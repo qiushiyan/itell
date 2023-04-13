@@ -1,4 +1,5 @@
 import { ILocation } from "@/types/location";
+import { SidebarSection } from "@/types/section";
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -51,4 +52,22 @@ export const getLocationFromPathname = (path: string): Partial<ILocation> => {
 	const chapter = getSingleLocation(pathname[2]);
 	const section = getSingleLocation(pathname[3]);
 	return { module, chapter, section };
+};
+
+export const sortSections = (sections: SidebarSection[]) => {
+	const sectionsSorted = sections.slice(0).sort((a, b) => {
+		if (a.chapter === b.chapter) {
+			if (!a.section) {
+				return -1;
+			}
+			if (!b.section) {
+				return 1;
+			}
+
+			return a.section - b.section;
+		}
+		return a.chapter - b.chapter;
+	});
+
+	return sectionsSorted;
 };
