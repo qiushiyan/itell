@@ -225,7 +225,7 @@ const CustomIFrame = ({
 					allowFullScreen
 				/>
 				{title && (
-					<Typography variant="h5" className="my-1">
+					<Typography variant="h5" className="m-0">
 						<Balancer as="div">{title}</Balancer>
 					</Typography>
 				)}

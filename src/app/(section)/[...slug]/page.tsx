@@ -10,6 +10,7 @@ import { Fragment } from "react";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import { motion } from "framer-motion";
+import getChapters from "@/lib/section-sidebar";
 
 export const generateStaticParams = async () => {
 	return allSections.map((section) => {
@@ -36,7 +37,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	}
 
 	const currentLocation = section.location as ILocation;
-	const moduleSections = await getModuleSections({
+	const chapters = await getChapters({
 		module: currentLocation.module,
 		allSections,
 	});
@@ -45,7 +46,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 		<Fragment>
 			<div className="max-w-7xl mx-auto grid grid-cols-12 gap-6">
 				<aside className="hidden md:block md:col-span-3 lg:col-span-2">
-					<LeftSidebar moduleSections={moduleSections} />
+					<LeftSidebar chapters={chapters} />
 				</aside>
 
 				<section className="col-span-12 md:col-span-9 lg:col-span-8">

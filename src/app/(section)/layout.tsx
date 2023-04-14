@@ -7,7 +7,7 @@ export default function SectionLayout({
 	return (
 		<>
 			<TextbookNavbar showProgress />
-			<div className="max-w-6xl mx-auto py-8 px-4">{children}</div>
+			<div className="max-w-7xl mx-auto py-8 px-8">{children}</div>
 		</>
 	);
 }

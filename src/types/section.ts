@@ -5,3 +5,10 @@ export type SidebarSection = {
 	section: number | undefined;
 	url: string;
 };
+
+export type Chapter = {
+	chapter: number;
+	title: string;
+	url: string;
+	sections: SidebarSection[];
+};

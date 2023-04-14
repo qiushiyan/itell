@@ -27,7 +27,7 @@ export const groupby = <
 	TTransformer extends (arg: TData) => any = (arg: TData) => TData,
 >(
 	data: TData[],
-	selector: (item: TData) => string,
+	selector: (item: TData) => string | number,
 	transformer?: TTransformer,
 ) =>
 	data.reduce(

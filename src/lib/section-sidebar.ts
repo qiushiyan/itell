@@ -1,8 +1,8 @@
 import { Section } from "contentlayer/generated";
-import { SidebarSection } from "@/types/section";
-import { sortSections } from "./utils";
+import { Chapter, SidebarSection } from "@/types/section";
+import { groupby, sortSections } from "./utils";
 
-export default async function getModuleSections({
+export default async function getChapters({
 	allSections,
 	module,
 }: {
@@ -21,5 +21,16 @@ export default async function getModuleSections({
 
 	const sectionsSorted = sortSections(sections);
 
-	return sectionsSorted;
+	const result = groupby(sectionsSorted, (section) => section.chapter);
+	const output: Chapter[] = [];
+	for (const [key, value] of Object.entries(result)) {
+		output.push({
+			chapter: Number(key),
+			title: value[0].title,
+			url: value[0].url,
+			sections: value.splice(1),
+		});
+	}
+
+	return output;
 }
