@@ -4,14 +4,11 @@ importers:
 
   .: {}
 
-  packages/app:
+  packages/client:
     dependencies:
       '@headlessui/react':
         specifier: ^1.7.13
         version: 1.7.13(react-dom@18.2.0)(react@18.2.0)
-      '@learlab/server':
-        specifier: workspace:^
-        version: link:../server
       '@material-tailwind/react':
         specifier: ^1.4.2
         version: 1.4.2(react-dom@18.2.0)(react@18.2.0)
@@ -118,18 +115,6 @@ importers:
       typescript:
         specifier: 5.0.2
         version: 5.0.2
-
-  packages/server:
-    dependencies:
-      '@trpc/server':
-        specifier: ^10.20.0
-        version: 10.20.0
-      superjson:
-        specifier: ^1.12.2
-        version: 1.12.2
-      zod:
-        specifier: ^3.21.4
-        version: 3.21.4
 
 packages:
 
