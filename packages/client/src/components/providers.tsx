@@ -14,7 +14,7 @@ export default function AppProvider({
 			<TRPCProvider>
 				<ThemeProvider>
 					<BalancerProvider>
-						<Toaster richColors />
+						<Toaster richColors visibleToasts={1} />
 						{children}
 					</BalancerProvider>
 				</ThemeProvider>

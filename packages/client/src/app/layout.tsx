@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import AppProvider from "@/components/providers";
 import { siteConfig } from "@/config/site";
 import { getServerAuthSession } from "@/lib/auth";
+import ShowToast from "@/components/toast";
 
 export const metadata: Metadata = {
 	title: {
@@ -29,6 +30,7 @@ export default function RootLayout({
 			</head>
 			<body>
 				<AppProvider>
+					<ShowToast />
 					<main>{children}</main>
 				</AppProvider>
 			</body>

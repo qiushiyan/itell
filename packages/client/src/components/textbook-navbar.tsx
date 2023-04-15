@@ -64,7 +64,6 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 
 	const handleSignin = async () => {
 		await signIn();
-		toast.success("Successfully logged in!");
 	};
 
 	useEffect(() => {
