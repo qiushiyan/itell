@@ -1,9 +1,13 @@
 import TextbookNavbar from "@/components/textbook-navbar";
+import { getServerAuthSession } from "@/lib/auth";
+import Link from "next/link";
 import { Fragment } from "react";
 
-export default function SectionLayout({
+export default async function SectionLayout({
 	children,
-}: { children: React.ReactNode }) {
+}: {
+	children: React.ReactNode;
+}) {
 	return (
 		<>
 			<TextbookNavbar showProgress />

@@ -1,10 +1,10 @@
 import { router } from "./utils";
-import HelloRouter from "./routers/hello.router";
-import { createAPIContext } from "./trpc-context";
+import { createTrpcContext } from "./trpc-context";
+import SummaryRouter from "./routers/summary.router";
 export const appRouter = router({
-	hello: HelloRouter,
+	summary: SummaryRouter,
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;
 
-export { createAPIContext };
+export { createTrpcContext };

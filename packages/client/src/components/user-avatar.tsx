@@ -12,7 +12,7 @@ import {
 } from "@/components/material-tailwind";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChartBarIcon, LogoutIcon } from "./icons";
+import { ChartBarIcon, ChevronDownIcon, LogoutIcon } from "./icons";
 import { Fragment, useState } from "react";
 import Dropdown from "./ui/Dropdown";
 
@@ -65,5 +65,12 @@ export default function UserAvatar({ user }: Props) {
 		);
 	}
 
-	return <Dropdown items={menuItems}>{UserDisplay}</Dropdown>;
+	return (
+		<Dropdown items={menuItems}>
+			<div className="flex items-center gap-2 cursor-pointer">
+				{UserDisplay}
+				<ChevronDownIcon className="w-5 h-5" />
+			</div>
+		</Dropdown>
+	);
 }

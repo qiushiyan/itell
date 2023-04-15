@@ -52,3 +52,10 @@ a[data-level="three"] {
 a[data-level="four"] {
   padding-left: 16px;
 }
+
+.inset-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -1,8 +1,11 @@
 import { env } from "@/env.mjs";
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import db from "@/lib/db";
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
+	adapter: PrismaAdapter(db),
 	secret: process.env.NEXTAUTH_SECRET,
 	providers: [
 		GoogleProvider({
@@ -11,10 +14,10 @@ export default NextAuth({
 		}),
 	],
 	callbacks: {
-		async signIn({ user, account, profile, email, credentials }) {
-			return true;
-		},
 		session({ session, user, token }) {
+			if (session.user) {
+				session.user.id = user.id;
+			}
 			return session;
 		},
 	},
@@ -38,4 +41,6 @@ export default NextAuth({
 			},
 		},
 	},
-});
+};
+
+export default NextAuth(authOptions);

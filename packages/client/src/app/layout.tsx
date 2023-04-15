@@ -3,6 +3,7 @@ import "../styles/globals.css";
 
 import AppProvider from "@/components/providers";
 import { siteConfig } from "@/config/site";
+import { getServerAuthSession } from "@/lib/auth";
 
 export const metadata: Metadata = {
 	title: {

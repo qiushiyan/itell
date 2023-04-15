@@ -1,8 +1,15 @@
+import { getApiAuthSession } from "@/lib/auth";
+import db from "@/lib/db";
 import { type inferAsyncReturnType } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
-export type APIContext = inferAsyncReturnType<typeof createAPIContext>;
+export const createTrpcContext = async (opts: CreateNextContextOptions) => {
+	const { req, res } = opts;
+	const session = await getApiAuthSession({ req, res });
 
-export const createAPIContext = async (opts: CreateNextContextOptions) => ({
-	...opts,
-});
+	return {
+		session,
+		prisma: db,
+	};
+};
+export type TrpcContext = inferAsyncReturnType<typeof createTrpcContext>;

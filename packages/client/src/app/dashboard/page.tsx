@@ -1,8 +1,7 @@
-import { Typography } from "@/components/material-tailwind";
+import DashboardStudent from "@/components/dashboard-student";
 import { delay } from "@/lib/utils";
 
-export default async function Dashboard() {
-	await delay(2000);
-
-	return <Typography>A good looking dashboard</Typography>;
+export default async function () {
+	await delay(1000);
+	return <DashboardStudent />;
 }

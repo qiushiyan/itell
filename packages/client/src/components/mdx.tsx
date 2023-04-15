@@ -267,14 +267,8 @@ export function Mdx({ code }: MdxProps) {
 	const Component = useMDXComponent(code);
 
 	return (
-		<MotionDiv
-			initial={{ opacity: 0, y: 20 }}
-			animate={{ opacity: 1, y: 0 }}
-			exit={{ opacity: 0, y: 20 }}
-		>
-			<article className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none">
-				<Component components={components} />
-			</article>
-		</MotionDiv>
+		<article className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none">
+			<Component components={components} />
+		</article>
 	);
 }

@@ -2,7 +2,11 @@ import type { Config } from "tailwindcss";
 import withMT from "@material-tailwind/react/utils/withMT";
 
 export default withMT({
-	content: ["./src/**/*.{js,jsx,ts,tsx}", "./content/**/*.{mdx,md}"],
+	content: [
+		"./src/**/*.{js,jsx,ts,tsx}",
+		"./content/**/*.{mdx,md}",
+		"./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
+	],
 	theme: {
 		extend: {
 			fontFamily: {

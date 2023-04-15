@@ -8,10 +8,17 @@ import { SectionLocation } from "@/types/location";
 import { Fragment } from "react";
 import { ModuleSidebar, TocSidebar } from "@/components/textbook-sidebar";
 import getChapters from "@/lib/section-sidebar";
+import SectionModal from "@/components/section-modal";
+import Link from "next/link";
+import { getServerAuthSession } from "@/lib/auth";
+import SectionPager from "@/components/section-pager";
+import { getPagerForSection } from "@/lib/pager";
 
 export const generateStaticParams = async () => {
 	return allSections.map((section) => {
-		return { slug: section._raw.flattenedPath.split("/") };
+		return {
+			slug: section._raw.flattenedPath.split("/"),
+		};
 	});
 };
 
@@ -25,15 +32,18 @@ export const generateMetadata = ({ params }) => {
 };
 
 export default async function ({ params }: { params: { slug: string[] } }) {
-	const section = allSections.find(
-		(section) => section._raw.flattenedPath === params.slug.join("/"),
+	const path = params.slug.join("/");
+	const sectionIndex = allSections.findIndex(
+		(section) => section._raw.flattenedPath === path,
 	);
 
-	if (!section) {
+	if (sectionIndex === -1) {
 		return notFound();
 	}
 
+	const section = allSections[sectionIndex];
 	const currentLocation = section.location as SectionLocation;
+	const pager = getPagerForSection({ allSections, index: sectionIndex });
 	const chapters = await getChapters({
 		module: currentLocation.module,
 		allSections,
@@ -42,6 +52,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	return (
 		<Fragment>
 			<div className="max-w-7xl mx-auto grid grid-cols-12 gap-6">
+				<SectionModal />
 				<aside className="hidden md:block md:col-span-3 lg:col-span-2">
 					<ModuleSidebar chapters={chapters} />
 				</aside>
@@ -54,6 +65,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					</div>
 
 					<Mdx code={section.body.code} />
+					<SectionPager pager={pager} />
 				</section>
 
 				<aside className="hidden lg:block lg:col-span-2">
