@@ -59,3 +59,11 @@ a[data-level="four"] {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+mark {
+  background: none;
+}
+
+.highlight {
+  @apply underline text-cyan-700;
+}

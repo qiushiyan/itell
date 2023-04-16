@@ -6,7 +6,6 @@ import Accordion from "@/components/ui/Accordion";
 import { cn, getYoutubeLinkFromEmbed } from "@/lib/utils";
 import Balancer from "react-wrap-balancer";
 import Steps from "./ui/Steps";
-import { MotionDiv } from "./motion";
 
 const CustomLink = (props) => {
 	const href = props.href;

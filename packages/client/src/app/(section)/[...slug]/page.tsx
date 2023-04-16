@@ -13,6 +13,8 @@ import Link from "next/link";
 import { getServerAuthSession } from "@/lib/auth";
 import SectionPager from "@/components/section-pager";
 import { getPagerForSection } from "@/lib/pager";
+import HighlightToolbar from "@/components/highlight-toolbar";
+import Spinner from "@/components/spinner";
 
 export const generateStaticParams = async () => {
 	return allSections.map((section) => {
@@ -51,20 +53,24 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 
 	return (
 		<Fragment>
-			<div className="max-w-7xl mx-auto grid grid-cols-12 gap-6">
+			<div className="max-w-7xl mx-auto grid grid-cols-12 gap-6 ">
 				<SectionModal />
 				<aside className="hidden md:block md:col-span-3 lg:col-span-2">
 					<ModuleSidebar chapters={chapters} />
 				</aside>
 
-				<section className="col-span-12 md:col-span-9 lg:col-span-8">
-					<div className="mb-4 text-center">
+				<section
+					className="col-span-12 md:col-span-9 lg:col-span-8"
+					id="section-content"
+				>
+					<div className="mb-4 text-center" id="section-title">
 						<Typography variant="h1">
 							<Balancer className="text-3xl">{section.title}</Balancer>
 						</Typography>
 					</div>
 
 					<Mdx code={section.body.code} />
+					<HighlightToolbar />
 					<SectionPager pager={pager} />
 				</section>
 

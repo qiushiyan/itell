@@ -21,12 +21,14 @@ export const authOptions: NextAuthOptions = {
 			return session;
 		},
 		redirect: async ({ url, baseUrl }) => {
+			const suffix = url.endsWith("?auth-redirect=true")
+				? ""
+				: "?auth-redirect=true";
 			// Allows relative callback URLs
-			if (url.startsWith("/")) return `${baseUrl}${url}?auth-redirect=true`;
+			if (url.startsWith("/")) return `${baseUrl}${url}${suffix}`;
 			// Allows callback URLs on the same origin
-			else if (new URL(url).origin === baseUrl)
-				return `${url}?auth-redirect=true`;
-			return `${baseUrl}?auth-redirect=true`;
+			else if (new URL(url).origin === baseUrl) return `${url}${suffix}`;
+			return `${baseUrl}${suffix}`;
 		},
 	},
 	cookies: {

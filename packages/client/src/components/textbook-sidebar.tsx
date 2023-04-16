@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { ChevronDownIcon } from "./icons";
 import { useLocation } from "@/lib/hooks";
+import Link from "next/link";
+import { PencilIcon, ArrowUpIcon } from "lucide-react";
 
 type ModuleSidebarProps = {
 	chapters: Chapter[];
@@ -94,10 +96,30 @@ type TocSidebarProps = {
 	headings: Heading[];
 };
 
+const AnchorLink = ({
+	text,
+	href,
+	icon,
+}: { text: string; href: string; icon: React.ReactNode }) => {
+	return (
+		<a
+			href={href}
+			className="flex gap-1 items-center hover:underline text-gray-800"
+		>
+			{icon}
+			<Typography variant="small" className="mb-0">
+				{text}
+			</Typography>
+		</a>
+	);
+};
+
 export function TocSidebar({ headings }: TocSidebarProps) {
 	return (
 		<div className="sticky top-20">
-			<Typography variant="small">ON THIS PAGE</Typography>
+			<Typography variant="small" className="text-gray-800">
+				ON THIS PAGE
+			</Typography>
 			<ul className="space-y-2">
 				{headings.map((heading) => (
 					<li key={heading.slug}>
@@ -111,6 +133,19 @@ export function TocSidebar({ headings }: TocSidebarProps) {
 					</li>
 				))}
 			</ul>
+
+			<div className="mt-16 flex flex-col gap-2">
+				<AnchorLink
+					icon={<PencilIcon className="w-4 h-4" />}
+					text="Write a Summary"
+					href="#section-summary"
+				/>
+				<AnchorLink
+					icon={<ArrowUpIcon className="w-4 h-4" />}
+					text="Back to Top"
+					href="#section-title"
+				/>
+			</div>
 		</div>
 	);
 }
