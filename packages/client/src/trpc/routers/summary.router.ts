@@ -1,17 +1,12 @@
+import { env } from "@/env.mjs";
 import { procedure, protecetdProcedure, router } from "../utils";
 import { z } from "zod";
+import { ZScore } from "@/lib/summary";
 
 const ZLocation = z.object({
 	module: z.number(),
 	section: z.number(),
 	chapter: z.number(),
-});
-
-const ZScore = z.object({
-	content: z.number(),
-	wording: z.number(),
-	similarity: z.number(),
-	contaiment: z.number(),
 });
 
 const SummaryRouter = router({
@@ -31,7 +26,22 @@ const SummaryRouter = router({
 				location: ZLocation,
 			}),
 		)
-		.query(({ ctx, input }) => {}),
+		.output(ZScore)
+		.mutation(async ({ input }) => {
+			const response = await fetch(`${env.SCORE_API_URL}/score`, {
+				method: "POST",
+				body: JSON.stringify({
+					summary: input.text,
+					chapter_index: input.location.chapter,
+					section_index: input.location.section,
+				}),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			const data = await response.json();
+			return ZScore.parse(data);
+		}),
 
 	create: protecetdProcedure
 		.input(
@@ -42,12 +52,11 @@ const SummaryRouter = router({
 				isPassed: z.boolean(),
 			}),
 		)
-		.mutation(({ ctx, input }) => {
+		.mutation(async ({ ctx, input }) => {
 			const { id } = ctx.user;
-			return ctx.prisma.summary.create({
+			return await ctx.prisma.summary.create({
 				data: {
 					text: input.text,
-					userId: id,
 					module: input.location.module,
 					chapter: input.location.chapter,
 					section: input.location.section,
@@ -55,7 +64,12 @@ const SummaryRouter = router({
 					content_score: input.score.content,
 					wording_score: input.score.wording,
 					similarity_score: input.score.similarity,
-					containment_score: input.score.contaiment,
+					containment_score: input.score.containment,
+					user: {
+						connect: {
+							id,
+						},
+					},
 				},
 			});
 		}),

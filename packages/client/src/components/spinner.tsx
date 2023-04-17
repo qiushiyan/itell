@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 type Props = {
 	className?: string;
 };
@@ -5,7 +7,7 @@ type Props = {
 export default function Spinner({ className }: Props) {
 	return (
 		<svg
-			className="w-12 h-12 animate-spin text-blue-500"
+			className={cn("w-12 h-12 animate-spin text-blue-600", className)}
 			viewBox="0 0 24 24"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

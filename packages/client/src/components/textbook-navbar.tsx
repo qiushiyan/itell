@@ -87,7 +87,10 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 				if (openNav) {
 					return (
 						<Fragment>
-							<div className="flex items-center gap-1 mb-2  text-blue-600">
+							<div
+								className="flex items-center gap-1 mb-2  text-blue-600"
+								key={module}
+							>
 								<Link href={moduleUrl} className="inline-flex">
 									<Button
 										variant={
@@ -121,6 +124,7 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 												"rounded-md hover:bg-gray-100 transition ease-in-out duration-100 p-2",
 												{ "bg-gray-100": location.chapter === chapter.chapter },
 											)}
+											key={chapter.chapter}
 										>
 											<Link href={chapter.url}>
 												<Typography

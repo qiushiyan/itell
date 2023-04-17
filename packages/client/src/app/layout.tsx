@@ -5,6 +5,7 @@ import AppProvider from "@/components/providers";
 import { siteConfig } from "@/config/site";
 import { getServerAuthSession } from "@/lib/auth";
 import ShowToast from "@/components/toast";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
 	title: {
@@ -30,7 +31,9 @@ export default function RootLayout({
 			</head>
 			<body>
 				<AppProvider>
-					<ShowToast />
+					<Suspense fallback={<p>placeholder</p>}>
+						<ShowToast />
+					</Suspense>
 					<main>{children}</main>
 				</AppProvider>
 			</body>

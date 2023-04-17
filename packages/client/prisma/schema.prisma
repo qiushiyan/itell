@@ -83,9 +83,9 @@ model Summary {
   section           Int
   isPassed          Boolean
   containment_score Float
-  content_score     Float
   similarity_score  Float
-  wording_score     Float
+  wording_score     Float?
+  content_score     Float?
   text              String
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt

@@ -45,7 +45,9 @@ export default function CustomAccordion({ items, defaultOpen }: Props) {
 						{item.title}
 					</AccordionHeader>
 					<AccordionBody>
-						<Typography as="div">{item.content}</Typography>
+						<Typography as="div" className="prose dark:prose-invert">
+							{item.content}
+						</Typography>
 					</AccordionBody>
 				</Accordion>
 			))}

@@ -34,7 +34,7 @@ export function ModuleSidebar({ chapters }: ModuleSidebarProps) {
 							"text-blue-600": chapter.chapter === location.chapter,
 						})}
 					>
-						<a href={`/${chapter.url}`} className="block mb-1 ">
+						<a href={`/${chapter.url}`} className="block mb-1">
 							<Typography variant="h6" className={cn("m-0 px-2 pr-1", {})}>
 								<Balancer>{chapter.title}</Balancer>
 							</Typography>
@@ -63,7 +63,7 @@ export function ModuleSidebar({ chapters }: ModuleSidebarProps) {
 							{chapter.sections.map((section) => (
 								<li
 									className={cn(
-										"px-2 py-2 transition ease-in-out duration-200 relative rounded-md hover:bg-gray-100",
+										"px-2 py-1 transition ease-in-out duration-200 relative rounded-md hover:bg-gray-100",
 										{
 											"bg-gray-100":
 												section.chapter === location.chapter &&
@@ -120,13 +120,21 @@ export function TocSidebar({ headings }: TocSidebarProps) {
 			<Typography variant="small" className="text-gray-800">
 				ON THIS PAGE
 			</Typography>
-			<ul className="space-y-2">
+			<ul>
 				{headings.map((heading) => (
-					<li key={heading.slug}>
+					<li
+						key={heading.slug}
+						className="font-light tracking-tighter line-clamp-2"
+					>
 						<a
 							data-level={heading.level}
 							href={`#${heading.slug}`}
-							className="font-light text-sm hover:underline inline-flex"
+							className={cn("hover:underline inline-flex ", {
+								"text-base mb-3": heading.level === "one",
+								"text-sm mb-2": heading.level === "two",
+								"text-gray-700 text-[0.8rem] mb-1 pl-2":
+									heading.level === "three",
+							})}
 						>
 							{heading.text}
 						</a>

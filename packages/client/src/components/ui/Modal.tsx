@@ -4,14 +4,16 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useRef } from "react";
 import { Button } from "../material-tailwind";
 import { Card } from "@material-tailwind/react";
+import { cn } from "@/lib/utils";
 
 type Props = {
 	open: boolean;
 	onClose?: () => void;
 	children: React.ReactNode;
+	className?: string;
 };
 
-export default function Modal({ open, onClose, children }: Props) {
+export default function Modal({ open, onClose, children, className }: Props) {
 	if (!open) {
 		return null;
 	}
@@ -47,7 +49,12 @@ export default function Modal({ open, onClose, children }: Props) {
 					{/* Container to center the panel */}
 					<div className="flex min-h-full items-center justify-center p-4">
 						{/* The actual dialog panel  */}
-						<Dialog.Panel className="mx-auto min-w-[400px] max-w-2xl rounded-md  bg-white shadow-md">
+						<Dialog.Panel
+							className={cn(
+								"mx-auto min-w-[400px] max-w-2xl rounded-md  bg-white shadow-md",
+								className,
+							)}
+						>
 							{children}
 						</Dialog.Panel>
 					</div>

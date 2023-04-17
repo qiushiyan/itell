@@ -6,6 +6,23 @@ import Accordion from "@/components/ui/Accordion";
 import { cn, getYoutubeLinkFromEmbed } from "@/lib/utils";
 import Balancer from "react-wrap-balancer";
 import Steps from "./ui/Steps";
+import Tabs from "./ui/Tabs";
+
+const Keyterm = ({
+	children,
+	label,
+}: { label: string; children: React.ReactNode }) => {
+	return (
+		<div className="border-2 px-4 py-2 rounded-md my-4">
+			<div className="border-blue-400 border-b font-bold ">
+				<Typography variant="h6">{label}</Typography>
+			</div>
+			<div className="">
+				<Typography variant="div">{children}</Typography>
+			</div>
+		</div>
+	);
+};
 
 const CustomLink = (props) => {
 	const href = props.href;
@@ -149,7 +166,7 @@ const Info = ({
 	</div>
 );
 
-const Warning = ({ children }) => (
+export const Warning = ({ children }) => (
 	<div className="border-l-4 border-orange-400 bg-orange-50 px-4 py-2">
 		<div className="ml-3">{children}</div>
 	</div>
@@ -162,6 +179,7 @@ const TextOverImage = ({
 	height = 400,
 	alt = "Card Image",
 	rounded = true,
+	priority = false,
 }: {
 	src: string;
 	children: React.ReactNode;
@@ -169,6 +187,7 @@ const TextOverImage = ({
 	width?: number;
 	height?: number;
 	rounded?: boolean;
+	priority?: boolean;
 }) => {
 	return (
 		<div className="flex justify-center items-center relative group">
@@ -177,6 +196,7 @@ const TextOverImage = ({
 				alt={alt}
 				width={width}
 				height={height}
+				priority={priority}
 				className={cn(
 					"blur-sm group-hover:blur-md transition-all duration-100 object-cover",
 					{
@@ -256,6 +276,8 @@ const components = {
 	Info,
 	Warning,
 	Steps,
+	Tabs,
+	Keyterm,
 };
 
 interface MdxProps {

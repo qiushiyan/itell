@@ -10,6 +10,7 @@ const server = z.object({
 	GOOGLE_CLIENT_SECRET: z.string(),
 	NEXTAUTH_URL: z.string(),
 	NEXTAUTH_SECRET: z.string(),
+	SCORE_API_URL: z.string(),
 });
 
 /**
@@ -30,6 +31,7 @@ const processEnv = {
 	GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 	NEXTAUTH_URL: process.env.NEXTAUTH_URL,
 	NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+	SCORE_API_URL: process.env.SCORE_API_URL,
 };
 
 // Don't touch the part below

@@ -52,7 +52,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	});
 
 	return (
-		<Fragment>
+		<div>
 			<div className="max-w-7xl mx-auto grid grid-cols-12 gap-6 ">
 				<SectionModal />
 				<aside className="hidden md:block md:col-span-3 lg:col-span-2">
@@ -80,6 +80,6 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 			</div>
 
 			<Summary />
-		</Fragment>
+		</div>
 	);
 }
