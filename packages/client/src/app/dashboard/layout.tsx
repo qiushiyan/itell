@@ -27,14 +27,20 @@ export default async function DashboardLayout({
 					<Fragment>
 						<TextbookNavbar />
 
-						<div className="max-w-6xl mx-auto py-8 px-4">{teacher}</div>
+						<div className="max-w-6xl mx-auto py-8 px-4">
+							{children}
+							{teacher}
+						</div>
 					</Fragment>
 				);
 			} else {
 				return (
 					<Fragment>
 						<TextbookNavbar />
-						<div className="max-w-6xl mx-auto py-8 px-4">{student}</div>
+						<div className="max-w-6xl mx-auto py-8 px-4">
+							{children}
+							{student}
+						</div>
 					</Fragment>
 				);
 			}

@@ -13,7 +13,7 @@ export default function ({ pager }: Props) {
 			{pager.prev && (
 				<Link
 					href={pager.prev.href}
-					className="inline-flex items-center justify-center rounded-lg border border-transparent bg-transparent py-2 px-3 text-center  font-medium text-slate-900 hover:border-slate-200 hover:bg-slate-100 focus:z-10 focus:outline-none focus:ring-4 focus:ring-slate-200 md:w-full"
+					className="inline-flex items-center justify-start rounded-lg border border-transparent bg-transparent py-2 px-3 text-center font-medium text-slate-900 hover:border-slate-200 hover:bg-slate-100 focus:z-10 focus:outline-none focus:ring-4 focus:ring-slate-200 md:w-full"
 				>
 					<ChevronLeft />
 					<Balancer>{pager.prev.title}</Balancer>
@@ -22,7 +22,7 @@ export default function ({ pager }: Props) {
 			{pager?.next && (
 				<Link
 					href={pager.next.href}
-					className="ml-auto inline-flex items-center justify-center rounded-lg border border-transparent bg-transparent py-2 px-3 text-center font-medium text-slate-900 hover:border-slate-200 hover:bg-slate-100 focus:z-10 focus:outline-none focus:ring-4 focus:ring-slate-200 md:w-full"
+					className="ml-auto inline-flex items-center justify-end rounded-lg border border-transparent bg-transparent py-2 px-3 text-center font-medium text-slate-900 hover:border-slate-200 hover:bg-slate-100 focus:z-10 focus:outline-none focus:ring-4 focus:ring-slate-200 md:w-full"
 				>
 					<Balancer>{pager.next.title}</Balancer>
 					<ChevronRight className="ml-2 h-4 w-4" />

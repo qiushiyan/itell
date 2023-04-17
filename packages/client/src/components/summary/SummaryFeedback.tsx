@@ -33,8 +33,8 @@ export default function Feedback({ feedback }: Props) {
 						}
 						return (
 							individualFeedback.prompt && (
-								<p>
-									<span style={{ textTransform: "capitalize" }} key={key}>{`${
+								<p key={key}>
+									<span style={{ textTransform: "capitalize" }}>{`${
 										individualFeedback.isPassed ? "✅" : "❌"
 									} ${label}: `}</span>
 									{feedback.individualPrompt[key].prompt}

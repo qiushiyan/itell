@@ -26,9 +26,5 @@ export default async function () {
 
 	const summariesByModule = groupby(user.Summary, (summary) => summary.module);
 
-	return (
-		<div>
-			<DashboardStudentSummaries summariesByModule={summariesByModule} />
-		</div>
-	);
+	return <DashboardStudentSummaries summariesByModule={summariesByModule} />;
 }

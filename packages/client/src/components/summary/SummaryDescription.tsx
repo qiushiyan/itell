@@ -52,7 +52,7 @@ const accordionItems: AccordionItem[] = [
 
 export default function SummaryDescription() {
 	return (
-		<div className="w-1/2">
+		<div className="lg:w-1/2">
 			<Typography variant="lead">
 				Write your summary for this section
 			</Typography>
