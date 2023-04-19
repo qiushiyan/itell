@@ -17,10 +17,28 @@ const Keyterm = ({
 			<div className="border-blue-400 border-b font-bold ">
 				<Typography variant="h6">{label}</Typography>
 			</div>
-			<div className="">
-				<Typography variant="div">{children}</Typography>
-			</div>
+			<Typography as="div">{children}</Typography>
 		</div>
+	);
+};
+
+const Caption = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<Typography
+			as="div"
+			variant="small"
+			className="max-w-2xl mx-auto text-center"
+		>
+			{children}
+		</Typography>
+	);
+};
+
+const Callout = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<Typography as="div" className="text-xl max-w-lg mx-auto">
+			{children}
+		</Typography>
 	);
 };
 
@@ -88,15 +106,6 @@ function RoundedImage({
 				<Balancer as="div">{children}</Balancer>
 			</figcaption>
 		</figure>
-	);
-}
-
-function Callout(props: { emoji: React.ReactNode; children: React.ReactNode }) {
-	return (
-		<div className="flex bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-md p-4 my-8">
-			<div className="flex items-center w-4 mr-4">{props.emoji}</div>
-			<div className="w-full callout">{props.children}</div>
-		</div>
 	);
 }
 
@@ -278,6 +287,7 @@ const components = {
 	Steps,
 	Tabs,
 	Keyterm,
+	Caption,
 };
 
 interface MdxProps {

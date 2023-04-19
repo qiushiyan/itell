@@ -4,7 +4,7 @@ import { Typography } from "@/components/material-tailwind";
 
 const accordionItems: AccordionItem[] = [
 	{
-		title: "What makes a good summary",
+		label: "What makes a good summary",
 		content: (
 			<>
 				<p>A successful summary will</p>
@@ -16,7 +16,7 @@ const accordionItems: AccordionItem[] = [
 		),
 	},
 	{
-		title: "Scording details",
+		label: "Scording details",
 		content: (
 			<>
 				<p>

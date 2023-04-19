@@ -37,12 +37,12 @@ export default function CustomAccordion({ items, defaultOpen }: Props) {
 	return (
 		<Fragment>
 			{items.map((item, index) => (
-				<Accordion open={openedItems.includes(index)} key={item.title}>
+				<Accordion open={openedItems.includes(index)} key={item.label}>
 					<AccordionHeader
 						onClick={() => handleOpen(index)}
 						className="text-left text-lg"
 					>
-						{item.title}
+						{item.label}
 					</AccordionHeader>
 					<AccordionBody>
 						<Typography as="div" className="prose dark:prose-invert">
