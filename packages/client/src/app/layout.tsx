@@ -31,7 +31,7 @@ export default function RootLayout({
 			</head>
 			<body>
 				<AppProvider>
-					<Suspense fallback={<p>placeholder</p>}>
+					<Suspense fallback={null}>
 						<ShowToast />
 					</Suspense>
 					<main>{children}</main>

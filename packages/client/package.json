@@ -37,6 +37,7 @@
     "react-dom": "18.2.0",
     "react-text-selection-popover": "^2.0.2",
     "react-wrap-balancer": "^0.4.0",
+    "react-xarrows": "^2.0.2",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-katex": "^6.0.2",
     "rehype-slug": "^5.1.0",

@@ -9,21 +9,27 @@ import { useClickOutside, useNotes } from "@/lib/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDeleteModal from "./note-delete-modal";
-import {
-	emphasizeText,
-	highlightText,
-	unHighlightText,
-	unemphasizeText,
-} from "@/lib/note";
+import { emphasizeText, unHighlightText, unemphasizeText } from "@/lib/note";
 import { cn, relativeDate } from "@/lib/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "./spinner";
 import { Transition } from "@headlessui/react";
+import Xarrow, { xarrowPropsType } from "react-xarrows";
+
+const arrowStyle: Partial<xarrowPropsType> = {
+	strokeWidth: 2,
+	headColor: "#c084fc",
+	lineColor: "#c084fc",
+};
 
 interface Props extends NoteCard {
 	location: SectionLocation;
 }
 
+// existing notes are wrapped in <mark class = "highlight"> </mark>
+// on mouse enter, add class = "emphasize"
+// on delete add class = "unhighlighted"
+// styles are in global.css
 export default function NoteCard({
 	id,
 	y,
@@ -36,6 +42,7 @@ export default function NoteCard({
 	const target = useRef<HTMLElement>();
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const { deleteNote: deleteContextNote } = useNotes();
+	const [showArrow, setShowArrow] = useState(false);
 	const [collapsed, setCollapsed] = useState(true);
 	const [editting, setEditting] = useState(!id);
 	const [text, setText] = useState(noteText);
@@ -79,19 +86,29 @@ export default function NoteCard({
 		setEditting(false);
 	};
 
-	const handleDelete = async (e: FormEvent) => {
-		e.preventDefault();
-		setShowDeleteModal(true);
+	const handleDelete = async () => {
+		if (id) {
+			deleteContextNote(id);
+			await deleteNote.mutateAsync({ id });
+			if (target.current) {
+				unHighlightText(target.current, highlightedText);
+			}
+			setShowDeleteModal(false);
+			setEditting(false);
+			setShowArrow(false);
+		}
 	};
 
 	const triggers = {
 		onMouseEnter: () => {
 			if (target.current) {
+				setShowArrow(true);
 				emphasizeText(target.current, highlightedText);
 			}
 		},
 		onMouseLeave: () => {
 			if (target.current) {
+				setShowArrow(false);
 				unemphasizeText(target.current, highlightedText);
 			}
 		},
@@ -107,6 +124,9 @@ export default function NoteCard({
 				ref={outsideRef}
 				{...triggers}
 			>
+				{showArrow && (
+					<Xarrow end={"emphasized"} start={outsideRef} {...arrowStyle} />
+				)}
 				<div>
 					<button
 						className="flex w-full rounded-md text-xs normal-case justify-between px-4 py-2 text-left font-medium text-purple-900 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
@@ -152,7 +172,10 @@ export default function NoteCard({
 												type="submit"
 												disabled={isLoading}
 												className="flex items-center gap-1 text-purple-400 hover:text-purple-800"
-												onClick={handleDelete}
+												onClick={(e) => {
+													e.preventDefault();
+													setShowDeleteModal(true);
+												}}
 											>
 												<DeleteIcon />
 											</button>
@@ -201,17 +224,7 @@ export default function NoteCard({
 			<NoteDeleteModal
 				show={showDeleteModal}
 				onClose={() => setShowDeleteModal(false)}
-				onDelete={async () => {
-					if (id) {
-						deleteContextNote(id);
-						await deleteNote.mutateAsync({ id });
-						if (target.current) {
-							unHighlightText(target.current, highlightedText);
-						}
-						setShowDeleteModal(false);
-						setEditting(false);
-					}
-				}}
+				onDelete={handleDelete}
 			/>
 		</Fragment>
 	);

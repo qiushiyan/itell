@@ -63,12 +63,16 @@ mark {
   background: none;
 }
 
-.highlight {
+mark .unhighlighted {
+  @apply text-black font-normal !important;
+}
+
+mark.highlight {
   @apply text-purple-500;
 }
 
-.highlight.emphasized {
-  @apply border border-purple-500 border-dashed font-bold
+mark.emphasized {
+  @apply text-purple-800 font-bold
 }
 
 
