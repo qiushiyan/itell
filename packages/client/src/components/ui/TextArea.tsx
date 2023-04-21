@@ -18,7 +18,7 @@ export default function TextArea({
 	value,
 	setValue,
 	autoFocus = false,
-	autoHeight = true,
+	autoHeight = false,
 	...props
 }: TextAreaProps) {
 	const ref = useRef<HTMLTextAreaElement>(null);

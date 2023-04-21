@@ -1,16 +1,24 @@
 "use client";
 
-import { Button, Typography } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import TextArea from "./ui/TextArea";
-import { PencilIcon } from "lucide-react";
+import { ChevronUpIcon, DeleteIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
 import { useClickOutside, useNotes } from "@/lib/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDeleteModal from "./note-delete-modal";
-import { unHighlightText } from "@/lib/note";
-import { relativeDate } from "@/lib/utils";
+import {
+	emphasizeText,
+	highlightText,
+	unHighlightText,
+	unemphasizeText,
+} from "@/lib/note";
+import { cn, relativeDate } from "@/lib/utils";
+import { ForwardIcon } from "lucide-react";
+import Spinner from "./spinner";
+import { Transition } from "@headlessui/react";
 
 interface Props extends NoteCard {
 	location: SectionLocation;
@@ -24,18 +32,19 @@ export default function NoteCard({
 	location,
 	updated_at,
 	created_at,
-	open = false,
 }: Props) {
 	const target = useRef<HTMLElement>();
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const { deleteNote: deleteContextNote } = useNotes();
-	const [editting, setEditting] = useState(open);
+	const [collapsed, setCollapsed] = useState(true);
+	const [editting, setEditting] = useState(!id);
 	const [text, setText] = useState(noteText);
 	const updateNote = trpc.note.update.useMutation();
 	const createNote = trpc.note.create.useMutation();
 	const deleteNote = trpc.note.delete.useMutation();
-	const ref = useClickOutside<HTMLDivElement>(() => {
+	const outsideRef = useClickOutside<HTMLDivElement>(() => {
 		setEditting(false);
+		setCollapsed(true);
 	});
 
 	useEffect(() => {
@@ -75,72 +84,119 @@ export default function NoteCard({
 		setShowDeleteModal(true);
 	};
 
+	const triggers = {
+		onMouseEnter: () => {
+			if (target.current) {
+				emphasizeText(target.current, highlightedText);
+			}
+		},
+		onMouseLeave: () => {
+			if (target.current) {
+				unemphasizeText(target.current, highlightedText);
+			}
+		},
+	};
+
 	return (
 		<Fragment>
 			<div
-				className={"absolute rounded-lg z-10 w-64 bg-gray-50 border"}
+				className={
+					"absolute z-10 w-64 rounded-md border border-purple-500 bg-white"
+				}
 				style={{ top: y }}
-				ref={ref}
+				ref={outsideRef}
+				{...triggers}
 			>
-				{editting ? (
-					<div className="p-2">
-						{(updated_at || created_at) && (
-							<p className="text-xs tracking-tight text-gray-500 mb-1">
-								updated at {relativeDate((updated_at || created_at) as Date)}
-							</p>
-						)}
-						<form>
-							<TextArea
-								placeholder="leave a note here"
-								value={text}
-								setValue={(val) => setText(val)}
-								autoFocus
-								autoHeight
-							/>
-							<footer className="flex justify-between items-center gap-1">
-								{id && (
-									<Button
-										size="sm"
-										type="submit"
-										disabled={isLoading}
-										className="flex items-center gap-1"
-										variant="text"
-										onClick={handleDelete}
-									>
-										X
-									</Button>
-								)}
-								{isUnsaved && (
-									<p className="text-xs tracking-tight text-gray-400 mb-0">
-										unsaved
-									</p>
-								)}
-								<Button
-									size="sm"
-									type="submit"
-									disabled={isLoading}
-									className="flex items-center gap-1"
-									variant="outlined"
-									onClick={handleSubmit}
-								>
-									{createNote.isLoading || updateNote.isLoading
-										? "Saving..."
-										: "Save"}
-								</Button>
-							</footer>
-						</form>
-					</div>
-				) : (
-					<Button
-						className="flex w-48 justify-between items-center  rounded-lg bg-purple-100/80 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
-						onClick={() => setEditting(true)}
+				<div>
+					<button
+						className="flex w-full rounded-md text-xs normal-case justify-between px-4 py-2 text-left font-medium text-purple-900 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
+						onClick={() => {
+							setCollapsed((c) => !c);
+							if (!id) {
+								setEditting(true);
+							} else {
+								setEditting(false);
+							}
+						}}
 					>
-						<span className="line-clamp-1 text-xs normal-case">
-							{text || "Note"}
-						</span>
-						<PencilIcon className="h-5 w-5 text-purple-500" />
-					</Button>
-				)}
+						<span className=" line-clamp-1">{text || "Note"}</span>
+						<ChevronUpIcon
+							className={`${
+								collapsed ? "rotate-180 transform" : ""
+							} h-5 w-5 text-purple-500`}
+						/>
+					</button>
+					<Transition
+						show={!collapsed}
+						enter="transition duration-100 ease-out"
+						enterFrom="transform scale-95 opacity-0"
+						enterTo="transform scale-100 opacity-100"
+						leave="transition duration-75 ease-out"
+						leaveFrom="transform scale-100 opacity-100"
+						leaveTo="transform scale-95 opacity-0"
+					>
+						<div className="px-4 text-sm mt-1 text-gray-800">
+							{editting ? (
+								<form>
+									<TextArea
+										className="text-sm"
+										placeholder="leave a note here"
+										rows={6}
+										value={text}
+										setValue={(val) => setText(val)}
+										autoFocus
+									/>
+									<footer className="flex justify-between items-center gap-1">
+										{id && (
+											<button
+												type="submit"
+												disabled={isLoading}
+												className="flex items-center gap-1 text-purple-400 hover:text-purple-800"
+												onClick={handleDelete}
+											>
+												<DeleteIcon />
+											</button>
+										)}
+										{isUnsaved && (
+											<span className="text-xs tracking-tight mb-0">
+												unsaved
+											</span>
+										)}
+										<button
+											type="submit"
+											disabled={isLoading}
+											className={cn(
+												"flex items-center text-purple-400 p-2 rounded-md",
+												"hover:text-purple-800",
+											)}
+											onClick={handleSubmit}
+										>
+											{updateNote.isLoading || createNote.isLoading ? (
+												<Spinner className="w-5 h-5" />
+											) : (
+												<ForwardIcon />
+											)}
+										</button>
+									</footer>
+								</form>
+							) : (
+								<Button
+									variant="text"
+									onClick={() => setEditting(true)}
+									fullWidth
+									className="text-left font-normal text-xs text-black py-4 px-2 normal-case hover:bg-purple-50"
+								>
+									<p className="mb-0 tracking-tight">{text}</p>
+								</Button>
+							)}
+							{(updated_at || created_at) && (
+								<p className="text-xs tracking-tight text-gray-500 text-right mt-2">
+									updated at {relativeDate((updated_at || created_at) as Date)}
+								</p>
+							)}
+						</div>
+					</Transition>
+				</div>
 			</div>
 			<NoteDeleteModal
 				show={showDeleteModal}

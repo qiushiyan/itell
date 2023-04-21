@@ -21,7 +21,6 @@ export default function NoteProvider({ children }) {
 				y: note.y,
 				highlightedText: note.highlightedText,
 				noteText: note.noteText,
-				open: false,
 				id: note.id,
 				updated_at: note.updated_at,
 				created_at: note.created_at,
@@ -36,7 +35,6 @@ export default function NoteProvider({ children }) {
 				y,
 				highlightedText,
 				noteText: "",
-				open: true,
 			},
 		]);
 	};

@@ -64,7 +64,11 @@ mark {
 }
 
 .highlight {
-  @apply text-cyan-700 underline;
+  @apply text-purple-500;
+}
+
+.highlight.emphasized {
+  @apply border border-purple-500 border-dashed font-bold
 }
 
 
