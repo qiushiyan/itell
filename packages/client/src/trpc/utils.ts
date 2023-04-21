@@ -1,6 +1,7 @@
 import superjson from "superjson";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { TrpcContext } from "./trpc-context";
+import { z } from "zod";
 // Avoid exporting the entire t-object
 // since it's not very descriptive.
 // For instance, the use of a t variable
@@ -25,3 +26,9 @@ const isAuthed = t.middleware(({ next, ctx }) => {
 export const router = t.router;
 export const procedure = t.procedure;
 export const protecetdProcedure = t.procedure.use(isAuthed);
+
+export const ZLocation = z.object({
+	module: z.number(),
+	chapter: z.number(),
+	section: z.number().optional(),
+});

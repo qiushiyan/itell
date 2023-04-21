@@ -10,9 +10,7 @@ import {
 	Typography,
 } from "@material-tailwind/react";
 import { Summary } from "@prisma/client";
-import Link from "next/link";
 import { useState } from "react";
-import Modal from "./ui/Modal";
 import SummaryModal from "./sumary-modal";
 
 type Props = {
@@ -21,7 +19,6 @@ type Props = {
 
 const SummaryCard = ({ summary }: { summary: Summary }) => {
 	const [open, setOpen] = useState(false);
-
 	return (
 		// rome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
 		<div

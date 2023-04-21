@@ -15,7 +15,7 @@ model Account {
   userId            String
   type              String
   provider          String
-  providerAccountId String
+  providerAccountId String  @map("provider_account_id")
   refresh_token     String?
   access_token      String?
   expires_at        Int?
@@ -27,6 +27,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@map("accounts")
 }
 
 model Session {
@@ -35,22 +36,31 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
 }
 
 model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
-  emailVerified DateTime?
+  emailVerified DateTime? @map("email_verified")
   image         String?
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
-  accounts      Account[]
-  sessions      Session[]
-  Teacher       Teacher?  @relation(fields: [teacherId], references: [id])
-  is_teacher    Boolean   @default(false)
-  teacherId     String?
-  Summary       Summary[]
+  module        Int       @default(1)
+  chapter       Int?      @default(1)
+  section       Int?      @default(2)
+
+  accounts   Account[]
+  sessions   Session[]
+  Teacher    Teacher?  @relation(fields: [teacherId], references: [id])
+  is_teacher Boolean   @default(false)
+  teacherId  String?
+  summaries  Summary[]
+  notes      Note[]
+
+  @@map("users")
 }
 
 model VerificationToken {
@@ -59,6 +69,7 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@map("verification_tokens")
 }
 
 model Teacher {
@@ -71,13 +82,15 @@ model Teacher {
   updated_at DateTime @updatedAt
   User       User[]
   token      String
+
+  @@map("teachers")
 }
 
 model Summary {
   id   String @id @default(uuid())
-  user User   @relation(fields: [userId], references: [id])
+  user User   @relation(fields: [user_id], references: [id])
 
-  userId            String
+  user_id           String
   module            Int
   chapter           Int
   section           Int
@@ -89,4 +102,23 @@ model Summary {
   text              String
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
+
+  @@map("summaries")
+}
+
+model Note {
+  id              String   @id @default(uuid())
+  y               Float
+  noteText        String
+  highlightedText String
+  module          Int
+  chapter         Int
+  section         Int
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+
+  @@map("notes")
 }

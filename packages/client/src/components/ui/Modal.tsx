@@ -1,65 +1,81 @@
 "use client";
 
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useRef } from "react";
-import { Button } from "../material-tailwind";
-import { Card } from "@material-tailwind/react";
+import { Fragment } from "react";
 import { cn } from "@/lib/utils";
 
 type Props = {
 	open: boolean;
+	title: string;
 	onClose?: () => void;
+	onAction?: () => void;
 	children: React.ReactNode;
 	className?: string;
 };
 
-export default function Modal({ open, onClose, children, className }: Props) {
+export default function Modal({
+	open,
+	onClose,
+	children,
+	className,
+	title,
+}: Props) {
 	if (!open) {
 		return null;
 	}
 
-	const handleClose = () => {
+	const handleClose = (val: boolean) => {
 		if (onClose) {
 			onClose();
 		}
 	};
 
 	return (
-		<Transition
-			show={open}
-			enter="transition duration-100 ease-out"
-			enterFrom="transform scale-95 opacity-0"
-			enterTo="transform scale-100 opacity-100"
-			leave="transition duration-75 ease-out"
-			leaveFrom="transform scale-100 opacity-100"
-			leaveTo="transform scale-95 opacity-0"
-			as={Fragment}
-		>
-			<Dialog
-				open={open}
-				// disable the backdrop click to close
-				onClose={handleClose}
-				className="relative z-50"
-			>
-				{/* The backdrop, rendered as a fixed sibling to the panel container */}
-				<div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+		<>
+			<Transition appear show={open} as={Fragment}>
+				<Dialog as="div" className="relative z-10" onClose={handleClose}>
+					<Transition.Child
+						as={Fragment}
+						enter="ease-out duration-300"
+						enterFrom="opacity-0"
+						enterTo="opacity-100"
+						leave="ease-in duration-200"
+						leaveFrom="opacity-100"
+						leaveTo="opacity-0"
+					>
+						<div className="fixed inset-0 bg-black bg-opacity-25" />
+					</Transition.Child>
 
-				{/* Full-screen scrollable container */}
-				<div className="fixed inset-0 overflow-y-auto">
-					{/* Container to center the panel */}
-					<div className="flex min-h-full items-center justify-center p-4">
-						{/* The actual dialog panel  */}
-						<Dialog.Panel
-							className={cn(
-								"mx-auto min-w-[400px] max-w-2xl rounded-md  bg-white shadow-md",
-								className,
-							)}
-						>
-							{children}
-						</Dialog.Panel>
+					<div className="fixed inset-0 overflow-y-auto">
+						<div className="flex min-h-full items-center justify-center p-4 text-center">
+							<Transition.Child
+								as={Fragment}
+								enter="ease-out duration-300"
+								enterFrom="opacity-0 scale-95"
+								enterTo="opacity-100 scale-100"
+								leave="ease-in duration-200"
+								leaveFrom="opacity-100 scale-100"
+								leaveTo="opacity-0 scale-95"
+							>
+								<Dialog.Panel
+									className={cn(
+										"w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all",
+										className,
+									)}
+								>
+									<Dialog.Title
+										as="h3"
+										className="text-lg font-medium leading-6 text-gray-900"
+									>
+										{title}
+									</Dialog.Title>
+									{children}
+								</Dialog.Panel>
+							</Transition.Child>
+						</div>
 					</div>
-				</div>
-			</Dialog>
-		</Transition>
+				</Dialog>
+			</Transition>
+		</>
 	);
 }

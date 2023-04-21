@@ -64,7 +64,7 @@ mark {
 }
 
 .highlight {
-  @apply underline text-cyan-700;
+  @apply text-cyan-700 underline;
 }
 
 

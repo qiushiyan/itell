@@ -9,29 +9,35 @@ import { ChevronDownIcon } from "./icons";
 import { useLocation } from "@/lib/hooks";
 import Link from "next/link";
 import { PencilIcon, ArrowUpIcon } from "lucide-react";
+import { Disclosure, Transition } from "@headlessui/react";
+import { SectionLocation } from "@/types/location";
 
 type ModuleSidebarProps = {
 	chapters: Chapter[];
+	currentLocation: SectionLocation;
 };
 
-export function ModuleSidebar({ chapters }: ModuleSidebarProps) {
-	const [sectionsCollapsed, setSectionsCollapsed] = useState<
+export function ModuleSidebar({
+	chapters,
+	currentLocation,
+}: ModuleSidebarProps) {
+	const [sectionsVisible, setSectionsVisible] = useState<
 		Record<string, boolean>
 	>(() => {
 		const output = {};
 		chapters.forEach((chapter) => {
-			output[chapter.chapter] = false;
+			output[chapter.chapter] = chapter.chapter === currentLocation.chapter;
 		});
 		return output;
 	});
-	const location = useLocation();
+
 	return (
 		<nav className="sticky top-20 space-y-1">
 			{chapters.map((chapter) => (
 				<div key={chapter.chapter}>
 					<div
 						className={cn("relative hover:text-blue-600", {
-							"text-blue-600": chapter.chapter === location.chapter,
+							"text-blue-600": chapter.chapter === currentLocation.chapter,
 						})}
 					>
 						<a href={`/${chapter.url}`} className="block mb-1">
@@ -42,7 +48,7 @@ export function ModuleSidebar({ chapters }: ModuleSidebarProps) {
 						<button
 							className="absolute top-1 -left-4"
 							onClick={() => {
-								setSectionsCollapsed((prev) => {
+								setSectionsVisible((prev) => {
 									return {
 										...prev,
 										[chapter.chapter]: !prev[chapter.chapter],
@@ -50,15 +56,23 @@ export function ModuleSidebar({ chapters }: ModuleSidebarProps) {
 								});
 							}}
 						>
-							{sectionsCollapsed[chapter.chapter] ? (
-								<ChevronDownIcon className="w-5 h-5" />
-							) : (
+							{sectionsVisible[chapter.chapter] ? (
 								<ChevronDownIcon className="w-5 h-5 transform rotate-180" />
+							) : (
+								<ChevronDownIcon className="w-5 h-5" />
 							)}
 						</button>
 					</div>
 
-					{!sectionsCollapsed[chapter.chapter] && (
+					<Transition
+						enter="transition duration-100 ease-out"
+						enterFrom="transform scale-95 opacity-0"
+						enterTo="transform scale-100 opacity-100"
+						leave="transition duration-75 ease-out"
+						leaveFrom="transform scale-100 opacity-100"
+						leaveTo="transform scale-95 opacity-0"
+						show={sectionsVisible[chapter.chapter]}
+					>
 						<ul className="space-y-1">
 							{chapter.sections.map((section) => (
 								<li
@@ -66,8 +80,8 @@ export function ModuleSidebar({ chapters }: ModuleSidebarProps) {
 										"px-2 py-1 transition ease-in-out duration-200 relative rounded-md hover:bg-gray-100",
 										{
 											"bg-gray-100":
-												section.chapter === location.chapter &&
-												section.section === location.section,
+												section.chapter === currentLocation.chapter &&
+												section.section === currentLocation.section,
 										},
 									)}
 									key={section.url}
@@ -80,7 +94,7 @@ export function ModuleSidebar({ chapters }: ModuleSidebarProps) {
 								</li>
 							))}
 						</ul>
-					)}
+					</Transition>
 				</div>
 			))}
 		</nav>

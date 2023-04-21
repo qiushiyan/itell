@@ -1,6 +1,7 @@
 import { Location } from "@/types/location";
 import { SidebarSection } from "@/types/section";
 import { ClassValue, clsx } from "clsx";
+import { formatRelative } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -73,3 +74,7 @@ export const sortSections = (sections: SidebarSection[]) => {
 };
 
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+export const relativeDate = (date: Date, relativeTo: Date = new Date()) => {
+	return formatRelative(new Date(date), relativeTo);
+};

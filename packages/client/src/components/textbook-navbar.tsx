@@ -24,6 +24,7 @@ import { siteConfig } from "@/config/site";
 import { ChevronDownIcon } from "./icons";
 import { Location } from "@/types/location";
 import { useLocation } from "@/lib/hooks";
+import Spinner from "./spinner";
 
 type Props = {
 	showProgress?: boolean;
@@ -43,7 +44,7 @@ const modules = keyof(moduleChapters);
 export default function TextbookNavbar({ showProgress = false }: Props) {
 	const location = useLocation();
 
-	const { data: session } = useSession();
+	const { data: session, status } = useSession();
 	const [openNav, setOpenNav] = useState(false);
 	const [moduleCollpased, setModuleCollapsed] = useState<
 		Record<string, boolean>
@@ -184,7 +185,9 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 					</Typography>
 					<div className="mr-4 hidden lg:block">{navList}</div>
 					<div className="flex items-center gap-4 ml-auto">
-						{session?.user ? (
+						{status === "loading" ? (
+							<Spinner className="w-5 h-5" />
+						) : session?.user ? (
 							<UserAvatar user={session.user} />
 						) : (
 							<Button onClick={handleSignin}>Sign in</Button>

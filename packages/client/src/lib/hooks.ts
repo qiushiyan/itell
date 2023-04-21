@@ -1,7 +1,8 @@
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
-import type {Location} from "@/types/location";
+import { useState, useEffect, useContext, useRef, RefObject } from "react";
+import type { Location } from "@/types/location";
 import { getLocationFromPathname } from "./utils";
+import { NoteContext } from "@/contexts/note";
 
 export const useLocalStorage = <T,>(key: string, initialValue: T) => {
 	const [storedValue, setStoredValue] = useState<T>(() => {
@@ -50,4 +51,32 @@ export const useLocation = () => {
 	}, [pathname]);
 
 	return location;
-}
+};
+
+export const useNotes = () => {
+	const noteContext = useContext(NoteContext);
+
+	return noteContext;
+};
+
+export const useClickOutside = <T extends HTMLElement>(
+	handler: () => void,
+): RefObject<T> => {
+	const ref = useRef<T>(null);
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (ref.current && !ref.current.contains(event.target as Node)) {
+				handler();
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [handler]);
+
+	return ref;
+};

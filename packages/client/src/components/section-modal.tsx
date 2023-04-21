@@ -28,25 +28,12 @@ export default function SectionModal({ type = "unauthorized" }: Props) {
 	if (session) return null;
 
 	return (
-		<Modal open={show && !session} onClose={() => {}}>
-			<Card className="w-full px-6 py-4">
-				<CardHeader
-					variant="gradient"
-					className="mb-4 flex h-20 justify-center items-center gap-2 bg-gray-200"
-				>
-					<Typography variant="h5" color="blue-gray">
-						{type === "unauthorized" ? "Sign In to Proceed" : "Section Locked"}
-					</Typography>
-					{type === "unauthorized" ? (
-						<UserPlusIcon className="w-5 h-5" />
-					) : (
-						<LockIcon />
-					)}
-				</CardHeader>
-				<CardBody className="flex flex-col gap-4 justify-center">
-					{AuthButtons.google}
-				</CardBody>
-			</Card>
+		<Modal
+			open={show && !session}
+			onClose={() => {}}
+			title={type === "unauthorized" ? "Sign In to Proceed" : "Section Locked"}
+		>
+			<div className="mt-5">{AuthButtons.google}</div>
 		</Modal>
 	);
 }

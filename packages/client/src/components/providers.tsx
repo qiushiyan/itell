@@ -5,6 +5,7 @@ import { ThemeProvider } from "@material-tailwind/react";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 import { TRPCProvider } from "@/trpc/trpc-provider";
+import NoteProvider from "@/contexts/note";
 
 export default function AppProvider({
 	children,
@@ -14,8 +15,10 @@ export default function AppProvider({
 			<TRPCProvider>
 				<ThemeProvider>
 					<BalancerProvider>
-						<Toaster richColors visibleToasts={1} />
-						{children}
+						<NoteProvider>
+							{children}
+							<Toaster richColors visibleToasts={1} />
+						</NoteProvider>
 					</BalancerProvider>
 				</ThemeProvider>
 			</TRPCProvider>

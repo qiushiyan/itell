@@ -6,6 +6,7 @@ import { Summary } from "@prisma/client";
 import { formatRelative } from "date-fns";
 import { Button, Typography } from "@/components/material-tailwind";
 import Link from "next/link";
+import { relativeDate } from "@/lib/utils";
 
 type Props = {
 	summary: Summary;
@@ -27,7 +28,10 @@ export default function SummaryModal({ summary, open, handleClose }: Props) {
 						</Typography>
 					</Link>
 					<Typography variant="small">
-						{formatRelative(new Date(summary.created_at), new Date())}
+						updated at{" "}
+						<span className="font-semibold">
+							{relativeDate(summary.updated_at)}
+						</span>
 					</Typography>
 				</div>
 				<textarea

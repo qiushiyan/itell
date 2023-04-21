@@ -5,16 +5,13 @@ import { Mdx } from "@/components/mdx";
 import Summary from "@/components/summary";
 import { notFound } from "next/navigation";
 import { SectionLocation } from "@/types/location";
-import { Fragment } from "react";
 import { ModuleSidebar, TocSidebar } from "@/components/textbook-sidebar";
 import getChapters from "@/lib/section-sidebar";
 import SectionModal from "@/components/section-modal";
-import Link from "next/link";
-import { getServerAuthSession } from "@/lib/auth";
 import SectionPager from "@/components/section-pager";
 import { getPagerForSection } from "@/lib/pager";
-import HighlightToolbar from "@/components/highlight-toolbar";
-import Spinner from "@/components/spinner";
+import NoteList from "@/components/note-list";
+import Highlighter from "@/components/highlighter";
 
 export const generateStaticParams = async () => {
 	return allSections.map((section) => {
@@ -56,11 +53,14 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 			<div className="max-w-7xl mx-auto grid grid-cols-12 gap-6 ">
 				<SectionModal />
 				<aside className="hidden md:block md:col-span-3 lg:col-span-2">
-					<ModuleSidebar chapters={chapters} />
+					<ModuleSidebar
+						chapters={chapters}
+						currentLocation={currentLocation}
+					/>
 				</aside>
 
 				<section
-					className="col-span-12 md:col-span-9 lg:col-span-8"
+					className="relative col-span-12 md:col-span-9 lg:col-span-8"
 					id="section-content"
 				>
 					<div className="mb-4 text-center" id="section-title">
@@ -70,12 +70,13 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					</div>
 
 					<Mdx code={section.body.code} />
-					<HighlightToolbar />
+					<Highlighter location={currentLocation} />
 					<SectionPager pager={pager} />
 				</section>
 
 				<aside className="hidden lg:block lg:col-span-2">
 					<TocSidebar headings={section.headings} />
+					<NoteList location={currentLocation} />
 				</aside>
 			</div>
 

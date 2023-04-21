@@ -7,12 +7,8 @@ import { Fragment } from "react";
 
 export default async function DashboardLayout({
 	children,
-	student,
-	teacher,
 }: {
 	children: React.ReactNode;
-	student: React.ReactNode;
-	teacher: React.ReactNode;
 }) {
 	const session = await getServerAuthSession();
 	if (session?.user) {
@@ -25,22 +21,14 @@ export default async function DashboardLayout({
 			if (user.is_teacher) {
 				return (
 					<Fragment>
-						<TextbookNavbar />
-
-						<div className="max-w-6xl mx-auto py-8 px-4">
-							{children}
-							{teacher}
-						</div>
+						<div className="max-w-6xl mx-auto py-8 px-4">you are a teacher</div>
 					</Fragment>
 				);
 			} else {
 				return (
 					<Fragment>
 						<TextbookNavbar />
-						<div className="max-w-6xl mx-auto py-8 px-4">
-							{children}
-							{student}
-						</div>
+						<div className="max-w-6xl mx-auto py-8 px-4">{children}</div>
 					</Fragment>
 				);
 			}
