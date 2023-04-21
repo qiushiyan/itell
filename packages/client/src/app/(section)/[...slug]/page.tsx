@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { SectionLocation } from "@/types/location";
 import { ModuleSidebar, TocSidebar } from "@/components/textbook-sidebar";
 import getChapters from "@/lib/section-sidebar";
-import SectionModal from "@/components/section-modal";
+import SectionAuthModal from "@/components/section-auth-modal";
 import SectionPager from "@/components/section-pager";
 import { getPagerForSection } from "@/lib/pager";
 import NoteList from "@/components/note-list";
@@ -51,7 +51,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	return (
 		<div>
 			<div className="max-w-7xl mx-auto grid grid-cols-12 gap-6 ">
-				<SectionModal />
+				<SectionAuthModal />
 				<aside className="hidden md:block md:col-span-3 lg:col-span-2">
 					<ModuleSidebar
 						chapters={chapters}

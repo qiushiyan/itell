@@ -11,7 +11,7 @@ import {
 } from "@material-tailwind/react";
 import { Summary } from "@prisma/client";
 import { useState } from "react";
-import SummaryModal from "./sumary-modal";
+import SummaryModal from "./summary-modal";
 
 type Props = {
 	summariesByModule: Record<string, Summary[]>;
@@ -44,6 +44,7 @@ const SummaryCard = ({ summary }: { summary: Summary }) => {
 
 export default function ({ summariesByModule }: Props) {
 	const modules = keyof(summariesByModule);
+
 	return (
 		<Tabs value={modules[0]} className="grid grid-cols-12">
 			<div className="col-span-3">

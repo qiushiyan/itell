@@ -10,7 +10,7 @@ export default function Home() {
 				<div className="flex justify-center items-center">
 					<Image
 						src="/images/learlab.svg"
-						alt="learlab"
+						alt="learlab icon"
 						width={600}
 						height={400}
 						priority

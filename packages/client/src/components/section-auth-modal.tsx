@@ -15,7 +15,7 @@ type Props = {
 	type?: "unauthorized" | "unlocked";
 };
 
-export default function SectionModal({ type = "unauthorized" }: Props) {
+export default function SectionAuthModal({ type = "unauthorized" }: Props) {
 	const [show, setShow] = useState(false);
 	const { data: session } = useSession();
 

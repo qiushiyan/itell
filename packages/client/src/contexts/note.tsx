@@ -23,7 +23,8 @@ export default function NoteProvider({ children }) {
 				noteText: note.noteText,
 				open: false,
 				id: note.id,
-				updatedAt: note.updatedAt,
+				updated_at: note.updated_at,
+				created_at: note.created_at,
 			})),
 		);
 	};

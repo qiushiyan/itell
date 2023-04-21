@@ -12,5 +12,6 @@ export type NoteCard = {
 	highlightedText: string;
 	open?: boolean;
 	id?: string;
-	updatedAt?: string;
+	updated_at?: Date;
+	created_at?: Date;
 };

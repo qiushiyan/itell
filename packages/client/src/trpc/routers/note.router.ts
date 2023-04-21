@@ -4,9 +4,9 @@ import { ZLocation, protecetdProcedure, router } from "../utils";
 const NoteRouter = router({
 	getByLocation: protecetdProcedure
 		.input(z.object({ location: ZLocation }))
-		.query(({ ctx, input }) => {
+		.query(async ({ ctx, input }) => {
 			const { id } = ctx.user;
-			return ctx.prisma.note.findMany({
+			const res = await ctx.prisma.note.findMany({
 				where: {
 					user_id: id,
 					module: input.location.module,
@@ -14,11 +14,12 @@ const NoteRouter = router({
 					section: input.location.section,
 				},
 			});
+			return res;
 		}),
 
-	getAll: protecetdProcedure.query(({ ctx }) => {
+	getAll: protecetdProcedure.query(async ({ ctx }) => {
 		const { id } = ctx.user;
-		return ctx.prisma.note.findMany({
+		return await ctx.prisma.note.findMany({
 			where: {
 				user_id: id,
 			},

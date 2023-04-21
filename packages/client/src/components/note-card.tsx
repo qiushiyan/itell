@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import TextArea from "./ui/TextArea";
 import { PencilIcon } from "lucide-react";
@@ -10,6 +10,7 @@ import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDeleteModal from "./note-delete-modal";
 import { unHighlightText } from "@/lib/note";
+import { relativeDate } from "@/lib/utils";
 
 interface Props extends NoteCard {
 	location: SectionLocation;
@@ -21,6 +22,8 @@ export default function NoteCard({
 	highlightedText,
 	noteText,
 	location,
+	updated_at,
+	created_at,
 	open = false,
 }: Props) {
 	const target = useRef<HTMLElement>();
@@ -81,12 +84,18 @@ export default function NoteCard({
 			>
 				{editting ? (
 					<div className="p-2">
+						{(updated_at || created_at) && (
+							<p className="text-xs tracking-tight text-gray-500 mb-1">
+								updated at {relativeDate((updated_at || created_at) as Date)}
+							</p>
+						)}
 						<form>
 							<TextArea
 								placeholder="leave a note here"
-								rows={4}
 								value={text}
 								setValue={(val) => setText(val)}
+								autoFocus
+								autoHeight
 							/>
 							<footer className="flex justify-between items-center gap-1">
 								{id && (

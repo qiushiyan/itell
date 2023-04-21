@@ -25,6 +25,10 @@ export default async function () {
 		return <Warning>user not found</Warning>;
 	}
 
+	if (user.summaries.length === 0) {
+		return <Warning>no summaries found</Warning>;
+	}
+
 	// convert date here since they will be passed from server components to client components
 	const summariesByModule = groupby(
 		user.summaries,

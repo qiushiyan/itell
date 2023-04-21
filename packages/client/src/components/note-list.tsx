@@ -7,9 +7,10 @@ import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import { highlightText } from "@/lib/note";
 import Spinner from "./spinner";
+import { useNotes } from "@/lib/hooks";
 
 export default function NoteList({ location }: { location: SectionLocation }) {
-	const { notes, fillNotes } = useContext(NoteContext);
+	const { notes, fillNotes } = useNotes()
 	const { data, isLoading } = trpc.note.getByLocation.useQuery({ location });
 	const ref = useRef<HTMLElement | null>(null);
 
