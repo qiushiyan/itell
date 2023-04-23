@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 
 type Props = {
 	open: boolean;
-	title: string;
+	title?: string;
+	titleNode?: React.ReactNode;
 	onClose?: () => void;
 	onAction?: () => void;
 	children: React.ReactNode;
@@ -19,6 +20,7 @@ export default function Modal({
 	children,
 	className,
 	title,
+	titleNode = null,
 }: Props) {
 	if (!open) {
 		return null;
@@ -63,12 +65,15 @@ export default function Modal({
 										className,
 									)}
 								>
-									<Dialog.Title
-										as="h3"
-										className="text-lg font-medium leading-6 text-gray-900"
-									>
-										{title}
-									</Dialog.Title>
+									{title && (
+										<Dialog.Title
+											as="h3"
+											className="text-lg font-medium leading-6 text-gray-900"
+										>
+											{title}
+										</Dialog.Title>
+									)}
+									{titleNode}
 									{children}
 								</Dialog.Panel>
 							</Transition.Child>

@@ -3,7 +3,7 @@
 import { Button } from "@material-tailwind/react";
 import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import TextArea from "../ui/TextArea";
-import { ChevronUpIcon, DeleteIcon } from "lucide-react";
+import { ChevronUpIcon, DeleteIcon, EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
 import { useClickOutside, useNotes } from "@/lib/hooks";
 import { trpc } from "@/trpc/trpc-provider";
@@ -169,7 +169,7 @@ export default function NoteCard({
 		<Fragment>
 			<div
 				className={
-					"absolute z-10 w-64 rounded-md border border-purple-500 bg-white"
+					"absolute z-10 w-64 rounded-md border border-purple-500 bg-white pb-1"
 				}
 				style={{ top: y }}
 				ref={containerRef}
@@ -183,6 +183,8 @@ export default function NoteCard({
 						className="flex w-full rounded-md text-xs normal-case justify-between px-4 py-2 text-left font-medium text-purple-900 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
 						onClick={() => {
 							dispatch({ type: "toggle_collapsed" });
+							// this is needed when a note is not saved
+							// and the user clicked outside and clicked back again
 							// if (!id) {
 							// 	dispatch({ type: "set_editting", payload: true });
 							// } else {
@@ -264,7 +266,9 @@ export default function NoteCard({
 									fullWidth
 									className="text-left font-normal text-xs text-black py-4 px-2 normal-case hover:bg-purple-50"
 								>
-									<p className="mb-0 tracking-tight">{editState.input}</p>
+									<p className="mb-0 tracking-tight">
+										{editState.input || <EditIcon className="w-4 h-4" />}
+									</p>
 								</Button>
 							)}
 							{(updated_at || created_at) && (
