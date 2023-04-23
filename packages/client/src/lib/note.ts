@@ -1,11 +1,4 @@
-export const highlightText = async (
-	target: HTMLElement,
-	textContent: string,
-) => {
-	// escape potential characters in selection
-	const regexString = textContent.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-	const regex = new RegExp(regexString, "gi");
-
+export const removeExistingMarks = async (target: HTMLElement) => {
 	// Remove all existing 'mark' tags before applying new highlighting
 	const existingMarks = target.querySelectorAll("mark.highlight");
 	for (let i = 0; i < existingMarks.length; i++) {
@@ -15,6 +8,15 @@ export const highlightText = async (
 			mark.parentNode?.replaceChild(text, mark);
 		}
 	}
+};
+
+export const highlightText = async (
+	target: HTMLElement,
+	textContent: string,
+) => {
+	// escape potential characters in selection
+	const regexString = textContent.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+	const regex = new RegExp(regexString, "gi");
 
 	const newText = target.innerHTML.replace(
 		regex,

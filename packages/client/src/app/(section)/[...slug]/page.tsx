@@ -10,7 +10,7 @@ import getChapters from "@/lib/section-sidebar";
 import SectionAuthModal from "@/components/section-auth-modal";
 import SectionPager from "@/components/section-pager";
 import { getPagerForSection } from "@/lib/pager";
-import NoteList from "@/components/note-list";
+import NoteList from "@/components/note/note-list";
 import Highlighter from "@/components/highlighter";
 
 export const generateStaticParams = async () => {

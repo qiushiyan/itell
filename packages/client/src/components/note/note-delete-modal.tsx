@@ -1,6 +1,6 @@
 "use client";
 import { Button, Card, CardHeader, Typography } from "@material-tailwind/react";
-import Modal from "./ui/Modal";
+import Modal from "../ui/Modal";
 
 type Props = {
 	show: boolean;
