@@ -1,11 +1,12 @@
 {
-  "name": "learlab-monorepo",
+  "name": "itell-monorepo",
   "authors": "learlab",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm --stream -r dev"
+    "dev": "pnpm --stream -r dev",
+    "docs": "pnpm -F @itell/docs dev"
   },
   "keywords": [],
   "license": "ISC"
