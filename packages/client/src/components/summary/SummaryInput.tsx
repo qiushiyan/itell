@@ -193,7 +193,7 @@ export default function SummaryInput() {
 	};
 
 	return (
-		<section className="summary-input flex-1">
+		<>
 			{state.feedback && <Feedback feedback={state.feedback} />}
 			<Typography variant="small">Number of words: {wordNum}</Typography>
 			<form className=" space-y-4">
@@ -220,6 +220,6 @@ export default function SummaryInput() {
 					{state.prompt}
 				</Button>
 			</form>
-		</section>
+		</>
 	);
 }

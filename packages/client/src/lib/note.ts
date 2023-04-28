@@ -1,3 +1,5 @@
+import { defaultNoteColor } from "@/contexts/note";
+
 export const removeExistingMarks = async (target: HTMLElement) => {
 	// Remove all existing 'mark' tags before applying new highlighting
 	const existingMarks = target.querySelectorAll("mark.highlight");
@@ -13,6 +15,7 @@ export const removeExistingMarks = async (target: HTMLElement) => {
 export const highlightText = async (
 	target: HTMLElement,
 	textContent: string,
+	color: string = defaultNoteColor,
 ) => {
 	// escape potential characters in selection
 	const regexString = textContent.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -20,7 +23,7 @@ export const highlightText = async (
 
 	const newText = target.innerHTML.replace(
 		regex,
-		'<mark class="highlight">$&</mark>',
+		`<mark class="highlight" style="color:${color}"}>$&</mark>`,
 	);
 
 	target.innerHTML = newText;

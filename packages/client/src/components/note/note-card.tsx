@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import TextArea from "../ui/TextArea";
 import { ChevronUpIcon, DeleteIcon, EditIcon } from "lucide-react";
@@ -9,19 +9,20 @@ import { useClickOutside, useNotes } from "@/lib/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDeleteModal from "./note-delete-modal";
-import { emphasizeText, unHighlightText, unemphasizeText } from "@/lib/note";
+import {
+	emphasizeText,
+	highlightText,
+	unHighlightText,
+	unemphasizeText,
+} from "@/lib/note";
 import { cn, relativeDate } from "@/lib/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
 import { Transition } from "@headlessui/react";
 import Xarrow, { xarrowPropsType } from "react-xarrows";
 import { useImmerReducer } from "use-immer";
-
-const arrowStyle: Partial<xarrowPropsType> = {
-	strokeWidth: 2,
-	headColor: "#c084fc",
-	lineColor: "#c084fc",
-};
+import NoteColorPicker from "./note-color-picker";
+import { defaultNoteColor } from "@/contexts/note";
 
 interface Props extends NoteCard {
 	location: SectionLocation;
@@ -29,10 +30,13 @@ interface Props extends NoteCard {
 
 type EditState = {
 	input: string;
+	color: string;
 	editting: boolean;
 	collapsed: boolean;
+	showEdit: boolean;
 	showArrow: boolean;
 	showDeleteModal: boolean;
+	showColorPicker: boolean;
 };
 
 type EditDispatch =
@@ -40,10 +44,12 @@ type EditDispatch =
 	| { type: "collapse_note" }
 	| { type: "toggle_collapsed" }
 	| { type: "toggle_editting" }
+	| { type: "set_show_edit"; payload: boolean }
 	| { type: "set_editting"; payload: boolean }
 	| { type: "toggle_arrow" }
 	| { type: "toggle_delete_modal" }
-	| { type: "finish_delete" };
+	| { type: "finish_delete" }
+	| { type: "set_color"; payload: string };
 
 // existing notes are wrapped in <mark class = "highlight"> </mark>
 // on mouse enter, add class = "emphasize"
@@ -57,6 +63,7 @@ export default function NoteCard({
 	location,
 	updated_at,
 	created_at,
+	color,
 }: Props) {
 	const [editState, dispatch] = useImmerReducer<EditState, EditDispatch>(
 		(draft, action) => {
@@ -67,12 +74,16 @@ export default function NoteCard({
 				case "collapse_note":
 					draft.collapsed = true;
 					draft.editting = false;
+					draft.showArrow = false;
 					break;
 				case "toggle_collapsed":
 					draft.collapsed = !draft.collapsed;
 					break;
 				case "toggle_editting":
 					draft.editting = !draft.editting;
+					break;
+				case "set_show_edit":
+					draft.showEdit = action.payload;
 					break;
 				case "set_editting":
 					draft.editting = action.payload;
@@ -88,19 +99,31 @@ export default function NoteCard({
 					draft.editting = false;
 					draft.showArrow = false;
 					break;
+				case "set_color":
+					draft.color = action.payload;
+					break;
 			}
 		},
 		{
 			input: noteText, // textarea input
+			color, // border color: ;
 			editting: !id, // true: show textarea, false: show noteText
 			collapsed: !!id, // if the note card is expanded
 			showArrow: false, // show arrow connecting note card and highlighted text
 			showDeleteModal: false, // show delete modal
+			showColorPicker: false, // show color picker
+			showEdit: false, // show edit overlay
 		},
 	);
+	const arrowStyle: Partial<xarrowPropsType> = {
+		strokeWidth: 2,
+		headColor: editState.color,
+		lineColor: editState.color,
+	};
 	const sectionContentRef = useRef<HTMLElement>();
-	const { deleteNote: deleteContextNote } = useNotes();
-	const updateNote = trpc.note.update.useMutation();
+	const { deleteNote: deleteContextNote, highlightNote } = useNotes();
+	const updateNoteColor = trpc.note.updateColor.useMutation();
+	const updateNoteContent = trpc.note.updateContent.useMutation();
 	const createNote = trpc.note.create.useMutation();
 	const deleteNote = trpc.note.delete.useMutation();
 	const containerRef = useClickOutside<HTMLDivElement>(() => {
@@ -116,13 +139,13 @@ export default function NoteCard({
 
 	const isUnsaved = !id || editState.input !== noteText;
 	const isLoading =
-		updateNote.isLoading || createNote.isLoading || deleteNote.isLoading;
+		updateNoteContent.isLoading || createNote.isLoading || deleteNote.isLoading;
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		if (id) {
 			// edit existing note
-			await updateNote.mutateAsync({
+			await updateNoteContent.mutateAsync({
 				id,
 				noteText: editState.input,
 			});
@@ -154,12 +177,16 @@ export default function NoteCard({
 		onMouseEnter: () => {
 			if (sectionContentRef.current) {
 				dispatch({ type: "toggle_arrow" });
+				if (editState.collapsed) {
+					dispatch({ type: "set_show_edit", payload: true });
+				}
 				emphasizeText(sectionContentRef.current, highlightedText);
 			}
 		},
 		onMouseLeave: () => {
 			if (sectionContentRef.current) {
 				dispatch({ type: "toggle_arrow" });
+				dispatch({ type: "set_show_edit", payload: false });
 				unemphasizeText(sectionContentRef.current, highlightedText);
 			}
 		},
@@ -168,51 +195,59 @@ export default function NoteCard({
 	return (
 		<Fragment>
 			<div
-				className={
-					"absolute z-10 w-64 rounded-md border border-purple-500 bg-white pb-1"
-				}
-				style={{ top: y }}
+				className={cn("absolute z-10 w-64 rounded-md border-2 bg-white", {
+					"z-50": editState.editting,
+				})}
+				style={{ top: y, borderColor: editState.color }}
 				ref={containerRef}
 				{...triggers}
 			>
 				{editState.showArrow && (
 					<Xarrow end={"emphasized"} start={containerRef} {...arrowStyle} />
 				)}
-				<div>
-					<button
-						className="flex w-full rounded-md text-xs normal-case justify-between px-4 py-2 text-left font-medium text-purple-900 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
-						onClick={() => {
-							dispatch({ type: "toggle_collapsed" });
-							// this is needed when a note is not saved
-							// and the user clicked outside and clicked back again
-							// if (!id) {
-							// 	dispatch({ type: "set_editting", payload: true });
-							// } else {
-							// 	dispatch({ type: "set_editting", payload: false });
-							// }
-						}}
-					>
-						<span className=" line-clamp-1">{editState.input || "Note"}</span>
-						<ChevronUpIcon
-							className={`${
-								editState.collapsed ? "rotate-180 transform" : ""
-							} h-5 w-5 text-purple-500`}
-						/>
-					</button>
-					<Transition
-						show={!editState.collapsed}
-						enter="transition duration-100 ease-out"
-						enterFrom="transform scale-95 opacity-0"
-						enterTo="transform scale-100 opacity-100"
-						leave="transition duration-75 ease-out"
-						leaveFrom="transform scale-100 opacity-100"
-						leaveTo="transform scale-95 opacity-0"
-					>
-						<div className="px-4 text-sm mt-1 text-gray-800">
+				<div className="font-light tracking-tight text-sm relative px-1 py-2">
+					{editState.showEdit && (
+						<>
+							<button
+								className="absolute inset-0 z-10 w-full flex rounded-md justify-center items-center bg-gray-200/50"
+								onClick={() => {
+									dispatch({ type: "toggle_collapsed" });
+									dispatch({ type: "set_show_edit", payload: false });
+									// this is needed when a note is not saved
+									// and the user clicked outside and clicked back again
+									if (!id) {
+										dispatch({ type: "set_editting", payload: true });
+									} else {
+										dispatch({ type: "set_editting", payload: false });
+									}
+								}}
+							>
+								<EditIcon />
+							</button>
+						</>
+					)}
+					{editState.collapsed && (
+						<p className="line-clamp-3 px-1 text-sm mb-0">
+							{editState.input || "Note"}
+						</p>
+					)}
+
+					{!editState.collapsed && (
+						<div className="px-2 mt-1 text-sm text-gray-800">
+							<NoteColorPicker
+								color={editState.color}
+								onChange={(color) => {
+									dispatch({ type: "set_color", payload: color });
+									highlightNote(highlightedText, color);
+									if (id) {
+										updateNoteColor.mutate({ id, color });
+									}
+								}}
+							/>
+
 							{editState.editting ? (
 								<form>
 									<TextArea
-										className="text-sm"
 										placeholder="leave a note here"
 										rows={6}
 										value={editState.input}
@@ -226,7 +261,7 @@ export default function NoteCard({
 											<button
 												type="submit"
 												disabled={isLoading}
-												className="flex items-center gap-1 text-purple-400 hover:text-purple-800"
+												className="flex items-center gap-1 "
 												onClick={(e) => {
 													e.preventDefault();
 													dispatch({ type: "toggle_delete_modal" });
@@ -235,21 +270,14 @@ export default function NoteCard({
 												<DeleteIcon />
 											</button>
 										)}
-										{isUnsaved && (
-											<span className="text-xs tracking-tight mb-0">
-												unsaved
-											</span>
-										)}
+										{isUnsaved && <span className="text-xs mb-0">unsaved</span>}
 										<button
 											type="submit"
 											disabled={isLoading}
-											className={cn(
-												"flex items-center text-purple-400 p-2 rounded-md",
-												"hover:text-purple-800",
-											)}
+											className={cn("flex items-center  p-2 rounded-md")}
 											onClick={handleSubmit}
 										>
-											{updateNote.isLoading || createNote.isLoading ? (
+											{updateNoteContent.isLoading || createNote.isLoading ? (
 												<Spinner className="w-5 h-5" />
 											) : (
 												<ForwardIcon />
@@ -258,26 +286,24 @@ export default function NoteCard({
 									</footer>
 								</form>
 							) : (
-								<Button
-									variant="text"
+								<button
 									onClick={() =>
 										dispatch({ type: "set_editting", payload: true })
 									}
-									fullWidth
-									className="text-left font-normal text-xs text-black py-4 px-2 normal-case hover:bg-purple-50"
+									className="flex w-full text-left hover:bg-gray-200/50 px-1 py-2  rounded-md"
 								>
-									<p className="mb-0 tracking-tight">
+									<span className="mb-0">
 										{editState.input || <EditIcon className="w-4 h-4" />}
-									</p>
-								</Button>
+									</span>
+								</button>
 							)}
 							{(updated_at || created_at) && (
-								<p className="text-xs tracking-tight text-gray-500 text-right mt-2">
+								<p className="text-xs  text-gray-500 text-right mt-2 mb-0">
 									updated at {relativeDate((updated_at || created_at) as Date)}
 								</p>
 							)}
 						</div>
-					</Transition>
+					)}
 				</div>
 			</div>
 			<NoteDeleteModal

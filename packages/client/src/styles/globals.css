@@ -67,12 +67,10 @@ mark .unhighlighted {
   @apply text-black font-normal !important;
 }
 
-mark.highlight {
-  @apply text-purple-500;
-}
+mark.highlight {}
 
 mark.emphasized {
-  @apply text-purple-800 font-bold
+  @apply font-bold
 }
 
 

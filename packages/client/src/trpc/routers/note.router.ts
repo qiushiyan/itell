@@ -50,7 +50,7 @@ const NoteRouter = router({
 			});
 		}),
 
-	update: protecetdProcedure
+	updateContent: protecetdProcedure
 		.input(
 			z.object({
 				id: z.string(),
@@ -64,6 +64,24 @@ const NoteRouter = router({
 				},
 				data: {
 					noteText: input.noteText,
+				},
+			});
+		}),
+
+	updateColor: protecetdProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				color: z.string(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.note.update({
+				where: {
+					id: input.id,
+				},
+				data: {
+					color: input.color,
 				},
 			});
 		}),

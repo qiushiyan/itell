@@ -52,7 +52,7 @@ const accordionItems: AccordionItem[] = [
 
 export default function SummaryDescription() {
 	return (
-		<div className="lg:w-1/2">
+		<>
 			<Typography variant="lead">
 				Write your summary for this section
 			</Typography>
@@ -61,6 +61,6 @@ export default function SummaryDescription() {
 				section
 			</Typography>
 			<Accordion items={accordionItems} defaultOpen={null} />
-		</div>
+		</>
 	);
 }

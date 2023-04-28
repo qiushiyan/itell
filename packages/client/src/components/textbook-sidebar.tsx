@@ -156,7 +156,7 @@ export function TocSidebar({ headings }: TocSidebarProps) {
 				))}
 			</ul>
 
-			<div className="mt-16 flex flex-col gap-2">
+			<div className="mt-12 flex flex-col gap-2">
 				<AnchorLink
 					icon={<PencilIcon className="w-4 h-4" />}
 					text="Write a Summary"
