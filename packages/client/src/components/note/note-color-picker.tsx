@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { TwitterPicker } from "@hello-pangea/color-picker";
+import { useClickOutside } from "@/lib/hooks";
 
 type Props = {
 	color: string;
@@ -11,13 +12,16 @@ type Props = {
 
 export default function NoteColorPicker({ color, onChange }: Props) {
 	const [showColorPicker, setShowColorPicker] = useState(false);
+	const ref = useClickOutside<HTMLDivElement>(() => {
+		setShowColorPicker(false);
+	});
 
 	const styles = {
 		background: color,
 	};
 
 	return (
-		<div className="relative my-2">
+		<div className="relative my-2" ref={ref}>
 			<button
 				style={styles}
 				className={cn(
