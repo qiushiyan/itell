@@ -15,13 +15,11 @@ type Props = {
 };
 
 export default function CustomAccordion({ items, defaultOpen }: Props) {
-	let defaultOpenArray;
+	let defaultOpenArray: number[];
 	if (defaultOpen) {
 		defaultOpenArray = [...defaultOpen];
-	} else if (defaultOpen === null) {
-		defaultOpenArray = [];
 	} else {
-		defaultOpenArray = [0];
+		defaultOpenArray = [];
 	}
 	const [openedItems, setOpenedItems] = useState(defaultOpenArray);
 
@@ -40,12 +38,12 @@ export default function CustomAccordion({ items, defaultOpen }: Props) {
 				<Accordion open={openedItems.includes(index)} key={item.label}>
 					<AccordionHeader
 						onClick={() => handleOpen(index)}
-						className="text-left text-lg"
+						className="text-left font-semibold text-lg"
 					>
 						{item.label}
 					</AccordionHeader>
 					<AccordionBody>
-						<Typography as="div" className="prose dark:prose-invert">
+						<Typography as="div" className="prose dark:prose-invert max-w-none">
 							{item.content}
 						</Typography>
 					</AccordionBody>

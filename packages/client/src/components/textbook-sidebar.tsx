@@ -32,7 +32,7 @@ export function ModuleSidebar({
 	});
 
 	return (
-		<nav className="sticky top-20 space-y-1">
+		<nav className="space-y-1">
 			{chapters.map((chapter) => (
 				<div key={chapter.chapter}>
 					<div
@@ -110,64 +110,36 @@ type TocSidebarProps = {
 	headings: Heading[];
 };
 
-const AnchorLink = ({
-	text,
-	href,
-	icon,
-}: { text: string; href: string; icon: React.ReactNode }) => {
-	return (
-		<a
-			href={href}
-			className="flex gap-1 items-center hover:underline text-gray-800"
-		>
-			{icon}
-			<Typography variant="small" className="mb-0">
-				{text}
-			</Typography>
-		</a>
-	);
-};
-
 export function TocSidebar({ headings }: TocSidebarProps) {
 	return (
 		<div className="sticky top-20">
 			<Typography variant="small" className="text-gray-800">
 				ON THIS PAGE
 			</Typography>
-			<ul>
-				{headings.map((heading) => (
-					<li
-						key={heading.slug}
-						className="font-light tracking-tighter line-clamp-2"
-					>
-						<a
-							data-level={heading.level}
-							href={`#${heading.slug}`}
-							className={cn("hover:underline inline-flex ", {
-								"text-base mb-3": heading.level === "one",
-								"text-sm mb-2": heading.level === "two",
-								"text-gray-700 text-[0.8rem] mb-1 pl-2":
-									heading.level === "three",
-							})}
+			<ul className="space-y-1">
+				{headings
+					.filter(
+						(heading) => !heading.text?.startsWith("Please write your summary"),
+					)
+					.map((heading) => (
+						<li
+							key={heading.slug}
+							className="font-light tracking-tighter line-clamp-2"
 						>
-							{heading.text}
-						</a>
-					</li>
-				))}
+							<a
+								data-level={heading.level}
+								href={`#${heading.slug}`}
+								className={cn("hover:underline inline-flex ", {
+									"text-base": heading.level === "one",
+									"text-sm": heading.level === "two",
+									"text-gray-700 text-[0.8rem] pl-2": heading.level === "three",
+								})}
+							>
+								{heading.text}
+							</a>
+						</li>
+					))}
 			</ul>
-
-			<div className="mt-12 flex flex-col gap-2">
-				<AnchorLink
-					icon={<PencilIcon className="w-4 h-4" />}
-					text="Write a Summary"
-					href="#section-summary"
-				/>
-				<AnchorLink
-					icon={<ArrowUpIcon className="w-4 h-4" />}
-					text="Back to Top"
-					href="#section-title"
-				/>
-			</div>
 		</div>
 	);
 }

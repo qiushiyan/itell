@@ -1,28 +1,20 @@
 "use client";
 
-import { Button, Typography } from "@material-tailwind/react";
-import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
+import { FormEvent, Fragment, useEffect, useRef } from "react";
 import TextArea from "../ui/TextArea";
-import { ChevronUpIcon, DeleteIcon, EditIcon } from "lucide-react";
+import { DeleteIcon, EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
 import { useClickOutside, useNotes } from "@/lib/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDeleteModal from "./note-delete-modal";
-import {
-	emphasizeText,
-	highlightText,
-	unHighlightText,
-	unemphasizeText,
-} from "@/lib/note";
+import { emphasizeText, unHighlightText, unemphasizeText } from "@/lib/note";
 import { cn, relativeDate } from "@/lib/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
-import { Transition } from "@headlessui/react";
 import Xarrow, { xarrowPropsType } from "react-xarrows";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
-import { defaultNoteColor } from "@/contexts/note";
 
 interface Props extends NoteCard {
 	location: SectionLocation;
@@ -31,7 +23,7 @@ interface Props extends NoteCard {
 type EditState = {
 	input: string;
 	color: string;
-	editting: boolean;
+	editing: boolean;
 	collapsed: boolean;
 	showEdit: boolean;
 	showArrow: boolean;
@@ -43,9 +35,9 @@ type EditDispatch =
 	| { type: "set_input"; payload: string }
 	| { type: "collapse_note" }
 	| { type: "toggle_collapsed" }
-	| { type: "toggle_editting" }
+	| { type: "toggle_editing" }
 	| { type: "set_show_edit"; payload: boolean }
-	| { type: "set_editting"; payload: boolean }
+	| { type: "set_editing"; payload: boolean }
 	| { type: "set_arrow"; payload: boolean }
 	| { type: "toggle_delete_modal" }
 	| { type: "finish_delete" }
@@ -73,20 +65,20 @@ export default function NoteCard({
 					break;
 				case "collapse_note":
 					draft.collapsed = true;
-					draft.editting = false;
+					draft.editing = false;
 					draft.showArrow = false;
 					break;
 				case "toggle_collapsed":
 					draft.collapsed = !draft.collapsed;
 					break;
-				case "toggle_editting":
-					draft.editting = !draft.editting;
+				case "toggle_editing":
+					draft.editing = !draft.editing;
 					break;
 				case "set_show_edit":
 					draft.showEdit = action.payload;
 					break;
-				case "set_editting":
-					draft.editting = action.payload;
+				case "set_editing":
+					draft.editing = action.payload;
 					break;
 				case "set_arrow":
 					draft.showArrow = action.payload;
@@ -96,7 +88,7 @@ export default function NoteCard({
 					break;
 				case "finish_delete":
 					draft.showDeleteModal = false;
-					draft.editting = false;
+					draft.editing = false;
 					draft.showArrow = false;
 					break;
 				case "set_color":
@@ -107,7 +99,7 @@ export default function NoteCard({
 		{
 			input: noteText, // textarea input
 			color, // border color: ;
-			editting: !id, // true: show textarea, false: show noteText
+			editing: !id, // true: show textarea, false: show noteText
 			collapsed: !!id, // if the note card is expanded
 			showArrow: false, // show arrow connecting note card and highlighted text
 			showDeleteModal: false, // show delete modal
@@ -122,9 +114,18 @@ export default function NoteCard({
 	};
 	const sectionContentRef = useRef<HTMLElement>();
 	const { deleteNote: deleteContextNote, highlightNote } = useNotes();
-	const updateNoteColor = trpc.note.updateColor.useMutation();
-	const updateNoteContent = trpc.note.updateContent.useMutation();
-	const createNote = trpc.note.create.useMutation();
+	const updateNote = trpc.note.update.useMutation({
+		onSuccess: () => {
+			dispatch({ type: "set_editing", payload: false });
+			dispatch({ type: "set_arrow", payload: false });
+		},
+	});
+	const createNote = trpc.note.create.useMutation({
+		onSuccess: () => {
+			dispatch({ type: "set_editing", payload: false });
+			dispatch({ type: "set_arrow", payload: false });
+		},
+	});
 	const deleteNote = trpc.note.delete.useMutation();
 	const containerRef = useClickOutside<HTMLDivElement>(() => {
 		dispatch({ type: "collapse_note" });
@@ -139,13 +140,13 @@ export default function NoteCard({
 
 	const isUnsaved = !id || editState.input !== noteText;
 	const isLoading =
-		updateNoteContent.isLoading || createNote.isLoading || deleteNote.isLoading;
+		updateNote.isLoading || createNote.isLoading || deleteNote.isLoading;
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		if (id) {
 			// edit existing note
-			await updateNoteContent.mutateAsync({
+			await updateNote.mutateAsync({
 				id,
 				noteText: editState.input,
 			});
@@ -156,10 +157,9 @@ export default function NoteCard({
 				noteText: editState.input,
 				highlightedText,
 				location,
+				color: editState.color,
 			});
 		}
-
-		dispatch({ type: "set_editting", payload: false });
 	};
 
 	const handleDelete = async () => {
@@ -197,7 +197,7 @@ export default function NoteCard({
 		<Fragment>
 			<div
 				className={cn("absolute z-10 w-64 rounded-md border-2 bg-white", {
-					"z-50": editState.editting,
+					"z-50": editState.editing,
 				})}
 				style={{ top: y, borderColor: editState.color }}
 				ref={containerRef}
@@ -217,9 +217,9 @@ export default function NoteCard({
 									// this is needed when a note is not saved
 									// and the user clicked outside and clicked back again
 									if (!id) {
-										dispatch({ type: "set_editting", payload: true });
+										dispatch({ type: "set_editing", payload: true });
 									} else {
-										dispatch({ type: "set_editting", payload: false });
+										dispatch({ type: "set_editing", payload: false });
 									}
 								}}
 							>
@@ -241,12 +241,12 @@ export default function NoteCard({
 									dispatch({ type: "set_color", payload: color });
 									highlightNote(highlightedText, color);
 									if (id) {
-										updateNoteColor.mutate({ id, color });
+										updateNote.mutate({ id, color });
 									}
 								}}
 							/>
 
-							{editState.editting ? (
+							{editState.editing ? (
 								<form>
 									<TextArea
 										placeholder="leave a note here"
@@ -278,7 +278,7 @@ export default function NoteCard({
 											className={cn("flex items-center  p-2 rounded-md")}
 											onClick={handleSubmit}
 										>
-											{updateNoteContent.isLoading || createNote.isLoading ? (
+											{updateNote.isLoading || createNote.isLoading ? (
 												<Spinner className="w-5 h-5" />
 											) : (
 												<ForwardIcon />
@@ -289,7 +289,7 @@ export default function NoteCard({
 							) : (
 								<button
 									onClick={() =>
-										dispatch({ type: "set_editting", payload: true })
+										dispatch({ type: "set_editing", payload: true })
 									}
 									className="flex w-full text-left hover:bg-gray-200/50 px-1 py-2  rounded-md"
 								>

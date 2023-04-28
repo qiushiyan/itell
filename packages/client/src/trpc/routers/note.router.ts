@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { ZLocation, protecetdProcedure, router } from "../utils";
+import { ZLocation, protectedProcedure, router } from "../utils";
+import { defaultNoteColor } from "@/contexts/note";
 
 const NoteRouter = router({
-	getByLocation: protecetdProcedure
+	getByLocation: protectedProcedure
 		.input(z.object({ location: ZLocation }))
 		.query(async ({ ctx, input }) => {
 			const { id } = ctx.user;
@@ -17,7 +18,7 @@ const NoteRouter = router({
 			return res;
 		}),
 
-	getAll: protecetdProcedure.query(async ({ ctx }) => {
+	getAll: protectedProcedure.query(async ({ ctx }) => {
 		const { id } = ctx.user;
 		return await ctx.prisma.note.findMany({
 			where: {
@@ -26,12 +27,13 @@ const NoteRouter = router({
 		});
 	}),
 
-	create: protecetdProcedure
+	create: protectedProcedure
 		.input(
 			z.object({
 				y: z.number(),
 				noteText: z.string(),
 				highlightedText: z.string(),
+				color: z.string().optional(),
 				location: ZLocation,
 			}),
 		)
@@ -45,16 +47,18 @@ const NoteRouter = router({
 					module: input.location.module,
 					chapter: input.location.chapter,
 					section: input.location.section || 0,
+					color: input.color || defaultNoteColor,
 					user_id: id,
 				},
 			});
 		}),
 
-	updateContent: protecetdProcedure
+	update: protectedProcedure
 		.input(
 			z.object({
 				id: z.string(),
-				noteText: z.string(),
+				noteText: z.string().optional(),
+				color: z.string().optional(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -64,29 +68,12 @@ const NoteRouter = router({
 				},
 				data: {
 					noteText: input.noteText,
-				},
-			});
-		}),
-
-	updateColor: protecetdProcedure
-		.input(
-			z.object({
-				id: z.string(),
-				color: z.string(),
-			}),
-		)
-		.mutation(async ({ ctx, input }) => {
-			return await ctx.prisma.note.update({
-				where: {
-					id: input.id,
-				},
-				data: {
 					color: input.color,
 				},
 			});
 		}),
 
-	delete: protecetdProcedure
+	delete: protectedProcedure
 		.input(z.object({ id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
 			return await ctx.prisma.note.delete({

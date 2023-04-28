@@ -114,7 +114,7 @@ model Note {
   module          Int
   chapter         Int
   section         Int
-  color           String   @default("#a855f7")
+  color           String   @default("#3730a3")
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 

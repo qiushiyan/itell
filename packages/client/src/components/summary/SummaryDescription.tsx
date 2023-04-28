@@ -60,7 +60,7 @@ export default function SummaryDescription() {
 				You can unlock the next section by submitting a good summary of this
 				section
 			</Typography>
-			<Accordion items={accordionItems} defaultOpen={null} />
+			<Accordion items={accordionItems} defaultOpen={[0]} />
 		</>
 	);
 }

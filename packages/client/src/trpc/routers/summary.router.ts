@@ -1,10 +1,10 @@
 import { env } from "@/env.mjs";
-import { ZLocation, procedure, protecetdProcedure, router } from "../utils";
+import { ZLocation, procedure, protectedProcedure, router } from "../utils";
 import { z } from "zod";
 import { ZScore } from "@/lib/summary";
 
 const SummaryRouter = router({
-	getAllByUser: protecetdProcedure.query(({ ctx }) => {
+	getAllByUser: protectedProcedure.query(({ ctx }) => {
 		const { id } = ctx.user;
 		return ctx.prisma.summary.findMany({
 			where: {
@@ -13,7 +13,7 @@ const SummaryRouter = router({
 		});
 	}),
 
-	getScore: protecetdProcedure
+	getScore: protectedProcedure
 		.input(
 			z.object({
 				text: z.string(),
@@ -37,7 +37,7 @@ const SummaryRouter = router({
 			return ZScore.parse(data);
 		}),
 
-	create: protecetdProcedure
+	create: protectedProcedure
 		.input(
 			z.object({
 				text: z.string(),
