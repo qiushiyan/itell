@@ -46,7 +46,7 @@ type EditDispatch =
 	| { type: "toggle_editting" }
 	| { type: "set_show_edit"; payload: boolean }
 	| { type: "set_editting"; payload: boolean }
-	| { type: "toggle_arrow" }
+	| { type: "set_arrow"; payload: boolean }
 	| { type: "toggle_delete_modal" }
 	| { type: "finish_delete" }
 	| { type: "set_color"; payload: string };
@@ -88,8 +88,8 @@ export default function NoteCard({
 				case "set_editting":
 					draft.editting = action.payload;
 					break;
-				case "toggle_arrow":
-					draft.showArrow = !draft.showArrow;
+				case "set_arrow":
+					draft.showArrow = action.payload;
 					break;
 				case "toggle_delete_modal":
 					draft.showDeleteModal = !draft.showDeleteModal;
@@ -176,7 +176,7 @@ export default function NoteCard({
 	const triggers = {
 		onMouseEnter: () => {
 			if (sectionContentRef.current) {
-				dispatch({ type: "toggle_arrow" });
+				dispatch({ type: "set_arrow", payload: true });
 				if (editState.collapsed) {
 					dispatch({ type: "set_show_edit", payload: true });
 				}
@@ -185,8 +185,9 @@ export default function NoteCard({
 		},
 		onMouseLeave: () => {
 			if (sectionContentRef.current) {
-				dispatch({ type: "toggle_arrow" });
+				dispatch({ type: "set_arrow", payload: false });
 				dispatch({ type: "set_show_edit", payload: false });
+
 				unemphasizeText(sectionContentRef.current, highlightedText);
 			}
 		},

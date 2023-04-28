@@ -170,7 +170,7 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 	);
 
 	return (
-		<header className="sticky inset-0 z-10 h-max">
+		<header className="sticky inset-0 z-20 h-max">
 			<Navbar className="max-w-full  py-2 px-4 lg:px-8 lg:py-3 rounded-none">
 				<div className="flex items-center gap-4 text-blue-gray-900">
 					<Typography
