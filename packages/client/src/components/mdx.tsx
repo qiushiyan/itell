@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { useMDXComponent } from "next-contentlayer/hooks";
@@ -5,7 +7,6 @@ import { Button, Typography } from "@/components/material-tailwind";
 import Accordion from "@/components/ui/Accordion";
 import { cn, getYoutubeLinkFromEmbed } from "@/lib/utils";
 import Balancer from "react-wrap-balancer";
-import Steps from "./ui/Steps";
 import Tabs from "./ui/Tabs";
 
 const Keyterm = ({
@@ -109,60 +110,6 @@ function RoundedImage({
 	);
 }
 
-function ProsCard({ title, pros }: { title: string; pros: string[] }) {
-	return (
-		<div className="border border-emerald-200 dark:border-emerald-900 bg-neutral-50 dark:bg-neutral-900 rounded-xl p-6 my-4 w-full">
-			<span>{`You might use ${title} if...`}</span>
-			<div className="mt-4">
-				{pros.map((pro) => (
-					<div key={pro} className="flex font-medium items-baseline mb-2">
-						<div className="h-4 w-4 mr-2">
-							<svg className="h-4 w-4 text-emerald-500" viewBox="0 0 24 24">
-								<g
-									fill="none"
-									stroke="currentColor"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								>
-									<path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-									<path d="M22 4L12 14.01l-3-3" />
-								</g>
-							</svg>
-						</div>
-						<span>{pro}</span>
-					</div>
-				))}
-			</div>
-		</div>
-	);
-}
-
-function ConsCard({ title, cons }: { title: string; cons: string[] }) {
-	return (
-		<div className="border border-red-200 dark:border-red-900 bg-neutral-50 dark:bg-neutral-900 rounded-xl p-6 my-6 w-full">
-			<span>{`You might not use ${title} if...`}</span>
-			<div className="mt-4">
-				{cons.map((con) => (
-					<div key={con} className="flex font-medium items-baseline mb-2">
-						<div className="h-4 w-4 mr-2">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 20 20"
-								fill="currentColor"
-								className="h-4 w-4 text-red-500"
-							>
-								<path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-							</svg>
-						</div>
-						<span>{con}</span>
-					</div>
-				))}
-			</div>
-		</div>
-	);
-}
-
 const Info = ({
 	title,
 	children,
@@ -181,6 +128,14 @@ export const Warning = ({ children }) => (
 	</div>
 );
 
+const Card = ({ title, children }) => {
+	return (
+		<div className="mb-4 rounded-md max-w-2xl mx-auto px-4 py-2 border-l-2 border-yellow-700">
+			<h5>{title}</h5>
+			{children}
+		</div>
+	);
+};
 const TextOverImage = ({
 	src,
 	children,
@@ -279,12 +234,10 @@ const components = {
 	Typography,
 	Accordion,
 	Callout,
-	ProsCard,
-	ConsCard,
+	Card,
 	TextOverImage,
 	Info,
 	Warning,
-	Steps,
 	Tabs,
 	Keyterm,
 	Caption,

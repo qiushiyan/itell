@@ -42,7 +42,7 @@ export function ModuleSidebar({
 					>
 						<a href={`/${chapter.url}`} className="block mb-1">
 							<Typography variant="h6" className={cn("m-0 px-2 pr-1", {})}>
-								<Balancer>{chapter.title}</Balancer>
+								<Balancer as="div">{chapter.title}</Balancer>
 							</Typography>
 						</a>
 						<button
@@ -57,9 +57,9 @@ export function ModuleSidebar({
 							}}
 						>
 							{sectionsVisible[chapter.chapter] ? (
-								<ChevronDownIcon className="w-5 h-5 transform rotate-180" />
-							) : (
 								<ChevronDownIcon className="w-5 h-5" />
+							) : (
+								<ChevronDownIcon className="w-5 h-5 transform rotate-180" />
 							)}
 						</button>
 					</div>
@@ -112,7 +112,7 @@ type TocSidebarProps = {
 
 export function TocSidebar({ headings }: TocSidebarProps) {
 	return (
-		<div className="sticky top-20">
+		<div className="hidden lg:block sticky top-20">
 			<Typography variant="small" className="text-gray-800">
 				ON THIS PAGE
 			</Typography>
