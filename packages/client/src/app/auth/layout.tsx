@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ChevronLeftIcon, Command } from "lucide-react";
-import { ChevronDownIcon } from "@/components/icons";
 import { Button, Typography } from "@/components/material-tailwind";
 import FlipCard from "@/components/flip-card";
 

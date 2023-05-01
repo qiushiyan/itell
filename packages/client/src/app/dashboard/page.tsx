@@ -1,5 +1,5 @@
 import DashboardStudentSummaries from "@/components/dashboard-student-summaries";
-import { Warning } from "@/components/mdx";
+import { Warning } from "@/components/mdx/callout";
 import { getServerAuthSession } from "@/lib/auth";
 import db from "@/lib/db";
 import { delay, groupby, relativeDate } from "@/lib/utils";
