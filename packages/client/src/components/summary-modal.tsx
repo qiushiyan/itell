@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Modal from "./ui/Modal";
+import Modal from "./ui/modal";
 import { Summary } from "@prisma/client";
 import { formatRelative } from "date-fns";
 import { Button, Typography } from "@/components/material-tailwind";

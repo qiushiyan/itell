@@ -1,4 +1,4 @@
-import Accordion from "@/components/ui/Accordion";
+import Accordion from "@/components/ui/accordion";
 import { AccordionItem } from "@/types/components";
 import { Typography } from "@/components/material-tailwind";
 

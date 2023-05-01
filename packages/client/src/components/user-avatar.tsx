@@ -1,20 +1,12 @@
 "use client";
 
 import { DefaultSession } from "next-auth";
-import {
-	Avatar,
-	Button,
-	Menu,
-	MenuHandler,
-	MenuItem,
-	MenuList,
-	Typography,
-} from "@/components/material-tailwind";
+import { Avatar, Typography } from "@/components/material-tailwind";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChartBarIcon, ChevronDownIcon, LogoutIcon } from "./icons";
-import { Fragment, useState } from "react";
-import Dropdown from "./ui/Dropdown";
+import { useState } from "react";
+import Dropdown from "./ui/dropdown";
+import { LogOutIcon, BarChart4Icon, ChevronDownIcon } from "lucide-react";
 
 type Props = {
 	user: NonNullable<DefaultSession["user"]>;
@@ -35,12 +27,12 @@ export default function UserAvatar({ user }: Props) {
 	const menuItems = [
 		{
 			label: "Dashboard",
-			icon: <ChartBarIcon />,
+			icon: <BarChart4Icon />,
 			action: () => router.push("/dashboard"),
 		},
 		{
 			label: "logout",
-			icon: <LogoutIcon />,
+			icon: <LogOutIcon />,
 			action: handleLogout,
 		},
 	];

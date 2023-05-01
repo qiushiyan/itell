@@ -1,8 +1,8 @@
 "use client";
 
 import { useLocation } from "@/lib/hooks";
-import SummaryDescription from "./SummaryDescription";
-import SummaryInput from "./SummaryInput";
+import SummaryDescription from "./summary-description";
+import SummaryInput from "./summary-input";
 import { Typography } from "../material-tailwind";
 
 export default function Summary() {

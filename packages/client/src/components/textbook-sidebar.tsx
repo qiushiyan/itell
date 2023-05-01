@@ -5,10 +5,9 @@ import { Typography } from "@/components/material-tailwind";
 import Balancer from "react-wrap-balancer";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { ChevronDownIcon } from "./icons";
 import { useLocation } from "@/lib/hooks";
 import Link from "next/link";
-import { PencilIcon, ArrowUpIcon } from "lucide-react";
+import { PencilIcon, ArrowUpIcon, ChevronDownIcon } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
 import { SectionLocation } from "@/types/location";
 
@@ -59,7 +58,7 @@ export function ModuleSidebar({
 							{sectionsVisible[chapter.chapter] ? (
 								<ChevronDownIcon className="w-5 h-5" />
 							) : (
-								<ChevronDownIcon className="w-5 h-5 transform rotate-180" />
+								<ChevronDownIcon className="w-5 h-5 rotate-180" />
 							)}
 						</button>
 					</div>

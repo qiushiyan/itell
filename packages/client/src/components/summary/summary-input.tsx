@@ -7,11 +7,11 @@ import { Location } from "@/types/location";
 import { useImmerReducer } from "use-immer";
 import { toast } from "sonner";
 import cld3 from "@/lib/cld";
-import { Warning } from "../mdx";
 import Spinner from "../spinner";
 import { SummaryFeedback, getFeedback } from "@/lib/summary";
-import Feedback from "./SummaryFeedback";
+import Feedback from "./summary-feedback";
 import { useEffect } from "react";
+import { Warning } from "../mdx/callout";
 
 type State = {
 	input: string;

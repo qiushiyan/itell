@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, Fragment, useEffect, useRef } from "react";
-import TextArea from "../ui/TextArea";
+import TextArea from "../ui/textarea";
 import { DeleteIcon, EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
 import { useClickOutside, useNotes } from "@/lib/hooks";

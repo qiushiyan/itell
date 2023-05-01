@@ -1,9 +1,12 @@
 "use client";
 
-import { CheckCircleIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
+import { CheckCircleIcon } from "lucide-react";
 import React, { useContext } from "react";
 import { createContext, useState } from "react";
+import { Transition } from "@headlessui/react";
+import { Typography } from "../material-tailwind";
+
 type StepStatus = "complete" | "current" | "upcoming";
 type StepperContextType = {
 	activeStep: number;
@@ -64,7 +67,7 @@ export const Step = ({
 	return (
 		<li className="cursor-pointer">
 			<a className="group no-underline" onClick={() => setActiveStep(value)}>
-				<span className="flex items-start">
+				<span className="flex items-center">
 					{StatusIcon[getStepStatus(value, activeStep)]}
 					<span className="ml-3 text-sm font-medium text-gray-500 group-hover:text-gray-900">
 						{children}
@@ -76,10 +79,10 @@ export const Step = ({
 };
 export const StepperHeader = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<nav className="basis-1/4" aria-label="Progress">
+		<nav className=" lg:basis-1/5" aria-label="Progress">
 			<ol
 				role="list"
-				className="list-none flex flex-row md:flex-col items-start gap-2"
+				className="list-none flex flex-row lg:flex-col items-center gap-2"
 			>
 				{children}
 			</ol>
@@ -93,13 +96,24 @@ export const StepperPanel = ({
 }: { value: number; children: React.ReactNode }) => {
 	const { activeStep } = useContext(StepperContext);
 
-	if (activeStep !== value) return null;
-
-	return <>{children}</>;
+	return (
+		<Transition
+			show={activeStep === value}
+			enter="transition-opacity duration-100"
+			enterFrom="opacity-0"
+			enterTo="opacity-100"
+		>
+			{children}
+		</Transition>
+	);
 };
 
 export const StepperBody = ({ children }: { children: React.ReactNode }) => {
-	return <div className="flex-1 rounded-md px-4">{children}</div>;
+	return (
+		<div className="flex-1 rounded-md px-4">
+			<Typography as="div">{children}</Typography>
+		</div>
+	);
 };
 
 export const Stepper = ({
@@ -112,7 +126,13 @@ export const Stepper = ({
 
 	return (
 		<StepperContext.Provider value={{ activeStep, setActiveStep }}>
-			<div className={cn("flex flex-row lg:flex-col", className)} {...rest}>
+			<div
+				className={cn(
+					"flex flex-col lg:flex-row gap-4 border border-blue-100 rounded-md shadow-md",
+					className,
+				)}
+				{...rest}
+			>
 				{children}
 			</div>
 		</StepperContext.Provider>

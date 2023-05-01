@@ -23,12 +23,15 @@ Think about what a complex system a modern economy is. It includes all productio
 
 There are at least three ways that societies organize an economy: **traditional economy, command economy**, and **market economy**.
 
-<Tabs
-  items={[
-    {
-      label: "traditional economy",
-      content: (
-        <p>
+<Tabs value="traditional">
+  <TabsHeader>
+    <Tab value="traditional">traditional economy</Tab>
+    <Tab value="command">command economy</Tab>
+    <Tab value="market">market economy</Tab>
+  </TabsHeader>
+
+  <TabsBody>
+    <TabPanel value="traditional">
           Traditional economy is the oldest economic system and is used in parts
           of Asia, Africa, and South America. Traditional economies organize
           their economic affairs the way they have always done (i.e.,
@@ -36,21 +39,15 @@ There are at least three ways that societies organize an economy: **traditional 
           who grow the crops using traditional methods. What you produce is what
           you consume. Because tradition drives the way of life, there is little
           economic progress or development.
-        </p>
-      ),
-    },
-    {
-      label: "command economy",
-      content: (
-        <div>
-          <p>
+    </TabPanel>
+    <TabPanel value="command">
             Command economies are very different. In a command economy, economic
             effort is devoted to goals passed down from a ruler or ruling class.
             Ancient Egypt was a good example: a large part of economic life was
             devoted to building pyramids for the pharaohs. Medieval manor life
             is another example: the lord provided the land for growing crops and
             protection in the event of war. In return, vassals provided labor
-            and soldiers to do the lord’s bidding. In the last century,
+            and soldiers to do the lord's bidding. In the last century,
             communist governments like Cuba, North Korea, and the former Soviet
             Union have emphasized command economies by centralizing economic
             planning with the state. The government decides what goods and
@@ -58,21 +55,8 @@ There are at least three ways that societies organize an economy: **traditional 
             of production will be used, and how much workers will receive for
             wages. In return, the government provides necessities free like
             healthcare and education.
-          </p>
-          <Image
-            src="/images/module-1/chapter-1/section-4/2a6af7aa6dce6a6e2f047d2d2835a506618adea4.png"
-            alt="people riding camels in front of two pyramids in Egypt"
-            width={400}
-            height={300}
-          />
-        </div>
-      ),
-    },
-    {
-      label: "market economy",
-      content: (
-        <div>
-          <p>
+    </TabPanel>
+    <TabPanel value="market">
             Although command economies have a very centralized structure for
             economic decisions, market economies have a very decentralized
             structure. A market is an institution that brings together buyers
@@ -91,18 +75,17 @@ There are at least three ways that societies organize an economy: **traditional 
             higher the income (think Lady Gaga or LeBron James). In this
             scenario, market forces, not governments, determine economic
             outcomes.
-          </p>
           <Image
             src="/images/module-1/chapter-1/section-4/156ff3bfad3dafb431ef8afb9c61a2248e7df9b1.png"
             alt="The image is a photograph of the New York Stock Exchange's entrance"
             width={400}
             height={300}
-          />
-        </div>
-      ),
-    },
-  ]}
-/>
+          >
+          </Image>
+    </TabPanel>
+  </TabsBody>
+</Tabs>
+
 
 Most economies in the real world are **mixed economies**, meaning they combine elements of command, market, and even traditional systems. The U.S. economy is a market-oriented mixed economy, whereas many countries in Europe and Latin America, while primarily market-oriented, have a greater degree of government involvement in economic decisions. China and Russia remain closer to being command economies, despite transitioning to a more market-oriented system over the past several decades.
 

@@ -1,6 +1,6 @@
 "use client";
 
-import Modal from "./ui/Modal";
+import Modal from "./ui/modal";
 import { LockIcon, UserPlusIcon } from "lucide-react";
 import {
 	Card,

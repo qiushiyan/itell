@@ -1,30 +1,24 @@
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
-import Dropdown from "@/components/ui/Dropdown";
+import Dropdown from "@/components/ui/dropdown";
 import {
 	Navbar,
 	MobileNav,
 	Typography,
 	Button,
 	IconButton,
-	Accordion,
-	AccordionHeader,
-	AccordionBody,
 } from "@/components/material-tailwind";
 import { signIn, useSession } from "next-auth/react";
 import UserAvatar from "./user-avatar";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { toast } from "sonner";
-import { cn, getLocationFromPathname, groupby, keyof } from "@/lib/utils";
+import { cn, groupby, keyof } from "@/lib/utils";
 import { allSections } from "contentlayer/generated";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
 import { siteConfig } from "@/config/site";
-import { ChevronDownIcon } from "./icons";
-import { Location } from "@/types/location";
 import { useLocation } from "@/lib/hooks";
 import Spinner from "./spinner";
+import { ChevronDownIcon } from "lucide-react";
 
 type Props = {
 	showProgress?: boolean;
@@ -46,7 +40,7 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 
 	const { data: session, status } = useSession();
 	const [openNav, setOpenNav] = useState(false);
-	const [moduleCollpased, setModuleCollapsed] = useState<
+	const [moduleCollapsed, setModuleCollapsed] = useState<
 		Record<string, boolean>
 	>(() => {
 		const output = {};
@@ -105,19 +99,19 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 								<button
 									onClick={() => {
 										setModuleCollapsed({
-											...moduleCollpased,
-											[module]: !moduleCollpased[module],
+											...moduleCollapsed,
+											[module]: !moduleCollapsed[module],
 										});
 									}}
 								>
-									{moduleCollpased[module] ? (
+									{moduleCollapsed[module] ? (
 										<ChevronDownIcon className="w-4 h-4" />
 									) : (
 										<ChevronDownIcon className="w-4 h-4 transform rotate-180" />
 									)}
 								</button>
 							</div>
-							{moduleCollpased[module] && (
+							{moduleCollapsed[module] && (
 								<ul>
 									{moduleChapters[module].map((chapter) => (
 										<li

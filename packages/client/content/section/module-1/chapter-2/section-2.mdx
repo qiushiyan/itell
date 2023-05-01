@@ -119,10 +119,14 @@ The production possibilities frontier can illustrate two kinds of efficiency: **
 - **Productive efficiency** means it is impossible to produce more of one good without decreasing the quantity that is produced of another good. Thus, all choices along a given PPF like B, C, and D display productive efficiency, but R does not.
 
 - **Allocative efficiency** means that the particular mix of goods being produced—that is, the specific choice along the production possibilities frontier—represents the allocation that society most desires.
+<Tabs value="productive">
+  <TabsHeader>
+    <Tab value="productive">Productive efficiency</Tab>
+    <Tab value="allocative">Allocative efficiency</Tab>
+  </TabsHeader>
 
-<Tabs items={[
-    {label: "Productive efficiency",
-    content: <p>
+  <TabsBody>
+    <TabPanel value="productive">
     Productive efficiency means that, given the available inputs and technology,
     it is impossible to produce more of one good without decreasing the quantity
     that is produced of another good. All choices on the PPF in Figure 2.4,
@@ -141,11 +145,9 @@ The production possibilities frontier can illustrate two kinds of efficiency: **
     the origin to a specific point on the PPF. Output mixes that have more
     healthcare and less education would have a steeper ray, while those with
     more education and less healthcare would have a flatter ray.
-    </p>},
-    {
-        label: "Allocative efficiency",
-        content: <p>
-            Allocative efficiency means that the particular combination of goods and
+    </TabPanel>
+    <TabPanel value="allocative">
+    Allocative efficiency means that the particular combination of goods and
     services on the production possibility curve that a society produces
     represents the combination that society most desires. How to determine what
     a society desires can be a controversial question, and is usually a
@@ -154,10 +156,10 @@ The production possibilities frontier can illustrate two kinds of efficiency: **
     supply the quantity of each product that consumers demand. Only one of the
     productively efficient choices will be the allocatively efficient choice for
     society as a whole.
-        </p>
-    }
+    </TabPanel>
+  </TabsBody>
+</Tabs>
 
-]}/>
 
 ## Why Society Must Choose
 
