@@ -250,12 +250,12 @@ export default function NoteCard({
 								<form>
 									<TextArea
 										placeholder="leave a note here"
-										rows={6}
 										value={editState.input}
 										setValue={(val) =>
 											dispatch({ type: "set_input", payload: val })
 										}
 										autoFocus
+										autoHeight
 									/>
 									<footer className="flex justify-between items-center gap-1">
 										{id && (

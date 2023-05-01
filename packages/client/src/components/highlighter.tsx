@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/material-tailwind";
 import { cn } from "@/lib/utils";
-import { HighlighterIcon, CopyIcon } from "lucide-react";
+import { HighlighterIcon, CopyIcon, PencilIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Popover } from "react-text-selection-popover";
 import { toast } from "sonner";
@@ -35,7 +35,7 @@ export default function HighlightToolbar({
 	const commands = [
 		{
 			label: "Note",
-			icon: <HighlighterIcon />,
+			icon: <PencilIcon className="w-5 h-5" />,
 			action: ({ clientRect, textContent }: SelectionData) => {
 				if (textContent) {
 					highlightSelection(textContent);
@@ -51,7 +51,7 @@ export default function HighlightToolbar({
 		},
 		{
 			label: "Copy",
-			icon: <CopyIcon />,
+			icon: <CopyIcon className="w-5 h-5" />,
 			action: async ({ textContent }: SelectionData) => {
 				if (textContent) {
 					await navigator.clipboard.writeText(textContent);
