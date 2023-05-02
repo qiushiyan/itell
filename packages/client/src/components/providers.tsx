@@ -5,7 +5,7 @@ import { ThemeProvider } from "@material-tailwind/react";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 import { TRPCProvider } from "@/trpc/trpc-provider";
-import NoteProvider from "@/contexts/note";
+import NoteProvider from "@/contexts/note-highlight";
 
 export default function AppProvider({
 	children,

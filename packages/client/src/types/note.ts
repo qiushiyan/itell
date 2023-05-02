@@ -15,3 +15,7 @@ export type NoteCard = {
 	updated_at?: Date;
 	created_at?: Date;
 };
+
+export type Highlight = {
+	id?: string;
+};

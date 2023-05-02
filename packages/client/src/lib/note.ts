@@ -1,4 +1,4 @@
-import { defaultNoteColor } from "@/contexts/note";
+import { defaultNoteColor } from "@/contexts/note-highlight";
 
 export const removeExistingMarks = async (target: HTMLElement) => {
 	// Remove all existing 'mark' tags before applying new highlighting
@@ -12,19 +12,35 @@ export const removeExistingMarks = async (target: HTMLElement) => {
 	}
 };
 
-export const highlightText = async (
-	target: HTMLElement,
-	textContent: string,
-	color: string = defaultNoteColor,
-) => {
+export const highlightText = async ({
+	target,
+	textContent,
+	color = defaultNoteColor,
+	backgroundColor,
+	id,
+}: {
+	target: HTMLElement;
+	textContent: string;
+	color?: string;
+	backgroundColor?: string;
+	id?: string;
+}) => {
 	// escape potential characters in selection
 	const regexString = textContent.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-	const regex = new RegExp(regexString, "gi");
+	const regex = new RegExp(regexString, "i");
 
-	const newText = target.innerHTML.replace(
-		regex,
-		`<mark class="highlight" style="color:${color}"}>$&</mark>`,
-	);
+	let newText = "";
+	if (backgroundColor) {
+		newText = target.innerHTML.replace(
+			regex,
+			`<mark class="highlight" id="${id}" style="background-color:${backgroundColor}">$&</mark>`,
+		);
+	} else {
+		newText = target.innerHTML.replace(
+			regex,
+			`<mark class="note" id="${id}" style="color:${color}"}>$&</mark>`,
+		);
+	}
 
 	target.innerHTML = newText;
 };
@@ -52,7 +68,7 @@ export const unHighlightText = (target: HTMLElement, textContent: string) => {
 		(mark) => {
 			mark.classList.add("unhighlighted");
 		},
-		"mark.highlight",
+		"mark.note",
 	);
 };
 

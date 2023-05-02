@@ -1,5 +1,5 @@
 import { env } from "@/env.mjs";
-import { ZLocation, procedure, protectedProcedure, router } from "../utils";
+import { ZLocation, protectedProcedure, router } from "../utils";
 import { z } from "zod";
 import { ZScore } from "@/lib/summary";
 
@@ -8,7 +8,7 @@ const SummaryRouter = router({
 		const { id } = ctx.user;
 		return ctx.prisma.summary.findMany({
 			where: {
-				user_id: id,
+				userId: id,
 			},
 		});
 	}),
@@ -55,10 +55,10 @@ const SummaryRouter = router({
 					chapter: input.location.chapter,
 					section: input.location.section || 0,
 					isPassed: input.isPassed,
-					content_score: input.score.content,
-					wording_score: input.score.wording,
-					similarity_score: input.score.similarity,
-					containment_score: input.score.containment,
+					contentScore: input.score.content,
+					wordingScore: input.score.wording,
+					similarityScore: input.score.similarity,
+					containmentScore: input.score.containment,
 					user: {
 						connect: {
 							id,

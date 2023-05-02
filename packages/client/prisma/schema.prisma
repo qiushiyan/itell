@@ -32,8 +32,8 @@ model Account {
 
 model Session {
   id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -52,13 +52,13 @@ model User {
   chapter       Int?      @default(1)
   section       Int?      @default(2)
 
-  accounts   Account[]
-  sessions   Session[]
-  Teacher    Teacher?  @relation(fields: [teacherId], references: [id])
-  is_teacher Boolean   @default(false)
-  teacherId  String?
-  summaries  Summary[]
-  notes      Note[]
+  accounts  Account[]
+  sessions  Session[]
+  Teacher   Teacher?  @relation(fields: [teacherId], references: [id])
+  isTeacher Boolean   @default(false) @map("is_teacher")
+  teacherId String?
+  summaries Summary[]
+  notes     Note[]
 
   @@map("users")
 }
@@ -88,20 +88,20 @@ model Teacher {
 
 model Summary {
   id   String @id @default(uuid())
-  user User   @relation(fields: [user_id], references: [id])
+  user User   @relation(fields: [userId], references: [id])
 
-  user_id           String
-  module            Int
-  chapter           Int
-  section           Int
-  isPassed          Boolean
-  containment_score Float
-  similarity_score  Float
-  wording_score     Float?
-  content_score     Float?
-  text              String
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
+  userId           String   @map("user_id")
+  module           Int
+  chapter          Int
+  section          Int
+  isPassed         Boolean
+  containmentScore Float    @map("containment_score")
+  similarityScore  Float    @map("similarity_score")
+  wordingScore     Float?   @map("wording_score")
+  contentScore     Float?   @map("content_score")
+  text             String
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
 
   @@map("summaries")
 }
@@ -109,8 +109,8 @@ model Summary {
 model Note {
   id              String   @id @default(uuid())
   y               Float
-  noteText        String
-  highlightedText String
+  noteText        String?  @map("note_text")
+  highlightedText String   @map("highlighted_text")
   module          Int
   chapter         Int
   section         Int
@@ -118,8 +118,8 @@ model Note {
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 
-  user_id String
-  user    User   @relation(fields: [user_id], references: [id])
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
 
   @@map("notes")
 }

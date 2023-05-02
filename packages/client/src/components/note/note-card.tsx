@@ -113,7 +113,7 @@ export default function NoteCard({
 		lineColor: editState.color,
 	};
 	const sectionContentRef = useRef<HTMLElement>();
-	const { deleteNote: deleteContextNote, highlightNote } = useNotes();
+	const { deleteNote: deleteContextNote, markNote } = useNotes();
 	const updateNote = trpc.note.update.useMutation({
 		onSuccess: () => {
 			dispatch({ type: "set_editing", payload: false });
@@ -239,7 +239,7 @@ export default function NoteCard({
 								color={editState.color}
 								onChange={(color) => {
 									dispatch({ type: "set_color", payload: color });
-									highlightNote(highlightedText, color);
+									markNote(highlightedText, color);
 									if (id) {
 										updateNote.mutate({ id, color });
 									}

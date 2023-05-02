@@ -10,6 +10,9 @@ import { useNotes } from "@/lib/hooks";
 import { useTextSelection } from "use-text-selection";
 import { SectionLocation } from "@/types/location";
 import { highlightText } from "@/lib/note";
+import { trpc } from "@/trpc/trpc-provider";
+import { defaultHighlightColor } from "@/contexts/note-highlight";
+import Spinner from "./spinner";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
@@ -17,13 +20,8 @@ export default function HighlightToolbar({
 	location,
 }: { location: SectionLocation }) {
 	const [target, setTarget] = useState<HTMLElement | null>(null);
-	const { createNote } = useNotes();
-
-	function highlightSelection(textContent: string) {
-		if (target && textContent) {
-			highlightText(target, textContent);
-		}
-	}
+	const { createNote, markNote, markHighlight } = useNotes();
+	const createHighlight = trpc.note.create.useMutation();
 
 	useEffect(() => {
 		const el = document.querySelector("#section-content") as HTMLElement;
@@ -38,13 +36,30 @@ export default function HighlightToolbar({
 			icon: <PencilIcon className="w-5 h-5" />,
 			action: ({ clientRect, textContent }: SelectionData) => {
 				if (textContent) {
-					highlightSelection(textContent);
+					markNote(textContent);
 					if (clientRect) {
 						createNote({
 							y: clientRect.y + window.scrollY,
 							highlightedText: textContent,
 							location,
 						});
+					}
+				}
+			},
+		},
+		{
+			label: "Highlight",
+			icon: <HighlighterIcon className="w-5 h-5" />,
+			action: async ({ clientRect, textContent }: SelectionData) => {
+				if (textContent) {
+					if (clientRect) {
+						const newHighlight = await createHighlight.mutateAsync({
+							y: clientRect.y + window.scrollY,
+							highlightedText: textContent,
+							location,
+							color: defaultHighlightColor,
+						});
+						markHighlight(textContent, newHighlight.id);
 					}
 				}
 			},
@@ -78,23 +93,27 @@ export default function HighlightToolbar({
 				return (
 					<div
 						className={cn(
-							"fixed w-48 rounded-md shadow-sm px-2 py-1 flex flex-col md:flex-row gap-2 border-2 border-gray-100 items-center justify-between bg-white -ml-[75px]",
+							"fixed rounded-md shadow-sm px-2 py-1 flex flex-col md:flex-row gap-2 border-2 border-gray-100 items-center justify-between bg-white -ml-[75px]",
 						)}
 						style={style}
 					>
-						{commands.map((command) => (
-							<Button
-								variant="text"
-								size="md"
-								color="blue-gray"
-								className="flex items-center gap-2 p-2"
-								onClick={() => command.action(data)}
-								key={command.label}
-							>
-								{command.icon}
-								{command.label}
-							</Button>
-						))}
+						{createHighlight.isLoading ? (
+							<Spinner className="w-5 h-5" />
+						) : (
+							commands.map((command) => (
+								<Button
+									variant="text"
+									size="md"
+									color="blue-gray"
+									className="flex items-center gap-2 p-2"
+									onClick={() => command.action(data)}
+									key={command.label}
+								>
+									{command.icon}
+									{command.label}
+								</Button>
+							))
+						)}
 					</div>
 				);
 			}}

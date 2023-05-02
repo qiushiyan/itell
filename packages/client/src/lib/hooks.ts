@@ -2,7 +2,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect, useContext, useRef, RefObject } from "react";
 import type { Location } from "@/types/location";
 import { getLocationFromPathname } from "./utils";
-import { NoteContext } from "@/contexts/note";
+import { NoteContext } from "@/contexts/note-highlight";
 
 export const useLocalStorage = <T,>(key: string, initialValue: T) => {
 	const [storedValue, setStoredValue] = useState<T>(() => {

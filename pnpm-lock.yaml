@@ -155,6 +155,8 @@ importers:
         specifier: 1.0.0-alpha.74
         version: 1.0.0-alpha.74(@algolia/client-search@4.17.0)
 
+  packages/vscode-snippets: {}
+
 packages:
 
   /@algolia/autocomplete-core@1.8.2:

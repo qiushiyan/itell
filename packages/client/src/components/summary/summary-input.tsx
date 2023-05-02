@@ -135,7 +135,7 @@ export default function SummaryInput() {
 			toast.error("Please use English for your summary");
 			return dispatch({
 				type: "check_language_error",
-				payload: "Please use English for your summary",
+				payload: "Please use English for your summary.",
 			});
 		}
 
@@ -175,12 +175,12 @@ export default function SummaryInput() {
 					},
 				});
 				if (feedback.isPassed) {
-					toast.success("You can now proceed to the next section");
+					toast.success("You can now proceed to the next section.");
 				}
 				dispatch({ type: "reset" });
 			} catch (err) {
 				console.log(err);
-				toast.error("Something went wrong, please try again later");
+				toast.error("Something went wrong, please try again later.");
 				return;
 			}
 

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { ZLocation, protectedProcedure, router } from "../utils";
-import { defaultNoteColor } from "@/contexts/note";
+import { defaultNoteColor } from "@/contexts/note-highlight";
 
 const NoteRouter = router({
 	getByLocation: protectedProcedure
@@ -9,7 +9,7 @@ const NoteRouter = router({
 			const { id } = ctx.user;
 			const res = await ctx.prisma.note.findMany({
 				where: {
-					user_id: id,
+					userId: id,
 					module: input.location.module,
 					chapter: input.location.chapter,
 					section: input.location.section,
@@ -22,7 +22,7 @@ const NoteRouter = router({
 		const { id } = ctx.user;
 		return await ctx.prisma.note.findMany({
 			where: {
-				user_id: id,
+				userId: id,
 			},
 		});
 	}),
@@ -31,7 +31,7 @@ const NoteRouter = router({
 		.input(
 			z.object({
 				y: z.number(),
-				noteText: z.string(),
+				noteText: z.string().optional(),
 				highlightedText: z.string(),
 				color: z.string().optional(),
 				location: ZLocation,
@@ -48,7 +48,7 @@ const NoteRouter = router({
 					chapter: input.location.chapter,
 					section: input.location.section || 0,
 					color: input.color || defaultNoteColor,
-					user_id: id,
+					userId: id,
 				},
 			});
 		}),
