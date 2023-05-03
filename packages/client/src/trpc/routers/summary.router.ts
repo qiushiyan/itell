@@ -22,7 +22,7 @@ const SummaryRouter = router({
 		)
 		.output(ZScore)
 		.mutation(async ({ input }) => {
-			const response = await fetch(`${env.SCORE_API_URL}/score`, {
+			const response = await fetch(`${env.SCORE_API_URL}`, {
 				method: "POST",
 				body: JSON.stringify({
 					summary: input.text,
