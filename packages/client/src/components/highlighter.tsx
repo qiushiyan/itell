@@ -48,7 +48,7 @@ export default function HighlightToolbar({
 			},
 		},
 		{
-			label: "Highlight",
+			label: "Mark",
 			icon: <HighlighterIcon className="w-5 h-5" />,
 			action: async ({ clientRect, textContent }: SelectionData) => {
 				if (textContent) {

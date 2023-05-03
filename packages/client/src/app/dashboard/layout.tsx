@@ -18,7 +18,7 @@ export default async function DashboardLayout({
 			},
 		});
 		if (user) {
-			if (user.is_teacher) {
+			if (user.isTeacher) {
 				return (
 					<Fragment>
 						<div className="max-w-6xl mx-auto py-8 px-4">you are a teacher</div>
