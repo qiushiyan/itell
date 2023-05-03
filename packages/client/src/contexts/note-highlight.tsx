@@ -11,8 +11,15 @@ type NoteContextType = {
 	createNote: (note: CreateNoteInput) => void;
 	deleteNote: (id: string) => void;
 	deleteHighlight: (id: string) => void;
-	markNote: (text: string, color?: string) => void;
-	markHighlight: (text: string, id: string, color?: string) => void;
+	markNote: (args: {
+		textContent: string;
+		color?: string;
+	}) => void;
+	markHighlight: (args: {
+		textContent: string;
+		id: string;
+		backgroundColor?: string;
+	}) => void;
 };
 
 export const defaultNoteColor = "#3730a3";
@@ -44,6 +51,7 @@ export const NoteContext = createContext<NoteContextType>(
 	{} as NoteContextType,
 );
 export default function NoteProvider({ children }) {
+	const targetRef = useRef<HTMLElement | null>(null);
 	const [state, dispatch] = useImmerReducer<State, Action>(
 		(draft, action) => {
 			switch (action.type) {
@@ -76,14 +84,6 @@ export default function NoteProvider({ children }) {
 			highlights: [],
 		},
 	);
-	const targetRef = useRef<HTMLDivElement | null>(null);
-
-	useEffect(() => {
-		const target = document.querySelector("#section-content") as HTMLDivElement;
-		if (target) {
-			targetRef.current = target;
-		}
-	}, []);
 
 	const setNotes = (notes: NoteCard[]) => {
 		dispatch({ type: "set_notes", payload: notes });
@@ -104,8 +104,21 @@ export default function NoteProvider({ children }) {
 		dispatch({ type: "delete_highlight", payload: id });
 	};
 
-	const markNote = (textContent: string, color: string = defaultNoteColor) => {
-		if (targetRef.current && textContent) {
+	useEffect(() => {
+		const el = document.getElementById("section-content");
+		if (el) {
+			targetRef.current = el;
+		}
+	}, []);
+
+	const markNote = ({
+		textContent,
+		color = defaultNoteColor,
+	}: {
+		textContent: string;
+		color?: string;
+	}) => {
+		if (textContent && targetRef.current) {
 			highlightText({
 				target: targetRef.current,
 				textContent,
@@ -114,11 +127,15 @@ export default function NoteProvider({ children }) {
 		}
 	};
 
-	const markHighlight = (
-		textContent: string,
-		id: string,
-		backgroundColor: string = defaultHighlightColor,
-	) => {
+	const markHighlight = ({
+		textContent,
+		id,
+		backgroundColor = defaultHighlightColor,
+	}: {
+		textContent: string;
+		id: string;
+		backgroundColor?: string;
+	}) => {
 		if (targetRef.current && textContent) {
 			highlightText({
 				target: targetRef.current,

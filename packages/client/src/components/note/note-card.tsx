@@ -132,7 +132,7 @@ export default function NoteCard({
 	});
 
 	useEffect(() => {
-		const t = document.querySelector("#section-content") as HTMLElement;
+		const t = document.getElementById("section-content") as HTMLElement;
 		if (t) {
 			sectionContentRef.current = t;
 		}
@@ -239,7 +239,7 @@ export default function NoteCard({
 								color={editState.color}
 								onChange={(color) => {
 									dispatch({ type: "set_color", payload: color });
-									markNote(highlightedText, color);
+									markNote({ textContent: highlightedText, color });
 									if (id) {
 										updateNote.mutate({ id, color });
 									}

@@ -24,7 +24,7 @@ export default function HighlightToolbar({
 	const createHighlight = trpc.note.create.useMutation();
 
 	useEffect(() => {
-		const el = document.querySelector("#section-content") as HTMLElement;
+		const el = document.getElementById("section-content") as HTMLElement;
 		if (el) {
 			setTarget(el);
 		}
@@ -36,7 +36,7 @@ export default function HighlightToolbar({
 			icon: <PencilIcon className="w-5 h-5" />,
 			action: ({ clientRect, textContent }: SelectionData) => {
 				if (textContent) {
-					markNote(textContent);
+					markNote({ textContent });
 					if (clientRect) {
 						createNote({
 							y: clientRect.y + window.scrollY,
@@ -59,7 +59,11 @@ export default function HighlightToolbar({
 							location,
 							color: defaultHighlightColor,
 						});
-						markHighlight(textContent, newHighlight.id);
+						markHighlight({
+							textContent,
+							id: newHighlight.id,
+							backgroundColor: newHighlight.color,
+						});
 					}
 				}
 			},

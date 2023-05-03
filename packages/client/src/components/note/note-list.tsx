@@ -29,7 +29,7 @@ export default function NoteList({ location }: { location: SectionLocation }) {
 	const ref = useRef<HTMLElement | null>(null);
 
 	useEffect(() => {
-		const el = document.querySelector("#section-content") as HTMLElement;
+		const el = document.getElementById("section-content") as HTMLElement;
 		if (el) {
 			ref.current = el;
 		}
@@ -43,10 +43,16 @@ export default function NoteList({ location }: { location: SectionLocation }) {
 				const highlights: Highlight[] = [];
 				for (const entry of data) {
 					if (entry.noteText) {
-						markNote(entry.highlightedText, entry.color);
+						markNote({
+							textContent: entry.highlightedText,
+							color: entry.color,
+						});
 						notes.push(entry as NoteCardType);
 					} else {
-						markHighlight(entry.highlightedText, entry.id, entry.color);
+						markHighlight({
+							textContent: entry.highlightedText,
+							id: entry.id,
+						});
 						highlights.push({ id: entry.id });
 					}
 				}
