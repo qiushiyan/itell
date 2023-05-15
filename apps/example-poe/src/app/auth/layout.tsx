@@ -1,10 +1,12 @@
 import { cn } from "@itell/core";
 import Link from "next/link";
-import { ChevronLeftIcon, Command } from "lucide-react";
-import { Button, Typography } from "@/components/material-tailwind";
+import { ChevronLeftIcon } from "lucide-react";
+import { Button } from "@/components/material-tailwind";
 import FlipCard from "@/components/flip-card";
 
-export default function AuthLayout({ children }) {
+export default function AuthLayout({
+	children,
+}: { children: React.ReactNode }) {
 	return (
 		<div className="w-screen h-screen grid flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
 			<Link href="/" className={cn("absolute top-4 left-4 md:top-8 md:left-8")}>

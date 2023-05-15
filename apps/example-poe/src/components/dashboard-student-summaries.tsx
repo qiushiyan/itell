@@ -1,6 +1,6 @@
 "use client";
 
-import { keyof } from "@/lib/utils";
+import { keyof } from "@itell/core";
 import {
 	Tabs,
 	TabsHeader,

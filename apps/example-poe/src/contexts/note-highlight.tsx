@@ -50,7 +50,9 @@ type Action =
 export const NoteContext = createContext<NoteContextType>(
 	{} as NoteContextType,
 );
-export default function NoteProvider({ children }) {
+export default function NoteProvider({
+	children,
+}: { children: React.ReactNode }) {
 	const targetRef = useRef<HTMLElement | null>(null);
 	const [state, dispatch] = useImmerReducer<State, Action>(
 		(draft, action) => {

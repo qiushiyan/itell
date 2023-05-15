@@ -1,8 +1,14 @@
 import DashboardStudentSummaries from "@/components/dashboard-student-summaries";
-import { Warning } from "@/components/mdx/callout";
 import { getServerAuthSession } from "@/lib/auth";
 import db from "@/lib/db";
-import { delay, groupby, relativeDate } from "@/lib/utils";
+import { delay, relativeDate } from "@/lib/utils";
+import { groupby } from "@itell/core";
+
+const Warning = ({ children }: { children: React.ReactNode }) => (
+	<div className="border-l-4 border-orange-400 bg-orange-50 px-4 py-2">
+		<div className="ml-3">{children}</div>
+	</div>
+);
 
 export default async function () {
 	await delay(1000);

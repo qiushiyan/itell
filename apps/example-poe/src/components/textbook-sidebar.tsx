@@ -21,7 +21,7 @@ export function ModuleSidebar({
 	const [sectionsVisible, setSectionsVisible] = useState<
 		Record<string, boolean>
 	>(() => {
-		const output = {};
+		const output: Record<string, boolean> = {};
 		chapters.forEach((chapter) => {
 			output[chapter.chapter] = chapter.chapter === currentLocation.chapter;
 		});

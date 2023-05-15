@@ -22,7 +22,9 @@ export const generateStaticParams = async () => {
 	});
 };
 
-export const generateMetadata = ({ params }) => {
+export const generateMetadata = ({
+	params,
+}: { params: { slug: string[] } }) => {
 	const post = allSections.find(
 		(post) => post._raw.flattenedPath === params.slug.join("/"),
 	);

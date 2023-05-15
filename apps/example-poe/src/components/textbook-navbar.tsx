@@ -43,7 +43,7 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 	const [moduleCollapsed, setModuleCollapsed] = useState<
 		Record<string, boolean>
 	>(() => {
-		const output = {};
+		const output: Record<string, boolean> = {};
 		modules.forEach((module) => {
 			output[module] = false;
 		});

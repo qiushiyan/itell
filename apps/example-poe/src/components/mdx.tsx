@@ -66,6 +66,7 @@ export function Mdx({ code }: MdxProps) {
 
 	return (
 		<article className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none">
+			{/* @ts-ignore */}
 			<Component components={MdxComponents} />
 		</article>
 	);
