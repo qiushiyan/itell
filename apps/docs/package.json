@@ -1,0 +1,11 @@
+{
+  "name": "@itell/docs",
+  "scripts": {
+    "dev": "vitepress dev content --port 3001",
+    "build": "vitepress build content",
+    "preview": "vitepress preview content"
+  },
+  "devDependencies": {
+    "vitepress": "1.0.0-alpha.74"
+  }
+}

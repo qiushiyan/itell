@@ -3,7 +3,9 @@
         "rules": {
             "a11y": {
                 "useValidAnchor": "off",
-                "useAnchorContent": "off"
+                "useAnchorContent": "off",
+                "useButtonType": "off",
+                "noSvgWithoutTitle": "off"
             }
         }
     }
