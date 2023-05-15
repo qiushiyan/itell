@@ -8,12 +8,6 @@ importers:
         specifier: ^1.9.3
         version: 1.9.3
 
-  apps/docs:
-    devDependencies:
-      vitepress:
-        specifier: 1.0.0-alpha.74
-        version: 1.0.0-alpha.74(@algolia/client-search@4.17.0)
-
   apps/example-poe:
     dependencies:
       '@headlessui/react':
@@ -64,9 +58,6 @@ importers:
       cld3-asm:
         specifier: ^3.1.1
         version: 3.1.1
-      clsx:
-        specifier: ^1.2.1
-        version: 1.2.1
       contentlayer:
         specifier: ^0.3.2
         version: 0.3.2(esbuild@0.17.18)(typescript@5.0.2)
@@ -112,9 +103,6 @@ importers:
       react-wrap-balancer:
         specifier: ^0.4.1
         version: 0.4.1(react@18.2.0)
-      react-xarrows:
-        specifier: ^2.0.2
-        version: 2.0.2(react@18.2.0)
       rehype-autolink-headings:
         specifier: ^6.1.1
         version: 6.1.1
@@ -136,9 +124,6 @@ importers:
       superjson:
         specifier: ^1.12.3
         version: 1.12.3
-      tailwind-merge:
-        specifier: ^1.12.0
-        version: 1.12.0
       use-immer:
         specifier: ^0.9.0
         version: 0.9.0(immer@9.0.21)(react@18.2.0)
@@ -164,6 +149,12 @@ importers:
       typescript:
         specifier: 5.0.2
         version: 5.0.2
+
+  docs:
+    devDependencies:
+      vitepress:
+        specifier: 1.0.0-alpha.74
+        version: 1.0.0-alpha.74(@algolia/client-search@4.17.0)
 
   packages/core:
     dependencies:
@@ -192,6 +183,9 @@ importers:
       '@material-tailwind/react':
         specifier: ^1.4.2
         version: 1.4.2(react-dom@18.2.0)(react@18.2.0)
+      '@tailwindcss/typography':
+        specifier: ^0.5.9
+        version: 0.5.9(tailwindcss@3.3.2)
       '@types/react':
         specifier: ^18.0.28
         version: 18.0.29
@@ -5930,17 +5924,6 @@ packages:
     peerDependencies:
       react: ^18.0.0
     dependencies:
-      react: 18.2.0
-    dev: false
-
-  /react-xarrows@2.0.2(react@18.2.0):
-    resolution: {integrity: sha512-tDlAqaxHNmy0vegW/6NdhoWyXJq1LANX/WUAlHyzoHe9BwFVnJPPDghmDjYeVr7XWFmBrVTUrHsrW7GKYI6HtQ==}
-    peerDependencies:
-      react: '>=16.8.0'
-    dependencies:
-      '@types/prop-types': 15.7.5
-      lodash: 4.17.21
-      prop-types: 15.8.1
       react: 18.2.0
     dev: false
 

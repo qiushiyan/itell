@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@itell/core";
 import Image from "next/image";
 import { Typography } from "../material-tailwind";
 import Balancer from "react-wrap-balancer";

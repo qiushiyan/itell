@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/material-tailwind";
-import { cn } from "@/lib/utils";
+import { cn } from "@itell/core";
 import { HighlighterIcon, CopyIcon, PencilIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Popover } from "react-text-selection-popover";

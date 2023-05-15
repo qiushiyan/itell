@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "vitepress dev content --port 3001",
     "build": "vitepress build content",
-    "preview": "vitepress preview content"
+    "preview": "vitepress preview content",
+    "clean": "rm -rf .turbo"
   },
   "devDependencies": {
     "vitepress": "1.0.0-alpha.74"

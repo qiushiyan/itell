@@ -37,15 +37,12 @@ export const Accordion = ({
 		<MAccordion open={activeItems.includes(value)}>
 			<MAccordionHeader
 				onClick={() => toggleItem(value)}
-				className="tw-text-left tw-font-semibold tw-text-lg"
+				className="text-left font-semibold text-lg"
 			>
 				{value}
 			</MAccordionHeader>
 			<MAccordionBody>
-				<Typography
-					as="div"
-					className="tw-prose dark:tw-prose-invert tw-max-w-none"
-				>
+				<Typography as="div" className="prose dark:prose-invert max-w-none">
 					{children}
 				</Typography>
 			</MAccordionBody>

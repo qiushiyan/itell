@@ -3,10 +3,10 @@
   "authors": "learlab",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "docs"
   ],
   "scripts": {
     "build": "turbo run build",

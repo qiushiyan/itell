@@ -25,7 +25,6 @@
     "@trpc/react-query": "^10.23.0",
     "@trpc/server": "^10.23.0",
     "cld3-asm": "^3.1.1",
-    "clsx": "^1.2.1",
     "contentlayer": "^0.3.2",
     "date-fns": "2.29.3",
     "framer-motion": "^10.12.4",
@@ -41,7 +40,6 @@
     "react-dom": "18.2.0",
     "react-text-selection-popover": "^2.0.2",
     "react-wrap-balancer": "^0.4.1",
-    "react-xarrows": "^2.0.2",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-katex": "^6.0.3",
     "rehype-slug": "^5.1.0",
@@ -49,7 +47,6 @@
     "remark-math": "^5.1.1",
     "sonner": "^0.3.5",
     "superjson": "^1.12.3",
-    "tailwind-merge": "^1.12.0",
     "use-immer": "^0.9.0",
     "use-text-selection": "^1.1.5",
     "zod": "^3.21.4"

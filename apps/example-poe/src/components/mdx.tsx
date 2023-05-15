@@ -5,6 +5,13 @@ import { Typography } from "@/components/material-tailwind";
 import { CustomImage, TextOverImage } from "./mdx/image";
 import { CustomLink } from "./mdx/link";
 import {
+	Stepper,
+	StepperBody,
+	StepperHeader,
+	StepperPanel,
+	Step,
+} from "./mdx/stepper";
+import {
 	Accordion,
 	Accordions,
 	Callout,
@@ -19,11 +26,6 @@ import {
 	TabsBody,
 	TabsHeader,
 	TabPanel,
-	Stepper,
-	StepperBody,
-	StepperHeader,
-	StepperPanel,
-	Step,
 } from "@itell/ui/mdx";
 
 const MdxComponents = {

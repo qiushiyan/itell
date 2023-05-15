@@ -3,12 +3,10 @@
 import { Chapter } from "@/types/section";
 import { Typography } from "@/components/material-tailwind";
 import Balancer from "react-wrap-balancer";
-import { cn } from "@/lib/utils";
+import { cn } from "@itell/core";
 import { useState } from "react";
-import { useLocation } from "@/lib/hooks";
-import Link from "next/link";
-import { PencilIcon, ArrowUpIcon, ChevronDownIcon } from "lucide-react";
-import { Disclosure, Transition } from "@headlessui/react";
+import { ChevronDownIcon } from "lucide-react";
+import { Transition } from "@headlessui/react";
 import { SectionLocation } from "@/types/location";
 
 type ModuleSidebarProps = {

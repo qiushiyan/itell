@@ -1,6 +1,7 @@
 import { Section } from "contentlayer/generated";
 import { Chapter, SidebarSection } from "@/types/section";
-import { groupby, sortSections } from "./utils";
+import { sortSections } from "./utils";
+import { groupby } from "@itell/core";
 
 export default async function getChapters({
 	allSections,

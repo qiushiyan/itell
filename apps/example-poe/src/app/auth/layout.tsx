@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@itell/core";
 import Link from "next/link";
 import { ChevronLeftIcon, Command } from "lucide-react";
 import { Button, Typography } from "@/components/material-tailwind";

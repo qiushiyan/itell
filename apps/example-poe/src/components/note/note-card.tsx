@@ -9,10 +9,10 @@ import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDeleteModal from "./note-delete-modal";
 import { emphasizeNote, unHighlightNote, unemphasizeNote } from "@/lib/note";
-import { cn, relativeDate } from "@/lib/utils";
+import { relativeDate } from "@/lib/utils";
+import { cn } from "@itell/core";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
-import Xarrow, { xarrowPropsType } from "react-xarrows";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
 
@@ -26,7 +26,6 @@ type EditState = {
 	editing: boolean;
 	collapsed: boolean;
 	showEdit: boolean;
-	showArrow: boolean;
 	showDeleteModal: boolean;
 	showColorPicker: boolean;
 };
@@ -38,7 +37,6 @@ type EditDispatch =
 	| { type: "toggle_editing" }
 	| { type: "set_show_edit"; payload: boolean }
 	| { type: "set_editing"; payload: boolean }
-	| { type: "set_arrow"; payload: boolean }
 	| { type: "toggle_delete_modal" }
 	| { type: "finish_delete" }
 	| { type: "set_color"; payload: string };
@@ -66,7 +64,6 @@ export default function ({
 				case "collapse_note":
 					draft.collapsed = true;
 					draft.editing = false;
-					draft.showArrow = false;
 					break;
 				case "toggle_collapsed":
 					draft.collapsed = !draft.collapsed;
@@ -80,16 +77,12 @@ export default function ({
 				case "set_editing":
 					draft.editing = action.payload;
 					break;
-				case "set_arrow":
-					draft.showArrow = action.payload;
-					break;
 				case "toggle_delete_modal":
 					draft.showDeleteModal = !draft.showDeleteModal;
 					break;
 				case "finish_delete":
 					draft.showDeleteModal = false;
 					draft.editing = false;
-					draft.showArrow = false;
 					break;
 				case "set_color":
 					draft.color = action.payload;
@@ -101,29 +94,21 @@ export default function ({
 			color, // border color: ;
 			editing: !id, // true: show textarea, false: show noteText
 			collapsed: !!id, // if the note card is expanded
-			showArrow: false, // show arrow connecting note card and highlighted text
 			showDeleteModal: false, // show delete modal
 			showColorPicker: false, // show color picker
 			showEdit: false, // show edit overlay
 		},
 	);
-	const arrowStyle: Partial<xarrowPropsType> = {
-		strokeWidth: 2,
-		headColor: editState.color,
-		lineColor: editState.color,
-	};
 	const sectionContentRef = useRef<HTMLElement>();
 	const { deleteNote: deleteContextNote, markNote } = useNotes();
 	const updateNote = trpc.note.update.useMutation({
 		onSuccess: () => {
 			dispatch({ type: "set_editing", payload: false });
-			dispatch({ type: "set_arrow", payload: false });
 		},
 	});
 	const createNote = trpc.note.create.useMutation({
 		onSuccess: () => {
 			dispatch({ type: "set_editing", payload: false });
-			dispatch({ type: "set_arrow", payload: false });
 		},
 	});
 	const deleteNote = trpc.note.delete.useMutation();
@@ -176,7 +161,6 @@ export default function ({
 	const triggers = {
 		onMouseEnter: () => {
 			if (sectionContentRef.current) {
-				dispatch({ type: "set_arrow", payload: true });
 				if (editState.collapsed) {
 					dispatch({ type: "set_show_edit", payload: true });
 				}
@@ -185,7 +169,6 @@ export default function ({
 		},
 		onMouseLeave: () => {
 			if (sectionContentRef.current) {
-				dispatch({ type: "set_arrow", payload: false });
 				dispatch({ type: "set_show_edit", payload: false });
 
 				unemphasizeNote(sectionContentRef.current, highlightedText);

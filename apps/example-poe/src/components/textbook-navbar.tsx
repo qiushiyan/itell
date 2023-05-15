@@ -12,7 +12,7 @@ import {
 import { signIn, useSession } from "next-auth/react";
 import UserAvatar from "./user-avatar";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { cn, groupby, keyof } from "@/lib/utils";
+import { cn, groupby, keyof } from "@itell/core";
 import { allSections } from "contentlayer/generated";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
@@ -87,12 +87,7 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 								key={module}
 							>
 								<Link href={moduleUrl} className="inline-flex">
-									<Button
-										variant={
-											location.module === Number(module) ? "filled" : "text"
-										}
-										className="p-2"
-									>
+									<Button variant={active ? "text" : "text"} className="p-2">
 										Module {module}
 									</Button>
 								</Link>
