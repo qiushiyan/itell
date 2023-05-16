@@ -24,8 +24,8 @@ type Props = {
 	showProgress?: boolean;
 };
 
-const moduleChapters = groupby(
-	allSections.filter((section) => section.location.section === undefined),
+const firstSectionsInModule = groupby(
+	allSections.filter((section) => section.location.section === 0),
 	(section) => section.location.module,
 	(section) => ({
 		title: section.title,
@@ -33,7 +33,7 @@ const moduleChapters = groupby(
 		url: `/module-${section.location.module}/chapter-${section.location.chapter}`,
 	}),
 );
-const modules = keyof(moduleChapters);
+const modules = keyof(firstSectionsInModule);
 
 export default function TextbookNavbar({ showProgress = false }: Props) {
 	const location = useLocation();
@@ -73,9 +73,9 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 		<ul className="flex flex-col gap-1 lg:flex-row lg:items-center lg:gap-2">
 			{modules.map((module) => {
 				const active = location && location.module === Number(module);
-				const firstChapter = moduleChapters[module][0].chapter;
+				const firstChapter = firstSectionsInModule[module][0].chapter;
 				const moduleUrl = `/module-${module}/chapter-${firstChapter}`;
-				const chapters = moduleChapters[module].sort(
+				const chapters = firstSectionsInModule[module].sort(
 					(a, b) => a.chapter - b.chapter,
 				);
 
@@ -108,7 +108,7 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 							</div>
 							{moduleCollapsed[module] && (
 								<ul>
-									{moduleChapters[module].map((chapter) => (
+									{firstSectionsInModule[module].map((chapter) => (
 										<li
 											className={cn(
 												"rounded-md hover:bg-gray-100 transition ease-in-out duration-100 p-2",

@@ -115,7 +115,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 				</aside>
 			</div>
 
-			<Summary />
+			<Summary location={currentLocation} />
 		</div>
 	);
 }

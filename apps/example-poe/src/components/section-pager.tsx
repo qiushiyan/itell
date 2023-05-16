@@ -1,4 +1,5 @@
 import { Pager } from "@/lib/pager";
+import { cn } from "@itell/core";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
@@ -7,27 +8,46 @@ type Props = {
 	pager: Pager;
 };
 
-export default function ({ pager }: Props) {
+const PagerLink = ({
+	pagerItem,
+	prev,
+	showChapter,
+}: { pagerItem: Pager["prev"]; prev: boolean; showChapter: boolean }) => {
 	return (
-		<div className="flex flex-col md:flex-row items-center justify-between pt-5 mt-5 border-t-2">
-			{pager.prev && (
-				<Link
-					href={pager.prev.href}
-					className="inline-flex items-center justify-start rounded-lg border border-transparent bg-transparent py-2 px-3 text-center font-medium text-slate-900 hover:border-slate-200 hover:bg-slate-100 focus:z-10 focus:outline-none focus:ring-4 focus:ring-slate-200 md:w-full"
-				>
-					<ChevronLeft />
-					<Balancer>{pager.prev.title}</Balancer>
-				</Link>
-			)}
-			{pager?.next && (
-				<Link
-					href={pager.next.href}
-					className="ml-auto inline-flex items-center justify-end rounded-lg border border-transparent bg-transparent py-2 px-3 text-center font-medium text-slate-900 hover:border-slate-200 hover:bg-slate-100 focus:z-10 focus:outline-none focus:ring-4 focus:ring-slate-200 md:w-full"
-				>
-					<Balancer>{pager.next.title}</Balancer>
-					<ChevronRight className="ml-2 h-4 w-4" />
-				</Link>
-			)}
+		pagerItem && (
+			<Link
+				href={pagerItem.href}
+				className={cn(
+					"inline-flex items-center rounded-md gap-2 border border-transparent bg-transparent py-2 px-3 text-center font-medium  hover:border-gray-200 hover:bg-gray-100 focus:z-10 focus:outline-none md:w-full",
+					{ "justify-end": !prev },
+				)}
+			>
+				{prev && <ChevronLeft />}
+				{showChapter ? (
+					<Balancer as="div">
+						<p className="mb-0 text-sm font-light tracking-tight">{`Chapter ${pagerItem.chapter}`}</p>
+						{pagerItem.title}
+					</Balancer>
+				) : (
+					<Balancer>{pagerItem.title}</Balancer>
+				)}
+				{!prev && <ChevronRight />}
+			</Link>
+		)
+	);
+};
+
+export default function ({ pager }: Props) {
+	const showChapter = pager.prev?.chapter !== pager.next?.chapter;
+
+	return (
+		<div className="flex flex-col md:flex-row items-stretch justify-between pt-5 mt-5 border-t-2">
+			<PagerLink pagerItem={pager.prev} prev={true} showChapter={showChapter} />
+			<PagerLink
+				pagerItem={pager.next}
+				prev={false}
+				showChapter={showChapter}
+			/>
 		</div>
 	);
 }

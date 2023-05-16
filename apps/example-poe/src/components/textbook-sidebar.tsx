@@ -33,8 +33,11 @@ export function ModuleSidebar({
 			{chapters.map((chapter) => (
 				<div key={chapter.chapter}>
 					<div
-						className={cn("relative hover:text-blue-600", {
+						className={cn("relative hover:text-blue-600 rounded-md mb-2", {
 							"text-blue-600": chapter.chapter === currentLocation.chapter,
+							"bg-gray-100":
+								chapter.chapter === currentLocation.chapter &&
+								currentLocation.section === 0,
 						})}
 					>
 						<a href={`/${chapter.url}`} className="block mb-1">

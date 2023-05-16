@@ -1,13 +1,11 @@
-"use client";
-
 import { useLocation } from "@/lib/hooks";
 import SummaryDescription from "./summary-description";
 import SummaryInput from "./summary-input";
 import { Typography } from "../material-tailwind";
+import { SectionLocation } from "@/types/location";
 
-export default function Summary() {
-	const location = useLocation();
-	if (location.section === undefined) {
+export default function Summary({ location }: { location: SectionLocation }) {
+	if (location.section === 0) {
 		return (
 			<div className="mt-10 border-l-4 border-blue-400 bg-blue-50 p-4">
 				<Typography className="mb-0">

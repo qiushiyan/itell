@@ -1,7 +1,9 @@
 import { Location } from "@/types/location";
 
-export const parseLocation = (x: string) =>
-	x ? parseInt(x.split("-")[1]) : undefined;
+export const parseLocation = (
+	x: string,
+	defaultVal: number | undefined = undefined,
+) => (x ? parseInt(x.split("-")[1]) : defaultVal);
 
 export const getLocationFromFlattenedPath = (
 	path: string,
@@ -11,6 +13,6 @@ export const getLocationFromFlattenedPath = (
 	return {
 		module: parseLocation(module),
 		chapter: parseLocation(chapter),
-		section: parseLocation(section),
+		section: parseLocation(section, 0),
 	};
 };

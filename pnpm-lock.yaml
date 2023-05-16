@@ -167,10 +167,10 @@ importers:
     devDependencies:
       vite:
         specifier: ^4.3.2
-        version: 4.3.2
+        version: 4.3.2(@types/node@20.1.5)
       vite-plugin-dts:
         specifier: ^2.3.0
-        version: 2.3.0(vite@4.3.2)
+        version: 2.3.0(@types/node@20.1.5)(vite@4.3.2)
 
   packages/ui:
     dependencies:
@@ -211,6 +211,9 @@ importers:
         specifier: ^3.3.2
         version: 3.3.2
     devDependencies:
+      '@types/node':
+        specifier: ^20.1.5
+        version: 20.1.5
       '@types/react-dom':
         specifier: ^18.0.11
         version: 18.0.11
@@ -222,10 +225,10 @@ importers:
         version: 5.0.2
       vite:
         specifier: ^4.3.2
-        version: 4.3.2
+        version: 4.3.2(@types/node@20.1.5)
       vite-plugin-dts:
         specifier: ^2.3.0
-        version: 2.3.0(vite@4.3.2)
+        version: 2.3.0(@types/node@20.1.5)(vite@4.3.2)
 
   packages/vscode: {}
 
@@ -1048,7 +1051,7 @@ packages:
     engines: {node: ^8.13.0 || >=10.10.0}
     dependencies:
       '@grpc/proto-loader': 0.7.7
-      '@types/node': 20.1.2
+      '@types/node': 20.1.5
     dev: false
 
   /@grpc/proto-loader@0.6.13:
@@ -1254,24 +1257,24 @@ packages:
       - supports-color
     dev: false
 
-  /@microsoft/api-extractor-model@7.26.8:
+  /@microsoft/api-extractor-model@7.26.8(@types/node@20.1.5):
     resolution: {integrity: sha512-ESj3bBJkiMg/8tS0PW4+2rUgTVwOEfy41idTnFgdbVX+O50bN6S99MV6FIPlCZWCnRDcBfwxRXLdAkOQQ0JqGw==}
     dependencies:
       '@microsoft/tsdoc': 0.14.2
       '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 3.58.0
+      '@rushstack/node-core-library': 3.58.0(@types/node@20.1.5)
     transitivePeerDependencies:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor@7.34.8:
+  /@microsoft/api-extractor@7.34.8(@types/node@20.1.5):
     resolution: {integrity: sha512-2Eh1PlZ8wULtH3kyAWcj62gFtjGKRXrEplsCO54vMLjiav3qet454VpSBXwKkXBenBylZRMk3SMBcpcuJ8RnKQ==}
     hasBin: true
     dependencies:
-      '@microsoft/api-extractor-model': 7.26.8
+      '@microsoft/api-extractor-model': 7.26.8(@types/node@20.1.5)
       '@microsoft/tsdoc': 0.14.2
       '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 3.58.0
+      '@rushstack/node-core-library': 3.58.0(@types/node@20.1.5)
       '@rushstack/rig-package': 0.3.18
       '@rushstack/ts-command-line': 4.13.2
       colors: 1.2.5
@@ -2457,7 +2460,7 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@rushstack/node-core-library@3.58.0:
+  /@rushstack/node-core-library@3.58.0(@types/node@20.1.5):
     resolution: {integrity: sha512-DHAZ3LTOEq2/EGURznpTJDnB3SNE2CKMDXuviQ6afhru6RykE3QoqXkeyjbpLb5ib5cpIRCPE/wykNe0xmQj3w==}
     peerDependencies:
       '@types/node': '*'
@@ -2465,6 +2468,7 @@ packages:
       '@types/node':
         optional: true
     dependencies:
+      '@types/node': 20.1.5
       colors: 1.2.5
       fs-extra: 7.0.1
       import-lazy: 4.0.0
@@ -2719,9 +2723,8 @@ packages:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: false
 
-  /@types/node@20.1.2:
-    resolution: {integrity: sha512-CTO/wa8x+rZU626cL2BlbCDzydgnFNgc19h4YvizpTO88MFQxab8wqisxaofQJ/9bLGugRdWIuX/TbIs6VVF6g==}
-    dev: false
+  /@types/node@20.1.5:
+    resolution: {integrity: sha512-IvGD1CD/nego63ySR7vrAKEX3AJTcmrAN2kn+/sDNLi1Ff5kBzDeEdqWDplK+0HAEoLYej137Sk0cUU8OLOlMg==}
 
   /@types/parse5@6.0.3:
     resolution: {integrity: sha512-SuT16Q1K51EAVPz1K29DJ/sXjhSQ0zjvsypYJ6tlwVsRV9jwW5Adq2ch8Dq8kDBCkYnELS7N7VNCSB5nC56t/g==}
@@ -2768,7 +2771,7 @@ packages:
       '@babel/plugin-transform-react-jsx-self': 7.21.0(@babel/core@7.21.8)
       '@babel/plugin-transform-react-jsx-source': 7.19.6(@babel/core@7.21.8)
       react-refresh: 0.14.0
-      vite: 4.3.2
+      vite: 4.3.2(@types/node@20.1.5)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2780,7 +2783,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.3.2
+      vite: 4.3.2(@types/node@20.1.5)
       vue: 3.2.47
     dev: true
 
@@ -5776,7 +5779,7 @@ packages:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.1.2
+      '@types/node': 20.1.5
       long: 4.0.0
     dev: false
 
@@ -5795,7 +5798,7 @@ packages:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 20.1.2
+      '@types/node': 20.1.5
       long: 5.2.3
     dev: false
 
@@ -6802,30 +6805,30 @@ packages:
       d3-timer: 3.0.1
     dev: false
 
-  /vite-plugin-dts@2.3.0(vite@4.3.2):
+  /vite-plugin-dts@2.3.0(@types/node@20.1.5)(vite@4.3.2):
     resolution: {integrity: sha512-WbJgGtsStgQhdm3EosYmIdTGbag5YQpZ3HXWUAPCDyoXI5qN6EY0V7NXq0lAmnv9hVQsvh0htbYcg0Or5Db9JQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: '>=2.9.0'
     dependencies:
       '@babel/parser': 7.21.8
-      '@microsoft/api-extractor': 7.34.8
+      '@microsoft/api-extractor': 7.34.8(@types/node@20.1.5)
       '@rollup/pluginutils': 5.0.2
-      '@rushstack/node-core-library': 3.58.0
+      '@rushstack/node-core-library': 3.58.0(@types/node@20.1.5)
       debug: 4.3.4
       fast-glob: 3.2.12
       fs-extra: 10.1.0
       kolorist: 1.8.0
       magic-string: 0.29.0
       ts-morph: 18.0.0
-      vite: 4.3.2
+      vite: 4.3.2(@types/node@20.1.5)
     transitivePeerDependencies:
       - '@types/node'
       - rollup
       - supports-color
     dev: true
 
-  /vite@4.3.2:
+  /vite@4.3.2(@types/node@20.1.5):
     resolution: {integrity: sha512-9R53Mf+TBoXCYejcL+qFbZde+eZveQLDYd9XgULILLC1a5ZwPaqgmdVpL8/uvw2BM/1TzetWjglwm+3RO+xTyw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -6850,6 +6853,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      '@types/node': 20.1.5
       esbuild: 0.17.18
       postcss: 8.4.23
       rollup: 3.21.6
@@ -6870,7 +6874,7 @@ packages:
       mark.js: 8.11.1
       minisearch: 6.0.1
       shiki: 0.14.2
-      vite: 4.3.2
+      vite: 4.3.2(@types/node@20.1.5)
       vue: 3.2.47
     transitivePeerDependencies:
       - '@algolia/client-search'

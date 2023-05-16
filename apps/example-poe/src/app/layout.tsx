@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-// import "@itell/ui/dist/style.css";
+
 import "../styles/globals.css";
 import AppProvider from "@/components/providers";
 import { siteConfig } from "@/config/site";

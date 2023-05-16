@@ -63,8 +63,8 @@ table tr:hover {
   @apply text-black font-normal !important;
 }
 
-.note .highlight {
-  @apply cursor-pointer
+mark.highlight {
+  cursor: pointer !important;
 }
 
 

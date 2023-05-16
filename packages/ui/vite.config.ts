@@ -24,7 +24,7 @@ const app = async (): Promise<UserConfigExport> => {
 					mdx: path.resolve(__dirname, "src/mdx/index.ts"),
 				},
 				name: "ui",
-				formats: ["es"],
+				formats: ["es", "cjs"],
 				fileName: (format, name) => `${name}.${format}.js`,
 			},
 			emptyOutDir: true,

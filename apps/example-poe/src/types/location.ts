@@ -7,5 +7,5 @@ export interface Location {
 export interface SectionLocation {
 	module: number;
 	chapter: number;
-	section: number | undefined;
+	section: number;
 }
