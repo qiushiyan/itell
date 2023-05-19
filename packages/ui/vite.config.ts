@@ -21,20 +21,21 @@ const app = async (): Promise<UserConfigExport> => {
 			lib: {
 				entry: {
 					index: path.resolve(__dirname, "src/index.ts"),
-					mdx: path.resolve(__dirname, "src/mdx/index.ts"),
+					server: path.resolve(__dirname, "src/components-server.ts"),
+					client: path.resolve(__dirname, "src/components-client.ts"),
 				},
 				name: "ui",
 				formats: ["es", "cjs"],
 				fileName: (format, name) => `${name}.${format}.js`,
 			},
-			emptyOutDir: true,
 			rollupOptions: {
-				external: ["react", "react-dom", "tailwindcss"],
+				external: ["react", "react-dom", "tailwindcss", "next"],
 				output: {
 					globals: {
 						react: "React",
 						"react-dom": "ReactDOM",
 						tailwindcss: "tailwindcss",
+						next: "next",
 					},
 				},
 			},

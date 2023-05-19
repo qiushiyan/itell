@@ -3,37 +3,23 @@ import { cn } from "@itell/core";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
+import { buttonVariants } from "@itell/ui/server";
 
 type Props = {
 	pager: Pager;
 };
 
-const PagerLink = ({
+const PagerTitle = ({
 	pagerItem,
-	prev,
 	showChapter,
-}: { pagerItem: Pager["prev"]; prev: boolean; showChapter: boolean }) => {
-	return (
-		pagerItem && (
-			<Link
-				href={pagerItem.href}
-				className={cn(
-					"inline-flex items-center rounded-md gap-2 border border-transparent bg-transparent py-2 px-3 text-center font-medium  hover:border-gray-200 hover:bg-gray-100 focus:z-10 focus:outline-none md:w-full",
-					{ "justify-end": !prev },
-				)}
-			>
-				{prev && <ChevronLeft />}
-				{showChapter ? (
-					<Balancer as="div">
-						<p className="mb-0 text-sm font-light tracking-tight">{`Chapter ${pagerItem.chapter}`}</p>
-						{pagerItem.title}
-					</Balancer>
-				) : (
-					<Balancer>{pagerItem.title}</Balancer>
-				)}
-				{!prev && <ChevronRight />}
-			</Link>
-		)
+}: { pagerItem: NonNullable<Pager["prev"]>; showChapter: boolean }) => {
+	return showChapter ? (
+		<Balancer as="div">
+			<p className="mb-0 text-sm font-light tracking-tight">{`Chapter ${pagerItem.chapter}`}</p>
+			{pagerItem.title}
+		</Balancer>
+	) : (
+		<Balancer>{pagerItem.title}</Balancer>
 	);
 };
 
@@ -41,13 +27,28 @@ export default function ({ pager }: Props) {
 	const showChapter = pager.prev?.chapter !== pager.next?.chapter;
 
 	return (
-		<div className="flex flex-col md:flex-row items-stretch justify-between pt-5 mt-5 border-t-2">
-			<PagerLink pagerItem={pager.prev} prev={true} showChapter={showChapter} />
-			<PagerLink
-				pagerItem={pager.next}
-				prev={false}
-				showChapter={showChapter}
-			/>
+		<div className="flex flex-row items-center justify-between mt-5">
+			{pager?.prev && (
+				<Link
+					href={pager.prev.href}
+					className={cn(buttonVariants({ variant: "ghost" }), "h-fit max-w-sm")}
+				>
+					<ChevronLeft className="mr-2 h-4 w-4" />
+					<PagerTitle pagerItem={pager.prev} showChapter={showChapter} />
+				</Link>
+			)}
+			{pager?.next && (
+				<Link
+					href={pager.next.href}
+					className={cn(
+						buttonVariants({ variant: "ghost" }),
+						"h-fit max-w-sm ml-auto",
+					)}
+				>
+					<PagerTitle pagerItem={pager.next} showChapter={showChapter} />
+					<ChevronRight className="ml-2 h-4 w-4" />
+				</Link>
+			)}
 		</div>
 	);
 }

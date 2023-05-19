@@ -1,62 +1,49 @@
 "use client";
-
-import { useMDXComponent } from "next-contentlayer/hooks";
-import { Typography } from "@/components/material-tailwind";
+import { Info, Warning, Keyterm, Callout, Caption } from "@itell/ui/server";
 import { CustomImage, TextOverImage } from "./mdx/image";
 import { CustomLink } from "./mdx/link";
+import { useMDXComponent } from "next-contentlayer/hooks";
 import {
-	Stepper,
-	StepperBody,
-	StepperHeader,
-	StepperPanel,
-	Step,
-} from "./mdx/stepper";
-import {
-	Accordion,
-	Accordions,
-	Callout,
 	CustomIFrame,
-	Info,
-	Warning,
-	Keyterm,
-	Card,
-	Caption,
+	Accordion,
+	AccordionItem,
 	Tabs,
-	Tab,
-	TabsBody,
 	TabsHeader,
+	Tab,
 	TabPanel,
-} from "@itell/ui/mdx";
+	TabsBody,
+	Stepper,
+	StepperHeader,
+	Step,
+	StepperBody,
+	StepperPanel,
+} from "./ui-components";
 
 const MdxComponents = {
-	Image: CustomImage,
 	a: CustomLink,
+	Image: CustomImage,
 	Iframe: CustomIFrame,
-	Typography,
-	Callout,
-	Card,
+	Accordion,
+	AccordionItem,
 	TextOverImage,
 	Info,
 	Warning,
 	Keyterm,
+	Callout,
 	Caption,
-	// stepper related
-	Stepper,
-	Step,
-	StepperBody,
-	StepperHeader,
-	StepperPanel,
 	// tab related
 	Tabs,
-	Tab,
-	TabsBody,
 	TabsHeader,
+	Tab,
 	TabPanel,
-	// accordion related
-	Accordions,
-	Accordion,
+	TabsBody,
+	// stepper related
+	Stepper,
+	StepperHeader,
+	Step,
+	StepperBody,
+	StepperPanel,
 };
-
 interface MdxProps {
 	code: string;
 }

@@ -1,5 +1,5 @@
 "use client";
-import { Button, Card, CardHeader, Typography } from "@material-tailwind/react";
+import { Button } from "../ui-components";
 import Modal from "../ui/modal";
 
 type Props = {
@@ -12,7 +12,7 @@ export default function NoteDeleteModal({ show, onClose, onDelete }: Props) {
 	return (
 		<Modal open={show} onClose={onClose} title="Delete this note?">
 			<div className="flex justify-end">
-				<Button variant="filled" size="md" onClick={onDelete}>
+				<Button variant="secondary" onClick={onDelete}>
 					Yes
 				</Button>
 			</div>

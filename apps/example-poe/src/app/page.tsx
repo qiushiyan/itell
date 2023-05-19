@@ -1,10 +1,11 @@
 import TextbookNavbar from "@/components/textbook-navbar";
-import { Typography } from "@/components/material-tailwind";
+import { Typography } from "@itell/ui/server";
 import Image from "next/image";
+import { Fragment } from "react";
 
 export default function Home() {
 	return (
-		<>
+		<Fragment>
 			<TextbookNavbar showProgress={false} />
 			<div className="px-6 md:px-10 lg:px-16 py-8 mx-auto max-w-3xl">
 				<div className="flex justify-center items-center">
@@ -31,6 +32,6 @@ export default function Home() {
 					Lab.
 				</Typography>
 			</div>
-		</>
+		</Fragment>
 	);
 }

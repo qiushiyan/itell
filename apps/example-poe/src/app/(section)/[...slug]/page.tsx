@@ -1,5 +1,5 @@
 import { allSections } from "contentlayer/generated";
-import { Typography } from "@/components/material-tailwind";
+import { Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
 import { Mdx } from "@/components/mdx";
 import Summary from "@/components/summary";

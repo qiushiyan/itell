@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Typography } from "@/components/material-tailwind";
+import { Button } from "@/components/ui-components";
+import { Typography } from "@itell/ui/server";
 import { trpc } from "@/trpc/trpc-provider";
 import { useLocation } from "@/lib/hooks";
 import { Location } from "@/types/location";
@@ -11,7 +12,6 @@ import Spinner from "../spinner";
 import { SummaryFeedback, getFeedback } from "@/lib/summary";
 import Feedback from "./summary-feedback";
 import { useEffect } from "react";
-import { Warning } from "@itell/ui/mdx";
 
 type State = {
 	input: string;
@@ -206,19 +206,20 @@ export default function SummaryInput() {
 					rows={10}
 					className="resize-none rounded-md shadow-md p-4 w-full"
 				/>
-				{state.error && <Warning>{state.error}</Warning>}
-				<Button
-					fullWidth
-					onClick={(e) => {
-						e.preventDefault();
-						handleSubmit();
-					}}
-					disabled={state.pending}
-					className="flex items-center justify-center gap-1"
-				>
-					{state.pending && <Spinner className="w-6 h-6 text-indigo-900" />}
-					{state.prompt}
-				</Button>
+				{state.error && <div className="bg-red-100">{state.error}</div>}
+				<div className="flex justify-end">
+					<Button
+						onClick={(e) => {
+							e.preventDefault();
+							handleSubmit();
+						}}
+						variant="secondary"
+						disabled={state.pending}
+					>
+						{state.pending && <Spinner className="w-6 h-6 text-indigo-900" />}
+						{state.prompt}
+					</Button>
+				</div>
 			</form>
 		</>
 	);

@@ -1,30 +1,32 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
-import Dropdown from "@/components/ui/dropdown";
-import {
-	Navbar,
-	MobileNav,
-	Typography,
-	Button,
-	IconButton,
-} from "@/components/material-tailwind";
+import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
-import UserAvatar from "./user-avatar";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { cn, groupby, keyof } from "@itell/core";
 import { allSections } from "contentlayer/generated";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { useLocation } from "@/lib/hooks";
+import {
+	Button,
+	NavigationMenu,
+	NavigationMenuContent,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+	NavigationMenuTrigger,
+} from "./ui-components";
+import { Typography } from "@itell/ui/server";
+import React from "react";
+import UserAvatar from "./user-avatar";
 import Spinner from "./spinner";
-import { ChevronDownIcon } from "lucide-react";
 
 type Props = {
 	showProgress?: boolean;
 };
 
-const firstSectionsInModule = groupby(
+const moduleChapters = groupby(
 	allSections.filter((section) => section.location.section === 0),
 	(section) => section.location.module,
 	(section) => ({
@@ -33,23 +35,39 @@ const firstSectionsInModule = groupby(
 		url: `/module-${section.location.module}/chapter-${section.location.chapter}`,
 	}),
 );
-const modules = keyof(firstSectionsInModule);
+const modules = keyof(moduleChapters);
+const navigationMenuTriggerStyle =
+	"inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:bg-accent focus:text-accent-foreground disabled:opacity-50 disabled:pointer-events-none bg-background hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent/50 data-[active]:bg-accent/50 h-10 py-2 px-4 group w-max";
+const ChapterItem = React.forwardRef<
+	React.ElementRef<"a">,
+	React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+	return (
+		<li>
+			<NavigationMenuLink asChild>
+				<a
+					ref={ref}
+					className={cn(
+						"block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+						className,
+					)}
+					{...props}
+				>
+					<div className="text-sm font-medium leading-none">{title}</div>
+					<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+						{children}
+					</p>
+				</a>
+			</NavigationMenuLink>
+		</li>
+	);
+});
+ChapterItem.displayName = "ChapterItem";
 
 export default function TextbookNavbar({ showProgress = false }: Props) {
 	const location = useLocation();
 
-	const { data: session, status } = useSession();
 	const [openNav, setOpenNav] = useState(false);
-	const [moduleCollapsed, setModuleCollapsed] = useState<
-		Record<string, boolean>
-	>(() => {
-		const output: Record<string, boolean> = {};
-		modules.forEach((module) => {
-			output[module] = false;
-		});
-		return output;
-	});
-
 	const { scrollYProgress } = useScroll();
 	const scaleX = useSpring(scrollYProgress, {
 		stiffness: 100,
@@ -69,171 +87,47 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 		return () => window.removeEventListener("resize", resizeHandler);
 	}, []);
 
-	const navList = (
-		<ul className="flex flex-col gap-1 lg:flex-row lg:items-center lg:gap-2">
-			{modules.map((module) => {
-				const active = location && location.module === Number(module);
-				const firstChapter = firstSectionsInModule[module][0].chapter;
-				const moduleUrl = `/module-${module}/chapter-${firstChapter}`;
-				const chapters = firstSectionsInModule[module].sort(
-					(a, b) => a.chapter - b.chapter,
-				);
-
-				if (openNav) {
-					return (
-						<Fragment>
-							<div
-								className="flex items-center gap-1 mb-2 text-blue-600"
-								key={module}
-							>
-								<Link href={moduleUrl} className="inline-flex">
-									<Button variant={active ? "text" : "text"} className="p-2">
-										Module {module}
-									</Button>
-								</Link>
-								<button
-									onClick={() => {
-										setModuleCollapsed({
-											...moduleCollapsed,
-											[module]: !moduleCollapsed[module],
-										});
-									}}
-								>
-									{moduleCollapsed[module] ? (
-										<ChevronDownIcon className="w-4 h-4" />
-									) : (
-										<ChevronDownIcon className="w-4 h-4 transform rotate-180" />
-									)}
-								</button>
-							</div>
-							{moduleCollapsed[module] && (
-								<ul>
-									{firstSectionsInModule[module].map((chapter) => (
-										<li
-											className={cn(
-												"rounded-md hover:bg-gray-100 transition ease-in-out duration-100 p-2",
-												{ "bg-gray-100": location.chapter === chapter.chapter },
-											)}
-											key={chapter.chapter}
-										>
-											<Link href={chapter.url}>
-												<Typography
-													variant="small"
-													color="black"
-													className="m-0"
-												>
-													{chapter.chapter}. {chapter.title}
-												</Typography>
-											</Link>
-										</li>
-									))}
-								</ul>
-							)}
-						</Fragment>
-					);
-				}
-
-				return (
-					<Dropdown
-						items={[
-							...chapters.map((chapter) => ({
-								label: `${chapter.chapter}. ${chapter.title}`,
-								url: chapter.url,
-							})),
-						]}
-						key={module}
-					>
-						<Button
-							variant={active ? "gradient" : "text"}
-							className="flex gap-1 items-center px-3"
-						>
-							<Link className="inline-flex" href={moduleUrl}>
-								Module {module}
-							</Link>
-							<ChevronDownIcon className="w-4 h-4" />
-						</Button>
-					</Dropdown>
-				);
-			})}
-		</ul>
-	);
-
 	return (
-		<header className="sticky inset-0 z-20 h-max">
-			<Navbar className="max-w-full  py-2 px-4 lg:px-8 lg:py-3 rounded-none">
-				<div className="flex items-center gap-4 text-blue-gray-900">
-					<Typography
-						as="a"
-						href="/"
-						className="mr-4 cursor-pointer py-1.5 font-handwritten"
-						variant="h4"
-						color="blue"
-						textGradient
-					>
+		<header
+			className={cn("sticky top-0 z-40 w-full bg-background shadow-md", {
+				"border-b": !showProgress,
+			})}
+		>
+			<div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
+				<Link
+					href="/"
+					className={cn(navigationMenuTriggerStyle, "text-primary-foreground")}
+				>
+					<Typography as="span" variant="lead">
 						{siteConfig.title}
 					</Typography>
-					<div className="mr-4 hidden lg:block">{navList}</div>
-					<div className="flex items-center gap-4 ml-auto">
-						{status === "loading" ? (
-							<Spinner className="w-5 h-5" />
-						) : session?.user ? (
-							<UserAvatar user={session.user} />
-						) : (
-							<Button onClick={handleSignin}>Sign in</Button>
-						)}
+				</Link>
+				<NavigationMenu className="textbook-navbar w-full px-8 lg:px-4 py-2 bg-white border border-white/80">
+					<NavigationMenuList>
+						{modules.map((module) => (
+							<NavigationMenuItem key={module}>
+								<NavigationMenuTrigger>Module {module}</NavigationMenuTrigger>
+								<NavigationMenuContent>
+									<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[750px] ">
+										{moduleChapters[module].map((chapter) => (
+											<ChapterItem
+												key={chapter.title}
+												title={`Chapter ${chapter.chapter}`}
+												href={chapter.url}
+											>
+												{chapter.title}
+											</ChapterItem>
+										))}
+									</ul>
+								</NavigationMenuContent>
+							</NavigationMenuItem>
+						))}
+					</NavigationMenuList>
+				</NavigationMenu>
+			</div>
 
-						<IconButton
-							variant="text"
-							className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
-							ripple={false}
-							onClick={() => setOpenNav(!openNav)}
-						>
-							{openNav ? (
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									className="h-6 w-6"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									strokeWidth={2}
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										d="M6 18L18 6M6 6l12 12"
-									/>
-								</svg>
-							) : (
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									className="h-6 w-6"
-									fill="none"
-									stroke="currentColor"
-									strokeWidth={2}
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										d="M4 6h16M4 12h16M4 18h16"
-									/>
-								</svg>
-							)}
-						</IconButton>
-					</div>
-				</div>
-				<MobileNav open={openNav}>
-					{navList}
-					<Button
-						variant="gradient"
-						size="sm"
-						fullWidth
-						className="mb-2"
-						onClick={handleSignin}
-					>
-						Login
-					</Button>
-				</MobileNav>
-			</Navbar>
+			{/* mobile navigation */}
+
 			{showProgress && !openNav && (
 				<motion.div
 					className="h-[5px] bg-blue-400 origin-[0%]"

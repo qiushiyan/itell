@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/material-tailwind";
 import { cn } from "@itell/core";
 import { HighlighterIcon, CopyIcon, PencilIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -12,6 +11,7 @@ import { SectionLocation } from "@/types/location";
 import { trpc } from "@/trpc/trpc-provider";
 import { defaultHighlightColor } from "@/contexts/note-highlight";
 import Spinner from "../spinner";
+import { Button } from "../ui-components";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
@@ -85,7 +85,7 @@ export default function HighlightToolbar({
 		<Popover
 			target={target as HTMLElement}
 			render={(data) => {
-				const { clientRect, isCollapsed, textContent } = data;
+				const { clientRect, isCollapsed } = data;
 				if (clientRect == null || isCollapsed) return null;
 
 				const style = {
@@ -96,7 +96,7 @@ export default function HighlightToolbar({
 				return (
 					<div
 						className={cn(
-							"fixed rounded-md shadow-sm px-2 py-1 flex flex-col md:flex-row gap-2 border-2 border-gray-100 items-center justify-between bg-white -ml-[75px]",
+							"fixed rounded-md shadow-sm px-2 py-1 flex flex-row gap-2 border-2 border-gray-100 items-center justify-between bg-white -ml-[75px]",
 						)}
 						style={style}
 					>
@@ -105,8 +105,7 @@ export default function HighlightToolbar({
 						) : (
 							commands.map((command) => (
 								<Button
-									variant="text"
-									size="md"
+									variant="ghost"
 									color="blue-gray"
 									className="flex items-center gap-2 p-2"
 									onClick={() => command.action(data)}

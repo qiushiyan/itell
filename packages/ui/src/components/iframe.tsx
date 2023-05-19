@@ -1,6 +1,7 @@
 import Balancer from "react-wrap-balancer";
-import { Button, Typography } from "@material-tailwind/react";
 import { cn } from "@itell/core";
+import Typography from "../components/typography";
+import { Button } from "./button";
 
 const getYoutubeLinkFromEmbed = (url: string) => {
 	const regex = /embed\/([\w-]+)\?/;
@@ -55,7 +56,7 @@ export const CustomIFrame = ({
 				)}
 				{youtube && (
 					<a href={getYoutubeLinkFromEmbed(src)} className="no-underline">
-						<Button variant="outlined">View on youtube</Button>
+						<Button variant="secondary">View on youtube</Button>
 					</a>
 				)}
 			</div>

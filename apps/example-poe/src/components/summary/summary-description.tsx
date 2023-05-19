@@ -1,10 +1,11 @@
-import Accordion from "@/components/ui/accordion";
-import { AccordionItem } from "@/types/components";
-import { Typography } from "@/components/material-tailwind";
+import { Accordion, AccordionItem } from "@/components/ui-components";
+import { Typography } from "@itell/ui/server";
+import { Fragment } from "react";
 
-const accordionItems: AccordionItem[] = [
+const accordionItems = [
 	{
-		label: "What makes a good summary",
+		title: "What makes a good summary",
+		value: "what",
 		content: (
 			<>
 				<p>A successful summary will</p>
@@ -16,7 +17,8 @@ const accordionItems: AccordionItem[] = [
 		),
 	},
 	{
-		label: "Scording details",
+		title: "Scoring details",
+		value: "scoring",
 		content: (
 			<>
 				<p>
@@ -52,7 +54,7 @@ const accordionItems: AccordionItem[] = [
 
 export default function SummaryDescription() {
 	return (
-		<>
+		<Fragment>
 			<Typography variant="lead">
 				Write your summary for this section
 			</Typography>
@@ -60,7 +62,13 @@ export default function SummaryDescription() {
 				You can unlock the next section by submitting a good summary of this
 				section
 			</Typography>
-			<Accordion items={accordionItems} defaultOpen={[0]} />
-		</>
+			<Accordion value={"what"}>
+				{accordionItems.map((item, index) => (
+					<AccordionItem key={item.value} title={item.title} value={item.value}>
+						{item.content}
+					</AccordionItem>
+				))}
+			</Accordion>
+		</Fragment>
 	);
 }

@@ -2,13 +2,17 @@
 
 import { cn } from "@itell/core";
 import { CheckCircleIcon } from "lucide-react";
-import { createContext, useState, useContext } from "react";
+import { createContext, useContext } from "react";
 import { Transition } from "@headlessui/react";
-import { Typography } from "@material-tailwind/react";
+import Typography from "./typography";
+import { useImmer } from "use-immer";
 
 type StepStatus = "complete" | "current" | "upcoming";
+type VisitedSteps = number[];
+type ActiveStep = number;
 type StepperContextType = {
-	activeStep: number;
+	visitedSteps: VisitedSteps;
+	activeStep: ActiveStep;
 	setActiveStep: (step: number) => void;
 };
 
@@ -50,10 +54,18 @@ const StatusIcon: Record<StepStatus, JSX.Element> = {
 	),
 };
 
-const getStepStatus = (currentStep: number, activeStep: number): StepStatus => {
-	if (currentStep === activeStep) return "current";
+const getStepStatus = ({
+	value,
+	activeStep,
+	visitedSteps,
+}: {
+	value: number;
+	activeStep: ActiveStep;
+	visitedSteps: VisitedSteps;
+}): StepStatus => {
+	if (value === activeStep) return "current";
 
-	if (currentStep < activeStep) return "complete";
+	if (value && visitedSteps.includes(value)) return "complete";
 
 	return "upcoming";
 };
@@ -62,27 +74,28 @@ export const Step = ({
 	value,
 	children,
 }: { value: number; children: React.ReactNode }) => {
-	const { activeStep, setActiveStep } = useContext(StepperContext);
+	const { activeStep, visitedSteps, setActiveStep } =
+		useContext(StepperContext);
 	return (
-		<li className="cursor-pointer">
-			<a className="group no-underline" onClick={() => setActiveStep(value)}>
-				<span className="flex items-center">
-					{StatusIcon[getStepStatus(value, activeStep)]}
+		<li className="cursor-pointer p-0 m-0">
+			<button
+				className="group no-underline w-full h-full flex items-center"
+				onClick={() => setActiveStep(value)}
+			>
+				<Typography variant="lead" className="flex items-center m-0">
+					{StatusIcon[getStepStatus({ value, activeStep, visitedSteps })]}
 					<span className="ml-3 text-sm font-medium text-gray-500 group-hover:text-gray-900">
 						{children}
 					</span>
-				</span>
-			</a>
+				</Typography>
+			</button>
 		</li>
 	);
 };
 export const StepperHeader = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<nav className=" lg:basis-1/5" aria-label="Progress">
-			<ol
-				role="list"
-				className="list-none flex flex-row lg:flex-col items-center gap-2"
-			>
+		<nav aria-label="Progress">
+			<ol role="list" className="list-none flex flex-row lg:flex-col gap-4">
 				{children}
 			</ol>
 		</nav>
@@ -121,13 +134,34 @@ export const Stepper = ({
 	className,
 	...rest
 }: StepperProps) => {
-	const [activeStep, setActiveStep] = useState(value);
+	const [state, setState] = useImmer<{
+		activeStep: ActiveStep;
+		visitedSteps: VisitedSteps;
+	}>({
+		activeStep: value,
+		visitedSteps: [value],
+	});
+
+	const setActiveStep = (step: number) => {
+		setState((draft) => {
+			draft.activeStep = step;
+			if (!draft.visitedSteps.includes(step)) {
+				draft.visitedSteps.push(step);
+			}
+		});
+	};
 
 	return (
-		<StepperContext.Provider value={{ activeStep, setActiveStep }}>
+		<StepperContext.Provider
+			value={{
+				activeStep: state.activeStep,
+				visitedSteps: state.visitedSteps,
+				setActiveStep,
+			}}
+		>
 			<div
 				className={cn(
-					"flex flex-col lg:flex-row gap-4 border border-blue-100 rounded-md shadow-md",
+					"flex flex-col gap-4 lg:flex-row lg:gap-8   border border-blue-100 rounded-md shadow-md",
 					className,
 				)}
 				{...rest}

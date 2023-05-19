@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import "../styles/globals.css";
+import "@/styles/globals.css";
 import AppProvider from "@/components/providers";
 import { siteConfig } from "@/config/site";
 import ShowToast from "@/components/toast";
