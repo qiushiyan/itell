@@ -1,4 +1,4 @@
-import TextbookNavbar from "@/components/textbook-navbar";
+import TextbookNavbar from "@/components/nav/textbook-nav";
 import { getServerAuthSession } from "@/lib/auth";
 import db from "@/lib/db";
 import { delay } from "@/lib/utils";

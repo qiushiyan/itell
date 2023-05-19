@@ -73,7 +73,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 		<div>
 			<div className="max-w-7xl mx-auto grid grid-cols-12 gap-6 px-2">
 				<SectionAuthModal />
-				<aside className="hidden md:block md:col-span-3 lg:col-span-2 ">
+				<aside className="col-span-3 lg:col-span-2 ">
 					<div className="sticky top-20">
 						<ModuleSidebar
 							chapters={chapters}

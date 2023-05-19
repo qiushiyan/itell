@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { cn, groupby, keyof } from "@itell/core";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
