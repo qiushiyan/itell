@@ -257,6 +257,7 @@ export default function ({
 								<footer className="mt-2">
 									{isUnsaved && <p className="text-xs mb-0">unsaved</p>}
 									<div className="flex justify-end">
+										{id && !isLoading && <NoteDelete onDelete={handleDelete} />}
 										{editState.editing && (
 											<Button
 												disabled={isLoading}
@@ -282,16 +283,8 @@ export default function ({
 							</div>
 						)}
 					</div>
-					<footer className="flex justify-end">
-						{id && !isLoading && <NoteDelete onDelete={handleDelete} />}
-					</footer>
 				</div>
 			</div>
-			{/* <NoteDeleteModal
-				show={editState.showDeleteModal}
-				onClose={() => dispatch({ type: "toggle_delete_modal" })}
-				onDelete={handleDelete}
-			/> */}
 		</Fragment>
 	);
 }

@@ -85,7 +85,7 @@ export const TextOverImage = ({
 				)}
 			/>
 			<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 group-hover:font-bold">
-				<Typography variant="h6" className="text-primary-foreground">
+				<Typography variant="h6" className="text-white">
 					{children}
 				</Typography>
 			</div>
