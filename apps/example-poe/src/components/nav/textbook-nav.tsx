@@ -88,7 +88,7 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 										<Link href={moduleUrl}>Module {module}</Link>
 									</NavigationMenuTrigger>
 									<NavigationMenuContent>
-										<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[750px] ">
+										<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[750px] bg-white">
 											{moduleChapters[module].map((chapter) => (
 												<ChapterItem
 													key={chapter.title}

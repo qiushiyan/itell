@@ -13,7 +13,6 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Dropdown from "./ui/dropdown";
 import {
 	LogOutIcon,
 	BarChart4Icon,

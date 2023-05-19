@@ -1,5 +1,5 @@
-// import config from "@itell/tailwind-config/tailwind.config.cjs";
 import type { Config } from "tailwindcss";
+// @ts-ignore
 import sharedConfig from "@itell/tailwind-config/tailwind.config.cjs";
 
 export default {
