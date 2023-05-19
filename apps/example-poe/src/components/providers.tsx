@@ -1,7 +1,6 @@
 "use client";
 
 import { Provider as BalancerProvider } from "react-wrap-balancer";
-import { ThemeProvider } from "@material-tailwind/react";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 import { TRPCProvider } from "@/trpc/trpc-provider";
@@ -13,14 +12,12 @@ export default function AppProvider({
 	return (
 		<SessionProvider>
 			<TRPCProvider>
-				<ThemeProvider>
-					<BalancerProvider>
-						<NoteProvider>
-							{children}
-							<Toaster richColors visibleToasts={1} />
-						</NoteProvider>
-					</BalancerProvider>
-				</ThemeProvider>
+				<BalancerProvider>
+					<NoteProvider>
+						{children}
+						<Toaster richColors visibleToasts={1} />
+					</NoteProvider>
+				</BalancerProvider>
 			</TRPCProvider>
 		</SessionProvider>
 	);

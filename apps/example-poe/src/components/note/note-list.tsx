@@ -7,7 +7,7 @@ import { SectionLocation } from "@/types/location";
 import Spinner from "../spinner";
 import { useNotes } from "@/lib/hooks";
 import { useSession } from "next-auth/react";
-import { Typography } from "@material-tailwind/react";
+import { Typography } from "@itell/ui/server";
 import { Highlight, NoteCard as NoteCardType } from "@/types/note";
 import { removeExistingMarks } from "@/lib/note";
 

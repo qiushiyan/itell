@@ -1,9 +1,9 @@
 import { cn } from "@itell/core";
-import Image from "next/image";
-import { Typography } from "../material-tailwind";
+import NextImage from "next/image";
+import Typography from "./typography";
 import Balancer from "react-wrap-balancer";
 
-export const CustomImage = ({
+export const Image = ({
 	src,
 	alt,
 	children,
@@ -32,7 +32,7 @@ export const CustomImage = ({
 			})}
 		>
 			<div className="flex justify-center items-center">
-				<Image
+				<NextImage
 					className={cn("object-cover", { "rounded-md": rounded })}
 					src={src}
 					alt={alt}
@@ -71,7 +71,7 @@ export const TextOverImage = ({
 }) => {
 	return (
 		<div className="flex justify-center items-center relative group">
-			<Image
+			<NextImage
 				src={src}
 				alt={alt}
 				width={width}

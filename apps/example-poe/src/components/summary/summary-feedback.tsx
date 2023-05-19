@@ -1,7 +1,7 @@
 import { ScoreType } from "@/lib/constants";
 import { SummaryFeedback } from "@/lib/summary";
 import { cn, keyof } from "@itell/core";
-import { Typography } from "@material-tailwind/react";
+import { Typography } from "@itell/ui/server";
 
 type Props = {
 	feedback: SummaryFeedback;

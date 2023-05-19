@@ -1,20 +1,15 @@
 "use client";
 
-import {
-	Card,
-	Input,
-	Checkbox,
-	Button,
-	Typography,
-} from "@material-tailwind/react";
+import { Typography } from "@itell/ui/server";
+import { Button } from "@/components/ui-components";
 import { Command } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export const AuthButtons = {
 	google: (
 		<Button
-			size="md"
-			variant="outlined"
+			variant="secondary"
 			color="blue-gray"
 			className="flex items-center gap-3 w-60 mx-auto"
 			onClick={(e) => {
@@ -29,8 +24,15 @@ export const AuthButtons = {
 };
 
 export default function AuthForm() {
+	const { data: session } = useSession();
+	const router = useRouter();
+
+	if (session?.user) {
+		router.push("/");
+	}
+
 	return (
-		<Card color="transparent" shadow={false}>
+		<div>
 			<form className="w-80 max-w-screen-lg sm:w-96 flex flex-col items-center">
 				<Command className="mx-auto h-6 w-6" />
 				<Typography variant="h4" color="blue-gray" className="mt-4">
@@ -41,6 +43,6 @@ export default function AuthForm() {
 				</Typography>
 				{AuthButtons.google}
 			</form>
-		</Card>
+		</div>
 	);
 }

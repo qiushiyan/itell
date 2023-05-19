@@ -1,9 +1,29 @@
 const { fontFamily } = require("tailwindcss/defaultTheme");
 
+const allBreakpoints = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl"];
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	darkMode: ["class"],
 	content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+	safelist: [
+		"hidden",
+		{
+			pattern: /col-span-.+/,
+		},
+		{
+			pattern: /grid-cols-.+/,
+		},
+		{
+			pattern: /transition-.+/,
+		},
+		{
+			pattern: /duration-.+/,
+		},
+		{
+			pattern: /transform-.+/,
+		},
+	],
 	theme: {
 		container: {
 			center: true,
@@ -13,6 +33,7 @@ module.exports = {
 			},
 		},
 		screens: {
+			xs: "475px",
 			sm: "640px",
 			md: "768px",
 			lg: "1024px",

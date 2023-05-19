@@ -1,4 +1,4 @@
-import { Typography } from "@/components/material-tailwind";
+import { Typography } from "@itell/ui/server";
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
 

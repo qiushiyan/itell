@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@itell/core";
 import Typography from "../typography";
 import {
 	Tabs as BaseTabs,
@@ -11,30 +12,56 @@ import {
 export const Tab = ({
 	children,
 	value,
+	className,
+	...rest
 }: {
 	children: React.ReactNode;
 	value: string;
-}) => {
+} & React.ComponentProps<typeof BaseTabsTrigger>) => {
 	return (
-		<BaseTabsTrigger value={value} className="px-4 py-2 flex-1">
+		<BaseTabsTrigger
+			value={value}
+			className={cn("px-4 py-2 flex-1", className)}
+			{...rest}
+		>
 			{children}
 		</BaseTabsTrigger>
 	);
 };
 
-export const TabsHeader = ({ children }: { children: React.ReactNode }) => {
-	return <BaseTabsList className="w-full">{children}</BaseTabsList>;
+export const TabsHeader = ({
+	children,
+	className,
+	...rest
+}: { children: React.ReactNode } & React.ComponentProps<
+	typeof BaseTabsList
+>) => {
+	return (
+		<BaseTabsList className={cn("w-full", className)} {...rest}>
+			{children}
+		</BaseTabsList>
+	);
 };
 
 export const TabPanel = ({
 	value,
 	children,
-}: { value: string; children: React.ReactNode }) => {
+	typography = true,
+	...rest
+}: {
+	value: string;
+	children: React.ReactNode;
+	typography?: boolean;
+} & React.ComponentProps<typeof BaseTabsContent>) => {
 	return (
-		<BaseTabsContent value={value}>
-			<Typography as="div" className="my-0">
-				{children}
-			</Typography>
+		<BaseTabsContent value={value} {...rest}>
+			{typography ? (
+				<Typography as="div" className="my-0">
+					{children}
+				</Typography>
+			) : (
+				<>{children}</>
+			)}
 		</BaseTabsContent>
 	);
 };
@@ -44,8 +71,7 @@ export const TabsBody = ({ children }: { children: React.ReactNode }) => {
 	return <>{children}</>;
 };
 
-// rome-ignore lint/suspicious/noExplicitAny: <explanation>
-interface TabsProps extends React.ComponentProps<any> {
+interface TabsProps extends React.ComponentProps<typeof BaseTabs> {
 	value: string;
 	children: React.ReactNode;
 }

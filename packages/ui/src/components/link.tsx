@@ -1,16 +1,16 @@
-import Link, { LinkProps } from "next/link";
+import NextLink, { LinkProps } from "next/link";
 
 interface CustomLinkProps extends LinkProps {
 	href: string;
 	children: React.ReactNode;
 }
 
-export const CustomLink = ({ href, children, ...rest }: CustomLinkProps) => {
+export const Link = ({ href, children, ...rest }: CustomLinkProps) => {
 	if (href.startsWith("/")) {
 		return (
-			<Link href={href} {...rest}>
+			<NextLink href={href} {...rest}>
 				{children}
-			</Link>
+			</NextLink>
 		);
 	}
 

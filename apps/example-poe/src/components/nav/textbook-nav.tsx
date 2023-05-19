@@ -16,6 +16,8 @@ import { Typography } from "@itell/ui/server";
 import React from "react";
 import TextbookScrollProgress from "./textbook-scroll-progress";
 import { allSectionsSorted } from "@/lib/sections";
+import SiteNav from "./site-nav";
+import UserAvatar from "../user-avatar";
 
 type Props = {
 	showProgress?: boolean;
@@ -63,46 +65,53 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 	const location = useLocation();
 
 	return (
-		<header
-			className={cn("sticky top-0 z-40 w-full bg-background shadow-md", {
-				"border-b": !showProgress,
-			})}
-		>
+		<SiteNav>
 			<div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-				<Link
-					href="/"
-					className={cn(navigationMenuTriggerStyle, "text-primary-foreground")}
-				>
+				<Link href="/" className={cn(navigationMenuTriggerStyle)}>
 					<Typography as="span" variant="lead">
 						{siteConfig.title}
 					</Typography>
 				</Link>
 				<NavigationMenu className="textbook-navbar w-full px-8 lg:px-4 py-2 bg-white border border-white/80">
 					<NavigationMenuList>
-						{modules.map((module) => (
-							<NavigationMenuItem key={module}>
-								<NavigationMenuTrigger>Module {module}</NavigationMenuTrigger>
-								<NavigationMenuContent>
-									<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[750px] ">
-										{moduleChapters[module].map((chapter) => (
-											<ChapterItem
-												key={chapter.title}
-												title={`Chapter ${chapter.chapter}`}
-												href={chapter.url}
-											>
-												{chapter.title}
-											</ChapterItem>
-										))}
-									</ul>
-								</NavigationMenuContent>
-							</NavigationMenuItem>
-						))}
+						{modules.map((module) => {
+							const active = location && location.module === Number(module);
+							const firstChapter = moduleChapters[module][0].chapter;
+							const moduleUrl = `/module-${module}/chapter-${firstChapter}`;
+							return (
+								<NavigationMenuItem key={module}>
+									<NavigationMenuTrigger
+										className={cn({
+											"bg-accent": active,
+										})}
+									>
+										<Link href={moduleUrl}>Module {module}</Link>
+									</NavigationMenuTrigger>
+									<NavigationMenuContent>
+										<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[750px] ">
+											{moduleChapters[module].map((chapter) => (
+												<ChapterItem
+													key={chapter.title}
+													title={`Chapter ${chapter.chapter}`}
+													href={chapter.url}
+												>
+													{chapter.title}
+												</ChapterItem>
+											))}
+										</ul>
+									</NavigationMenuContent>
+								</NavigationMenuItem>
+							);
+						})}
 					</NavigationMenuList>
+					<div className="ml-auto">
+						<UserAvatar />
+					</div>
 				</NavigationMenu>
 			</div>
 
 			{/* mobile navigation */}
 			{showProgress && <TextbookScrollProgress />}
-		</header>
+		</SiteNav>
 	);
 }

@@ -213,10 +213,9 @@ export default function SummaryInput() {
 							e.preventDefault();
 							handleSubmit();
 						}}
-						variant="secondary"
 						disabled={state.pending}
 					>
-						{state.pending && <Spinner className="w-6 h-6 text-indigo-900" />}
+						{state.pending && <Spinner className="w-6 h-6 text-white mr-1" />}
 						{state.prompt}
 					</Button>
 				</div>

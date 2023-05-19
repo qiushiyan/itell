@@ -1,4 +1,4 @@
-import DashboardStudentSummaries from "@/components/dashboard-student-summaries";
+import DashboardStudentSummaries from "@/components/dashboard/dashboard-student-summaries";
 import { getServerAuthSession } from "@/lib/auth";
 import db from "@/lib/db";
 import { delay, relativeDate } from "@/lib/utils";

@@ -1,7 +1,7 @@
 "use client";
 
 import { Chapter } from "@/types/section";
-import { Typography } from "@/components/material-tailwind";
+import { Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
 import { cn } from "@itell/core";
 import { useState } from "react";
@@ -95,7 +95,7 @@ type TocSidebarProps = {
 
 export function TocSidebar({ headings }: TocSidebarProps) {
 	return (
-		<div className="hidden lg:block sticky top-20">
+		<div className="sticky top-20">
 			<Typography variant="small" className="text-gray-800">
 				ON THIS PAGE
 			</Typography>

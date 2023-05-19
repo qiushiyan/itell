@@ -3,19 +3,14 @@
 @tailwind utilities;
 
 
-@import url('https://fonts.googleapis.com/css2?family=Courgette&family=Inter:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
 
-:root {
-  --primary-foreground: 213, 89%, 60% !important
-}
+:root {}
 
 html {
   --font-sans: 'Inter', sans-serif;
   --font-handwritten: 'Courgette', cursive;
 }
-
-
-
 
 
 .inset-center {

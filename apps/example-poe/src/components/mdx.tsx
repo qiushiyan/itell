@@ -1,7 +1,5 @@
 "use client";
 import { Info, Warning, Keyterm, Callout, Caption } from "@itell/ui/server";
-import { CustomImage, TextOverImage } from "./mdx/image";
-import { CustomLink } from "./mdx/link";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import {
 	CustomIFrame,
@@ -17,12 +15,15 @@ import {
 	Step,
 	StepperBody,
 	StepperPanel,
+	Image,
+	TextOverImage,
+	Link,
 } from "./ui-components";
 
 const MdxComponents = {
-	a: CustomLink,
-	Image: CustomImage,
+	a: Link,
 	Iframe: CustomIFrame,
+	Image,
 	Accordion,
 	AccordionItem,
 	TextOverImage,

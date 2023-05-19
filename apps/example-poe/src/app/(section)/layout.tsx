@@ -1,4 +1,4 @@
-import TextbookNavbar from "@/components/textbook-navbar";
+import TextbookNavbar from "@/components/nav/textbook-nav";
 
 export default async function SectionLayout({
 	children,

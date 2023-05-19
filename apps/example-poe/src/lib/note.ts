@@ -88,7 +88,6 @@ export const unemphasizeNote = (target: HTMLElement, textContent: string) => {
 };
 
 export const emphasizeNote = (target: HTMLElement, textContent: string) => {
-	console.log("emphasizeNote");
 	modifyhighlightedText({
 		target,
 		textContent,

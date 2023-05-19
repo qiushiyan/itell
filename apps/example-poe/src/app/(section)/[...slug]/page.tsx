@@ -7,12 +7,13 @@ import { notFound } from "next/navigation";
 import { SectionLocation } from "@/types/location";
 import { ModuleSidebar, TocSidebar } from "@/components/textbook-sidebar";
 import getChapters from "@/lib/textbook-sidebar";
-import SectionAuthModal from "@/components/section-auth-modal";
+import SectionAuthDialog from "@/components/section-auth-dialog";
 import SectionPager from "@/components/section-pager";
 import { getPagerForSection } from "@/lib/pager";
 import NoteList from "@/components/note/note-list";
 import Highlighter from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
+import { Fragment } from "react";
 
 export const generateStaticParams = async () => {
 	return allSections.map((section) => {
@@ -70,10 +71,10 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	});
 
 	return (
-		<div>
-			<div className="max-w-7xl mx-auto grid grid-cols-12 gap-6 px-2">
-				<SectionAuthModal />
-				<aside className="col-span-3 lg:col-span-2 ">
+		<Fragment>
+			<div className="max-w-[1440px] mx-auto grid grid-cols-12 gap-6 px-2">
+				<SectionAuthDialog />
+				<aside className="col-span-2">
 					<div className="sticky top-20">
 						<ModuleSidebar
 							chapters={chapters}
@@ -94,10 +95,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					</div>
 				</aside>
 
-				<section
-					className="relative col-span-12 md:col-span-9 lg:col-span-8"
-					id="section-content"
-				>
+				<section className="relative col-span-8" id="section-content">
 					<div className="mb-4 text-center" id="section-title">
 						<Typography variant="h1">
 							<Balancer className="text-3xl">{section.title}</Balancer>
@@ -116,6 +114,6 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 			</div>
 
 			<Summary location={currentLocation} />
-		</div>
+		</Fragment>
 	);
 }

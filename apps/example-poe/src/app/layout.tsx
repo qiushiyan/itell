@@ -1,11 +1,13 @@
 import { Metadata } from "next";
-
+import { Inter as FontSans } from "next/font/google";
 import "@/styles/globals.css";
 import "@itell/ui/dist/style.css";
 import AppProvider from "@/components/providers";
 import { siteConfig } from "@/config/site";
 import ShowToast from "@/components/toast";
 import { Suspense } from "react";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
+import { cn } from "@itell/core";
 
 export const metadata: Metadata = {
 	title: {
@@ -13,13 +15,19 @@ export const metadata: Metadata = {
 		template: `%s | ${siteConfig.title}`,
 	},
 	description: siteConfig.description,
+	authors: siteConfig.authors,
 };
+
+const fontSans = FontSans({
+	subsets: ["latin"],
+	variable: "--font-sans",
+});
 
 export default function RootLayout({
 	children,
 }: { children: React.ReactNode }) {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<head>
 				<link rel="icon" type="image/x-icon" href="/favicon.png" />
 				<link
@@ -29,11 +37,17 @@ export default function RootLayout({
 					crossOrigin="anonymous"
 				/>
 			</head>
-			<body>
+			<body
+				className={cn(
+					"min-h-screen bg-background font-sans antialiased",
+					fontSans.variable,
+				)}
+			>
 				<AppProvider>
 					<Suspense fallback={null}>
 						<ShowToast />
 					</Suspense>
+					<TailwindIndicator />
 					<main>{children}</main>
 				</AppProvider>
 			</body>

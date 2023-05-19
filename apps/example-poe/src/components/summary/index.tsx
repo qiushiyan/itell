@@ -1,7 +1,7 @@
 import { useLocation } from "@/lib/hooks";
 import SummaryDescription from "./summary-description";
 import SummaryInput from "./summary-input";
-import { Typography } from "../material-tailwind";
+import { Typography } from "@itell/ui/server";
 import { SectionLocation } from "@/types/location";
 
 export default function Summary({ location }: { location: SectionLocation }) {

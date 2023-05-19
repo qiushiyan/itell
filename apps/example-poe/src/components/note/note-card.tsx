@@ -2,12 +2,12 @@
 
 import { FormEvent, Fragment, useEffect, useRef } from "react";
 import TextArea from "../ui/textarea";
-import { DeleteIcon, EditIcon } from "lucide-react";
+import { EditIcon, TrashIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
 import { useClickOutside, useNotes } from "@/lib/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
-import NoteDeleteModal from "./note-delete-modal";
+import NoteDelete from "./node-delete";
 import { emphasizeNote, unHighlightNote, unemphasizeNote } from "@/lib/note";
 import { relativeDate } from "@/lib/utils";
 import { cn } from "@itell/core";
@@ -15,6 +15,7 @@ import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
+import { Button } from "../ui-components";
 
 interface Props extends NoteCard {
 	location: SectionLocation;
@@ -62,8 +63,10 @@ export default function ({
 					draft.input = action.payload;
 					break;
 				case "collapse_note":
-					draft.collapsed = true;
-					draft.editing = false;
+					if (!draft.showDeleteModal) {
+						draft.editing = false;
+						draft.collapsed = true;
+					}
 					break;
 				case "toggle_collapsed":
 					draft.collapsed = !draft.collapsed;
@@ -179,119 +182,116 @@ export default function ({
 	return (
 		<Fragment>
 			<div
-				className={cn("absolute z-10 w-64 rounded-md border-2 bg-white", {
+				className={cn("absolute z-20 w-64 rounded-md border-2 bg-white", {
 					"z-50": editState.editing,
 				})}
 				style={{ top: y, borderColor: editState.color }}
 				ref={containerRef}
 				{...triggers}
 			>
-				<div className="font-light tracking-tight text-sm relative px-1 py-2">
+				<div className="relative">
+					{/* edit icon overlay */}
 					{editState.showEdit && (
-						<>
-							<button
-								className="absolute inset-0 z-10 w-full flex rounded-md justify-center items-center bg-gray-200/50"
-								onClick={() => {
-									dispatch({ type: "toggle_collapsed" });
-									dispatch({ type: "set_show_edit", payload: false });
-									// this is needed when a note is not saved
-									// and the user clicked outside and clicked back again
-									if (!id) {
-										dispatch({ type: "set_editing", payload: true });
-									} else {
-										dispatch({ type: "set_editing", payload: false });
-									}
-								}}
-							>
-								<EditIcon />
-							</button>
-						</>
-					)}
-					{editState.collapsed && (
-						<p className="line-clamp-3 px-1 text-sm mb-0">
-							{editState.input || "Note"}
-						</p>
+						<button
+							className="absolute left-0 top-0 w-full h-full bg-secondary/50 z-50 flex items-center justify-center"
+							onClick={() => {
+								dispatch({ type: "toggle_collapsed" });
+								dispatch({ type: "set_show_edit", payload: false });
+								// this is needed when a note is not saved
+								// and the user clicked outside and clicked back again
+								if (!id) {
+									dispatch({ type: "set_editing", payload: true });
+								} else {
+									dispatch({ type: "set_editing", payload: false });
+								}
+							}}
+						>
+							<EditIcon />
+						</button>
 					)}
 
-					{!editState.collapsed && (
-						<div className="px-2 mt-1 text-sm text-gray-800">
-							<NoteColorPicker
-								color={editState.color}
-								onChange={(color) => {
-									dispatch({ type: "set_color", payload: color });
-									markNote({ textContent: highlightedText, color });
-									if (id) {
-										updateNote.mutate({ id, color });
-									}
-								}}
-							/>
+					<div className="font-light tracking-tight text-sm relative px-1 py-2">
+						{editState.collapsed && (
+							<p className="line-clamp-3 px-1 text-sm mb-0">
+								{editState.input || "Note"}
+							</p>
+						)}
 
-							{editState.editing ? (
-								<form>
-									<TextArea
-										placeholder="leave a note here"
-										value={editState.input}
-										setValue={(val) =>
-											dispatch({ type: "set_input", payload: val })
+						{!editState.collapsed && (
+							<div className="px-2 mt-1 text-sm text-gray-800">
+								<NoteColorPicker
+									color={editState.color}
+									onChange={(color) => {
+										dispatch({ type: "set_color", payload: color });
+										markNote({ textContent: highlightedText, color });
+										if (id) {
+											updateNote.mutate({ id, color });
 										}
-										autoFocus
-										autoHeight
-									/>
-									<footer className="flex justify-between items-center gap-1">
-										{id && (
-											<button
-												type="submit"
+									}}
+								/>
+
+								{editState.editing ? (
+									<form>
+										<TextArea
+											placeholder="leave a note here"
+											value={editState.input}
+											setValue={(val) =>
+												dispatch({ type: "set_input", payload: val })
+											}
+											autoFocus
+											autoHeight
+										/>
+									</form>
+								) : (
+									<button
+										onClick={() =>
+											dispatch({ type: "set_editing", payload: true })
+										}
+										className="flex w-full text-left px-1 py-2 rounded-md hover:bg-secondary"
+									>
+										<span className="mb-0">
+											{editState.input || <EditIcon className="w-4 h-4" />}
+										</span>
+									</button>
+								)}
+								<footer className="mt-2">
+									{isUnsaved && <p className="text-xs mb-0">unsaved</p>}
+									<div className="flex justify-end">
+										{editState.editing && (
+											<Button
 												disabled={isLoading}
-												className="flex items-center gap-1 "
-												onClick={(e) => {
-													e.preventDefault();
-													dispatch({ type: "toggle_delete_modal" });
-												}}
+												variant="ghost"
+												size="sm"
+												onClick={handleSubmit}
 											>
-												<DeleteIcon />
-											</button>
+												{updateNote.isLoading || createNote.isLoading ? (
+													<Spinner className="w-5 h-5" />
+												) : (
+													<ForwardIcon className="w-4 h-4" />
+												)}
+											</Button>
 										)}
-										{isUnsaved && <span className="text-xs mb-0">unsaved</span>}
-										<button
-											type="submit"
-											disabled={isLoading}
-											className={cn("flex items-center  p-2 rounded-md")}
-											onClick={handleSubmit}
-										>
-											{updateNote.isLoading || createNote.isLoading ? (
-												<Spinner className="w-5 h-5" />
-											) : (
-												<ForwardIcon />
-											)}
-										</button>
-									</footer>
-								</form>
-							) : (
-								<button
-									onClick={() =>
-										dispatch({ type: "set_editing", payload: true })
-									}
-									className="flex w-full text-left hover:bg-gray-200/50 px-1 py-2  rounded-md"
-								>
-									<span className="mb-0">
-										{editState.input || <EditIcon className="w-4 h-4" />}
-									</span>
-								</button>
-							)}
-							{(updated_at || created_at) && (
-								<p className="text-xs  text-gray-500 text-right mt-2 mb-0">
-									updated at {relativeDate((updated_at || created_at) as Date)}
-								</p>
-							)}
-						</div>
-					)}
+									</div>
+								</footer>
+								{(updated_at || created_at) && (
+									<p className="text-xs  text-gray-500 text-right mt-2 mb-0">
+										updated at{" "}
+										{relativeDate((updated_at || created_at) as Date)}
+									</p>
+								)}
+							</div>
+						)}
+					</div>
+					<footer className="flex justify-end">
+						{id && !isLoading && <NoteDelete onDelete={handleDelete} />}
+					</footer>
 				</div>
 			</div>
-			<NoteDeleteModal
+			{/* <NoteDeleteModal
 				show={editState.showDeleteModal}
 				onClose={() => dispatch({ type: "toggle_delete_modal" })}
 				onDelete={handleDelete}
-			/>
+			/> */}
 		</Fragment>
 	);
 }
