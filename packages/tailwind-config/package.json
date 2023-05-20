@@ -1,11 +1,14 @@
 {
     "name": "@itell/tailwind-config",
-    "main": "index.js",
+    "main": "dist/index.js",
     "private": true,
     "version": "0.0.0",
     "scripts": {
         "build": "tsc"
     },
+    "files": [
+        "dist"
+    ],
     "dependencies": {
         "autoprefixer": "^10.4.14",
         "postcss": "^8.4.23",

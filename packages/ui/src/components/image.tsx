@@ -1,6 +1,5 @@
 import { cn } from "@itell/core";
 import NextImage from "next/image";
-import Typography from "./typography";
 import Balancer from "react-wrap-balancer";
 
 export const Image = ({
@@ -54,6 +53,7 @@ export const Image = ({
 
 export const TextOverImage = ({
 	src,
+	className,
 	children,
 	width = 600,
 	height = 400,
@@ -62,6 +62,7 @@ export const TextOverImage = ({
 	priority = false,
 }: {
 	src: string;
+	className?: string;
 	children: React.ReactNode;
 	alt?: string;
 	width?: number;
@@ -84,10 +85,13 @@ export const TextOverImage = ({
 					},
 				)}
 			/>
-			<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 group-hover:font-bold">
-				<Typography variant="h6" className="text-white">
-					{children}
-				</Typography>
+			<div
+				className={cn(
+					"absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 group-hover:font-bold",
+					className,
+				)}
+			>
+				<p className="text-xl leading-relaxed">{children}</p>
 			</div>
 		</div>
 	);
