@@ -5,8 +5,6 @@ import { Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
 import { cn } from "@itell/core";
 import { useState } from "react";
-import { ChevronDownIcon } from "lucide-react";
-import { Transition } from "@headlessui/react";
 import { SectionLocation } from "@/types/location";
 import {
 	Collapsible,

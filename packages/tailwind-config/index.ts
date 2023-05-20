@@ -1,29 +1,32 @@
-const { fontFamily } = require("tailwindcss/defaultTheme");
+import { fontFamily } from "tailwindcss/defaultTheme";
+import typographyPlugin from "@tailwindcss/typography";
+// @ts-ignore
+import animatePlugin from "tailwindcss-animate";
+import type { Config } from "tailwindcss";
 
-const allBreakpoints = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl"];
+// const allBreakpoints = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl"];
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
 	darkMode: ["class"],
 	content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
-	safelist: [
-		"hidden",
-		{
-			pattern: /col-span-.+/,
-		},
-		{
-			pattern: /grid-cols-.+/,
-		},
-		{
-			pattern: /transition-.+/,
-		},
-		{
-			pattern: /duration-.+/,
-		},
-		{
-			pattern: /transform-.+/,
-		},
-	],
+	// safelist: [
+	// 	"hidden",
+	// 	{
+	// 		pattern: /col-span-.+/,
+	// 	},
+	// 	{
+	// 		pattern: /grid-cols-.+/,
+	// 	},
+	// 	{
+	// 		pattern: /transition-.+/,
+	// 	},
+	// 	{
+	// 		pattern: /duration-.+/,
+	// 	},
+	// 	{
+	// 		pattern: /transform-.+/,
+	// 	},
+	// ],
 	theme: {
 		container: {
 			center: true,
@@ -151,5 +154,5 @@ module.exports = {
 	future: {
 		hoverOnlyWhenSupported: true,
 	},
-	plugins: [require("@tailwindcss/typography"), require("tailwindcss-animate")],
+	plugins: [typographyPlugin, animatePlugin],
 };

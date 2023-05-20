@@ -1,8 +1,15 @@
 import type { Config } from "tailwindcss";
 // @ts-ignore
-import sharedConfig from "@itell/tailwind-config/tailwind.config.cjs";
+import sharedConfig from "@itell/tailwind-config";
 
 export default {
 	...sharedConfig,
-	content: ["./src/**/*.{js,ts,jsx,tsx}", "./content/**/*.{mdx}"],
+	darkMode: ["class"],
+	content: ["./src/**/*.{js,ts,jsx,tsx}", "./content/**/*.mdx"],
+	safelist: [
+		{
+			pattern: /col-span-2/,
+			variants: ["md"],
+		},
+	],
 } satisfies Config;
