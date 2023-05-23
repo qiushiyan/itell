@@ -11,7 +11,6 @@ const Warning = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default async function () {
-	await delay(1000);
 	const session = await getServerAuthSession();
 	if (!session) {
 		return null;

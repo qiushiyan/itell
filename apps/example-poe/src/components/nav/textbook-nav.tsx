@@ -11,13 +11,15 @@ import {
 	NavigationMenuLink,
 	NavigationMenuList,
 	NavigationMenuTrigger,
-} from "../ui-components";
+	navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 import { Typography } from "@itell/ui/server";
 import React from "react";
 import TextbookScrollProgress from "./textbook-scroll-progress";
 import { allSectionsSorted } from "@/lib/sections";
 import SiteNav from "./site-nav";
 import UserAvatar from "../user-avatar";
+import ThemeToggle from "../theme/theme-toggle";
 
 type Props = {
 	showProgress?: boolean;
@@ -33,8 +35,7 @@ const moduleChapters = groupby(
 	}),
 );
 const modules = keyof(moduleChapters);
-const navigationMenuTriggerStyle =
-	"inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:bg-accent focus:text-accent-foreground disabled:opacity-50 disabled:pointer-events-none bg-background hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent/50 data-[active]:bg-accent/50 h-10 py-2 px-4 group w-max";
+
 const ChapterItem = React.forwardRef<
 	React.ElementRef<"a">,
 	React.ComponentPropsWithoutRef<"a">
@@ -72,7 +73,7 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 						{siteConfig.title}
 					</Typography>
 				</Link>
-				<NavigationMenu className="textbook-navbar w-full px-8 lg:px-4 py-2 bg-white border border-white/80">
+				<NavigationMenu className="w-full px-8 lg:px-4 py-2">
 					<NavigationMenuList>
 						{modules.map((module) => {
 							const active = location && location.module === Number(module);
@@ -88,7 +89,7 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 										<Link href={moduleUrl}>Module {module}</Link>
 									</NavigationMenuTrigger>
 									<NavigationMenuContent>
-										<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[750px] bg-white">
+										<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
 											{moduleChapters[module].map((chapter) => (
 												<ChapterItem
 													key={chapter.title}
@@ -104,7 +105,8 @@ export default function TextbookNavbar({ showProgress = false }: Props) {
 							);
 						})}
 					</NavigationMenuList>
-					<div className="ml-auto">
+					<div className="ml-auto flex items-center gap-2">
+						<ThemeToggle />
 						<UserAvatar />
 					</div>
 				</NavigationMenu>

@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "@/styles/globals.css";
-import "@itell/ui/dist/style.css";
 import AppProvider from "@/components/providers";
 import { siteConfig } from "@/config/site";
 import ShowToast from "@/components/toast";

@@ -17,7 +17,7 @@ export const Keyterm = ({
 }: { label: string; children: React.ReactNode }) => {
 	return (
 		<div className="border-2 px-4 py-2 rounded-md my-4">
-			<div className="border-blue-400 border-b font-bold ">
+			<div className="border-accent border-b font-bold ">
 				<Typography variant="h6">{label}</Typography>
 			</div>
 			<Typography as="div">{children}</Typography>
@@ -29,7 +29,7 @@ export const Info = ({
 	title,
 	children,
 }: { title?: string; children: React.ReactNode }) => (
-	<Alert className="bg-blue-50">
+	<Alert className="bg-blue-50 dark:bg-inherit dark:border-2 dark:border-blue-400">
 		<InfoIcon className="h-4 w-4" />
 		{title && <AlertTitle>{title}</AlertTitle>}
 		<AlertDescription className={cn({ "[&>p]:mt-0": !title })}>
@@ -56,7 +56,7 @@ export const Warning = ({
 	title,
 	children,
 }: { title?: string; children: React.ReactNode }) => (
-	<Alert className="bg-orange-50">
+	<Alert className="bg-orange-50 dark:bg-inherit dark:border-orange-400">
 		<AlertCircleIcon className="h-4 w-4" />
 		{title && <AlertTitle>{title}</AlertTitle>}
 		<AlertDescription className={cn({ "[&>p]:mt-0": !title })}>

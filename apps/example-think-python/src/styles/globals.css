@@ -4,10 +4,7 @@
 
 @import url("@itell/ui/dist/style.css");
 
-html {
-  --font-sans: 'Inter', sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
-}
+
 
 @layer base {
   :root {
@@ -80,6 +77,11 @@ html {
     @apply border-border;
   }
 
+  html {
+    --font-sans: 'Inter', sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+  }
+
   :focus {
     outline: none
   }
@@ -88,9 +90,6 @@ html {
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-  }
-
-  html {
     scroll-behavior: smooth;
   }
 

@@ -1,4 +1,4 @@
-import { Typography } from "@itell/ui/server";
+import { Typography, buttonVariants } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
 import { Mdx } from "@/components/mdx";
 import Summary from "@/components/summary";
@@ -14,6 +14,8 @@ import Highlighter from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
 import { Fragment } from "react";
 import { allSectionsSorted } from "@/lib/sections";
+import { Button } from "@/components/ui-components";
+import { cn } from "@itell/core";
 
 export const generateStaticParams = async () => {
 	return allSectionsSorted.map((section) => {
@@ -43,14 +45,15 @@ const AnchorLink = ({
 	icon,
 }: { text: string; href: string; icon: React.ReactNode }) => {
 	return (
-		<a
-			href={href}
-			className="flex gap-1 items-center hover:underline text-gray-800"
-		>
-			{icon}
-			<Typography variant="small" className="mb-0">
+		<a href={href}>
+			<Button
+				size="sm"
+				variant="ghost"
+				className="flex items-center gap-1 mb-0 py-1"
+			>
+				{icon}
 				{text}
-			</Typography>
+			</Button>
 		</a>
 	);
 };
@@ -80,24 +83,22 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 		<Fragment>
 			<div className="max-w-[1440px] mx-auto grid grid-cols-12 gap-6 px-2">
 				<SectionAuthDialog />
-				<aside className="module-sidebar col-span-2">
-					<div className="sticky top-20">
-						<ModuleSidebar
-							chapters={chapters}
-							currentLocation={currentLocation}
+				<aside className="module-sidebar col-span-2 sticky top-20">
+					<ModuleSidebar
+						chapters={chapters}
+						currentLocation={currentLocation}
+					/>
+					<div className="mt-12 flex flex-col gap-2">
+						<AnchorLink
+							icon={<PencilIcon className="w-4 h-4" />}
+							text="Write a Summary"
+							href="#section-summary"
 						/>
-						<div className="mt-12 flex flex-col gap-2">
-							<AnchorLink
-								icon={<PencilIcon className="w-4 h-4" />}
-								text="Write a Summary"
-								href="#section-summary"
-							/>
-							<AnchorLink
-								icon={<ArrowUpIcon className="w-4 h-4" />}
-								text="Back to Top"
-								href="#section-title"
-							/>
-						</div>
+						<AnchorLink
+							icon={<ArrowUpIcon className="w-4 h-4" />}
+							text="Back to Top"
+							href="#section-title"
+						/>
 					</div>
 				</aside>
 

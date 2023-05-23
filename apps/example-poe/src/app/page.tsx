@@ -1,4 +1,4 @@
-import SiteNav from "@/components/nav/site-nav";
+import LabIcon from "@/components/lab-icon";
 import TextbookNavbar from "@/components/nav/textbook-nav";
 import { Typography } from "@itell/ui/server";
 import Image from "next/image";
@@ -10,13 +10,7 @@ export default function Home() {
 			<TextbookNavbar showProgress={false} />
 			<div className="px-6 md:px-10 lg:px-16 py-8 mx-auto max-w-3xl">
 				<div className="flex justify-center items-center">
-					<Image
-						src="/images/learlab.svg"
-						alt="learlab icon"
-						width={600}
-						height={400}
-						priority
-					/>
+					<LabIcon />
 				</div>
 				<Typography>
 					This textbook is adopted from Principles of Macroeconomics 2e

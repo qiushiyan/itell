@@ -5,7 +5,6 @@ export * from "./components/stepper";
 export * from "./components/accordion";
 export * from "./components/tabs";
 export * from "./components/collapsible";
-export * from "./components/navigation-menu";
 export * from "./components/avatar";
 export * from "./components/dropdown";
 export * from "./components/dialog";

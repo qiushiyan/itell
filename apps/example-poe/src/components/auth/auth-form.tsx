@@ -11,7 +11,7 @@ export const AuthButtons = {
 		<Button
 			variant="secondary"
 			color="blue-gray"
-			className="flex items-center gap-3 w-60 mx-auto"
+			className="flex items-center gap-3 w-60 mx-auto my-2"
 			onClick={(e) => {
 				e.preventDefault();
 				signIn("google");
