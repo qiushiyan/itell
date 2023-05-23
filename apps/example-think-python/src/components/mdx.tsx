@@ -8,6 +8,7 @@ import {
 	Definition,
 } from "@itell/ui/server";
 import { useMDXComponent } from "next-contentlayer/hooks";
+import { Exercise } from "./exercise";
 import {
 	CustomIFrame,
 	Accordion,
@@ -36,6 +37,7 @@ const MdxComponents = {
 	TextOverImage,
 	Info,
 	Warning,
+	Exercise,
 	Keyterm,
 	Callout,
 	Caption,
