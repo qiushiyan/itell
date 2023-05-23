@@ -11,16 +11,6 @@ export const getPagerForSection = ({
 }: { allSections: Section[]; index: number }) => {
 	const pager: Pager = { prev: null, next: null };
 
-	allSections.sort((a, b) => {
-		if (a.location.module === b.location.module) {
-			if (a.location.chapter === b.location.chapter) {
-				return a.location.section - b.location.section;
-			}
-			return a.location.chapter - b.location.chapter;
-		}
-		return a.location.module - b.location.module;
-	});
-
 	if (index !== 0) {
 		const section = allSections[index - 1];
 		pager.prev = {

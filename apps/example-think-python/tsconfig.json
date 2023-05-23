@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "contentlayer/generated": [
+        ".contentlayer/generated"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".contentlayer/generated",
+    ".next/types/**/*.ts",
+    "src/env.mjs",
+    "tailwind.config.cjs",
+    "tailwind.config.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -1,10 +1,7 @@
-"use client";
-
 import { Chapter } from "@/types/section";
 import { Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
 import { cn } from "@itell/core";
-import { useState } from "react";
 import { SectionLocation } from "@/types/location";
 import {
 	Collapsible,
@@ -21,16 +18,6 @@ export function ModuleSidebar({
 	chapters,
 	currentLocation,
 }: ModuleSidebarProps) {
-	const [sectionsVisible, setSectionsVisible] = useState<
-		Record<string, boolean>
-	>(() => {
-		const output: Record<string, boolean> = {};
-		chapters.forEach((chapter) => {
-			output[chapter.chapter] = chapter.chapter === currentLocation.chapter;
-		});
-		return output;
-	});
-
 	return (
 		<nav className="space-y-1">
 			{chapters.map((chapter) => (

@@ -2,12 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
 
 
 html {
   --font-sans: 'Inter', sans-serif;
-  --font-handwritten: 'Courgette', cursive;
 }
 
 

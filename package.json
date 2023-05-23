@@ -15,6 +15,7 @@
     "build:docs": "turbo run build --scope @itell/docs",
     "dev": "turbo run dev",
     "dev:poe": "turbo run dev --filter @itell/example-poe",
+    "dev:tp": "turbo run dev --filter @itell/example-think-python",
     "dev:docs": "turbo run dev --filter @itell/docs",
     "start": "turbo run start",
     "lint": "turbo run lint",

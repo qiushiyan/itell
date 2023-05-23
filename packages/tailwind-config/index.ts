@@ -4,29 +4,9 @@ import typographyPlugin from "@tailwindcss/typography";
 import animatePlugin from "tailwindcss-animate";
 import type { Config } from "tailwindcss";
 
-// const allBreakpoints = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl"];
-
 export default {
 	darkMode: ["class"],
 	content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
-	// safelist: [
-	// 	"hidden",
-	// 	{
-	// 		pattern: /col-span-.+/,
-	// 	},
-	// 	{
-	// 		pattern: /grid-cols-.+/,
-	// 	},
-	// 	{
-	// 		pattern: /transition-.+/,
-	// 	},
-	// 	{
-	// 		pattern: /duration-.+/,
-	// 	},
-	// 	{
-	// 		pattern: /transform-.+/,
-	// 	},
-	// ],
 	theme: {
 		container: {
 			center: true,
@@ -133,6 +113,7 @@ export default {
 			fontFamily: {
 				sans: ["var(--font-sans)", ...fontFamily.sans],
 				serif: ["var(--font-serif)", ...fontFamily.serif],
+				mono: ["var(--font-mono)", ...fontFamily.mono],
 				handwritten: ["var(--font-handwritten)"],
 			},
 			keyframes: {
@@ -155,4 +136,4 @@ export default {
 		hoverOnlyWhenSupported: true,
 	},
 	plugins: [typographyPlugin, animatePlugin],
-};
+} satisfies Config;

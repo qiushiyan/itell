@@ -1,4 +1,3 @@
-import { allSections } from "contentlayer/generated";
 import { Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
 import { Mdx } from "@/components/mdx";
@@ -14,9 +13,10 @@ import NoteList from "@/components/note/note-list";
 import Highlighter from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
 import { Fragment } from "react";
+import { allSectionsSorted } from "@/lib/sections";
 
 export const generateStaticParams = async () => {
-	return allSections.map((section) => {
+	return allSectionsSorted.map((section) => {
 		return {
 			slug: section._raw.flattenedPath.split("/"),
 		};
@@ -26,11 +26,14 @@ export const generateStaticParams = async () => {
 export const generateMetadata = ({
 	params,
 }: { params: { slug: string[] } }) => {
-	const post = allSections.find(
-		(post) => post._raw.flattenedPath === params.slug.join("/"),
+	const section = allSectionsSorted.find(
+		(section) => section._raw.flattenedPath === params.slug.join("/"),
 	);
-	if (post) {
-		return { title: post.title, description: post.body.raw.slice(0, 100) };
+	if (section) {
+		return {
+			title: section.title,
+			description: section.body.raw.slice(0, 100),
+		};
 	}
 };
 
@@ -54,7 +57,7 @@ const AnchorLink = ({
 
 export default async function ({ params }: { params: { slug: string[] } }) {
 	const path = params.slug.join("/");
-	const sectionIndex = allSections.findIndex(
+	const sectionIndex = allSectionsSorted.findIndex(
 		(section) => section._raw.flattenedPath === path,
 	);
 
@@ -62,12 +65,15 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 		return notFound();
 	}
 
-	const section = allSections[sectionIndex];
+	const section = allSectionsSorted[sectionIndex];
 	const currentLocation = section.location as SectionLocation;
-	const pager = getPagerForSection({ allSections, index: sectionIndex });
+	const pager = getPagerForSection({
+		allSections: allSectionsSorted,
+		index: sectionIndex,
+	});
 	const chapters = await getChapters({
 		module: currentLocation.module,
-		allSections,
+		allSections: allSectionsSorted,
 	});
 
 	return (
