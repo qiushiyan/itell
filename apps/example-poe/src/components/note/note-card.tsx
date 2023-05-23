@@ -182,7 +182,7 @@ export default function ({
 	return (
 		<Fragment>
 			<div
-				className={cn("absolute z-20 w-64 rounded-md border-2 bg-white", {
+				className={cn("absolute z-20 w-64 rounded-md border-2", {
 					"z-50": editState.editing,
 				})}
 				style={{ top: y, borderColor: editState.color }}
@@ -218,7 +218,7 @@ export default function ({
 						)}
 
 						{!editState.collapsed && (
-							<div className="px-2 mt-1 text-sm text-gray-800">
+							<div className="px-2 mt-1 text-sm">
 								<NoteColorPicker
 									color={editState.color}
 									onChange={(color) => {
@@ -247,7 +247,7 @@ export default function ({
 										onClick={() =>
 											dispatch({ type: "set_editing", payload: true })
 										}
-										className="flex w-full text-left px-1 py-2 rounded-md hover:bg-secondary"
+										className="flex w-full text-left px-1 py-2 rounded-md hover:bg-accent"
 									>
 										<span className="mb-0">
 											{editState.input || <EditIcon className="w-4 h-4" />}
@@ -275,7 +275,7 @@ export default function ({
 									</div>
 								</footer>
 								{(updated_at || created_at) && (
-									<p className="text-xs  text-gray-500 text-right mt-2 mb-0">
+									<p className="text-xs text-right mt-2 mb-0">
 										updated at{" "}
 										{relativeDate((updated_at || created_at) as Date)}
 									</p>

@@ -3,12 +3,7 @@ import { getServerAuthSession } from "@/lib/auth";
 import db from "@/lib/db";
 import { delay, relativeDate } from "@/lib/utils";
 import { groupby } from "@itell/core";
-
-const Warning = ({ children }: { children: React.ReactNode }) => (
-	<div className="border-l-4 border-orange-400 bg-orange-50 px-4 py-2">
-		<div className="ml-3">{children}</div>
-	</div>
-);
+import { Warning } from "@itell/ui/server";
 
 export default async function () {
 	const session = await getServerAuthSession();
