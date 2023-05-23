@@ -10,9 +10,7 @@ const NoteRouter = router({
 			const res = await ctx.prisma.note.findMany({
 				where: {
 					userId: id,
-					module: input.location.module,
 					chapter: input.location.chapter,
-					section: input.location.section,
 				},
 			});
 			return res;
@@ -44,9 +42,7 @@ const NoteRouter = router({
 					noteText: input.noteText,
 					highlightedText: input.highlightedText,
 					y: input.y,
-					module: input.location.module,
 					chapter: input.location.chapter,
-					section: input.location.section || 0,
 					color: input.color || defaultNoteColor,
 					userId: id,
 				},

@@ -35,9 +35,9 @@ export default async function () {
 	}
 
 	// convert date here since they will be passed from server components to client components
-	const summariesByModule = groupby(
+	const summariesByChapter = groupby(
 		user.summaries,
-		(summary) => summary.module,
+		(summary) => summary.chapter,
 	);
 
 	// .map((s) => ({
@@ -46,5 +46,5 @@ export default async function () {
 	// 	updated_at: relativeDate(s.updated_at),
 	// })),
 
-	return <DashboardStudentSummaries summariesByModule={summariesByModule} />;
+	return <DashboardStudentSummaries summariesByChapter={summariesByChapter} />;
 }

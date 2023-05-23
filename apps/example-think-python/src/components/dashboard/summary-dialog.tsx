@@ -20,13 +20,8 @@ export default function ({ summary }: Props) {
 			<DialogContent>
 				<div className="p-8 lg:p-4">
 					<div className="rounded-md px-2 py-1 tracking-tighter flex items-center justify-between">
-						<Link
-							href={`/module-${summary.module}/chapter-${summary.chapter}/section-${summary.section}`}
-							className="underline"
-						>
-							<Typography variant="small">
-								Chapter {summary.chapter}, Section {summary.section}
-							</Typography>
+						<Link href={`/chapter-${summary.chapter}`} className="underline">
+							<Typography variant="small">Chapter {summary.chapter}</Typography>
 						</Link>
 						<Typography variant="small">
 							updated at{" "}

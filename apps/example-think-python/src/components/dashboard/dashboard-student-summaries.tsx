@@ -5,17 +5,17 @@ import { Tab, TabPanel, Tabs, TabsBody, TabsHeader } from "../ui-components";
 import SummaryDialog from "./summary-dialog";
 
 type Props = {
-	summariesByModule: Record<string, Summary[]>;
+	summariesByChapter: Record<string, Summary[]>;
 };
 
-export default function ({ summariesByModule }: Props) {
-	const modules = keyof(summariesByModule);
+export default function ({ summariesByChapter }: Props) {
+	const chapters = keyof(summariesByChapter);
 
 	return (
-		<Tabs value={modules[0]} className="grid grid-cols-12 gap-4">
+		<Tabs value={chapters[0]} className="grid grid-cols-12 gap-4">
 			<div className="col-span-3">
 				<TabsHeader>
-					{modules.map((module) => (
+					{chapters.map((module) => (
 						<Tab key={module} value={module}>
 							Module {module}
 						</Tab>
@@ -24,14 +24,14 @@ export default function ({ summariesByModule }: Props) {
 			</div>
 			<div className="col-span-9">
 				<TabsBody>
-					{modules.map((module) => (
+					{chapters.map((module) => (
 						<TabPanel
 							key={module}
 							value={module}
 							className="grid grid-cols-3 gap-4"
 							typography={false}
 						>
-							{summariesByModule[module].map((summary) => (
+							{summariesByChapter[module].map((summary) => (
 								<div
 									className="rounded-md shadow-md group hover:shadow-lg transition ease-in-out duration-100 col-span-1"
 									key={summary.id}

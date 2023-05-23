@@ -1,5 +1,4 @@
 import { Location } from "@/types/location";
-import { SidebarSection } from "@/types/section";
 import { formatRelative } from "date-fns";
 
 export const getYoutubeLinkFromEmbed = (url: string) => {
@@ -21,28 +20,8 @@ const getSingleLocation = (s: string | undefined) => {
 export const getLocationFromPathname = (path: string): Location => {
 	const pathname = path.split("/");
 
-	const module = getSingleLocation(pathname[1]);
-	const chapter = getSingleLocation(pathname[2]);
-	const section = getSingleLocation(pathname[3]);
-	return { module, chapter, section };
-};
-
-export const sortSections = (sections: SidebarSection[]) => {
-	const sectionsSorted = sections.slice(0).sort((a, b) => {
-		if (a.chapter === b.chapter) {
-			if (!a.section) {
-				return -1;
-			}
-			if (!b.section) {
-				return 1;
-			}
-
-			return a.section - b.section;
-		}
-		return a.chapter - b.chapter;
-	});
-
-	return sectionsSorted;
+	const chapter = getSingleLocation(pathname[1]);
+	return { chapter };
 };
 
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
