@@ -11,6 +11,7 @@ const server = z.object({
 	NEXTAUTH_URL: z.string(),
 	NEXTAUTH_SECRET: z.string(),
 	SCORE_API_URL: z.string(),
+	DATABASE_URL: z.string(),
 });
 
 /**
@@ -32,6 +33,7 @@ const processEnv = {
 	NEXTAUTH_URL: process.env.NEXTAUTH_URL,
 	NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
 	SCORE_API_URL: process.env.SCORE_API_URL,
+	DATABASE_URL: process.env.DATABASE_URL,
 };
 
 // Don't touch the part below
