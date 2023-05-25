@@ -6,13 +6,14 @@ import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
+} from "./ui-components";
+import {
 	Dialog,
 	DialogContent,
-	DialogContentBody,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-} from "./ui-components";
+} from "@/components/ui/dialog";
 type Props = {
 	type?: "unauthorized" | "unlocked";
 };
@@ -41,9 +42,7 @@ export default function SectionAuthModal({ type = "unauthorized" }: Props) {
 						</Collapsible>
 					</DialogDescription>
 				</DialogHeader>
-				<DialogContentBody>
-					<div className="mt-5">{AuthButtons.google}</div>
-				</DialogContentBody>
+				<div className="mt-5">{AuthButtons.google}</div>
 			</DialogContent>
 		</Dialog>
 	);

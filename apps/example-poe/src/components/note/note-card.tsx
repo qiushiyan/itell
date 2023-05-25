@@ -236,7 +236,7 @@ export default function ({
 										<TextArea
 											placeholder="leave a note here"
 											value={editState.input}
-											setValue={(val) =>
+											onValueChange={(val) =>
 												dispatch({ type: "set_input", payload: val })
 											}
 											autoFocus
