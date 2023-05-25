@@ -4,7 +4,7 @@ import { FormEvent, Fragment, useEffect, useRef } from "react";
 import TextArea from "../ui/textarea";
 import { EditIcon, TrashIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
-import { useClickOutside, useNotes } from "@/lib/hooks";
+import { useClickOutside } from "@/lib/hooks/utils";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDelete from "./node-delete";
@@ -16,6 +16,7 @@ import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
 import { Button } from "../ui-components";
+import { useNotes } from "@/lib/hooks/notes";
 
 interface Props extends NoteCard {
 	location: SectionLocation;

@@ -1,18 +1,24 @@
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import DashboardStudentSummaries from "@/components/dashboard/dashboard-student-summaries";
-import { getServerAuthSession } from "@/lib/auth";
+import DashboardSummaryHeader from "@/components/dashboard/dashboard-summary-header";
+import SummaryCreateButton from "@/components/dashboard/summary-create-button";
+import SummaryList from "@/components/dashboard/summary-list";
+import { DashboardShell } from "@/components/shell";
+import { getCurrentUser, getServerAuthSession } from "@/lib/auth";
 import db from "@/lib/db";
 import { delay, relativeDate } from "@/lib/utils";
 import { groupby } from "@itell/core";
 import { Warning } from "@itell/ui/server";
+import { notFound, redirect } from "next/navigation";
 
 export default async function () {
-	const session = await getServerAuthSession();
-	if (!session) {
-		return null;
+	const user = await getCurrentUser();
+	if (!user) {
+		return redirect("/auth");
 	}
 
-	const id = session.user.id;
-	const user = await db.user.findUnique({
+	const id = user.id;
+	const userSummaries = await db.user.findUnique({
 		where: {
 			id,
 		},
@@ -21,25 +27,20 @@ export default async function () {
 		},
 	});
 
-	if (!user) {
-		return <Warning>user not found</Warning>;
+	if (!userSummaries) {
+		return notFound();
 	}
 
-	if (user.summaries.length === 0) {
-		return <Warning>no summaries found</Warning>;
-	}
-
-	// convert date here since they will be passed from server components to client components
+	// // convert date here since they will be passed from server components to client components
 	const summariesByModule = groupby(
-		user.summaries,
+		userSummaries.summaries,
 		(summary) => summary.module,
 	);
 
-	// .map((s) => ({
-	// 	...s,
-	// 	created_at: relativeDate(s.created_at),
-	// 	updated_at: relativeDate(s.updated_at),
-	// })),
-
-	return <DashboardStudentSummaries summariesByModule={summariesByModule} />;
+	return (
+		<DashboardShell>
+			<DashboardSummaryHeader />
+			<SummaryList summariesByModule={summariesByModule} />
+		</DashboardShell>
+	);
 }

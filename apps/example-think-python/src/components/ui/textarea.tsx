@@ -37,7 +37,7 @@ export default function TextArea({
 			onChange={(e) => setValue(e.currentTarget.value)}
 			ref={ref}
 			className={cn(
-				"w-full resize-none px-3 py-2 text-gray-700 border border-indigo-400 bg-white rounded-lg text-sm shadow-sm focus:outline-none ",
+				"flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
 				className,
 			)}
 			{...props}

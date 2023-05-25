@@ -98,7 +98,7 @@ export function TocSidebar({ headings }: TocSidebarProps) {
 								className={cn("hover:underline inline-flex ", {
 									"text-base": heading.level === "one",
 									"text-sm": heading.level === "two",
-									"text-primary/70 text-[0.8rem] pl-2":
+									"text-muted-foreground text-[0.8rem] pl-2":
 										heading.level === "three",
 								})}
 							>

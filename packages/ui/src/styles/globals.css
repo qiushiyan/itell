@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.callout-no-title p {
+    margin-top: 0;
+}
+
+.callout-no-title ul {
+    margin-top: 0;
+}

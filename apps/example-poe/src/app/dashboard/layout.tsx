@@ -1,39 +1,38 @@
-import TextbookNavbar from "@/components/nav/textbook-nav";
-import { getServerAuthSession } from "@/lib/auth";
-import db from "@/lib/db";
-import { delay } from "@/lib/utils";
+import { DashboardNav } from "@/components/nav/dashboard-nav";
+import { MainNav } from "@/components/nav/main-nav";
+import ThemeToggle from "@/components/theme/theme-toggle";
+import UserAvatar from "@/components/user-avatar";
+import { dashboardConfig } from "@/config/dashboard";
+import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { Fragment } from "react";
 
 export default async function DashboardLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	const session = await getServerAuthSession();
-	if (session?.user) {
-		const user = await db.user.findUnique({
-			where: {
-				id: session.user.id,
-			},
-		});
-		if (user) {
-			if (user.isTeacher) {
-				return (
-					<Fragment>
-						<div className="max-w-6xl mx-auto py-8 px-4">you are a teacher</div>
-					</Fragment>
-				);
-			} else {
-				return (
-					<Fragment>
-						<TextbookNavbar />
-						<div className="max-w-6xl mx-auto py-8 px-4">{children}</div>
-					</Fragment>
-				);
-			}
-		}
+	const user = await getCurrentUser();
+	if (!user) {
+		return redirect("/auth");
 	}
 
-	return redirect("/auth");
+	return (
+		<div className="flex min-h-screen flex-col space-y-6">
+			<header className="sticky top-0 z-40 border-b bg-background">
+				<div className="container flex h-16 items-center justify-between py-4">
+					<MainNav items={dashboardConfig.mainNav} />
+					<div className="ml-auto flex items-center gap-2">
+						<ThemeToggle />
+						<UserAvatar />
+					</div>
+				</div>
+			</header>
+			<div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
+				<aside className="hidden w-[200px] flex-col md:flex">
+					<DashboardNav items={dashboardConfig.sidebarNav} />
+				</aside>
+				<main className="flex w-full flex-1 flex-col">{children}</main>
+			</div>
+		</div>
+	);
 }

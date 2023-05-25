@@ -50,3 +50,23 @@ export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 export const relativeDate = (date: Date, relativeTo: Date = new Date()) => {
 	return formatRelative(new Date(date), relativeTo);
 };
+
+export const numOfWords = (str: string): number => {
+	if (str.trim() === "") {
+		return 0;
+	}
+	const strWithoutSpace = str.replace(/[\s\t]+/g, " ");
+	return strWithoutSpace.split(" ").length;
+};
+
+export const makeInputKey = (location: Location) => {
+	return `chapter-${location.chapter}-section-${location.section}-summary`;
+};
+
+export const isTextbookPage = (location: Location) => {
+	return (
+		location.module !== undefined &&
+		location.chapter !== undefined &&
+		location.section !== undefined
+	);
+};

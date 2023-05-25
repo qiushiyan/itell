@@ -88,7 +88,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 						chapters={chapters}
 						currentLocation={currentLocation}
 					/>
-					<div className="mt-12 flex flex-col gap-2">
+					<div className="mt-12 flex flex-col">
 						<AnchorLink
 							icon={<PencilIcon className="w-4 h-4" />}
 							text="Write a Summary"

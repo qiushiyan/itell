@@ -1,16 +1,14 @@
 "use client";
 import { TrashIcon } from "lucide-react";
 import {
-	Button,
 	Dialog,
 	DialogTrigger,
 	DialogHeader,
 	DialogContent,
 	DialogTitle,
-	DialogContentBody,
 	DialogFooter,
-} from "../ui-components";
-import { useState } from "react";
+} from "@/components/ui/dialog";
+import { Button } from "../ui-components";
 
 type Props = {
 	onDelete: () => Promise<void>;
@@ -29,9 +27,7 @@ export default function NoteDeleteModal({ onDelete }: Props) {
 					<DialogTitle>Delete this Note?</DialogTitle>
 				</DialogHeader>
 				<DialogFooter>
-					<Button type="submit" onClick={onDelete}>
-						Yes
-					</Button>
+					<Button onClick={onDelete}>Yes</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

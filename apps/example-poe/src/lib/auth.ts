@@ -16,3 +16,9 @@ export const getApiAuthSession = async ({
 export const getServerAuthSession = async () => {
 	return await getServerSessionNext(authOptions);
 };
+
+export async function getCurrentUser() {
+	const session = await getServerSession(authOptions);
+
+	return session?.user;
+}

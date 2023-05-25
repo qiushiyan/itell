@@ -36,11 +36,6 @@ export default function UserAvatar() {
 			action: () => router.push("/dashboard"),
 		},
 		{
-			text: "Settings",
-			icon: <SettingsIcon className="mr-2 h-4 w-4" />,
-			action: () => router.push("/settings"),
-		},
-		{
 			text: "Logout",
 			icon: <LogOutIcon className="mr-2 h-4 w-4" />,
 			action: () => signOut(),

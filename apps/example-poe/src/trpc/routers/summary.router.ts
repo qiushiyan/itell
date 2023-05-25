@@ -67,6 +67,31 @@ const SummaryRouter = router({
 				},
 			});
 		}),
+
+	update: protectedProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				text: z.string(),
+				score: ZScore,
+				isPassed: z.boolean(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			await ctx.prisma.summary.update({
+				where: {
+					id: input.id,
+				},
+				data: {
+					text: input.text,
+					contentScore: input.score.content,
+					wordingScore: input.score.wording,
+					similarityScore: input.score.similarity,
+					containmentScore: input.score.containment,
+					isPassed: input.isPassed,
+				},
+			});
+		}),
 });
 
 export default SummaryRouter;

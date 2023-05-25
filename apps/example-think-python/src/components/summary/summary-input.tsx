@@ -12,6 +12,7 @@ import Spinner from "../spinner";
 import { SummaryFeedback, getFeedback } from "@/lib/summary";
 import Feedback from "./summary-feedback";
 import { useEffect } from "react";
+import TextArea from "../ui/textarea";
 
 type State = {
 	input: string;
@@ -188,13 +189,11 @@ export default function SummaryInput() {
 		<>
 			{state.feedback && <Feedback feedback={state.feedback} />}
 			<Typography variant="small">Number of words: {wordNum}</Typography>
-			<form className=" space-y-4">
-				<textarea
+			<form className="mt-2 space-y-4">
+				<TextArea
 					placeholder="Write your summary here."
 					value={state.input}
-					onChange={(e) =>
-						dispatch({ type: "set_input", payload: e.target.value })
-					}
+					setValue={(val) => dispatch({ type: "set_input", payload: val })}
 					rows={10}
 					className="resize-none rounded-md shadow-md p-4 w-full"
 				/>

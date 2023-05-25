@@ -11,7 +11,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:poe": "turbo run build --scope @itell/example-poe",
-    "build:ui": "turbo run build --scope @itell/ui",
+    "build:ui": "turbo run build --filter @itell/ui",
     "build:docs": "turbo run build --scope @itell/docs",
     "dev": "turbo run dev",
     "dev:poe": "turbo run dev --filter @itell/example-poe",

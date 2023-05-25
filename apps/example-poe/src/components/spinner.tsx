@@ -7,7 +7,7 @@ type Props = {
 export default function Spinner({ className }: Props) {
 	return (
 		<svg
-			className={cn("w-12 h-12 animate-spin text-blue-600", className)}
+			className={cn("w-12 h-12 animate-spin text-background", className)}
 			viewBox="0 0 24 24"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

@@ -3,7 +3,7 @@
 import { cn, groupby, keyof } from "@itell/core";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { useLocation } from "@/lib/hooks";
+import { useLocation } from "@/lib/hooks/utils";
 import {
 	NavigationMenu,
 	NavigationMenuContent,

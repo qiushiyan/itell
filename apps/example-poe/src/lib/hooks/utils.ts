@@ -1,8 +1,15 @@
 import { usePathname } from "next/navigation";
-import { useState, useEffect, useContext, useRef, RefObject } from "react";
+import {
+	useState,
+	useEffect,
+	useContext,
+	useRef,
+	RefObject,
+	useLayoutEffect,
+} from "react";
 import type { Location } from "@/types/location";
-import { getLocationFromPathname } from "./utils";
 import { NoteContext } from "@/contexts/note-highlight";
+import { getLocationFromPathname } from "../utils";
 
 export const useLocalStorage = <T,>(key: string, initialValue: T) => {
 	const [storedValue, setStoredValue] = useState<T>(() => {
@@ -53,12 +60,6 @@ export const useLocation = () => {
 	return location;
 };
 
-export const useNotes = () => {
-	const noteContext = useContext(NoteContext);
-
-	return noteContext;
-};
-
 export const useClickOutside = <T extends HTMLElement>(
 	handler: () => void,
 ): RefObject<T> => {
@@ -99,4 +100,14 @@ export const useAutosizeTextArea = (
 	}, [textAreaRef, value]);
 };
 
-export default useAutosizeTextArea;
+export function useLockBody() {
+	useLayoutEffect((): (() => void) => {
+		const originalStyle: string = window.getComputedStyle(
+			document.body,
+		).overflow;
+		document.body.style.overflow = "hidden";
+		return () => {
+			document.body.style.overflow = originalStyle;
+		};
+	}, []);
+}

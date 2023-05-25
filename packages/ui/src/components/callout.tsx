@@ -32,7 +32,8 @@ export const Info = ({
 	<Alert className="bg-blue-50 dark:bg-inherit dark:border-2 dark:border-blue-400">
 		<InfoIcon className="h-4 w-4" />
 		{title && <AlertTitle>{title}</AlertTitle>}
-		<AlertDescription className={cn({ "[&>p]:mt-0": !title })}>
+		{/* align content with icon when there is no title */}
+		<AlertDescription className={cn({ "callout-no-title": !title })}>
 			{children}
 		</AlertDescription>
 	</Alert>
@@ -45,8 +46,7 @@ export const Errorbox = ({
 	<Alert variant="destructive">
 		<AlertTriangleIcon className="h-4 w-4" />
 		{title && <AlertTitle>{title}</AlertTitle>}
-		{/* align content with icon when there is no title */}
-		<AlertDescription className={cn({ "[&>p]:mt-0": !title })}>
+		<AlertDescription className={cn({ "callout-no-title": !title })}>
 			{children}
 		</AlertDescription>
 	</Alert>
@@ -59,20 +59,8 @@ export const Warning = ({
 	<Alert className="bg-orange-50 dark:bg-inherit dark:border-orange-400">
 		<AlertCircleIcon className="h-4 w-4" />
 		{title && <AlertTitle>{title}</AlertTitle>}
-		<AlertDescription className={cn({ "[&>p]:mt-0": !title })}>
+		<AlertDescription className={cn({ "callout-no-title": !title })}>
 			{children}
 		</AlertDescription>
 	</Alert>
 );
-
-export const Card = ({
-	title,
-	children,
-}: { title: string; children: React.ReactNode }) => {
-	return (
-		<div className="mb-4 rounded-md max-w-2xl mx-auto px-4 py-2 border-l-2 border-yellow-700">
-			<h5>{title}</h5>
-			{children}
-		</div>
-	);
-};

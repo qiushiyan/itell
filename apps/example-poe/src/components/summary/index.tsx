@@ -1,13 +1,12 @@
-import { useLocation } from "@/lib/hooks";
 import SummaryDescription from "./summary-description";
 import SummaryInput from "./summary-input";
-import { Info, Typography } from "@itell/ui/server";
+import { Info } from "@itell/ui/server";
 import { SectionLocation } from "@/types/location";
 
 export default function Summary({ location }: { location: SectionLocation }) {
 	if (location.section === 0) {
 		return (
-			<section className="mt-2">
+			<section className="mt-2 w-[800px] mx-auto">
 				<Info>
 					No summary is required for this section. You are good to go!
 				</Info>

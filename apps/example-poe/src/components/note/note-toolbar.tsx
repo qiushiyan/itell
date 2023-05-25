@@ -5,7 +5,7 @@ import { HighlighterIcon, CopyIcon, PencilIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Popover } from "react-text-selection-popover";
 import { toast } from "sonner";
-import { useNotes } from "@/lib/hooks";
+import { useNotes } from "@/lib/hooks/notes";
 import { useTextSelection } from "use-text-selection";
 import { SectionLocation } from "@/types/location";
 import { trpc } from "@/trpc/trpc-provider";
@@ -96,7 +96,7 @@ export default function HighlightToolbar({
 				return (
 					<div
 						className={cn(
-							"fixed rounded-md shadow-sm px-2 py-1 flex flex-row gap-2 border-2 border-gray-100 items-center justify-between bg-white -ml-[75px]",
+							"fixed rounded-md shadow-sm px-2 py-1 flex flex-row gap-2 border-2 border-gray-100 items-center justify-between bg-background -ml-[75px]",
 						)}
 						style={style}
 					>
