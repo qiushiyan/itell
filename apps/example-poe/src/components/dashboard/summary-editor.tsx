@@ -2,15 +2,15 @@
 
 import { Summary } from "@prisma/client";
 import TextArea from "../ui/textarea";
-import { FormEvent, Fragment, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Button } from "../ui-components";
-import SummaryInput from "../summary/summary-input";
 import { useSummary } from "@/lib/hooks/summary";
 import Feedback from "../summary/summary-feedback";
 import { numOfWords } from "@/lib/utils";
 import Spinner from "../spinner";
 import { SummaryFeedback, SummaryScore } from "@/lib/summary";
 import { useRouter } from "next/navigation";
+import { SectionLocation } from "@/types/location";
 
 type Props =
 	| {
@@ -19,21 +19,24 @@ type Props =
 	  }
 	| {
 			published: false;
-			module: Summary["module"];
-			chapter: Summary["chapter"];
-			section: Summary["section"];
-			userId: Summary["userId"];
+			location: SectionLocation;
 	  };
 
 export default function (props: Props) {
 	const router = useRouter();
-	const { state, setInput, handleScore, handleUpdate } = useSummary();
+	const [pending, setPending] = useState({
+		update: false,
+		score: false,
+	});
+	const { state, setInput, score, update, create } = useSummary({
+		useLocalStorage: false,
+	});
 	const [result, setResult] = useState<{
 		score: SummaryScore | null;
 		feedback: SummaryFeedback | null;
 	}>({ score: null, feedback: null });
-	const [prompt, setPrompt] = useState("Get Score");
 	const [isScored, setIsScored] = useState(false);
+	const canUpdate = isScored && !state.error;
 
 	useEffect(() => {
 		if (props.published) {
@@ -43,56 +46,77 @@ export default function (props: Props) {
 		}
 	}, []);
 
-	const handleGetScore = async (event: FormEvent) => {
+	const handleUpsert = async (event: FormEvent) => {
 		event.preventDefault();
-		if (props.published) {
-			if (isScored) {
-				await handleUpdate(props.summary, result.score, result.feedback);
-				setPrompt("Get Score");
-				setIsScored(false);
+
+		if (isScored && result.score) {
+			setPending({ ...pending, update: true });
+			if (props.published) {
+				await update(props.summary, result.score, result.feedback);
 				router.refresh();
 			} else {
-				const result = await handleScore({
-					module: props.summary.module,
-					chapter: props.summary.chapter,
-					section: props.summary.section,
-				});
-				if (result) {
-					setResult(result);
-				}
-				setPrompt("Update and Save");
-				setIsScored(true);
+				await create(result.score, result.feedback, props.location);
+				router.push("/dashboard");
 			}
+			setIsScored(false);
+			setPending({ ...pending, update: false });
 		}
 	};
 
-	return (
-		<div className="max-w-3xl mx-auto ">
-			<form className="space-y-4">
-				<p className="text-sm text-muted-foreground">
-					Number of words: {numOfWords(state.input)}
-				</p>
-				<div className="text-left">
-					{state.feedback && <Feedback feedback={state.feedback} />}
-				</div>
+	const handleScore = async (event: FormEvent) => {
+		event.preventDefault();
+		const sectionLocation = props.published
+			? {
+					module: props.summary.module,
+					chapter: props.summary.chapter,
+					section: props.summary.section,
+			  }
+			: props.location;
 
-				<div className="prose prose-stone dark:prose-invert max-w-2xl mx-auto space-y-4">
-					<TextArea
-						autoFocus
-						id="title"
-						value={state.input}
-						onValueChange={setInput}
-						placeholder="Summary Content"
-						className="w-full resize-none appearance-none overflow-hidden bg-transparent focus:outline-none min-h-[400px]"
-					/>
-					<div className="flex justify-end">
-						<Button disabled={state.pending} onClick={handleGetScore}>
-							{state.pending && <Spinner className="w-6 h-6 mr-1" />}
-							{prompt}
+		setPending({ ...pending, score: true });
+		const result = await score(sectionLocation);
+		if (result) {
+			setResult(result);
+		}
+		setIsScored(true);
+		setPending({ ...pending, score: false });
+	};
+
+	return (
+		<form className="space-y-6">
+			<p className="text-sm text-muted-foreground">
+				Number of words: {numOfWords(state.input)}
+			</p>
+			<div className="text-left">
+				{state.feedback && <Feedback feedback={state.feedback} />}
+			</div>
+
+			<div className="prose prose-stone dark:prose-invert max-w-2xl  space-y-4">
+				<TextArea
+					autoFocus
+					id="title"
+					value={state.input}
+					onValueChange={setInput}
+					placeholder="Summary Content"
+					className="w-full resize-none appearance-none overflow-hidden bg-transparent focus:outline-none min-h-[400px]"
+				/>
+				<div className="flex justify-between">
+					{canUpdate && (
+						<Button disabled={state.pending} onClick={handleUpsert}>
+							{pending.update && <Spinner className="w-6 h-6 mr-1" />}
+							{props.published ? "Save and update" : "Create"}
 						</Button>
-					</div>
+					)}
+					<Button
+						disabled={state.pending}
+						onClick={handleScore}
+						className="ml-auto"
+					>
+						{pending.score && <Spinner className="w-6 h-6 mr-1" />}
+						Get score
+					</Button>
 				</div>
-			</form>
-		</div>
+			</div>
+		</form>
 	);
 }

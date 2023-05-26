@@ -1,4 +1,5 @@
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import SettingsForm from "@/components/dashboard/settings-form";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -16,7 +17,7 @@ export default async function () {
 				heading="Settings"
 				text="Manage account and website settings."
 			/>
-			<div>settings</div>
+			<SettingsForm />
 		</DashboardShell>
 	);
 }

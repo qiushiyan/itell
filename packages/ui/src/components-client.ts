@@ -10,3 +10,5 @@ export * from "./components/image";
 export * from "./components/link";
 export * from "./components/select";
 export * from "./components/tooltip";
+export * from "./components/alert-dialog";
+export * from "./components/popover";

@@ -63,6 +63,10 @@ export const makeInputKey = (location: Location) => {
 	return `chapter-${location.chapter}-section-${location.section}-summary`;
 };
 
+export const makeLocationHref = (location: Location) => {
+	return `/module-${location.module}/chapter-${location.chapter}/section-${location.section}`;
+};
+
 export const isTextbookPage = (location: Location) => {
 	return (
 		location.module !== undefined &&

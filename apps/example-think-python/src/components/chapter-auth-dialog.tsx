@@ -3,15 +3,16 @@
 import { AuthButtons } from "./auth/auth-form";
 import { useSession } from "next-auth/react";
 import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
 	Dialog,
 	DialogContent,
-	DialogContentBody,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
+} from "@/components/ui/dialog";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
 } from "./ui-components";
 type Props = {
 	type?: "unauthorized" | "unlocked";
@@ -41,9 +42,7 @@ export default function SectionAuthModal({ type = "unauthorized" }: Props) {
 						</Collapsible>
 					</DialogDescription>
 				</DialogHeader>
-				<DialogContentBody>
-					<div className="mt-5">{AuthButtons.google}</div>
-				</DialogContentBody>
+				<div className="mt-5">{AuthButtons.google}</div>
 			</DialogContent>
 		</Dialog>
 	);

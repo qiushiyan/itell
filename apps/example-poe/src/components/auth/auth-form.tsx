@@ -5,6 +5,7 @@ import { Button } from "@/components/ui-components";
 import { Command } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { LoginGoogle } from "./auth-buttons";
 
 export const AuthButtons = {
 	google: (
@@ -41,7 +42,9 @@ export default function AuthForm() {
 				<Typography variant="small">
 					Use your social accounts to register
 				</Typography>
-				{AuthButtons.google}
+				<div className="mt-2 space-y-2">
+					<LoginGoogle />
+				</div>
 			</form>
 		</div>
 	);

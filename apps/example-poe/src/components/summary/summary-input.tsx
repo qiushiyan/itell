@@ -5,13 +5,14 @@ import { Typography, Warning } from "@itell/ui/server";
 import Spinner from "../spinner";
 import Feedback from "./summary-feedback";
 import TextArea from "../ui/textarea";
-import { isTextbookPage, makeInputKey, numOfWords } from "@/lib/utils";
+import { makeInputKey, numOfWords } from "@/lib/utils";
 import { useSummary } from "@/lib/hooks/summary";
-import { useEffect, useState } from "react";
 import { useLocation } from "@/lib/hooks/utils";
 
 export default function SummaryInput() {
-	const { state, setInput, handleScore, handleSave } = useSummary();
+	const { state, setInput, score, create } = useSummary({
+		useLocalStorage: true,
+	});
 	const location = useLocation();
 
 	return (
@@ -33,9 +34,11 @@ export default function SummaryInput() {
 					<Button
 						onClick={async (e) => {
 							e.preventDefault();
-							const result = await handleScore(location);
+							const inputKey = makeInputKey(location);
+							window.localStorage.setItem(inputKey, state.input);
+							const result = await score(location);
 							if (result) {
-								await handleSave(result.score, result.feedback);
+								await create(result.score, result.feedback, location);
 							}
 						}}
 						disabled={state.pending}

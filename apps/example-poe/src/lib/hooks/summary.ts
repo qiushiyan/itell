@@ -2,21 +2,24 @@ import { trpc } from "@/trpc/trpc-provider";
 import { useLocation } from "./utils";
 import { SummaryFeedback, SummaryScore, getFeedback } from "../summary";
 import { isTextbookPage, makeInputKey, numOfWords } from "../utils";
-import { useImmerReducer } from "use-immer";
-import { useCallback, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { toast } from "sonner";
 import cld3 from "../cld";
 import { Location } from "@/types/location";
 import { Summary } from "@prisma/client";
+import offensiveWords from "public/offensive-words.json";
 
 enum ErrorType {
 	LANGUAGE_NOT_EN = "LANGUAGE_NOT_EN",
 	WORD_COUNT = "WORD_COUNT",
+	OFFENSIVE = "OFFENSIVE",
 }
 
 const ErrorFeedback: Record<ErrorType, string> = {
 	[ErrorType.LANGUAGE_NOT_EN]: "Please use English for your summary.",
 	[ErrorType.WORD_COUNT]: "Your summary must be between 50 and 200 words.",
+	[ErrorType.OFFENSIVE]:
+		"Your summary includes inoffensive language. Please remove the offensive language and resubmit.",
 };
 
 type State = {
@@ -31,10 +34,10 @@ type State = {
 type Action =
 	| { type: "set_input"; payload: string }
 	| { type: "set_pending"; payload: boolean }
-	| { type: "check_length" }
+	| { type: "start_check" }
 	| { type: "check_length_error" }
-	| { type: "check_language" }
 	| { type: "check_language_error" }
+	| { type: "check_offensive_error" }
 	| { type: "score_summary" }
 	| {
 			type: "score_summary_finished";
@@ -60,12 +63,12 @@ const reducer = (state: State, action: Action) => {
 				pending: action.payload,
 			};
 		}
-		case "check_length": {
+		case "start_check": {
 			return {
 				...state,
-				error: null,
 				pending: true,
-				prompt: "Checking length",
+				error: null,
+				prompt: "Checking",
 			};
 		}
 		case "check_length_error": {
@@ -76,14 +79,6 @@ const reducer = (state: State, action: Action) => {
 				prompt: "Submit your summary",
 			};
 		}
-		case "check_language": {
-			return {
-				...state,
-				error: null,
-				pending: true,
-				prompt: "Checking language",
-			};
-		}
 		case "check_language_error": {
 			return {
 				...state,
@@ -92,6 +87,15 @@ const reducer = (state: State, action: Action) => {
 				prompt: "Submit your summary",
 			};
 		}
+		case "check_offensive_error": {
+			return {
+				...state,
+				error: ErrorFeedback[ErrorType.OFFENSIVE],
+				pending: false,
+				prompt: "Submit your summary",
+			};
+		}
+
 		case "score_summary": {
 			return {
 				...state,
@@ -149,7 +153,9 @@ const reducer = (state: State, action: Action) => {
 	}
 };
 
-export const useSummary = () => {
+export const useSummary = ({
+	useLocalStorage,
+}: { useLocalStorage?: boolean }) => {
 	const location = useLocation();
 	const scoreSummary = trpc.summary.getScore.useMutation();
 	const addSummary = trpc.summary.create.useMutation();
@@ -167,18 +173,17 @@ export const useSummary = () => {
 	const [state, dispatch] = useReducer(reducer, initialState);
 
 	const checkSummary = (text: string) => {
-		const inputKey = makeInputKey(location);
 		const wordNum = numOfWords(text);
 
-		window.localStorage.setItem(inputKey, text);
-		dispatch({ type: "check_length" });
+		dispatch({ type: "start_check" });
+		// check word count
 		if (wordNum < 50 || wordNum > 200) {
 			dispatch({ type: "check_length_error" });
 			toast.error(ErrorFeedback[ErrorType.WORD_COUNT]);
 			return false;
 		}
 
-		dispatch({ type: "check_language" });
+		// check language is english
 		const cldResult = cld3.findLanguage(text);
 		if (cldResult.language !== "en") {
 			dispatch({ type: "check_language_error" });
@@ -186,53 +191,22 @@ export const useSummary = () => {
 			return false;
 		}
 
+		// check offensive words
+		let isOffensive = false;
+		for (const word of text.split(" ")) {
+			if (offensiveWords.includes(word.toLowerCase())) {
+				isOffensive = true;
+				break;
+			}
+		}
+		if (isOffensive) {
+			dispatch({ type: "check_offensive_error" });
+			toast.error(ErrorFeedback[ErrorType.OFFENSIVE]);
+			return false;
+		}
+
 		return true;
 	};
-	// 	switch (action.type) {
-	// 		case "check_length": {
-	// 			draft.error = null;
-	// 			draft.pending = true;
-	// 			draft.prompt = "Checking length";
-	// 			break;
-	// 		}
-	// 		case "check_length_error": {
-	// 			draft.error = ErrorFeedback[ErrorType.WORD_COUNT];
-	// 			draft.pending = false;
-	// 			draft.prompt = "Submit your summary";
-	// 			break;
-	// 		}
-	// 		case "check_language": {
-	// 			draft.error = null;
-	// 			draft.pending = true;
-	// 			draft.prompt = "Checking language";
-	// 			break;
-	// 		}
-	// 		case "check_language_error": {
-	// 			draft.error = ErrorFeedback[ErrorType.LANGUAGE_NOT_EN];
-	// 			draft.pending = false;
-	// 			draft.prompt = "Submit your summary";
-	// 			break;
-	// 		}
-	// 		case "score_summary": {
-	// 			draft.pending = true;
-	// 			draft.feedback = null;
-	// 			draft.prompt = "Generating score";
-	// 			break;
-	// 		}
-	// 		case "save_summary": {
-	// 			draft.pending = true;
-	// 			draft.prompt = "Saving summary";
-	// 			break;
-	// 		}
-	// 		case "reset": {
-	// 			draft.pending = false;
-	// 			draft.prompt = "Submit your summary";
-	// 			draft.score = null;
-	// 			draft.feedback = null;
-	// 			break;
-	// 		}
-	// 	}
-	// }, initialState);
 
 	const setInput = (text: string) => {
 		dispatch({ type: "set_input", payload: text });
@@ -241,13 +215,14 @@ export const useSummary = () => {
 	const inputKey = makeInputKey(location);
 
 	useEffect(() => {
-		if (isTextbookPage(location)) {
+		if (isTextbookPage(location) && useLocalStorage) {
 			setInput(localStorage.getItem(inputKey) || "");
 		}
 	}, [location]);
 
-	const handleScore = async (location: Location) => {
-		if (checkSummary(state.input)) {
+	const score = async (location: Location) => {
+		const isSummaryValid = checkSummary(state.input);
+		if (isSummaryValid) {
 			dispatch({ type: "score_summary" });
 			if (isTextbookPage(location)) {
 				try {
@@ -277,7 +252,7 @@ export const useSummary = () => {
 		}
 	};
 
-	const handleUpdate = async (
+	const update = async (
 		summary: Summary,
 		score: SummaryScore | null,
 		feedback: SummaryFeedback | null,
@@ -301,8 +276,12 @@ export const useSummary = () => {
 		}
 	};
 
-	const handleSave = async (score: SummaryScore, feedback: SummaryFeedback) => {
-		if (feedback && score && isTextbookPage(location)) {
+	const create = async (
+		score: SummaryScore | null,
+		feedback: SummaryFeedback | null,
+		location: Location,
+	) => {
+		if (score && feedback) {
 			dispatch({ type: "save_summary" });
 			try {
 				await addSummary.mutateAsync({
@@ -330,5 +309,5 @@ export const useSummary = () => {
 		}
 	};
 
-	return { state, setInput, handleScore, handleSave, handleUpdate };
+	return { state, setInput, score, create, update };
 };

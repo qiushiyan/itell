@@ -1,12 +1,12 @@
 import SummaryEditor from "@/components/dashboard/summary-editor";
+import SummaryOperations from "@/components/dashboard/summary-operations";
 import { ScoreBadge } from "@/components/score/badge";
 import SectionDialog from "@/components/section-dialog";
-import { Button } from "@/components/ui-components";
 import { getCurrentUser } from "@/lib/auth";
 import { ScoreType } from "@/lib/constants";
 import db from "@/lib/db";
 import { allSectionsSorted } from "@/lib/sections";
-import { delay, relativeDate } from "@/lib/utils";
+import { relativeDate } from "@/lib/utils";
 import { cn } from "@itell/core";
 import { Badge, buttonVariants } from "@itell/ui/server";
 import { Summary, User } from "@prisma/client";
@@ -49,8 +49,6 @@ export default async function ({ params }: PageProps) {
 		return notFound();
 	}
 
-	const sectionHref = `/module-${summary.module}/chapter-${summary.chapter}/section-${summary.section}`;
-
 	return (
 		<div className="max-w-3xl mx-auto">
 			<div className="flex w-full items-center justify-between">
@@ -65,14 +63,10 @@ export default async function ({ params }: PageProps) {
 						</>
 					</Link>
 					<p className="text-sm text-muted-foreground">
-						{`Created at ${relativeDate(summary.created_at)} for Chapter ${
-							summary.chapter
-						} Section ${summary.section}`}
+						{`Created at ${relativeDate(summary.created_at)}`}
 					</p>
 				</div>
-				<Link href={sectionHref} className="mr-2">
-					<Button variant="ghost">Jump to Section</Button>
-				</Link>
+				<SummaryOperations summary={summary} />
 			</div>
 			<div className="w-[800px] mx-auto mt-4 space-y-2 text-center">
 				<SectionDialog section={section} />
@@ -98,7 +92,9 @@ export default async function ({ params }: PageProps) {
 				<p className="text-sm text-muted-foreground">
 					{`Last updated at ${relativeDate(summary.updated_at)}`}
 				</p>
-				<SummaryEditor published summary={summary} />
+				<div className="max-w-2xl mx-auto">
+					<SummaryEditor published summary={summary} />
+				</div>
 			</div>
 		</div>
 	);
