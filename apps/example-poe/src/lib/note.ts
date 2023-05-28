@@ -47,7 +47,7 @@ export const highlightTextAsNote = async ({
 	target.innerHTML = newText;
 };
 
-const modifyhighlightedText = async ({
+const modifyHighlightedText = async ({
 	target,
 	textContent,
 	fn,
@@ -68,15 +68,15 @@ const modifyhighlightedText = async ({
 };
 
 export const unHighlightNote = (target: HTMLElement, textContent: string) => {
-	modifyhighlightedText({
+	modifyHighlightedText({
 		target,
 		textContent,
 		fn: (el) => el.classList.add("unhighlighted"),
 	});
 };
 
-export const unemphasizeNote = (target: HTMLElement, textContent: string) => {
-	modifyhighlightedText({
+export const deemphasizeNote = (target: HTMLElement, textContent: string) => {
+	modifyHighlightedText({
 		target,
 		textContent,
 		fn: (el) => {
@@ -88,7 +88,7 @@ export const unemphasizeNote = (target: HTMLElement, textContent: string) => {
 };
 
 export const emphasizeNote = (target: HTMLElement, textContent: string) => {
-	modifyhighlightedText({
+	modifyHighlightedText({
 		target,
 		textContent,
 		fn: (el) => {

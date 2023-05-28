@@ -2,13 +2,13 @@
 
 import { FormEvent, Fragment, useEffect, useRef } from "react";
 import TextArea from "../ui/textarea";
-import { EditIcon, TrashIcon } from "lucide-react";
+import { EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
 import { useClickOutside } from "@/lib/hooks/utils";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDelete from "./node-delete";
-import { emphasizeNote, unHighlightNote, unemphasizeNote } from "@/lib/note";
+import { emphasizeNote, unHighlightNote, deemphasizeNote } from "@/lib/note";
 import { relativeDate } from "@/lib/utils";
 import { cn } from "@itell/core";
 import { ForwardIcon } from "lucide-react";
@@ -175,7 +175,7 @@ export default function ({
 			if (sectionContentRef.current) {
 				dispatch({ type: "set_show_edit", payload: false });
 
-				unemphasizeNote(sectionContentRef.current, highlightedText);
+				deemphasizeNote(sectionContentRef.current, highlightedText);
 			}
 		},
 	};
@@ -183,9 +183,10 @@ export default function ({
 	return (
 		<Fragment>
 			<div
-				className={cn("absolute z-20 w-64 rounded-md border-2", {
-					"z-50": editState.editing,
-				})}
+				className={cn(
+					"absolute w-48 lg:w-64 rounded-md border-2 bg-background",
+					editState.collapsed ? "z-10" : "z-50",
+				)}
 				style={{ top: y, borderColor: editState.color }}
 				ref={containerRef}
 				{...triggers}
@@ -211,15 +212,13 @@ export default function ({
 						</button>
 					)}
 
-					<div className="font-light tracking-tight text-sm relative px-1 py-2">
-						{editState.collapsed && (
-							<p className="line-clamp-3 px-1 text-sm mb-0">
+					<div className="font-light tracking-tight text-sm relative p-2">
+						{editState.collapsed ? (
+							<p className="line-clamp-3 text-sm mb-0">
 								{editState.input || "Note"}
 							</p>
-						)}
-
-						{!editState.collapsed && (
-							<div className="px-2 mt-1 text-sm">
+						) : (
+							<div className="mt-1">
 								<NoteColorPicker
 									color={editState.color}
 									onChange={(color) => {
@@ -256,7 +255,9 @@ export default function ({
 									</button>
 								)}
 								<footer className="mt-2">
-									{isUnsaved && <p className="text-xs mb-0">unsaved</p>}
+									{isUnsaved && (
+										<p className="text-sm text-muted-foreground">unsaved</p>
+									)}
 									<div className="flex justify-end">
 										{id && !isLoading && <NoteDelete onDelete={handleDelete} />}
 										{editState.editing && (

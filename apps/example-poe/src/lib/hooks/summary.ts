@@ -157,7 +157,7 @@ export const useSummary = ({
 	useLocalStorage,
 }: { useLocalStorage?: boolean }) => {
 	const location = useLocation();
-	const scoreSummary = trpc.summary.getScore.useMutation();
+	const scoreSummary = trpc.summary.score.useMutation();
 	const addSummary = trpc.summary.create.useMutation();
 	const updateSummary = trpc.summary.update.useMutation();
 
@@ -226,7 +226,7 @@ export const useSummary = ({
 			dispatch({ type: "score_summary" });
 			if (isTextbookPage(location)) {
 				try {
-					const score = await scoreSummary.mutateAsync({
+					const response = await scoreSummary.mutateAsync({
 						text: state.input,
 						location: {
 							module: location.module as number,
@@ -234,6 +234,12 @@ export const useSummary = ({
 							section: location.section,
 						},
 					});
+					if (!response.success) {
+						// API response is not in correct shape
+						console.error("API Response error", response);
+						return toast.error("Something went wrong, please try again later.");
+					}
+					const score = response.data;
 					const feedback = getFeedback(score);
 					dispatch({
 						type: "score_summary_finished",

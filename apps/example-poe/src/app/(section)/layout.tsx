@@ -8,7 +8,7 @@ export default async function SectionLayout({
 	return (
 		<>
 			<TextbookNavbar showProgress />
-			<div className="max-w-7xl mx-auto py-8 px-8">{children}</div>
+			<div className="max-w-screen-2xl mx-auto p-4 lg:p-8">{children}</div>
 		</>
 	);
 }

@@ -2,7 +2,6 @@ import { keyof } from "@itell/core";
 import { Summary } from "@prisma/client";
 import { Typography } from "@itell/ui/server";
 import { Tab, TabPanel, Tabs, TabsBody, TabsHeader } from "../ui-components";
-import SummaryDialog from "./summary-dialog";
 
 type Props = {
 	summariesByChapter: Record<string, Summary[]>;
@@ -33,10 +32,10 @@ export default function ({ summariesByChapter }: Props) {
 						>
 							{summariesByChapter[module].map((summary) => (
 								<div
-									className="rounded-md shadow-md group hover:shadow-lg transition ease-in-out duration-100 col-span-1"
+									className="rounded-md shadow-md group hover:shadow-lg transition ease-in-out duration-100 col-span-1 text-muted-foreground text-sm"
 									key={summary.id}
 								>
-									<SummaryDialog summary={summary} />
+									{summary.text.slice(0, 100)}
 								</div>
 							))}
 						</TabPanel>

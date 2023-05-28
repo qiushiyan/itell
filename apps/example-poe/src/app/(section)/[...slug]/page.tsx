@@ -4,8 +4,7 @@ import { Mdx } from "@/components/mdx";
 import Summary from "@/components/summary";
 import { notFound } from "next/navigation";
 import { SectionLocation } from "@/types/location";
-import { ModuleSidebar, TocSidebar } from "@/components/textbook-sidebar";
-import getChapters from "@/lib/textbook-sidebar";
+import getChapters from "@/lib/sidebar";
 import SectionAuthDialog from "@/components/section-auth-dialog";
 import SectionPager from "@/components/section-pager";
 import { getPagerForSection } from "@/lib/pager";
@@ -16,6 +15,8 @@ import { Fragment } from "react";
 import { allSectionsSorted } from "@/lib/sections";
 import { Button } from "@/components/ui-components";
 import { cn } from "@itell/core";
+import { ModuleSidebar } from "@/components/module-sidebar";
+import { TocSidebar } from "@/components/toc-sidebar";
 
 export const generateStaticParams = async () => {
 	return allSectionsSorted.map((section) => {
@@ -81,9 +82,9 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 
 	return (
 		<Fragment>
-			<div className="max-w-[1440px] mx-auto grid grid-cols-12 gap-6 px-2">
+			<div className="grid grid-cols-12 gap-6 px-2">
 				<SectionAuthDialog />
-				<aside className="module-sidebar col-span-2 sticky top-20">
+				<aside className="module-sidebar col-span-2 sticky top-20 h-fit">
 					<ModuleSidebar
 						chapters={chapters}
 						currentLocation={currentLocation}

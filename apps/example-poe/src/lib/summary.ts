@@ -1,14 +1,9 @@
 import { z } from "zod";
 import { ScoreThreshold, ScoreType } from "./constants";
+import { ScoreSchema } from "@/trpc/utils";
+import { APIResponseSchema } from "@/trpc/routers/summary.router";
 
-export const ZScore = z.object({
-	content: z.number().nullable(),
-	wording: z.number().nullable(),
-	similarity: z.number(),
-	containment: z.number(),
-});
-
-export type SummaryScore = z.infer<typeof ZScore>;
+export type SummaryScore = z.infer<typeof ScoreSchema>;
 export interface Feedback {
 	isPassed: boolean;
 	prompt: string | null;
@@ -97,22 +92,24 @@ export const wordingFeedback = (score: number | null): Feedback => {
 	}
 };
 
-export const getFeedback = (score: SummaryScore): SummaryFeedback => {
+export const getFeedback = (
+	score: z.infer<typeof APIResponseSchema>,
+): SummaryFeedback => {
 	const wording = wordingFeedback(score.wording);
 	const content = contentFeedback(score.content);
 	const similarity = similarityFeedback(score.similarity);
 	const containment = containmentFeedback(score.containment);
 
-	const isPassed = wording.isPassed && content.isPassed;
 	const passedNum =
 		Number(wording.isPassed) +
 		Number(content.isPassed) +
 		Number(similarity.isPassed) +
 		Number(containment.isPassed);
 
+	const isPassed = containment.isPassed && wording.isPassed && content.isPassed;
 	let prompt: string;
 	if (isPassed) {
-		if (passedNum > 2) {
+		if (passedNum > 3) {
 			prompt =
 				"Excellent job on summarizing this section. We will now show you a professional summary of the section. After reading that summary, please move forward to the next section.";
 		} else {
@@ -120,8 +117,11 @@ export const getFeedback = (score: SummaryScore): SummaryFeedback => {
 				"Good job on summarizing this section. We will now show you a professional summary of the section. After reading that summary, please move forward to the next section.";
 		}
 	} else {
-		prompt =
-			"Before moving onto the next section, you will need to revise the summary you wrote using the feedback provided. After submitting a second summary, you will be given feedback again. You will also be shown a professional summary.";
+		prompt = `Before moving onto the next section, you will need to revise the summary you wrote using the feedback provided. After submitting a second summary, you will be given feedback again. You will also be shown a professional summary.
+
+		Try to include the following keywords: ${score.suggested_keyphrases.join(
+			", ",
+		)}`;
 	}
 
 	return {

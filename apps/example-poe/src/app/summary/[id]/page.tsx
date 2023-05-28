@@ -8,7 +8,7 @@ import db from "@/lib/db";
 import { allSectionsSorted } from "@/lib/sections";
 import { relativeDate } from "@/lib/utils";
 import { cn } from "@itell/core";
-import { Badge, buttonVariants } from "@itell/ui/server";
+import { Badge, Typography, buttonVariants } from "@itell/ui/server";
 import { Summary, User } from "@prisma/client";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -50,7 +50,7 @@ export default async function ({ params }: PageProps) {
 	}
 
 	return (
-		<div className="max-w-3xl mx-auto">
+		<div className="px-32 py-4">
 			<div className="flex w-full items-center justify-between">
 				<div className="flex items-center space-x-10">
 					<Link
@@ -68,32 +68,40 @@ export default async function ({ params }: PageProps) {
 				</div>
 				<SummaryOperations summary={summary} />
 			</div>
-			<div className="w-[800px] mx-auto mt-4 space-y-2 text-center">
-				<SectionDialog section={section} />
+			<div className="grid gap-12 md:grid-cols-[200px_1fr] mt-4">
+				<aside className="hidden w-[200px] flex-col md:flex space-y-4">
+					<div className="flex items-center justify-center">
+						<Badge variant={summary.isPassed ? "default" : "destructive"}>
+							{summary.isPassed ? "Passed" : "Failed"}
+						</Badge>
+					</div>
+					<p className="tracking-tight text-sm text-muted-foreground">
+						Revise your summary here. After getting a new score, you can choose
+						to update the old summary. Click on the title the review this
+						section's content.
+					</p>
+					<div className="flex flex-col gap-2">
+						<ScoreBadge
+							type={ScoreType.containment}
+							score={summary.containmentScore}
+						/>
+						<ScoreBadge
+							type={ScoreType.similarity}
+							score={summary.similarityScore}
+						/>
+						<ScoreBadge type={ScoreType.wording} score={summary.wordingScore} />
+						<ScoreBadge type={ScoreType.content} score={summary.contentScore} />
+					</div>
+				</aside>
+				<div className="space-y-2 text-center">
+					<SectionDialog section={section} />
 
-				<div className="flex items-center justify-center">
-					<Badge variant={summary.isPassed ? "default" : "destructive"}>
-						{summary.isPassed ? "Passed" : "Failed"}
-					</Badge>
-				</div>
-
-				<div className="flex justify-center gap-2 items-center">
-					<ScoreBadge
-						type={ScoreType.containment}
-						score={summary.containmentScore}
-					/>
-					<ScoreBadge
-						type={ScoreType.similarity}
-						score={summary.similarityScore}
-					/>
-					<ScoreBadge type={ScoreType.wording} score={summary.wordingScore} />
-					<ScoreBadge type={ScoreType.content} score={summary.contentScore} />
-				</div>
-				<p className="text-sm text-muted-foreground">
-					{`Last updated at ${relativeDate(summary.updated_at)}`}
-				</p>
-				<div className="max-w-2xl mx-auto">
-					<SummaryEditor published summary={summary} />
+					<p className="text-sm text-muted-foreground">
+						{`Last updated at ${relativeDate(summary.updated_at)}`}
+					</p>
+					<div className="max-w-2xl mx-auto">
+						<SummaryEditor published summary={summary} />
+					</div>
 				</div>
 			</div>
 		</div>

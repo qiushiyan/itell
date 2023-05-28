@@ -26,19 +26,23 @@ const config: Record<
 	{ description: string; feedbackFn: (score: number) => Feedback }
 > = {
 	[ScoreType.wording]: {
-		description: "Summary",
+		description:
+			"measures the quality of the summary's language. If your wording score is low try to check your grammar and make sure you are using original and objective language.",
 		feedbackFn: wordingFeedback,
 	},
 	[ScoreType.content]: {
-		description: "Content",
+		description:
+			"measures how well you summarized the main ideas in the section. If your content score is low, try to identify and discuss more of the main ideas in the section.",
 		feedbackFn: contentFeedback,
 	},
 	[ScoreType.containment]: {
-		description: "Containment",
+		description:
+			"measures how much language you borrowed from the section. If your containment score is high, try revising your summary using your own words",
 		feedbackFn: containmentFeedback,
 	},
 	[ScoreType.similarity]: {
-		description: "Similarity",
+		description:
+			"measures how similar your summary is to the section you summarized. If your similarity score is low, try to identify and discuss more of the main ideas in the section.",
 		feedbackFn: similarityFeedback,
 	},
 };
@@ -63,7 +67,7 @@ export const ScoreBadge = ({ type, score }: Props) => {
 						</Badge>
 					</div>
 				</TooltipTrigger>
-				<TooltipContent>
+				<TooltipContent className="max-w-lg text-left">
 					<p>{description}</p>
 				</TooltipContent>
 			</Tooltip>

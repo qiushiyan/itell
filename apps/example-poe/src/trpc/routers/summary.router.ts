@@ -1,7 +1,19 @@
 import { env } from "@/env.mjs";
-import { ZLocation, protectedProcedure, router } from "../utils";
+import {
+	LocationSchema,
+	ScoreSchema,
+	protectedProcedure,
+	router,
+} from "../utils";
 import { z } from "zod";
-import { ZScore } from "@/lib/summary";
+
+export const APIResponseSchema = z
+	.object({
+		profanity: z.boolean(),
+		included_keyphrases: z.array(z.string()),
+		suggested_keyphrases: z.array(z.string()),
+	})
+	.merge(ScoreSchema);
 
 const SummaryRouter = router({
 	getAllByUser: protectedProcedure.query(({ ctx }) => {
@@ -13,14 +25,13 @@ const SummaryRouter = router({
 		});
 	}),
 
-	getScore: protectedProcedure
+	score: protectedProcedure
 		.input(
 			z.object({
 				text: z.string(),
-				location: ZLocation,
+				location: LocationSchema,
 			}),
 		)
-		.output(ZScore)
 		.mutation(async ({ input }) => {
 			const response = await fetch(`${env.SCORE_API_URL}`, {
 				method: "POST",
@@ -34,15 +45,15 @@ const SummaryRouter = router({
 				},
 			});
 			const data = await response.json();
-			return ZScore.parse(data);
+			return APIResponseSchema.safeParse(data);
 		}),
 
 	create: protectedProcedure
 		.input(
 			z.object({
 				text: z.string(),
-				location: ZLocation,
-				score: ZScore,
+				location: LocationSchema,
+				score: ScoreSchema,
 				isPassed: z.boolean(),
 			}),
 		)
@@ -73,7 +84,7 @@ const SummaryRouter = router({
 			z.object({
 				id: z.string(),
 				text: z.string(),
-				score: ZScore,
+				score: ScoreSchema,
 				isPassed: z.boolean(),
 			}),
 		)
