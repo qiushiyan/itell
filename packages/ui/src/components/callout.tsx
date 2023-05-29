@@ -5,7 +5,7 @@ import { InfoIcon, AlertCircleIcon, AlertTriangleIcon } from "lucide-react";
 
 export const Callout = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<Typography as="div" className="text-xl max-w-lg mx-auto">
+		<Typography as="div" className="text-xl max-w-2xl mx-auto text-center my-4">
 			{children}
 		</Typography>
 	);

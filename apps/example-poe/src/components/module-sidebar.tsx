@@ -43,7 +43,7 @@ export function ModuleSidebar({
 					</CollapsibleTrigger>
 
 					<CollapsibleContent>
-						{chapter.sections.map((section) => (
+						{chapter.sections.map((section, index) => (
 							<li
 								className={cn(
 									"px-2 py-1 transition ease-in-out duration-200 relative rounded-md hover:bg-accent",
@@ -57,7 +57,7 @@ export function ModuleSidebar({
 							>
 								<a href={`/${section.url}`}>
 									<Typography variant="small" className="m-0 p-0">
-										<Balancer>{section.title}</Balancer>
+										<Balancer>{`${index + 1}. ${section.title}`}</Balancer>
 									</Typography>
 								</a>
 							</li>

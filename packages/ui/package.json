@@ -31,7 +31,6 @@
     "clean": "rm -rf .turbo"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.14",
     "@itell/core": "workspace:^",
     "@itell/tailwind-config": "workspace:^",
     "@material-tailwind/react": "^1.4.2",

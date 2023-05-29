@@ -3,7 +3,6 @@
 import { cn } from "@itell/core";
 import { CheckCircleIcon } from "lucide-react";
 import { createContext, useContext } from "react";
-import { Transition } from "@headlessui/react";
 import Typography from "./typography";
 import { useImmer } from "use-immer";
 
@@ -30,7 +29,7 @@ const StatusIcon: Record<StepStatus, JSX.Element> = {
 	complete: (
 		<span className="relative flex h-5 w-5 flex-shrink-0 items-center justify-center">
 			<CheckCircleIcon
-				className="h-full w-full text-blue-600 group-hover:text-blue-800"
+				className="h-full w-full text-indigo-200 dark:text-indigo-600 group-hover:text-accent-foreground"
 				aria-hidden="true"
 			/>
 		</span>
@@ -84,7 +83,7 @@ export const Step = ({
 			>
 				<Typography variant="lead" className="flex items-center m-0">
 					{StatusIcon[getStepStatus({ value, activeStep, visitedSteps })]}
-					<span className="ml-3 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+					<span className="ml-3 text-sm font-medium  group-hover:text-accent-foreground">
 						{children}
 					</span>
 				</Typography>
@@ -95,7 +94,7 @@ export const Step = ({
 export const StepperHeader = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<nav aria-label="Progress">
-			<ol role="list" className="list-none flex flex-row lg:flex-col gap-4">
+			<ol role="list" className="list-none flex flex-col gap-4">
 				{children}
 			</ol>
 		</nav>
@@ -108,16 +107,9 @@ export const StepperPanel = ({
 }: { value: number; children: React.ReactNode }) => {
 	const { activeStep } = useContext(StepperContext);
 
-	return (
-		<Transition
-			show={activeStep === value}
-			enter="transition-opacity duration-100"
-			enterFrom="opacity-0"
-			enterTo="opacity-100"
-		>
-			{children}
-		</Transition>
-	);
+	if (value !== activeStep) return null;
+
+	return children;
 };
 
 export const StepperBody = ({ children }: { children: React.ReactNode }) => {
@@ -161,7 +153,7 @@ export const Stepper = ({
 		>
 			<div
 				className={cn(
-					"flex flex-col gap-4 lg:flex-row lg:gap-8   border border-blue-100 rounded-md shadow-md",
+					"flex flex-row gap-8  border border-blue-100 rounded-md shadow-md",
 					className,
 				)}
 				{...rest}
