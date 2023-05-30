@@ -1,13 +1,9 @@
 "use client";
-import { Section } from "contentlayer/generated";
 import SummaryEditor from "./summary-editor";
 import { allSectionsSorted } from "@/lib/sections";
 import SectionCombobox from "./section-combobox";
 import { useState } from "react";
 import { SectionLocation } from "@/types/location";
-import { Button } from "../ui-components";
-import Link from "next/link";
-import { makeLocationHref } from "@/lib/utils";
 import SectionDialog from "../section-dialog";
 
 export default function () {

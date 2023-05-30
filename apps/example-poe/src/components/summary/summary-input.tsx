@@ -38,7 +38,7 @@ export default function SummaryInput() {
 							window.localStorage.setItem(inputKey, state.input);
 							const result = await score(location);
 							if (result) {
-								await create(result.score, result.feedback, location);
+								await create(result.result, result.feedback, location);
 							}
 						}}
 						disabled={state.pending}

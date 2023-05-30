@@ -1,6 +1,6 @@
 import { trpc } from "@/trpc/trpc-provider";
 import { useLocation } from "./utils";
-import { SummaryFeedback, SummaryScore, getFeedback } from "../summary";
+import { SummaryFeedback, getFeedback } from "../summary";
 import { isTextbookPage, makeInputKey, numOfWords } from "../utils";
 import { useEffect, useReducer } from "react";
 import { toast } from "sonner";
@@ -8,6 +8,7 @@ import cld3 from "../cld";
 import { Location } from "@/types/location";
 import { Summary } from "@prisma/client";
 import offensiveWords from "public/offensive-words.json";
+import { SummaryResult, SummaryScore } from "@/trpc/schema";
 
 enum ErrorType {
 	LANGUAGE_NOT_EN = "LANGUAGE_NOT_EN",
@@ -28,7 +29,7 @@ type State = {
 	error: string | null;
 	pending: boolean;
 	feedback: SummaryFeedback | null;
-	score: SummaryScore | null;
+	result: SummaryResult | null;
 };
 
 type Action =
@@ -41,7 +42,7 @@ type Action =
 	| { type: "score_summary" }
 	| {
 			type: "score_summary_finished";
-			payload: { score: SummaryScore; feedback: SummaryFeedback };
+			payload: { result: SummaryResult; feedback: SummaryFeedback };
 	  }
 	| { type: "save_summary" }
 	| { type: "save_summary_finished" }
@@ -107,7 +108,7 @@ const reducer = (state: State, action: Action) => {
 		case "score_summary_finished": {
 			return {
 				...state,
-				score: action.payload.score,
+				result: action.payload.result,
 				feedback: action.payload.feedback,
 				pending: false,
 				prompt: "Score generated",
@@ -167,7 +168,7 @@ export const useSummary = ({
 		error: null,
 		pending: false,
 		feedback: null,
-		score: null,
+		result: null,
 	};
 
 	const [state, dispatch] = useReducer(reducer, initialState);
@@ -237,23 +238,26 @@ export const useSummary = ({
 					if (!response.success) {
 						// API response is not in correct shape
 						console.error("API Response error", response);
-						return toast.error("Something went wrong, please try again later.");
+						toast.error("Something went wrong, please try again later.");
+						return null;
 					}
-					const score = response.data;
-					const feedback = getFeedback(score);
+					const result = response.data;
+					const feedback = getFeedback(result);
 					dispatch({
 						type: "score_summary_finished",
-						payload: { score, feedback },
+						payload: { result, feedback },
 					});
-					return { score, feedback };
+					return { result, feedback };
 				} catch (err) {
 					console.log(err);
 					toast.error("Something went wrong, please try again later.");
+					return null;
 				}
 			} else {
 				toast.success(
 					"No summary is required for this section. You are good to go!",
 				);
+				return null;
 			}
 		}
 	};
@@ -283,11 +287,11 @@ export const useSummary = ({
 	};
 
 	const create = async (
-		score: SummaryScore | null,
+		result: SummaryResult | null,
 		feedback: SummaryFeedback | null,
 		location: Location,
 	) => {
-		if (score && feedback) {
+		if (result && feedback) {
 			dispatch({ type: "save_summary" });
 			try {
 				await addSummary.mutateAsync({
@@ -299,10 +303,10 @@ export const useSummary = ({
 					},
 					isPassed: feedback.isPassed,
 					score: {
-						containment: score.containment,
-						similarity: score.similarity,
-						wording: score.wording,
-						content: score.wording,
+						containment: result.containment,
+						similarity: result.similarity,
+						wording: result.wording,
+						content: result.wording,
 					},
 				});
 				if (feedback.isPassed) {

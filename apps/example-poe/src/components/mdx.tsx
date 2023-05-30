@@ -19,6 +19,7 @@ import {
 	TextOverImage,
 	Link,
 } from "./ui-components";
+import { useFocusTime } from "@/lib/hooks/focus-time";
 
 const MdxComponents = {
 	a: Link,
@@ -51,9 +52,13 @@ interface MdxProps {
 
 export function Mdx({ code }: MdxProps) {
 	const Component = useMDXComponent(code);
+	useFocusTime();
 
 	return (
-		<article className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none">
+		<article
+			className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none section-content"
+			id="section-content"
+		>
 			{/* @ts-ignore */}
 			<Component components={MdxComponents} />
 		</article>

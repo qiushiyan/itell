@@ -1,9 +1,6 @@
-import { z } from "zod";
 import { ScoreThreshold, ScoreType } from "./constants";
-import { ScoreSchema } from "@/trpc/utils";
-import { APIResponseSchema } from "@/trpc/routers/summary.router";
+import { SummaryResult } from "@/trpc/schema";
 
-export type SummaryScore = z.infer<typeof ScoreSchema>;
 export interface Feedback {
 	isPassed: boolean;
 	prompt: string | null;
@@ -92,13 +89,11 @@ export const wordingFeedback = (score: number | null): Feedback => {
 	}
 };
 
-export const getFeedback = (
-	score: z.infer<typeof APIResponseSchema>,
-): SummaryFeedback => {
-	const wording = wordingFeedback(score.wording);
-	const content = contentFeedback(score.content);
-	const similarity = similarityFeedback(score.similarity);
-	const containment = containmentFeedback(score.containment);
+export const getFeedback = (result: SummaryResult): SummaryFeedback => {
+	const wording = wordingFeedback(result.wording);
+	const content = contentFeedback(result.content);
+	const similarity = similarityFeedback(result.similarity);
+	const containment = containmentFeedback(result.containment);
 
 	const passedNum =
 		Number(wording.isPassed) +
@@ -119,7 +114,7 @@ export const getFeedback = (
 	} else {
 		prompt = `Before moving onto the next section, you will need to revise the summary you wrote using the feedback provided. After submitting a second summary, you will be given feedback again. You will also be shown a professional summary.
 
-		Try to include the following keywords: ${score.suggested_keyphrases.join(
+		Try to include the following keywords: ${result.suggested_keyphrases.join(
 			", ",
 		)}`;
 	}

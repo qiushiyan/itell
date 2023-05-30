@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { LocationSchema, protectedProcedure, router } from "../utils";
+import { protectedProcedure, router } from "../utils";
 import { defaultNoteColor } from "@/contexts/note-highlight";
+import { LocationSchema } from "../schema";
 
 const NoteRouter = router({
 	getByLocation: protectedProcedure

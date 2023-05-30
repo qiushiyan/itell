@@ -8,9 +8,10 @@ import { useSummary } from "@/lib/hooks/summary";
 import Feedback from "../summary/summary-feedback";
 import { numOfWords } from "@/lib/utils";
 import Spinner from "../spinner";
-import { SummaryFeedback, SummaryScore } from "@/lib/summary";
+import { SummaryFeedback } from "@/lib/summary";
 import { useRouter } from "next/navigation";
 import { SectionLocation } from "@/types/location";
+import { SummaryResult } from "@/trpc/schema";
 
 type Props =
 	| {
@@ -32,9 +33,9 @@ export default function (props: Props) {
 		useLocalStorage: false,
 	});
 	const [result, setResult] = useState<{
-		score: SummaryScore | null;
+		result: SummaryResult | null;
 		feedback: SummaryFeedback | null;
-	}>({ score: null, feedback: null });
+	}>({ result: null, feedback: null });
 	const [isScored, setIsScored] = useState(false);
 	const canUpdate = isScored && !state.error;
 
@@ -49,13 +50,13 @@ export default function (props: Props) {
 	const handleUpsert = async (event: FormEvent) => {
 		event.preventDefault();
 
-		if (isScored && result.score) {
+		if (isScored && result.result) {
 			setPending({ ...pending, update: true });
 			if (props.published) {
-				await update(props.summary, result.score, result.feedback);
+				await update(props.summary, result.result, result.feedback);
 				router.refresh();
 			} else {
-				await create(result.score, result.feedback, props.location);
+				await create(result.result, result.feedback, props.location);
 				router.push("/dashboard");
 			}
 			setIsScored(false);

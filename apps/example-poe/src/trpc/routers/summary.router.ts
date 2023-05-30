@@ -1,11 +1,7 @@
 import { env } from "@/env.mjs";
-import {
-	LocationSchema,
-	ScoreSchema,
-	protectedProcedure,
-	router,
-} from "../utils";
+import { protectedProcedure, router } from "../utils";
 import { z } from "zod";
+import { LocationSchema, ScoreSchema } from "../schema";
 
 export const APIResponseSchema = z
 	.object({
