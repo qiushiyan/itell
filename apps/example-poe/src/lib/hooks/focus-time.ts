@@ -1,22 +1,97 @@
-import { useEffect } from "react";
-import { getTrackingElements } from "../focus-time";
+import { useEffect, useRef } from "react";
+const markTrackingElements = () => {
+	// select direct children of h2, p and div of #section-content
+	const sectionContent = document.querySelector("#section-content");
+	const subsectionElements: HTMLElement[] = [];
 
-export const useFocusTime = () => {
-	useEffect(() => {
-		const sectionContent = document.querySelector("#section-content");
-		if (sectionContent) {
-			const els = sectionContent.querySelectorAll(
-				":scope > h2, :scope > p, :scope > div",
-			);
-			const subsectionEls = [];
-			for (const [index, el] of els.entries()) {
-				if (el.tagName === "H2") {
-					subsectionEls.push(el);
-				} else if (index < els.length - 1 && els[index + 1].tagName === "H2") {
-					subsectionEls.push(el);
+	if (sectionContent) {
+		const els = sectionContent.querySelectorAll(
+			":scope > h2, :scope > p, :scope > div",
+		);
+		// h2: start of a section
+		// p or div: end of a section
+		for (let i = 0; i < els.length; i++) {
+			const el = els[i] as HTMLElement;
+			if (el.tagName === "H2" && el.id !== "please-write-your-summary-below") {
+				el.dataset.sectionId = el.id;
+				el.dataset.sectionType = "section-start";
+				subsectionElements.push(el);
+			} else if (els[i + 1]?.tagName === "H2") {
+				if (subsectionElements.length > 0) {
+					// avoid the case where an element is appeared before the first h2
+					const previousEl = subsectionElements[subsectionElements.length - 1];
+					el.dataset.sectionId = previousEl.dataset.sectionId;
+					el.dataset.sectionType = "section-end";
+					subsectionElements.push(el);
 				}
 			}
-			console.log(subsectionEls);
 		}
+	}
+	return subsectionElements;
+};
+
+export type FocusTimeEntry = {
+	id: string;
+	totalViewTime: number;
+	lastTick: number;
+};
+
+export const useFocusTime = () => {
+	const data = useRef<FocusTimeEntry[]>();
+	const visibleSections = new Set<string>();
+
+	const options: IntersectionObserverInit = {
+		root: null,
+		rootMargin: "0px",
+		threshold: 1,
+	};
+
+	const timer = setInterval(() => {
+		if (data.current) {
+			data.current.forEach((entry) => {
+				if (visibleSections.has(entry.id)) {
+					entry.totalViewTime += performance.now() - entry.lastTick;
+				}
+				entry.lastTick = performance.now();
+			});
+		}
+	}, 5000);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				const target = entry.target as HTMLElement;
+				const id = target.dataset.sectionId as string;
+				const sectionType = target.dataset.sectionType as string;
+				if (entry.isIntersecting) {
+					if (sectionType === "section-start") {
+						visibleSections.add(id);
+					}
+				} else {
+					if (sectionType === "section-end") {
+						visibleSections.delete(id);
+					}
+				}
+			});
+		}, options);
+		const elements = markTrackingElements();
+		data.current = elements
+			.filter((el) => el.dataset.sectionType === "section-start")
+			.map((el) => ({
+				id: el.dataset.sectionId as string,
+				totalViewTime: 0,
+				lastTick: performance.now(),
+			}));
+
+		elements.forEach((el) => {
+			observer.observe(el);
+		});
+
+		return () => {
+			elements.forEach((el) => observer.unobserve(el));
+			clearInterval(timer);
+		};
 	}, []);
+
+	return data;
 };

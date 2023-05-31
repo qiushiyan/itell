@@ -29,7 +29,7 @@ const SummaryRouter = router({
 			}),
 		)
 		.mutation(async ({ input }) => {
-			const response = await fetch(`${env.SCORE_API_URL}`, {
+			const response = await fetch(env.SCORE_API_URL, {
 				method: "POST",
 				body: JSON.stringify({
 					summary: input.text,

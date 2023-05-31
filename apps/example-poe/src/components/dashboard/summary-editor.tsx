@@ -4,14 +4,12 @@ import { Summary } from "@prisma/client";
 import TextArea from "../ui/textarea";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "../ui-components";
-import { useSummary } from "@/lib/hooks/summary";
+import { ScoreResponse, useSummary } from "@/lib/hooks/summary";
 import Feedback from "../summary/summary-feedback";
 import { numOfWords } from "@/lib/utils";
 import Spinner from "../spinner";
-import { SummaryFeedback } from "@/lib/summary";
 import { useRouter } from "next/navigation";
 import { SectionLocation } from "@/types/location";
-import { SummaryResult } from "@/trpc/schema";
 
 type Props =
 	| {
@@ -21,6 +19,7 @@ type Props =
 	| {
 			published: false;
 			location: SectionLocation;
+			onScoreResponse?(response: ScoreResponse): void;
 	  };
 
 export default function (props: Props) {
@@ -32,10 +31,9 @@ export default function (props: Props) {
 	const { state, setInput, score, update, create } = useSummary({
 		useLocalStorage: false,
 	});
-	const [result, setResult] = useState<{
-		result: SummaryResult | null;
-		feedback: SummaryFeedback | null;
-	}>({ result: null, feedback: null });
+	const [scoreResponse, setScoreResponse] = useState<ScoreResponse | null>(
+		null,
+	);
 	const [isScored, setIsScored] = useState(false);
 	const canUpdate = isScored && !state.error;
 
@@ -50,13 +48,21 @@ export default function (props: Props) {
 	const handleUpsert = async (event: FormEvent) => {
 		event.preventDefault();
 
-		if (isScored && result.result) {
+		if (isScored && scoreResponse) {
 			setPending({ ...pending, update: true });
 			if (props.published) {
-				await update(props.summary, result.result, result.feedback);
+				await update(
+					props.summary,
+					scoreResponse.result,
+					scoreResponse.feedback,
+				);
 				router.refresh();
 			} else {
-				await create(result.result, result.feedback, props.location);
+				await create(
+					scoreResponse.result,
+					scoreResponse.feedback,
+					props.location,
+				);
 				router.push("/dashboard");
 			}
 			setIsScored(false);
@@ -75,9 +81,12 @@ export default function (props: Props) {
 			: props.location;
 
 		setPending({ ...pending, score: true });
-		const result = await score(sectionLocation);
-		if (result) {
-			setResult(result);
+		const response = await score(sectionLocation);
+		if (response) {
+			setScoreResponse(response);
+			if (!props.published) {
+				props.onScoreResponse?.(response);
+			}
 		}
 		setIsScored(true);
 		setPending({ ...pending, score: false });

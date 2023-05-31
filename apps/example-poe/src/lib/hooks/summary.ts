@@ -51,6 +51,11 @@ type Action =
 	| { type: "reset" }
 	| { type: "save_summary" };
 
+export type ScoreResponse = {
+	result: SummaryResult;
+	feedback: SummaryFeedback;
+};
+
 const reducer = (state: State, action: Action) => {
 	switch (action.type) {
 		case "set_input":
@@ -250,6 +255,7 @@ export const useSummary = ({
 					return { result, feedback };
 				} catch (err) {
 					console.log(err);
+					dispatch({ type: "reset" });
 					toast.error("Something went wrong, please try again later.");
 					return null;
 				}

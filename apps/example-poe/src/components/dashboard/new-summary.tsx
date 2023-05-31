@@ -5,10 +5,17 @@ import SectionCombobox from "./section-combobox";
 import { useState } from "react";
 import { SectionLocation } from "@/types/location";
 import SectionDialog from "../section-dialog";
+import { ScoreResponse } from "@/lib/hooks/summary";
+import { Badge } from "@itell/ui/server";
+import { ScoreBadge } from "../score/badge";
+import { ScoreType } from "@/lib/constants";
 
 export default function () {
 	const [selectedLocation, setSelectedLocation] =
 		useState<SectionLocation | null>(null);
+	const [scoreResponse, setScoreResponse] = useState<ScoreResponse | null>(
+		null,
+	);
 	const section = selectedLocation
 		? allSectionsSorted.find(
 				(s) =>
@@ -18,16 +25,62 @@ export default function () {
 		: null;
 
 	return (
-		<div className="mt-4 space-y-6">
-			<h1 className="font-heading text-2xl md:text-4xl">
-				Create a new summary
-			</h1>
-			<SectionCombobox onValueChange={setSelectedLocation} />
+		<>
+			<div className="my-8 space-y-4">
+				<p className="tracking-tight text-sm text-muted-foreground max-w-lg">
+					Create a new summary and receive feedbacks. Once you are ready, save a
+					passing summary to unlock the next section.
+				</p>
+				<SectionCombobox onValueChange={setSelectedLocation} />
+			</div>
 
-			{section && <SectionDialog section={section} title="View section" />}
-			{selectedLocation && (
-				<SummaryEditor published={false} location={selectedLocation} />
-			)}
-		</div>
+			<div className="grid gap-12 md:grid-cols-[200px_1fr] mt-4">
+				<aside className="hidden w-[200px] flex-col md:flex space-y-4">
+					{scoreResponse ? (
+						<div className="flex flex-col gap-2">
+							<Badge
+								variant={
+									scoreResponse.feedback.isPassed ? "default" : "destructive"
+								}
+							>
+								{scoreResponse.feedback.isPassed ? "Passed" : "Failed"}
+							</Badge>
+							<ScoreBadge
+								type={ScoreType.containment}
+								score={scoreResponse.result.containment}
+							/>
+							<ScoreBadge
+								type={ScoreType.similarity}
+								score={scoreResponse.result.similarity}
+							/>
+							<ScoreBadge
+								type={ScoreType.wording}
+								score={scoreResponse.result.wording}
+							/>
+							<ScoreBadge
+								type={ScoreType.content}
+								score={scoreResponse.result.content}
+							/>
+						</div>
+					) : (
+						<p className="text-muted-foreground text-sm">
+							you score will be shown here
+						</p>
+					)}
+				</aside>
+				<div className="space-y-2 text-center">
+					{section && <SectionDialog section={section} />}
+					<div className="max-w-2xl mx-auto">
+						{selectedLocation && (
+							<SummaryEditor
+								published={false}
+								location={selectedLocation}
+								onScoreResponse={setScoreResponse}
+							/>
+						)}
+					</div>
+				</div>
+			</div>
+		</>
 	);
 }

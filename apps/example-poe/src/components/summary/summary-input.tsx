@@ -8,12 +8,15 @@ import TextArea from "../ui/textarea";
 import { makeInputKey, numOfWords } from "@/lib/utils";
 import { useSummary } from "@/lib/hooks/summary";
 import { useLocation } from "@/lib/hooks/utils";
+import { useFocusTime } from "@/lib/hooks/focus-time";
 
 export default function SummaryInput() {
 	const { state, setInput, score, create } = useSummary({
 		useLocalStorage: true,
 	});
 	const location = useLocation();
+
+	const focusTimeData = useFocusTime();
 
 	return (
 		<>
