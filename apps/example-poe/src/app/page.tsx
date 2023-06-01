@@ -1,7 +1,6 @@
 import LabIcon from "@/components/lab-icon";
 import TextbookNavbar from "@/components/nav/textbook-nav";
 import { Typography } from "@itell/ui/server";
-import Image from "next/image";
 import { Fragment } from "react";
 
 export default function Home() {

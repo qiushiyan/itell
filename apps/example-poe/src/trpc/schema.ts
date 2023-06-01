@@ -1,21 +1,21 @@
 import { z } from "zod";
 
-export const ScoreSchema = z.object({
+export const SummaryScoreSchema = z.object({
 	content: z.number().nullable(),
 	wording: z.number().nullable(),
 	similarity: z.number(),
 	containment: z.number(),
 });
-export type SummaryScore = z.infer<typeof ScoreSchema>;
+export type SummaryScore = z.infer<typeof SummaryScoreSchema>;
 
-export const APIResponseSchema = z
+export const SummaryResponseSchema = z
 	.object({
 		profanity: z.boolean(),
 		included_keyphrases: z.array(z.string()),
 		suggested_keyphrases: z.array(z.string()),
 	})
-	.merge(ScoreSchema);
-export type SummaryResult = z.infer<typeof APIResponseSchema>;
+	.merge(SummaryScoreSchema);
+export type SummaryResponse = z.infer<typeof SummaryResponseSchema>;
 
 export const LocationSchema = z.object({
 	module: z.number(),

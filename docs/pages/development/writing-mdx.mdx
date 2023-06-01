@@ -1,0 +1,35 @@
+# Writing MDX
+
+## UI library
+
+Use components from our official UI library `@itell/ui`
+
+### Tabs
+
+```jsx
+import { Tabs, TabsHeader, Tab, TabsBody, TabPanel } from "@itell/ui/client";
+
+<Tabs value="1">
+  <TabsHeader>
+    <Tab value="1">Tab 1</Tab>
+    <Tab value="2">Tab 2</Tab>
+  </TabsHeader>
+  <TabsBody>
+    <TabPanel value="1">Tab 1 content</TabPanel>
+    <TabPanel value="2">Tab 2 content</TabPanel>
+  </TabsBody>
+</Tabs>;
+```
+
+import { Tabs, TabsHeader, Tab, TabsBody, TabPanel } from "@itell/ui/client";
+
+<Tabs value="1">
+  <TabsHeader>
+    <Tab value="1">Tab 1</Tab>
+    <Tab value="2">Tab 2</Tab>
+  </TabsHeader>
+  <TabsBody>
+    <TabPanel value="1">Tab 1 content</TabPanel>
+    <TabPanel value="2">Tab 2 content</TabPanel>
+  </TabsBody>
+</Tabs>

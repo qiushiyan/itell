@@ -5,7 +5,7 @@ import { HighlighterIcon, CopyIcon, PencilIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Popover } from "react-text-selection-popover";
 import { toast } from "sonner";
-import { useNotes } from "@/lib/hooks/notes";
+import { useNotes } from "@/lib/hooks/use-notes";
 import { useTextSelection } from "use-text-selection";
 import { SectionLocation } from "@/types/location";
 import { trpc } from "@/trpc/trpc-provider";

@@ -54,11 +54,12 @@ model User {
 
   accounts  Account[]
   sessions  Session[]
-  Teacher   Teacher?  @relation(fields: [teacherId], references: [id])
-  isTeacher Boolean   @default(false) @map("is_teacher")
+  Teacher   Teacher?    @relation(fields: [teacherId], references: [id])
+  isTeacher Boolean     @default(false) @map("is_teacher")
   teacherId String?
   summaries Summary[]
   notes     Note[]
+  FocusTime FocusTime[]
 
   @@map("users")
 }
@@ -90,18 +91,19 @@ model Summary {
   id   String @id @default(uuid())
   user User   @relation(fields: [userId], references: [id])
 
-  userId           String   @map("user_id")
+  userId           String      @map("user_id")
   module           Int
   chapter          Int
   section          Int
   isPassed         Boolean
-  containmentScore Float    @map("containment_score")
-  similarityScore  Float    @map("similarity_score")
-  wordingScore     Float?   @map("wording_score")
-  contentScore     Float?   @map("content_score")
+  containmentScore Float       @map("containment_score")
+  similarityScore  Float       @map("similarity_score")
+  wordingScore     Float?      @map("wording_score")
+  contentScore     Float?      @map("content_score")
   text             String
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
+  created_at       DateTime    @default(now())
+  updated_at       DateTime    @updatedAt
+  FocusTime        FocusTime[]
 
   @@map("summaries")
 }
@@ -122,4 +124,20 @@ model Note {
   user   User   @relation(fields: [userId], references: [id])
 
   @@map("notes")
+}
+
+model FocusTime {
+  id String @id @default(uuid())
+
+  data Json
+
+  summaryId String  @map("summary_id")
+  summary   Summary @relation(fields: [summaryId], references: [id])
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  created_at DateTime @default(now())
+
+  @@map("focus_time")
 }

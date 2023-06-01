@@ -3,7 +3,9 @@ import SummaryInput from "./summary-input";
 import { Info } from "@itell/ui/server";
 import { SectionLocation } from "@/types/location";
 
-export default function Summary({ location }: { location: SectionLocation }) {
+export default async function Summary({
+	location,
+}: { location: SectionLocation }) {
 	if (location.section === 0) {
 		return (
 			<section className="mt-2 w-[800px] mx-auto">
@@ -13,6 +15,7 @@ export default function Summary({ location }: { location: SectionLocation }) {
 			</section>
 		);
 	}
+
 	return (
 		<section
 			className="flex flex-col lg:flex-row gap-8 mt-10 border-t-2 py-4"

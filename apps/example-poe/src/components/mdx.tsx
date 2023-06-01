@@ -19,7 +19,7 @@ import {
 	TextOverImage,
 	Link,
 } from "./ui-components";
-import { useFocusTime } from "@/lib/hooks/focus-time";
+import { useFocusTime } from "@/lib/hooks/use-focus-time";
 
 const MdxComponents = {
 	a: Link,

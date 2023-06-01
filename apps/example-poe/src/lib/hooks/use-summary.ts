@@ -8,7 +8,7 @@ import cld3 from "../cld";
 import { Location } from "@/types/location";
 import { Summary } from "@prisma/client";
 import offensiveWords from "public/offensive-words.json";
-import { SummaryResult, SummaryScore } from "@/trpc/schema";
+import { SummaryResponse, SummaryScore } from "@/trpc/schema";
 
 enum ErrorType {
 	LANGUAGE_NOT_EN = "LANGUAGE_NOT_EN",
@@ -29,7 +29,7 @@ type State = {
 	error: string | null;
 	pending: boolean;
 	feedback: SummaryFeedback | null;
-	result: SummaryResult | null;
+	result: SummaryResponse | null;
 };
 
 type Action =
@@ -42,7 +42,7 @@ type Action =
 	| { type: "score_summary" }
 	| {
 			type: "score_summary_finished";
-			payload: { result: SummaryResult; feedback: SummaryFeedback };
+			payload: { result: SummaryResponse; feedback: SummaryFeedback };
 	  }
 	| { type: "save_summary" }
 	| { type: "save_summary_finished" }
@@ -52,7 +52,7 @@ type Action =
 	| { type: "save_summary" };
 
 export type ScoreResponse = {
-	result: SummaryResult;
+	result: SummaryResponse;
 	feedback: SummaryFeedback;
 };
 
@@ -244,7 +244,7 @@ export const useSummary = ({
 						// API response is not in correct shape
 						console.error("API Response error", response);
 						toast.error("Something went wrong, please try again later.");
-						return null;
+						return;
 					}
 					const result = response.data;
 					const feedback = getFeedback(result);
@@ -254,16 +254,14 @@ export const useSummary = ({
 					});
 					return { result, feedback };
 				} catch (err) {
-					console.log(err);
 					dispatch({ type: "reset" });
+					console.log(err);
 					toast.error("Something went wrong, please try again later.");
-					return null;
 				}
 			} else {
 				toast.success(
 					"No summary is required for this section. You are good to go!",
 				);
-				return null;
 			}
 		}
 	};
@@ -293,14 +291,14 @@ export const useSummary = ({
 	};
 
 	const create = async (
-		result: SummaryResult | null,
+		result: SummaryResponse | null,
 		feedback: SummaryFeedback | null,
 		location: Location,
 	) => {
 		if (result && feedback) {
 			dispatch({ type: "save_summary" });
 			try {
-				await addSummary.mutateAsync({
+				const summary = await addSummary.mutateAsync({
 					text: state.input,
 					location: {
 						module: location.module as number,
@@ -319,6 +317,7 @@ export const useSummary = ({
 					toast.success("You can now proceed to the next section.");
 				}
 				dispatch({ type: "save_summary_finished" });
+				return summary;
 			} catch (err) {
 				toast.error("Something went wrong, please try again later.");
 			}

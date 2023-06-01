@@ -1,3 +1,4 @@
+import { trpc } from "@/trpc/trpc-provider";
 import { useEffect, useRef } from "react";
 const markTrackingElements = () => {
 	// select direct children of h2, p and div of #section-content
@@ -31,31 +32,67 @@ const markTrackingElements = () => {
 };
 
 export type FocusTimeEntry = {
-	id: string;
+	sectionId: string;
 	totalViewTime: number;
 	lastTick: number;
 };
 
 export const useFocusTime = () => {
 	const data = useRef<FocusTimeEntry[]>();
+	const createFocusTime = trpc.focusTime.create.useMutation();
 	const visibleSections = new Set<string>();
 
 	const options: IntersectionObserverInit = {
 		root: null,
 		rootMargin: "0px",
-		threshold: 1,
+		threshold: 0,
 	};
 
-	const timer = setInterval(() => {
-		if (data.current) {
-			data.current.forEach((entry) => {
-				if (visibleSections.has(entry.id)) {
-					entry.totalViewTime += performance.now() - entry.lastTick;
+	let timer: NodeJS.Timer | null = null;
+
+	const pause = () => {
+		if (timer) {
+			clearInterval(timer);
+		}
+	};
+
+	const start = () => {
+		pause();
+		data.current?.forEach((entry) => {
+			entry.lastTick = performance.now();
+		});
+		timer = setInterval(() => {
+			data.current?.forEach((entry) => {
+				if (visibleSections.has(entry.sectionId)) {
+					entry.totalViewTime += Math.round(
+						(performance.now() - entry.lastTick) / 1000,
+					);
 				}
 				entry.lastTick = performance.now();
 			});
+		}, 5000);
+	};
+
+	const saveFocusTime = async ({ summaryId }: { summaryId: string }) => {
+		if (data.current) {
+			await createFocusTime.mutateAsync({
+				summaryId,
+				data: data.current,
+			});
 		}
-	}, 5000);
+	};
+
+	const handleVisibilityChange = () => {
+		if (document.hidden) {
+			pause();
+		} else {
+			start();
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+	});
 
 	useEffect(() => {
 		const observer = new IntersectionObserver((entries) => {
@@ -78,7 +115,7 @@ export const useFocusTime = () => {
 		data.current = elements
 			.filter((el) => el.dataset.sectionType === "section-start")
 			.map((el) => ({
-				id: el.dataset.sectionId as string,
+				sectionId: el.dataset.sectionId as string,
 				totalViewTime: 0,
 				lastTick: performance.now(),
 			}));
@@ -87,11 +124,14 @@ export const useFocusTime = () => {
 			observer.observe(el);
 		});
 
+		start();
+
 		return () => {
 			elements.forEach((el) => observer.unobserve(el));
-			clearInterval(timer);
+			pause();
+			document.addEventListener("visibilitychange", handleVisibilityChange);
 		};
 	}, []);
 
-	return data;
+	return { saveFocusTime, start, pause };
 };

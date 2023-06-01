@@ -6,17 +6,51 @@ import Spinner from "../spinner";
 import Feedback from "./summary-feedback";
 import TextArea from "../ui/textarea";
 import { makeInputKey, numOfWords } from "@/lib/utils";
-import { useSummary } from "@/lib/hooks/summary";
+import { useSummary } from "@/lib/hooks/use-summary";
 import { useLocation } from "@/lib/hooks/utils";
-import { useFocusTime } from "@/lib/hooks/focus-time";
+import { useFocusTime } from "@/lib/hooks/use-focus-time";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SummaryInput() {
 	const { state, setInput, score, create } = useSummary({
 		useLocalStorage: true,
 	});
+	const { status: sessionStatus } = useSession();
 	const location = useLocation();
+	const router = useRouter();
 
-	const focusTimeData = useFocusTime();
+	const {
+		saveFocusTime,
+		start: startFocusTimeCounting,
+		pause: pauseFocusTimeCounting,
+	} = useFocusTime();
+
+	const handleSubmit = async (e: FormEvent) => {
+		if (sessionStatus === "authenticated") {
+			e.preventDefault();
+			pauseFocusTimeCounting();
+			const inputKey = makeInputKey(location);
+			window.localStorage.setItem(inputKey, state.input);
+			const response = await score(location);
+			if (response) {
+				const savedSummary = await create(
+					response.result,
+					response.feedback,
+					location,
+				);
+				if (savedSummary) {
+					await saveFocusTime({
+						summaryId: savedSummary.id,
+					});
+				}
+			}
+		} else {
+			router.push("/auth");
+		}
+	};
 
 	return (
 		<>
@@ -31,25 +65,20 @@ export default function SummaryInput() {
 					onValueChange={(val) => setInput(val)}
 					rows={10}
 					className="resize-none rounded-md shadow-md p-4 w-full"
+					onFocus={() => pauseFocusTimeCounting()}
+					onBlur={() => startFocusTimeCounting()}
 				/>
 				{state.error && <Warning>{state.error}</Warning>}
 				<div className="flex justify-end">
-					<Button
-						onClick={async (e) => {
-							e.preventDefault();
-							const inputKey = makeInputKey(location);
-							window.localStorage.setItem(inputKey, state.input);
-							const result = await score(location);
-							if (result) {
-								await create(result.result, result.feedback, location);
-							}
-						}}
-						disabled={state.pending}
-					>
+					<Button onClick={handleSubmit} disabled={state.pending}>
 						{state.pending && (
 							<Spinner className="w-6 h-6 text-background mr-1" />
 						)}
-						{state.prompt}
+						{sessionStatus === "authenticated" ? (
+							state.prompt
+						) : (
+							<Link href="/auth">Log in to create a summary</Link>
+						)}
 					</Button>
 				</div>
 			</form>

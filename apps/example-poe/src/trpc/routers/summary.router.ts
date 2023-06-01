@@ -1,15 +1,11 @@
 import { env } from "@/env.mjs";
 import { protectedProcedure, router } from "../utils";
 import { z } from "zod";
-import { LocationSchema, ScoreSchema } from "../schema";
-
-export const APIResponseSchema = z
-	.object({
-		profanity: z.boolean(),
-		included_keyphrases: z.array(z.string()),
-		suggested_keyphrases: z.array(z.string()),
-	})
-	.merge(ScoreSchema);
+import {
+	LocationSchema,
+	SummaryResponseSchema,
+	SummaryScoreSchema,
+} from "../schema";
 
 const SummaryRouter = router({
 	getAllByUser: protectedProcedure.query(({ ctx }) => {
@@ -41,7 +37,7 @@ const SummaryRouter = router({
 				},
 			});
 			const data = await response.json();
-			return APIResponseSchema.safeParse(data);
+			return SummaryResponseSchema.safeParse(data);
 		}),
 
 	create: protectedProcedure
@@ -49,7 +45,7 @@ const SummaryRouter = router({
 			z.object({
 				text: z.string(),
 				location: LocationSchema,
-				score: ScoreSchema,
+				score: SummaryScoreSchema,
 				isPassed: z.boolean(),
 			}),
 		)
@@ -80,7 +76,7 @@ const SummaryRouter = router({
 			z.object({
 				id: z.string(),
 				text: z.string(),
-				score: ScoreSchema,
+				score: SummaryScoreSchema,
 				isPassed: z.boolean(),
 			}),
 		)

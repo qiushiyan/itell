@@ -16,7 +16,7 @@ import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
 import { Button } from "../ui-components";
-import { useNotes } from "@/lib/hooks/notes";
+import { useNotes } from "@/lib/hooks/use-notes";
 
 interface Props extends NoteCard {
 	location: SectionLocation;

@@ -5,7 +5,7 @@ import NoteCard from "./note-card";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import Spinner from "../spinner";
-import { useNotes } from "@/lib/hooks/notes";
+import { useNotes } from "@/lib/hooks/use-notes";
 import { useSession } from "next-auth/react";
 import { Typography } from "@itell/ui/server";
 import { Highlight, NoteCard as NoteCardType } from "@/types/note";
