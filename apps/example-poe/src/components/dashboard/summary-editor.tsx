@@ -4,7 +4,7 @@ import { Summary } from "@prisma/client";
 import TextArea from "../ui/textarea";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "../ui-components";
-import { ScoreResponse, useSummary } from "@/lib/hooks/summary";
+import { ScoreResponse, useSummary } from "@/lib/hooks/use-summary";
 import Feedback from "../summary/summary-feedback";
 import { numOfWords } from "@/lib/utils";
 import Spinner from "../spinner";

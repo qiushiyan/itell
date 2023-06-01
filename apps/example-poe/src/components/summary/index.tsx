@@ -3,9 +3,7 @@ import SummaryInput from "./summary-input";
 import { Info } from "@itell/ui/server";
 import { SectionLocation } from "@/types/location";
 
-export default async function Summary({
-	location,
-}: { location: SectionLocation }) {
+export default function Summary({ location }: { location: SectionLocation }) {
 	if (location.section === 0) {
 		return (
 			<section className="mt-2 w-[800px] mx-auto">

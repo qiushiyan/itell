@@ -1,5 +1,5 @@
+import { SummaryResponse } from "@/trpc/schema";
 import { ScoreThreshold, ScoreType } from "./constants";
-import { SummaryResult } from "@/trpc/schema";
 
 export interface Feedback {
 	isPassed: boolean;
@@ -89,11 +89,11 @@ export const wordingFeedback = (score: number | null): Feedback => {
 	}
 };
 
-export const getFeedback = (result: SummaryResult): SummaryFeedback => {
-	const wording = wordingFeedback(result.wording);
-	const content = contentFeedback(result.content);
-	const similarity = similarityFeedback(result.similarity);
-	const containment = containmentFeedback(result.containment);
+export const getFeedback = (response: SummaryResponse): SummaryFeedback => {
+	const wording = wordingFeedback(response.wording);
+	const content = contentFeedback(response.content);
+	const similarity = similarityFeedback(response.similarity);
+	const containment = containmentFeedback(response.containment);
 
 	const passedNum =
 		Number(wording.isPassed) +
@@ -114,7 +114,7 @@ export const getFeedback = (result: SummaryResult): SummaryFeedback => {
 	} else {
 		prompt = `Before moving onto the next section, you will need to revise the summary you wrote using the feedback provided. After submitting a second summary, you will be given feedback again. You will also be shown a professional summary.
 
-		Try to include the following keywords: ${result.suggested_keyphrases.join(
+		Try to include the following keywords: ${response.suggested_keyphrases.join(
 			", ",
 		)}`;
 	}

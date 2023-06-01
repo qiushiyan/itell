@@ -5,7 +5,7 @@ import SectionCombobox from "./section-combobox";
 import { useState } from "react";
 import { SectionLocation } from "@/types/location";
 import SectionDialog from "../section-dialog";
-import { ScoreResponse } from "@/lib/hooks/summary";
+import { ScoreResponse } from "@/lib/hooks/use-summary";
 import { Badge } from "@itell/ui/server";
 import { ScoreBadge } from "../score/badge";
 import { ScoreType } from "@/lib/constants";
