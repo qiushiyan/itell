@@ -5,4 +5,5 @@ export default {
 	...sharedConfig,
 	darkMode: ["class"],
 	content: ["./src/**/*.{js,ts,jsx,tsx}", "./content/**/*.mdx"],
+	plugins: [require("@itell/tailwind-plugin")],
 } satisfies Config;
