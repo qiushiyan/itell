@@ -56,7 +56,7 @@ const Section = defineDocumentType(() => ({
 }));
 
 export default makeSource({
-	contentDirPath: "content/section",
+	contentDirPath: "content",
 	documentTypes: [Section],
 	mdx: {
 		remarkPlugins: [remarkGfm, remarkMath],
