@@ -13,7 +13,7 @@ interface TypographyProps extends React.ComponentProps<any> {
 	textGradient?: boolean;
 }
 
-export default function ({
+export const Typography = ({
 	as: Component = "p",
 	variant = "paragraph",
 	color = "inherit",
@@ -21,7 +21,7 @@ export default function ({
 	className = "",
 	children,
 	...rest
-}: TypographyProps) {
+}: TypographyProps) => {
 	const variantClasses = Object.values(
 		typographyStyles.styles.variants[variant],
 	).join(" ");
@@ -34,4 +34,4 @@ export default function ({
 			{children}
 		</Component>
 	);
-}
+};

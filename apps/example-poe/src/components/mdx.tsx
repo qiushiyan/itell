@@ -5,11 +5,6 @@ import {
 	CustomIFrame,
 	Accordion,
 	AccordionItem,
-	Tabs,
-	TabsHeader,
-	Tab,
-	TabPanel,
-	TabsBody,
 	Stepper,
 	StepperHeader,
 	Step,
@@ -19,6 +14,7 @@ import {
 	TextOverImage,
 	Link,
 } from "./ui-components";
+import { Tabs, TabsHeader, Tab, TabPanel, TabsBody } from "./ui/tabs";
 
 const MdxComponents = {
 	a: Link,

@@ -7,7 +7,7 @@ import {
 	AccordionItem as BaseAccordionItem,
 	AccordionTrigger as BaseAccordionTrigger,
 } from "./accordion";
-import Typography from "../typography";
+import { Typography } from "../typography";
 
 type Props = {
 	children: React.ReactNode;

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@itell/core";
 import { SidebarNavItem } from "@/types/nav";
-import { ArrowRight, ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 
 interface DashboardNavProps {
 	items: SidebarNavItem[];

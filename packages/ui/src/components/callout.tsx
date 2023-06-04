@@ -1,6 +1,6 @@
 import { cn } from "@itell/core";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
-import Typography from "./typography";
+import { Typography } from "./typography";
 import { InfoIcon, AlertCircleIcon, AlertTriangleIcon } from "lucide-react";
 
 export const Callout = ({ children }: { children: React.ReactNode }) => {

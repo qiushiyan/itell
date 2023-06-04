@@ -3,7 +3,7 @@
 import { cn } from "@itell/core";
 import { CheckCircleIcon } from "lucide-react";
 import { createContext, useContext } from "react";
-import Typography from "./typography";
+import { Typography } from "./typography";
 import { useImmer } from "use-immer";
 
 type StepStatus = "complete" | "current" | "upcoming";

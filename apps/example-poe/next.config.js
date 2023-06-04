@@ -1,6 +1,9 @@
 const { withContentlayer } = require("next-contentlayer");
 
 module.exports = withContentlayer({
+	experimental: {
+		serverActions: true,
+	},
 	redirects: async () => {
 		return [
 			{

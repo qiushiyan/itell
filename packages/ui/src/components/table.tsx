@@ -1,4 +1,4 @@
-import Typography from "../components/typography";
+import { Typography } from "../components/typography";
 
 export const Caption = ({ children }: { children: React.ReactNode }) => {
 	return (
