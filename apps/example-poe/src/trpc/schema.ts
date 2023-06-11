@@ -10,7 +10,6 @@ export type SummaryScore = z.infer<typeof SummaryScoreSchema>;
 
 export const SummaryResponseSchema = z
 	.object({
-		profanity: z.boolean(),
 		included_keyphrases: z.array(z.string()),
 		suggested_keyphrases: z.array(z.string()),
 	})

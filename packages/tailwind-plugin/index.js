@@ -54,8 +54,12 @@ module.exports = plugin(function ({ addUtilities, addBase }) {
 			fontFeatureSettings: '"rlig" 1, "calt" 1',
 			scrollBehavior: "smooth",
 		},
-		"table thead": { "@apply bg-accent": true },
-		"table tr:hover": { "@apply bg-accent": true },
+		thead: {
+			"@apply px-4 text-left align-middle font-medium text-muted-foreground": true,
+		},
+		"tr:hover": { "@apply bg-muted/50": true },
+		tr: { "@apply border-b transition-colors": true },
+		td: { "@apply p-4 align-middle": true },
 		th: { "@apply max-w-[10rem]": true },
 	});
 });
