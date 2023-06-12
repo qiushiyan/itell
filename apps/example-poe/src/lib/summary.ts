@@ -112,7 +112,8 @@ export const getFeedback = (response: SummaryResponse): SummaryFeedback => {
 				"Good job on summarizing this section. We will now show you a professional summary of the section. After reading that summary, please move forward to the next section.";
 		}
 	} else {
-		prompt = `Before moving onto the next section, you will need to revise the summary you wrote using the feedback provided. After submitting a second summary, you will be given feedback again. You will also be shown a professional summary.
+		prompt = `Before moving onto the next section, you will need to revise the summary you wrote using the feedback provided. After submitting a second summary, you will be given feedback again and shown a professional summary.
+
 
 		Try to include the following keywords: ${response.suggested_keyphrases.join(
 			", ",

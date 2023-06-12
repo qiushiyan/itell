@@ -10,8 +10,10 @@ const accordionItems = [
 			<>
 				<p>A successful summary will</p>
 				<ul>
-					<li>Be within 50 ~ 200 words long Be written in</li>
-					<li>English Be on topic Not be plagiarized</li>
+					<li>Be within 50 ~ 200 words long</li>
+					<li>Be written in English</li>
+					<li>Be on topic</li>
+					<li>Not be plagiarized</li>
 				</ul>
 			</>
 		),
