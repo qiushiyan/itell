@@ -36,8 +36,6 @@ const SummaryRouter = router({
 					"Content-Type": "application/json",
 				},
 			});
-			console.log(response);
-			console.log(await response.text());
 			const data = await response.json();
 			return SummaryResponseSchema.safeParse(data);
 		}),
