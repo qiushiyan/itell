@@ -10,31 +10,25 @@ import {
 import { useMDXComponent } from "next-contentlayer/hooks";
 import { Exercise } from "./exercise";
 import {
-	CustomIFrame,
+	YoutubeVideo,
 	Accordion,
 	AccordionItem,
-	Tabs,
-	TabsHeader,
-	Tab,
-	TabPanel,
-	TabsBody,
 	Stepper,
 	StepperHeader,
 	Step,
 	StepperBody,
 	StepperPanel,
 	Image,
-	TextOverImage,
 	Link,
 } from "./ui-components";
+import { Tabs, TabsHeader, Tab, TabPanel, TabsBody } from "./ui/tabs";
 
 const MdxComponents = {
 	a: Link,
-	Iframe: CustomIFrame,
+	YoutubeVideo,
 	Image,
 	Accordion,
 	AccordionItem,
-	TextOverImage,
 	Info,
 	Warning,
 	Exercise,

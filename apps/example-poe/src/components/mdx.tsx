@@ -2,7 +2,7 @@
 import { Info, Warning, Keyterm, Callout, Caption } from "@itell/ui/server";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import {
-	CustomIFrame,
+	YoutubeVideo,
 	Accordion,
 	AccordionItem,
 	Stepper,
@@ -18,7 +18,7 @@ import { TextOverImage } from "./ui/text-over-image";
 
 const MdxComponents = {
 	a: Link,
-	Iframe: CustomIFrame,
+	YoutubeVideo,
 	Image,
 	Accordion,
 	AccordionItem,
