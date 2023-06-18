@@ -11,7 +11,6 @@
   "dependencies": {
     "@hello-pangea/color-picker": "^3.2.2",
     "@itell/core": "workspace:^",
-    "@itell/tailwind-config": "workspace:^",
     "@itell/tailwind-plugin": "workspace:^",
     "@itell/ui": "workspace:*",
     "@next-auth/prisma-adapter": "^1.0.6",

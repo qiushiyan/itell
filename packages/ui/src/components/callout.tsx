@@ -29,7 +29,7 @@ export const Info = ({
 	title,
 	children,
 }: { title?: string; children: React.ReactNode }) => (
-	<Alert className="bg-blue-50 dark:bg-inherit dark:border-2 dark:border-blue-400">
+	<Alert className="bg-info dark:bg-inherit dark:border-2 dark:border-info">
 		<InfoIcon className="h-4 w-4" />
 		{title && <AlertTitle>{title}</AlertTitle>}
 		{/* align content with icon when there is no title */}
@@ -56,7 +56,7 @@ export const Warning = ({
 	title,
 	children,
 }: { title?: string; children: React.ReactNode }) => (
-	<Alert className="bg-orange-50 dark:bg-inherit dark:border-orange-400">
+	<Alert className="bg-warning dark:bg-inherit dark:border-warning">
 		<AlertCircleIcon className="h-4 w-4" />
 		{title && <AlertTitle>{title}</AlertTitle>}
 		<AlertDescription className={cn({ "callout-no-title": !title })}>

@@ -1,9 +1,9 @@
 import type { Config } from "tailwindcss";
-import sharedConfig from "@itell/tailwind-config";
-
+import itellPlugin from "@itell/tailwind-plugin";
+// @ts-ignore
+import animatePlugin from "tailwindcss-animate";
+import typographyPlugin from "@tailwindcss/typography";
 export default {
-	...sharedConfig,
-	darkMode: ["class"],
 	content: ["./src/**/*.{js,ts,jsx,tsx}", "./content/**/*.mdx"],
-	plugins: [require("@itell/tailwind-plugin")],
+	plugins: [itellPlugin, animatePlugin, typographyPlugin],
 } satisfies Config;
