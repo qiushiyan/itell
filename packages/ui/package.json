@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@itell/core": "workspace:^",
-    "@itell/tailwind-plugin": "workspace:^",
+    "@itell/tailwind": "workspace:^",
     "@material-tailwind/react": "^1.4.2",
     "@radix-ui/react-accordion": "^1.1.1",
     "@radix-ui/react-alert-dialog": "^1.0.3",

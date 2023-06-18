@@ -11,7 +11,7 @@ export default function Home() {
 				<div className="flex justify-center items-center">
 					<LabIcon />
 				</div>
-				<Typography className="animate-in zoom-in duration-500">
+				<Typography>
 					This textbook is adopted from Principles of Macroeconomics 2e
 					available at OpenStax. It was redesigned by a team comprised of
 					subject matter expert, content and assessment developer, multimedia

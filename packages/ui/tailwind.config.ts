@@ -1,8 +1,7 @@
 import type { Config } from "tailwindcss";
-import animatePlugin from "tailwindcss-animate";
-import itellPlugin from "@itell/tailwind-plugin";
+import tailwindPreset from "@itell/tailwind";
 
 export default {
+	presets: [tailwindPreset],
 	content: ["./src/**/*.{js,jsx,ts,tsx}"],
-	plugins: [itellPlugin, animatePlugin],
 } satisfies Config;

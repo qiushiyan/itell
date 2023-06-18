@@ -26,8 +26,8 @@ export default plugin(
 				"--destructive-foreground": "210 40% 98%",
 				"--ring": "215 20.2% 65.1%",
 				"--radius": "0.5rem",
-				"--info": "213 94% 68%",
-				"--warning": "43 96% 56%",
+				"--info": "214 95% 93%",
+				"--warning": "34 100% 92%",
 			},
 			".dark": {
 				"--background": "224 71% 4%",
@@ -50,8 +50,8 @@ export default plugin(
 				"--destructive-foreground": "210 40% 98%",
 				"--ring": "216 34% 17%",
 				"--radius": "0.5rem",
-				"--info": "214 100% 97%",
-				"--warning": "33 100% 96%",
+				"--info": "214 95% 93%",
+				"--warning": "34 100% 92%",
 			},
 		});
 
@@ -76,7 +76,6 @@ export default plugin(
 		});
 	},
 	{
-		darkMode: ["class"],
 		theme: {
 			container: {
 				center: true,

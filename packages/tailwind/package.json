@@ -1,5 +1,5 @@
 {
-  "name": "@itell/tailwind-plugin",
+  "name": "@itell/tailwind",
   "main": "dist/index.js",
   "private": true,
   "version": "0.0.0",
