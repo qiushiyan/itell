@@ -48,13 +48,11 @@
     "remark-math": "^5.1.1",
     "sonner": "^0.3.5",
     "superjson": "^1.12.3",
-    "tailwindcss-animate": "^1.0.5",
     "use-immer": "^0.9.0",
     "use-text-selection": "^1.1.5",
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.9",
     "@types/react": "18.0.29",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
