@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import ConfettiExplosion from "react-confetti-explosion";
 
 export default function SummaryInput() {
 	const { state, setInput, score, create } = useSummary({
@@ -55,6 +56,9 @@ export default function SummaryInput() {
 	return (
 		<>
 			{state.feedback && <Feedback feedback={state.feedback} />}
+			{state.feedback?.isPassed && (
+				<ConfettiExplosion width={window.innerWidth} />
+			)}
 			<Typography variant="small" className="my-2">
 				Number of words: {numOfWords(state.input)}
 			</Typography>
