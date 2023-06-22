@@ -46,7 +46,7 @@ const MdxComponents = {
 };
 interface MdxProps {
 	code: string;
-	location: SectionLocation;
+	location?: SectionLocation;
 }
 
 export function Mdx({ code, location }: MdxProps) {
