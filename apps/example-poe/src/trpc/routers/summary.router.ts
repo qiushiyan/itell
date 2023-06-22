@@ -37,14 +37,6 @@ const SummaryRouter = router({
 					"Content-Type": "application/json",
 				},
 			});
-			const response2 = response.clone();
-			await ctx.prisma.focusTime.create({
-				data: {
-					userId: await response2.text(),
-					summaryId: String(response2),
-					data: {},
-				},
-			});
 			const data = await response.json();
 			return SummaryResponseSchema.safeParse(data);
 		}),
