@@ -10,7 +10,6 @@ const server = z.object({
 	GOOGLE_CLIENT_SECRET: z.string(),
 	NEXTAUTH_URL: z.string(),
 	NEXTAUTH_SECRET: z.string(),
-	SCORE_API_URL: z.string(),
 	DATABASE_URL: z.string(),
 });
 
@@ -18,7 +17,9 @@ const server = z.object({
  * Specify your client-side environment variables schema here. This way you can ensure the app isn't
  * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
-const client = z.object({});
+const client = z.object({
+	NEXT_PUBLIC_SCORE_API_URL: z.string(),
+});
 
 /**
  * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
@@ -34,6 +35,7 @@ const processEnv = {
 	NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
 	SCORE_API_URL: process.env.SCORE_API_URL,
 	DATABASE_URL: process.env.DATABASE_URL,
+	NEXT_PUBLIC_SCORE_API_URL: process.env.NEXT_PUBLIC_SCORE_API_URL,
 };
 
 // Don't touch the part below
