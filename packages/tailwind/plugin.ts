@@ -1,6 +1,6 @@
 import plugin from "tailwindcss/plugin";
 import { fontFamily } from "tailwindcss/defaultTheme";
-import { ItellDefaultConfig, ItellThemeColors } from "@itell/core";
+import { DefaultThemeConfig, type ItellThemeColors } from "@itell/core";
 
 const camelToKebab = (str: string) => {
 	return str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
@@ -18,21 +18,19 @@ const extractCssVariables = (obj: Record<string, string>) => {
 
 export default plugin(
 	function ({ addBase, config }) {
-		const itellConfig = config("itell");
-		let lightColors = ItellDefaultConfig["theme"]["light"];
-		let darkColors = ItellDefaultConfig["theme"]["dark"];
-		if (itellConfig) {
-			if (itellConfig["theme"]) {
-				if (itellConfig["theme"]["light"]) {
-					lightColors = extractCssVariables(
-						itellConfig["theme"]["light"],
-					) as ItellThemeColors;
-				}
-				if (itellConfig["theme"]["dark"]) {
-					darkColors = extractCssVariables(
-						itellConfig["theme"]["dark"],
-					) as ItellThemeColors;
-				}
+		const themeConfig = config("itell.theme");
+		let lightColors = DefaultThemeConfig["light"];
+		let darkColors = DefaultThemeConfig["dark"];
+		if (themeConfig) {
+			if (themeConfig["light"]) {
+				lightColors = extractCssVariables(
+					themeConfig["light"],
+				) as ItellThemeColors;
+			}
+			if (themeConfig["dark"]) {
+				darkColors = extractCssVariables(
+					themeConfig["dark"],
+				) as ItellThemeColors;
 			}
 		}
 

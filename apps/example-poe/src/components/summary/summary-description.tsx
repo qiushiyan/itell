@@ -14,6 +14,7 @@ const accordionItems = [
 					<li>Be written in English</li>
 					<li>Be on topic</li>
 					<li>Not be plagiarized</li>
+					<li>Use appropriate language</li>
 				</ul>
 			</>
 		),

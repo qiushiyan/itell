@@ -1,4 +1,4 @@
-import { Location } from "@/types/location";
+import { Location, SectionLocation } from "@/types/location";
 import { SidebarSection } from "@/types/section";
 import { formatRelative } from "date-fns";
 
@@ -23,7 +23,10 @@ export const getLocationFromPathname = (path: string): Location => {
 
 	const module = getSingleLocation(pathname[1]);
 	const chapter = getSingleLocation(pathname[2]);
-	const section = getSingleLocation(pathname[3]);
+	let section = getSingleLocation(pathname[3]);
+	if (module && chapter && !section) {
+		section = 0;
+	}
 	return { module, chapter, section };
 };
 
@@ -59,12 +62,13 @@ export const numOfWords = (str: string): number => {
 	return strWithoutSpace.split(" ").length;
 };
 
-export const makeInputKey = (location: Location) => {
+export const makeInputKey = (location: SectionLocation) => {
 	return `chapter-${location.chapter}-section-${location.section}-summary`;
 };
 
-export const makeLocationHref = (location: Location) => {
-	return `/module-${location.module}/chapter-${location.chapter}/section-${location.section}`;
+export const makeLocationHref = (location: SectionLocation) => {
+	const sectionSlug = location.section ? `section-${location.section}` : "";
+	return `/module-${location.module}/chapter-${location.chapter}/${sectionSlug}`;
 };
 
 export const isTextbookPage = (location: Location) => {

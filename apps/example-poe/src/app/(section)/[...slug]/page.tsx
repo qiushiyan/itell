@@ -110,7 +110,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 						</Typography>
 					</div>
 
-					<Mdx code={section.body.code} />
+					<Mdx code={section.body.code} location={section.location} />
 					<Highlighter location={currentLocation} />
 					<SectionPager pager={pager} />
 				</section>

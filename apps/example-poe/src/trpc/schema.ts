@@ -16,8 +16,8 @@ export const SummaryResponseSchema = z
 	.merge(SummaryScoreSchema);
 export type SummaryResponse = z.infer<typeof SummaryResponseSchema>;
 
-export const LocationSchema = z.object({
+export const SectionLocationSchema = z.object({
 	module: z.number(),
 	chapter: z.number(),
-	section: z.number().optional(),
+	section: z.number(),
 });

@@ -15,6 +15,9 @@ import {
 } from "./ui-components";
 import { Tabs, TabsHeader, Tab, TabPanel, TabsBody } from "./ui/tabs";
 import { TextOverImage } from "./ui/text-over-image";
+import { SectionLocation } from "@/types/location";
+import { useEffect, useLayoutEffect } from "react";
+import { useLastVisitedSection } from "@/lib/hooks/use-last-visisted-section";
 
 const MdxComponents = {
 	a: Link,
@@ -43,10 +46,13 @@ const MdxComponents = {
 };
 interface MdxProps {
 	code: string;
+	location: SectionLocation;
 }
 
-export function Mdx({ code }: MdxProps) {
+export function Mdx({ code, location }: MdxProps) {
 	const Component = useMDXComponent(code);
+
+	useLastVisitedSection(location);
 
 	return (
 		<article

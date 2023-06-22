@@ -2,7 +2,7 @@ import { env } from "@/env.mjs";
 import { protectedProcedure, router } from "../utils";
 import { z } from "zod";
 import {
-	LocationSchema,
+	SectionLocationSchema,
 	SummaryResponseSchema,
 	SummaryScoreSchema,
 } from "../schema";
@@ -21,7 +21,7 @@ const SummaryRouter = router({
 		.input(
 			z.object({
 				text: z.string(),
-				location: LocationSchema,
+				location: SectionLocationSchema,
 			}),
 		)
 		.mutation(async ({ input }) => {
@@ -44,7 +44,7 @@ const SummaryRouter = router({
 		.input(
 			z.object({
 				text: z.string(),
-				location: LocationSchema,
+				location: SectionLocationSchema,
 				score: SummaryScoreSchema,
 				isPassed: z.boolean(),
 			}),

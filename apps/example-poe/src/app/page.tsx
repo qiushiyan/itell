@@ -9,11 +9,8 @@ export default function Home() {
 		<Fragment>
 			<TextbookNavbar showProgress={false} />
 			<div className="px-6 md:px-10 lg:px-16 py-8 mx-auto max-w-3xl">
-				<Button variant="default">primary</Button>
-				<Button variant="secondary">hello world</Button>
 				<div className="flex justify-center items-center">
 					<LabIcon />
-					B
 				</div>
 				<Typography>
 					This textbook is adopted from Principles of Macroeconomics 2e

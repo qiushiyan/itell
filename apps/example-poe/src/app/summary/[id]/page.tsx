@@ -2,6 +2,7 @@ import SummaryEditor from "@/components/dashboard/summary-editor";
 import SummaryOperations from "@/components/dashboard/summary-operations";
 import { ScoreBadge } from "@/components/score/badge";
 import SectionDialog from "@/components/section-dialog";
+import { SummaryBackButton } from "@/components/summary/summary-back-button";
 import { getCurrentUser } from "@/lib/auth";
 import { ScoreType } from "@/lib/constants";
 import db from "@/lib/db";
@@ -53,15 +54,7 @@ export default async function ({ params }: PageProps) {
 		<div className="px-32 py-4">
 			<div className="flex w-full items-center justify-between">
 				<div className="flex items-center space-x-10">
-					<Link
-						href="/dashboard"
-						className={cn(buttonVariants({ variant: "ghost" }))}
-					>
-						<>
-							<ChevronLeft className="mr-2 h-4 w-4" />
-							Back
-						</>
-					</Link>
+					<SummaryBackButton />
 					<p className="text-sm text-muted-foreground">
 						{`Created at ${relativeDate(summary.created_at)}`}
 					</p>

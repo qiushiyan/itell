@@ -1,11 +1,11 @@
 import { trpc } from "@/trpc/trpc-provider";
 import { useLocation } from "./utils";
 import { SummaryFeedback, getFeedback } from "../summary";
-import { isTextbookPage, makeInputKey, numOfWords } from "../utils";
+import { makeInputKey, numOfWords } from "../utils";
 import { useEffect, useReducer } from "react";
 import { toast } from "sonner";
 import cld3 from "../cld";
-import { Location } from "@/types/location";
+import { Location, SectionLocation } from "@/types/location";
 import { Summary } from "@prisma/client";
 import offensiveWords from "public/offensive-words.json";
 import { SummaryResponse, SummaryScore } from "@/trpc/schema";
@@ -218,19 +218,18 @@ export const useSummary = ({
 		dispatch({ type: "set_input", payload: text });
 	};
 
-	const inputKey = makeInputKey(location);
-
 	useEffect(() => {
-		if (isTextbookPage(location) && useLocalStorage) {
+		if (location && useLocalStorage) {
+			const inputKey = makeInputKey(location as SectionLocation);
 			setInput(localStorage.getItem(inputKey) || "");
 		}
 	}, [location]);
 
-	const score = async (location: Location) => {
+	const score = async (location: SectionLocation) => {
 		const isSummaryValid = checkSummary(state.input);
 		if (isSummaryValid) {
 			dispatch({ type: "score_summary" });
-			if (isTextbookPage(location)) {
+			if (location) {
 				try {
 					const response = await scoreSummary.mutateAsync({
 						text: state.input,
@@ -240,6 +239,7 @@ export const useSummary = ({
 							section: location.section,
 						},
 					});
+					console.log("trpc score summary resposne ", response);
 					if (!response.success) {
 						// API response is not in correct shape
 						console.error("API Response error", response);
@@ -255,7 +255,7 @@ export const useSummary = ({
 					return { result, feedback };
 				} catch (err) {
 					dispatch({ type: "reset" });
-					console.log(err);
+					console.error(err);
 					toast.error("Something went wrong, please try again later.");
 				}
 			} else {
@@ -293,7 +293,7 @@ export const useSummary = ({
 	const create = async (
 		result: SummaryResponse | null,
 		feedback: SummaryFeedback | null,
-		location: Location,
+		location: SectionLocation,
 	) => {
 		if (result && feedback) {
 			dispatch({ type: "save_summary" });

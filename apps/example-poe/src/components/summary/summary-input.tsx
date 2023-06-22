@@ -30,11 +30,17 @@ export default function SummaryInput() {
 	} = useFocusTime();
 
 	const handleSubmit = async (e: FormEvent) => {
-		if (sessionStatus === "authenticated") {
+		if (sessionStatus === "authenticated" && location) {
 			e.preventDefault();
+
+			// stop counting focus time
 			pauseFocusTimeCounting();
+
+			// save summary text for the current section
 			const inputKey = makeInputKey(location);
 			window.localStorage.setItem(inputKey, state.input);
+
+			// score the summary
 			const response = await score(location);
 			if (response) {
 				const savedSummary = await create(

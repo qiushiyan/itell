@@ -28,6 +28,6 @@ export const groupby = <
 	);
 
 // rome-ignore lint/suspicious/noExplicitAny: <explanation>
-export const isObject = (obj: Record<string, any>, key: string) => {
-	return key in obj && typeof obj[key] === "object" && obj[key] !== null;
+export const isObject = (obj: any) => {
+	return typeof obj === "object" && obj !== null;
 };

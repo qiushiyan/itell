@@ -6,6 +6,7 @@ import { Command } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { LoginGoogle } from "./auth-buttons";
+import { useLastVisitedSection } from "@/lib/hooks/use-last-visisted-section";
 
 export const AuthButtons = {
 	google: (
@@ -27,9 +28,10 @@ export const AuthButtons = {
 export default function AuthForm() {
 	const { data: session } = useSession();
 	const router = useRouter();
+	const lastVisitedSection = useLastVisitedSection();
 
 	if (session?.user) {
-		router.push("/");
+		router.push(lastVisitedSection || "/");
 	}
 
 	return (

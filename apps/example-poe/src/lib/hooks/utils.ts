@@ -1,15 +1,8 @@
 import { usePathname } from "next/navigation";
-import {
-	useState,
-	useEffect,
-	useContext,
-	useRef,
-	RefObject,
-	useLayoutEffect,
-} from "react";
-import type { Location } from "@/types/location";
-import { NoteContext } from "@/contexts/note-highlight";
+import { useState, useEffect, useRef, RefObject, useLayoutEffect } from "react";
+import type { Location, SectionLocation } from "@/types/location";
 import { getLocationFromPathname } from "../utils";
+import { SectionLocationSchema } from "@/trpc/schema";
 
 export const useLocalStorage = <T,>(key: string, initialValue: T) => {
 	const [storedValue, setStoredValue] = useState<T>(() => {
@@ -45,15 +38,15 @@ export const useLocalStorage = <T,>(key: string, initialValue: T) => {
 
 export const useLocation = () => {
 	const pathname = usePathname();
-	const [location, setLocation] = useState<Location>({
-		module: undefined,
-		chapter: undefined,
-		section: undefined,
-	});
+	const [location, setLocation] = useState<SectionLocation | null>(null);
 
 	useEffect(() => {
 		if (pathname) {
-			setLocation(getLocationFromPathname(pathname));
+			const location = getLocationFromPathname(pathname);
+			const parsedLocation = SectionLocationSchema.safeParse(location);
+			if (parsedLocation.success) {
+				setLocation(parsedLocation.data);
+			}
 		}
 	}, [pathname]);
 
