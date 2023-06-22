@@ -1,12 +1,6 @@
-import { env } from "@/env.mjs";
 import { protectedProcedure, router } from "../utils";
 import { z } from "zod";
-import {
-	SectionLocationSchema,
-	SummaryResponseSchema,
-	SummaryScoreSchema,
-} from "../schema";
-import { contextProps } from "@trpc/react-query/shared";
+import { SectionLocationSchema, SummaryScoreSchema } from "../schema";
 
 const SummaryRouter = router({
 	getAllByUser: protectedProcedure.query(({ ctx }) => {
@@ -17,29 +11,6 @@ const SummaryRouter = router({
 			},
 		});
 	}),
-
-	score: protectedProcedure
-		.input(
-			z.object({
-				text: z.string(),
-				location: SectionLocationSchema,
-			}),
-		)
-		.mutation(async ({ input, ctx }) => {
-			const response = await fetch(env.SCORE_API_URL, {
-				method: "POST",
-				body: JSON.stringify({
-					summary: input.text,
-					chapter_index: input.location.chapter,
-					section_index: input.location.section,
-				}),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-			const data = await response.json();
-			return SummaryResponseSchema.safeParse(data);
-		}),
 
 	create: protectedProcedure
 		.input(

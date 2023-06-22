@@ -9,6 +9,7 @@ import { Location, SectionLocation } from "@/types/location";
 import { Summary } from "@prisma/client";
 import offensiveWords from "public/offensive-words.json";
 import { SummaryResponse, SummaryScore } from "@/trpc/schema";
+import { getScore } from "../score";
 
 enum ErrorType {
 	LANGUAGE_NOT_EN = "LANGUAGE_NOT_EN",
@@ -163,7 +164,6 @@ export const useSummary = ({
 	useLocalStorage,
 }: { useLocalStorage?: boolean }) => {
 	const location = useLocation();
-	const scoreSummary = trpc.summary.score.useMutation();
 	const addSummary = trpc.summary.create.useMutation();
 	const updateSummary = trpc.summary.update.useMutation();
 
@@ -231,31 +231,7 @@ export const useSummary = ({
 			dispatch({ type: "score_summary" });
 			if (location) {
 				try {
-					const testResponse = await fetch(
-						"https://textbook-summary-api-zoghmeioka-ue.a.run.app/score",
-						{
-							method: "POST",
-							body: JSON.stringify({
-								summary: state.input,
-								chapter_index: location.chapter,
-								section_index: location.section,
-							}),
-							headers: {
-								"Content-Type": "application/json",
-							},
-						},
-					);
-					console.log(testResponse);
-					console.log("parse", JSON.parse(await testResponse.clone().text()));
-					console.log("json", await testResponse.clone().json());
-					const response = await scoreSummary.mutateAsync({
-						text: state.input,
-						location: {
-							module: location.module as number,
-							chapter: location.chapter as number,
-							section: location.section,
-						},
-					});
+					const response = await getScore({ input: state.input, location });
 					if (!response.success) {
 						// API response is not in correct shape
 						console.error("API Response error", response);

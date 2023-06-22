@@ -52,7 +52,7 @@ export default function ({
 					onValueChange={(val) => setSelectedModule(val)}
 				/>
 				<p className="text-muted-foreground text-sm">
-					{`You have submitted ${moduleSummaries.length} ${
+					{`${moduleSummaries.length} ${
 						moduleSummaries.length > 1 ? "summaries" : "summary"
 					}.`}
 				</p>
