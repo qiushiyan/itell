@@ -246,7 +246,8 @@ export const useSummary = ({
 						},
 					);
 					console.log(testResponse);
-					console.log(await testResponse.text());
+					console.log("parse", JSON.parse(await testResponse.clone().text()));
+					console.log("json", await testResponse.clone().json());
 					const response = await scoreSummary.mutateAsync({
 						text: state.input,
 						location: {
