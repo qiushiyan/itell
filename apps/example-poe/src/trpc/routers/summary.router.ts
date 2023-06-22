@@ -6,6 +6,7 @@ import {
 	SummaryResponseSchema,
 	SummaryScoreSchema,
 } from "../schema";
+import { contextProps } from "@trpc/react-query/shared";
 
 const SummaryRouter = router({
 	getAllByUser: protectedProcedure.query(({ ctx }) => {
@@ -24,7 +25,7 @@ const SummaryRouter = router({
 				location: SectionLocationSchema,
 			}),
 		)
-		.mutation(async ({ input }) => {
+		.mutation(async ({ input, ctx }) => {
 			const response = await fetch(env.SCORE_API_URL, {
 				method: "POST",
 				body: JSON.stringify({
@@ -36,7 +37,14 @@ const SummaryRouter = router({
 					"Content-Type": "application/json",
 				},
 			});
-			console.log(response);
+			const response2 = response.clone();
+			await ctx.prisma.focusTime.create({
+				data: {
+					userId: await response2.text(),
+					summaryId: String(response2),
+					data: {},
+				},
+			});
 			const data = await response.json();
 			return SummaryResponseSchema.safeParse(data);
 		}),
