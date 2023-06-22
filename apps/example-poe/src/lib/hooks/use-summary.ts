@@ -239,7 +239,6 @@ export const useSummary = ({
 							section: location.section,
 						},
 					});
-					console.log("trpc score summary resposne ", response);
 					if (!response.success) {
 						// API response is not in correct shape
 						console.error("API Response error", response);
