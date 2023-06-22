@@ -18,11 +18,6 @@ export const getScore = async ({
 		},
 	});
 
-	console.log("response", response);
-	console.log(".text", await response.clone().text());
-	console.log("parse", JSON.parse(await response.clone().text()));
 	const data = await response.json();
-	console.log(".json", data);
-
 	return SummaryResponseSchema.safeParse(data);
 };

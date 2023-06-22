@@ -1,6 +1,5 @@
 import ClassForm from "@/components/dashboard/class-form";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import SettingsForm from "@/components/dashboard/settings-form";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
