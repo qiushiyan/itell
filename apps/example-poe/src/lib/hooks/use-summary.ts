@@ -231,6 +231,22 @@ export const useSummary = ({
 			dispatch({ type: "score_summary" });
 			if (location) {
 				try {
+					const testResponse = await fetch(
+						"https://textbook-summary-api-zoghmeioka-ue.a.run.app/score",
+						{
+							method: "POST",
+							body: JSON.stringify({
+								summary: state.input,
+								chapter_index: location.chapter,
+								section_index: location.section,
+							}),
+							headers: {
+								"Content-Type": "application/json",
+							},
+						},
+					);
+					console.log(testResponse);
+					console.log(await testResponse.text());
 					const response = await scoreSummary.mutateAsync({
 						text: state.input,
 						location: {
