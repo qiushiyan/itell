@@ -9,7 +9,7 @@ export const getLocationFromFlattenedPath = (
 	path: string,
 ): Partial<Location> => {
 	const slugSplit = path.substring(1).split("/");
-	const [module, chapter, section] = slugSplit;
+	const [_, module, chapter, section] = slugSplit;
 	return {
 		module: parseLocation(module),
 		chapter: parseLocation(chapter),

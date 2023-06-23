@@ -7,11 +7,22 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import GithubSlugger from "github-slugger";
 
+const Site = defineDocumentType(() => ({
+	name: "Site",
+	filePathPattern: "site/**/*.{md,mdx}",
+	contentType: "mdx",
+	computedFields: {
+		slug: {
+			type: "string",
+			resolve: (doc) => `${doc._raw.flattenedPath.replace("site/", "")}`,
+		},
+	},
+}));
+
 const Section = defineDocumentType(() => ({
 	name: "Section",
-	filePathPattern: "**/*.{md,mdx}",
+	filePathPattern: "section/**/*.{md,mdx}",
 	contentType: "mdx",
-
 	fields: {
 		title: {
 			type: "string",
@@ -22,7 +33,7 @@ const Section = defineDocumentType(() => ({
 	computedFields: {
 		url: {
 			type: "string",
-			resolve: (doc) => `${doc._raw.flattenedPath}`,
+			resolve: (doc) => `${doc._raw.flattenedPath.replace("section/", "")}`,
 		},
 		location: {
 			type: "json",
@@ -57,7 +68,7 @@ const Section = defineDocumentType(() => ({
 
 export default makeSource({
 	contentDirPath: "content",
-	documentTypes: [Section],
+	documentTypes: [Section, Site],
 	mdx: {
 		remarkPlugins: [remarkGfm, remarkMath],
 		rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, rehypeKatex],

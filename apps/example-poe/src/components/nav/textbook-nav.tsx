@@ -24,7 +24,6 @@ import ThemeToggle from "../theme/theme-toggle";
 type Props = {
 	showProgress?: boolean;
 };
-
 const moduleChapters = groupby(
 	allSectionsSorted.filter((section) => section.location.section === 0),
 	(section) => section.location.module,

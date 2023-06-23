@@ -17,11 +17,12 @@ import { Button } from "@/components/ui-components";
 import { cn } from "@itell/core";
 import { ModuleSidebar } from "@/components/module-sidebar";
 import { TocSidebar } from "@/components/toc-sidebar";
+import SectionContent from "@/components/section/section-content";
 
 export const generateStaticParams = async () => {
 	return allSectionsSorted.map((section) => {
 		return {
-			slug: section._raw.flattenedPath.split("/"),
+			slug: section.url.split("/"),
 		};
 	});
 };
@@ -30,7 +31,7 @@ export const generateMetadata = ({
 	params,
 }: { params: { slug: string[] } }) => {
 	const section = allSectionsSorted.find(
-		(section) => section._raw.flattenedPath === params.slug.join("/"),
+		(section) => section.url === params.slug.join("/"),
 	);
 	if (section) {
 		return {
@@ -61,9 +62,9 @@ const AnchorLink = ({
 
 export default async function ({ params }: { params: { slug: string[] } }) {
 	const path = params.slug.join("/");
-	const sectionIndex = allSectionsSorted.findIndex(
-		(section) => section._raw.flattenedPath === path,
-	);
+	const sectionIndex = allSectionsSorted.findIndex((section) => {
+		return section.url === path;
+	});
 
 	if (sectionIndex === -1) {
 		return notFound();
@@ -103,14 +104,17 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					</div>
 				</aside>
 
-				<section className="elative col-span-8">
+				<section className="relative col-span-8">
 					<div className="mb-4 text-center" id="section-title">
 						<Typography variant="h1">
 							<Balancer className="text-3xl">{section.title}</Balancer>
 						</Typography>
 					</div>
 
-					<Mdx code={section.body.code} location={section.location} />
+					<SectionContent
+						code={section.body.code}
+						location={section.location}
+					/>
 					<Highlighter location={currentLocation} />
 					<SectionPager pager={pager} />
 				</section>

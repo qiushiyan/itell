@@ -1,5 +1,4 @@
 import { allSections } from "contentlayer/generated";
-import { sortSections } from "./utils";
 
 export const allSectionsSorted = allSections.slice(0).sort((a, b) => {
 	if (a.location.chapter === b.location.chapter) {
