@@ -12,9 +12,7 @@ import {
 } from "@/components/ui-components";
 
 import { Button } from "../ui-components";
-import { useEffect, useState } from "react";
-import Spinner from "../spinner";
-import { delay } from "@/lib/utils";
+import { useEffect } from "react";
 
 type Props = {
 	onDelete: () => Promise<void>;
@@ -22,13 +20,9 @@ type Props = {
 };
 
 export default function NoteDeleteModal({ onDelete, onOpen }: Props) {
-	useEffect(() => {
-		onOpen();
-	}, []);
-
 	return (
 		<AlertDialog>
-			<AlertDialogTrigger asChild>
+			<AlertDialogTrigger asChild onClick={onOpen}>
 				<Button variant="outline">
 					<TrashIcon className="w-4 h-4" />
 				</Button>

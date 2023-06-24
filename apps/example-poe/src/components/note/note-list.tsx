@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import { Typography } from "@itell/ui/server";
 import { Highlight, NoteCard as NoteCardType } from "@/types/note";
 import { removeExistingMarks } from "@/lib/note";
+import { useSectionContent } from "@/lib/hooks/use-section-content";
 
 export default function NoteList({ location }: { location: SectionLocation }) {
 	const {
@@ -26,19 +27,12 @@ export default function NoteList({ location }: { location: SectionLocation }) {
 		{ location },
 		{ enabled: Boolean(session?.user) },
 	);
-	const ref = useRef<HTMLElement | null>(null);
-
-	useEffect(() => {
-		const el = document.getElementById("section-content") as HTMLElement;
-		if (el) {
-			ref.current = el;
-		}
-	}, []);
+	const sectionContentRef = useSectionContent();
 
 	useEffect(() => {
 		if (data) {
-			if (ref.current) {
-				removeExistingMarks(ref.current as HTMLElement);
+			if (sectionContentRef.current) {
+				removeExistingMarks(sectionContentRef.current as HTMLElement);
 				const notes: NoteCardType[] = [];
 				const highlights: Highlight[] = [];
 				for (const entry of data) {
@@ -50,8 +44,9 @@ export default function NoteList({ location }: { location: SectionLocation }) {
 						notes.push(entry as NoteCardType);
 					} else {
 						markHighlight({
-							textContent: entry.highlightedText,
 							id: entry.id,
+							textContent: entry.highlightedText,
+							color: entry.color,
 						});
 						highlights.push({ id: entry.id });
 					}

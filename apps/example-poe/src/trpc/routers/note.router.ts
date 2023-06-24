@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../utils";
-import { defaultNoteColor } from "@/contexts/note-highlight";
 import { SectionLocationSchema } from "../schema";
 
 const NoteRouter = router({
@@ -34,7 +33,7 @@ const NoteRouter = router({
 				y: z.number(),
 				noteText: z.string().optional(),
 				highlightedText: z.string(),
-				color: z.string().optional(),
+				color: z.string(),
 				location: SectionLocationSchema,
 			}),
 		)
@@ -48,7 +47,7 @@ const NoteRouter = router({
 					module: input.location.module,
 					chapter: input.location.chapter,
 					section: input.location.section || 0,
-					color: input.color || defaultNoteColor,
+					color: input.color,
 					userId: id,
 				},
 			});

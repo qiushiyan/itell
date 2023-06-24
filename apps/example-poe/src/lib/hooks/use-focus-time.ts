@@ -2,7 +2,7 @@ import { trpc } from "@/trpc/trpc-provider";
 import { useEffect, useRef } from "react";
 const markTrackingElements = () => {
 	// select direct children of h2, p and div of #section-content
-	const sectionContent = document.querySelector("#section-content");
+	const sectionContent = document.getElementById("section-content");
 	const subsectionElements: HTMLElement[] = [];
 
 	if (sectionContent) {

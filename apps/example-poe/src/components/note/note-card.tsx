@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, Fragment, useEffect, useRef } from "react";
+import { FormEvent, Fragment, useState } from "react";
 import TextArea from "../ui/textarea";
 import { EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
@@ -17,6 +17,7 @@ import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
 import { Button } from "../ui-components";
 import { useNotes } from "@/lib/hooks/use-notes";
+import { useSectionContent } from "@/lib/hooks/use-section-content";
 
 interface Props extends NoteCard {
 	location: SectionLocation;
@@ -39,8 +40,9 @@ type EditDispatch =
 	| { type: "toggle_editing" }
 	| { type: "set_show_edit"; payload: boolean }
 	| { type: "set_editing"; payload: boolean }
-	| { type: "toggle_delete_modal" }
+	| { type: "set_show_delete_modal"; payload: boolean }
 	| { type: "finish_delete" }
+	| { type: "finish_upsert" }
 	| { type: "set_color"; payload: string };
 
 // existing notes are wrapped in <mark class = "highlight"> </mark>
@@ -81,12 +83,16 @@ export default function ({
 				case "set_editing":
 					draft.editing = action.payload;
 					break;
-				case "toggle_delete_modal":
-					draft.showDeleteModal = !draft.showDeleteModal;
+				case "set_show_delete_modal":
+					draft.showDeleteModal = action.payload;
 					break;
 				case "finish_delete":
 					draft.showDeleteModal = false;
 					draft.editing = false;
+					break;
+				case "finish_upsert":
+					draft.editing = false;
+					draft.collapsed = true;
 					break;
 				case "set_color":
 					draft.color = action.payload;
@@ -103,29 +109,23 @@ export default function ({
 			showEdit: false, // show edit overlay
 		},
 	);
-	const sectionContentRef = useRef<HTMLElement>();
+	const sectionContentRef = useSectionContent();
+	const [isHidden, setIsHidden] = useState(false);
 	const { deleteNote: deleteContextNote, markNote } = useNotes();
 	const updateNote = trpc.note.update.useMutation({
 		onSuccess: () => {
-			dispatch({ type: "set_editing", payload: false });
+			dispatch({ type: "finish_upsert" });
 		},
 	});
 	const createNote = trpc.note.create.useMutation({
 		onSuccess: () => {
-			dispatch({ type: "set_editing", payload: false });
+			dispatch({ type: "finish_upsert" });
 		},
 	});
 	const deleteNote = trpc.note.delete.useMutation();
 	const containerRef = useClickOutside<HTMLDivElement>(() => {
 		dispatch({ type: "collapse_note" });
 	});
-
-	useEffect(() => {
-		const t = document.getElementById("section-content") as HTMLElement;
-		if (t) {
-			sectionContentRef.current = t;
-		}
-	}, []);
 
 	const isUnsaved = !id || editState.input !== noteText;
 	const isLoading =
@@ -152,14 +152,18 @@ export default function ({
 	};
 
 	const handleDelete = async () => {
+		if (sectionContentRef.current) {
+			unHighlightNote(sectionContentRef.current, highlightedText);
+		}
 		if (id) {
+			// delete note in database
 			deleteContextNote(id);
 			await deleteNote.mutateAsync({ id });
-			if (sectionContentRef.current) {
-				unHighlightNote(sectionContentRef.current, highlightedText);
-			}
-			dispatch({ type: "finish_delete" });
+		} else {
+			// just hide this card
+			setIsHidden(true);
 		}
+		dispatch({ type: "finish_delete" });
 	};
 
 	const triggers = {
@@ -186,6 +190,7 @@ export default function ({
 				className={cn(
 					"absolute w-48 lg:w-64 rounded-md border-2 bg-background",
 					editState.collapsed ? "z-10" : "z-50",
+					isHidden && "hidden",
 				)}
 				style={{ top: y, borderColor: editState.color }}
 				ref={containerRef}
@@ -259,10 +264,15 @@ export default function ({
 										<p className="text-sm text-muted-foreground">unsaved</p>
 									)}
 									<div className="flex justify-end">
-										{id && !isLoading && (
+										{!isLoading && (
 											<NoteDelete
 												onDelete={handleDelete}
-												onOpen={() => dispatch({ type: "toggle_delete_modal" })}
+												onOpen={() => {
+													dispatch({
+														type: "set_show_delete_modal",
+														payload: true,
+													});
+												}}
 											/>
 										)}
 										{editState.editing && (

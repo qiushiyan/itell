@@ -51,7 +51,7 @@ export const DefaultThemeConfig: ThemeConfig = {
 		destructive: "210 40% 96.1%",
 		destructiveForeground: "215.4 16.3% 46.9%",
 		ring: "210 40% 96.1%",
-		radius: "210 40% 96.1%",
+		radius: "0.5rem",
 		info: "214 95% 93%",
 		warning: "34 100% 92%",
 	},
@@ -76,8 +76,8 @@ export const DefaultThemeConfig: ThemeConfig = {
 		destructiveForeground: "210 40% 98%",
 		ring: "216 34% 17%",
 		radius: "0.5rem",
-		info: "214 95% 93%",
-		warning: "34 100% 92%",
+		info: "214 95% 67%",
+		warning: "34 100% 60%",
 	},
 };
 

@@ -13,7 +13,7 @@
 }
 
 .note .unhighlighted {
-  @apply text-black font-normal !important;
+  @apply text-foreground font-normal !important;
 }
 
 mark.highlight {
