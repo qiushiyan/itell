@@ -18,13 +18,11 @@ import {
 	StepperBody,
 	StepperPanel,
 	Image,
-	Link,
 } from "./ui-components";
 import { Tabs, TabsHeader, Tab, TabPanel, TabsBody } from "./ui/tabs";
 import { TextOverImage } from "./ui/text-over-image";
 
 const MdxComponents = {
-	a: Link,
 	YoutubeVideo,
 	Image,
 	Accordion,

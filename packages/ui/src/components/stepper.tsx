@@ -76,7 +76,7 @@ export const Step = ({
 	const { activeStep, visitedSteps, setActiveStep } =
 		useContext(StepperContext);
 	return (
-		<li className="cursor-pointer p-0 m-0">
+		<li className="cursor-pointer p-0 m-0 whitespace-nowrap">
 			<button
 				className="group no-underline w-full h-full flex items-center"
 				onClick={() => setActiveStep(value)}
@@ -94,7 +94,7 @@ export const Step = ({
 export const StepperHeader = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<nav aria-label="Progress">
-			<ol role="list" className="list-none flex flex-col gap-4">
+			<ol role="list" className="list-none flex flex-row gap-2 flex-wrap">
 				{children}
 			</ol>
 		</nav>
@@ -153,7 +153,7 @@ export const Stepper = ({
 		>
 			<div
 				className={cn(
-					"flex flex-row gap-8  border border-blue-100 rounded-md shadow-md",
+					"flex flex-col gap-2 border border-blue-100 rounded-md shadow-md",
 					className,
 				)}
 				{...rest}
