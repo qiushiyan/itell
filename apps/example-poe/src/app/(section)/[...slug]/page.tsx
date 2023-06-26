@@ -104,7 +104,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					</div>
 				</aside>
 
-				<section className="relative col-span-8">
+				<section className="section-content relative col-span-8">
 					<div className="mb-4 text-center" id="section-title">
 						<Typography variant="h1">
 							<Balancer className="text-3xl">{section.title}</Balancer>

@@ -33,7 +33,7 @@ svg {
     display: none;
   }
 
-  #section-content {
+  .section-content {
     grid-column: span 12;
   }
 }

@@ -6,6 +6,7 @@ import {
 	Callout,
 	Caption,
 	Typography,
+	Blockquote,
 } from "@itell/ui/server";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import {
@@ -25,6 +26,7 @@ import { TextOverImage } from "./ui/text-over-image";
 const MdxComponents = {
 	YoutubeVideo,
 	Image,
+	Blockquote,
 	Accordion,
 	AccordionItem,
 	TextOverImage,
