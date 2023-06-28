@@ -4,10 +4,10 @@ import { cn } from "@itell/core";
 import Link from "next/link";
 import { Button } from "../ui-components";
 import { ChevronLeft } from "lucide-react";
-import { useLastVisitedSection } from "@/lib/hooks/use-last-visisted-section";
+import { useLastVisitedSectionUrl } from "@/lib/hooks/use-last-visisted-section";
 
 export const SummaryBackButton = () => {
-	const lastVisitedSection = useLastVisitedSection();
+	const lastVisitedSection = useLastVisitedSectionUrl();
 	console.log(lastVisitedSection);
 	return (
 		<Link href={lastVisitedSection || "/dashboard"}>

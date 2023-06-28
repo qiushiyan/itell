@@ -1,22 +1,40 @@
 import { SectionLocation } from "@/types/location";
-import { useEffect } from "react";
-import { useLocalStorage } from "./utils";
+import { useEffect, useState } from "react";
+import { useLocalStorage, useLocation } from "./utils";
 import { makeLocationHref } from "../utils";
+import { SectionLocationSchema } from "@/trpc/schema";
 
-export const useLastVisitedSection = (location?: SectionLocation) => {
-	const [lastVisitedSection, setLastVisitedSection] = useLocalStorage<
-		string | undefined
-	>("last-visited-section", undefined);
+export const useTrackLastVisitedSection = () => {
+	const location = useLocation();
+	const [_, setLastVisitedSection] = useLocalStorage<string | undefined>(
+		"last-visited-section",
+		undefined,
+	);
 
 	useEffect(() => {
 		if (location) {
 			setLastVisitedSection(JSON.stringify(location));
 		}
-	}, []);
+	}, [location]);
+};
 
-	const url = lastVisitedSection
-		? makeLocationHref(JSON.parse(lastVisitedSection) as SectionLocation)
-		: undefined;
+export const useLastVisitedSectionUrl = () => {
+	const [lastVisitedSection, _] = useLocalStorage<string | undefined>(
+		"last-visited-section",
+		undefined,
+	);
+	const [url, setUrl] = useState<string | null>(null);
+
+	useEffect(() => {
+		if (lastVisitedSection) {
+			const parsedSection = JSON.parse(lastVisitedSection);
+			const parsedSectionResult =
+				SectionLocationSchema.safeParse(parsedSection);
+			if (parsedSectionResult.success) {
+				setUrl(makeLocationHref(parsedSectionResult.data));
+			}
+		}
+	}, [lastVisitedSection]);
 
 	return url;
 };

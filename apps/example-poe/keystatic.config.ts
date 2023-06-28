@@ -1,39 +1,32 @@
-import { config, fields, singleton } from "@keystatic/core";
+import { component, config, fields, singleton } from "@keystatic/core";
 
 export default config({
 	storage: {
-		kind: "local",
-	},
-	collections: {
-		sections: {
-			label: "Textbook",
-			path: "content/section/*",
-			format: { contentField: "content" },
-			schema: {
-				title: fields.slug({ name: { label: "Title" } }),
-				content: fields.document({
-					label: "Content",
-					formatting: true,
-					links: true,
-					images: true,
-				}),
-			},
-			slugField: "title",
+		kind: "github",
+		repo: {
+			owner: "learlab",
+			name: "itell",
 		},
 	},
 	singletons: {
 		config: singleton({
 			label: "Site Configuration",
 			path: "config/site",
+			format: "yaml",
 			schema: {
 				title: fields.text({ label: "Title" }),
 				description: fields.text({ label: "Description", multiline: true }),
 				footer: fields.text({ label: "Footer", multiline: true }),
 				latex: fields.checkbox({
 					label: "Enable LaTeX",
-					defaultValue: true,
+					defaultValue: false,
 					description:
 						"Enable LaTeX to support math expressions in the textbook",
+				}),
+				favicon: fields.image({
+					label: "Favicon",
+					directory: "public/images/avatars",
+					publicPath: "/images/avatars/",
 				}),
 			},
 		}),
