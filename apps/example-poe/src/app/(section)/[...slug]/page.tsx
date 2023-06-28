@@ -111,10 +111,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 						</Typography>
 					</div>
 
-					<SectionContent
-						code={section.body.code}
-						location={section.location}
-					/>
+					<SectionContent code={section.body.code} />
 					<Highlighter location={currentLocation} />
 					<SectionPager pager={pager} />
 				</section>
