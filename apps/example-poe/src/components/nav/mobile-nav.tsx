@@ -1,17 +1,20 @@
 import * as React from "react";
 import Link from "next/link";
 
-import { siteConfig } from "@/config/site";
 import { cn } from "@itell/core";
 import { useLockBody } from "@/lib/hooks/utils";
-import { MainNavItem } from "@/types/nav";
+import { DashboardNavItem } from "@/types/nav";
 
+// had to accept title as a prop here
+// because MobileNav is imported by DashboardNavMenu (client component)
+// and cannot be a server component
 interface MobileNavProps {
-	items: MainNavItem[];
+	title: string;
+	items: DashboardNavItem[];
 	children?: React.ReactNode;
 }
 
-export function MobileNav({ items, children }: MobileNavProps) {
+export function MobileNav({ title, items, children }: MobileNavProps) {
 	useLockBody();
 
 	return (
@@ -22,7 +25,7 @@ export function MobileNav({ items, children }: MobileNavProps) {
 		>
 			<div className="relative z-20 grid gap-6 rounded-md bg-popover p-4 text-popover-foreground shadow-md">
 				<Link href="/" className="flex items-center space-x-2">
-					<span className="font-bold">{siteConfig.title}</span>
+					<span className="font-bold">{title}</span>
 				</Link>
 				<nav className="grid grid-flow-row auto-rows-max text-sm">
 					{items.map((item, index) => (

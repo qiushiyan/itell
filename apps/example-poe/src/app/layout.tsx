@@ -1,21 +1,30 @@
-import { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "@/styles/globals.css";
 import AppProvider from "@/components/providers";
-import { siteConfig } from "@/config/site";
 import ShowToast from "@/components/toast";
 import { Suspense } from "react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { cn } from "@itell/core";
+import { Metadata, ResolvingMetadata } from "next";
+import { reader } from "@/lib/keystatic";
+import { getSiteConfig } from "@/lib/config";
 
-export const metadata: Metadata = {
-	title: {
-		default: siteConfig.title,
-		template: `%s | ${siteConfig.title}`,
-	},
-	description: siteConfig.description,
-	authors: siteConfig.authors,
+type SiteConfig = {
+	title: string;
+	description: string;
+	latex: boolean;
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+	const siteConfig = await getSiteConfig();
+	return {
+		title: {
+			default: siteConfig.title,
+			template: `%s | ${siteConfig.title}`,
+		},
+		description: siteConfig.description,
+	};
+}
 
 const fontSans = FontSans({
 	subsets: ["latin"],
@@ -47,7 +56,7 @@ export default function RootLayout({
 						<ShowToast />
 					</Suspense>
 					<TailwindIndicator />
-					<main>{children}</main>
+					<main> {children}</main>
 				</AppProvider>
 			</body>
 		</html>

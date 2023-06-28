@@ -1,4 +1,6 @@
 import TextbookNavbar from "@/components/nav/textbook-nav";
+import { SiteFooter } from "@/components/site-footer";
+import { getSiteConfig } from "@/lib/config";
 
 export default async function SectionLayout({
 	children,
@@ -7,7 +9,8 @@ export default async function SectionLayout({
 }) {
 	return (
 		<>
-			<TextbookNavbar showProgress />
+			{/* @ts-ignore */}
+			<TextbookNavbar />
 			<div className="max-w-screen-2xl mx-auto p-4 lg:p-8">{children}</div>
 		</>
 	);

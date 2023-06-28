@@ -1,32 +1,27 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
 
-import { siteConfig } from "@/config/site";
 import { cn } from "@itell/core";
 import { MobileNav } from "@/components/nav/mobile-nav";
-import { MainNavItem } from "@/types/nav";
+import { DashboardNavItem } from "@/types/nav";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
 
-interface MainNavProps {
-	items?: MainNavItem[];
+interface Props {
+	title: string;
+	items?: DashboardNavItem[];
 	children?: React.ReactNode;
 }
 
-export function MainNav({ items, children }: MainNavProps) {
+export function DashboardNavMenu({ title, items, children }: Props) {
 	const segment = useSelectedLayoutSegment();
 	const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
 
 	return (
-		<div className="flex gap-6 md:gap-10">
-			<Link href="/" className="hidden items-center space-x-2 md:flex">
-				<span className="hidden font-bold sm:inline-block">
-					{siteConfig.title}
-				</span>
-			</Link>
+		<>
 			{items?.length ? (
 				<nav className="hidden gap-6 md:flex">
 					{items?.map((item) => (
@@ -54,8 +49,10 @@ export function MainNav({ items, children }: MainNavProps) {
 				<span className="font-bold">Menu</span>
 			</button>
 			{showMobileMenu && items && (
-				<MobileNav items={items}>{children}</MobileNav>
+				<MobileNav items={items} title={title}>
+					{children}
+				</MobileNav>
 			)}
-		</div>
+		</>
 	);
 }

@@ -4,7 +4,7 @@ export type NavItem = {
 	disabled?: boolean;
 };
 
-export type MainNavItem = NavItem;
+export type DashboardNavItem = NavItem;
 
 export type SidebarNavItem = {
 	title: string;

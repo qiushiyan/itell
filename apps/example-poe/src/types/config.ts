@@ -1,6 +1,6 @@
-import { MainNavItem, SidebarNavItem } from "./nav";
+import { DashboardNavItem, SidebarNavItem } from "./nav";
 
 export type DashboardConfig = {
-	mainNav: MainNavItem[];
+	mainNav: DashboardNavItem[];
 	sidebarNav: SidebarNavItem[];
 };
