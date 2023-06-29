@@ -19,7 +19,7 @@ import { allSectionsSorted } from "@/lib/sections";
 import SiteNav from "./site-nav";
 import UserAvatar from "../user-avatar";
 import ThemeToggle from "../theme/theme-toggle";
-import { XIcon } from "lucide-react";
+import { MenuIcon, XIcon } from "lucide-react";
 import { MobileNav } from "./mobile-nav";
 
 const moduleChapters = groupby(
@@ -109,16 +109,21 @@ export default function TextbookNavMenu() {
 				</div>
 			</NavigationMenu>
 			<div className="flex w-full items-center justify-between space-x-2 md:hidden">
-				<button onClick={() => setShowMobileMenu(!showMobileMenu)}>
-					{showMobileMenu && <XIcon />}
+				<button
+					className="flex items-center gap-2"
+					onClick={() => setShowMobileMenu(!showMobileMenu)}
+				>
+					{showMobileMenu ? <XIcon /> : <MenuIcon />}
 					<span className="font-bold">Menu</span>
 				</button>
-				<MobileNav
-					items={moduleTriggers.map((m) => ({
-						title: `Module ${m.module}`,
-						href: m.url,
-					}))}
-				/>
+				{showMobileMenu && (
+					<MobileNav
+						items={moduleTriggers.map((m) => ({
+							title: `Module ${m.module}`,
+							href: m.url,
+						}))}
+					/>
+				)}
 				<UserAvatar />
 			</div>
 		</>

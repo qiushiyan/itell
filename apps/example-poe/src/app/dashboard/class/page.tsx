@@ -2,7 +2,16 @@ import ClassForm from "@/components/dashboard/class-form";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+const title = "Class Registration";
+const description = "Manage your class";
+
+export const metadata: Metadata = {
+	title,
+	description,
+};
 
 export default async function () {
 	const user = await getCurrentUser();
@@ -13,7 +22,7 @@ export default async function () {
 
 	return (
 		<DashboardShell>
-			<DashboardHeader heading="Class" text="Manage class registration" />
+			<DashboardHeader heading={title} text={description} />
 			<ClassForm />
 		</DashboardShell>
 	);

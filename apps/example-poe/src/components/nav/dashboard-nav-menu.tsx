@@ -7,7 +7,7 @@ import { useSelectedLayoutSegment } from "next/navigation";
 import { cn } from "@itell/core";
 import { MobileNav } from "@/components/nav/mobile-nav";
 import { DashboardNavItem } from "@/types/nav";
-import { XIcon } from "lucide-react";
+import { MenuIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 
 interface Props {
@@ -44,7 +44,7 @@ export function DashboardNavMenu({ items, children }: Props) {
 				className="flex items-center space-x-2 md:hidden"
 				onClick={() => setShowMobileMenu(!showMobileMenu)}
 			>
-				{showMobileMenu && <XIcon />}
+				{showMobileMenu ? <XIcon /> : <MenuIcon />}
 				<span className="font-bold">Menu</span>
 			</button>
 			{showMobileMenu && items && (
