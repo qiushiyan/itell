@@ -1,4 +1,4 @@
-import { component, config, fields, singleton } from "@keystatic/core";
+import { config, fields, singleton } from "@keystatic/core";
 
 export default config({
 	storage: {
@@ -11,7 +11,10 @@ export default config({
 	singletons: {
 		config: singleton({
 			label: "Site Configuration",
-			path: "config/site",
+			path:
+				process.env.NODE_ENV === "production"
+					? "apps/example-poe/config/site"
+					: "config/site",
 			format: "yaml",
 			schema: {
 				title: fields.text({ label: "Title" }),

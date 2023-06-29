@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Link from "next/link";
 
 import { cn } from "@itell/core";
@@ -9,12 +9,11 @@ import { DashboardNavItem } from "@/types/nav";
 // because MobileNav is imported by DashboardNavMenu (client component)
 // and cannot be a server component
 interface MobileNavProps {
-	title: string;
 	items: DashboardNavItem[];
 	children?: React.ReactNode;
 }
 
-export function MobileNav({ title, items, children }: MobileNavProps) {
+export function MobileNav({ items, children }: MobileNavProps) {
 	useLockBody();
 
 	return (
@@ -24,8 +23,11 @@ export function MobileNav({ title, items, children }: MobileNavProps) {
 			)}
 		>
 			<div className="relative z-20 grid gap-6 rounded-md bg-popover p-4 text-popover-foreground shadow-md">
-				<Link href="/" className="flex items-center space-x-2">
-					<span className="font-bold">{title}</span>
+				<Link
+					href="/"
+					className="flex w-full items-center rounded-md p-2 text-sm font-medium border-border border-b-2"
+				>
+					<span className="font-bold">Home</span>
 				</Link>
 				<nav className="grid grid-flow-row auto-rows-max text-sm">
 					{items.map((item, index) => (

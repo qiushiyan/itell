@@ -12,11 +12,9 @@ export default async function TextbookNavbar() {
 
 	return (
 		<SiteNav>
-			<div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-				<Link href="/" className={navigationMenuTriggerStyle}>
-					<Typography as="span" variant="lead">
-						{title}
-					</Typography>
+			<div className="container flex h-16 w-full items-center space-x-4 sm:justify-between sm:space-x-0">
+				<Link href="/" className="hidden items-center space-x-2 md:flex">
+					<span className="hidden font-bold sm:inline-block">{title}</span>
 				</Link>
 				<TextbookNavMenu />
 			</div>

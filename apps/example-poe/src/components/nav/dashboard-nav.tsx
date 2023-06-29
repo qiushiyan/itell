@@ -1,8 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { useSelectedLayoutSegment } from "next/navigation";
 
-import { useState } from "react";
 import { DashboardNavItem } from "@/types/nav";
 import { DashboardNavMenu } from "./dashboard-nav-menu";
 import { getSiteConfig } from "@/lib/config";
@@ -20,7 +18,7 @@ export async function DashboardNav(props: Props) {
 			<Link href="/" className="hidden items-center space-x-2 md:flex">
 				<span className="hidden font-bold sm:inline-block">{title}</span>
 			</Link>
-			<DashboardNavMenu {...props} title={title} />
+			<DashboardNavMenu {...props} />
 		</div>
 	);
 }

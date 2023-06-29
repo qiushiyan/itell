@@ -52,11 +52,11 @@ model User {
   chapter       Int?      @default(1)
   section       Int?      @default(2)
 
+  isTeacher Boolean @default(false) @map("is_teacher")
+  classId   String? @map("class_id")
+
   accounts  Account[]
   sessions  Session[]
-  Teacher   Teacher?    @relation(fields: [teacherId], references: [id])
-  isTeacher Boolean     @default(false) @map("is_teacher")
-  teacherId String?
   summaries Summary[]
   notes     Note[]
   FocusTime FocusTime[]
@@ -74,15 +74,9 @@ model VerificationToken {
 }
 
 model Teacher {
-  id         String   @id @default(uuid())
-  email      String   @unique
-  module     Int
-  chapter    Int
-  section    Int
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  User       User[]
-  token      String
+  id         String  @id
+  isApproved Boolean @default(false)
+  classId    String  @map("class_id")
 
   @@map("teachers")
 }

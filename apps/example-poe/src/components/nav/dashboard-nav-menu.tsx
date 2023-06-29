@@ -11,12 +11,11 @@ import { XIcon } from "lucide-react";
 import { useState } from "react";
 
 interface Props {
-	title: string;
 	items?: DashboardNavItem[];
 	children?: React.ReactNode;
 }
 
-export function DashboardNavMenu({ title, items, children }: Props) {
+export function DashboardNavMenu({ items, children }: Props) {
 	const segment = useSelectedLayoutSegment();
 	const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
 
@@ -49,9 +48,7 @@ export function DashboardNavMenu({ title, items, children }: Props) {
 				<span className="font-bold">Menu</span>
 			</button>
 			{showMobileMenu && items && (
-				<MobileNav items={items} title={title}>
-					{children}
-				</MobileNav>
+				<MobileNav items={items}>{children}</MobileNav>
 			)}
 		</>
 	);
