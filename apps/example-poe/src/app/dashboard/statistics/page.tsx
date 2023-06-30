@@ -1,6 +1,7 @@
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { Badge } from "@/components/dashboard/statistics/badge";
-import { ReadingTime } from "@/components/dashboard/statistics/reading-time";
+import { ReadingTime } from "@/components/dashboard/statistics/student/reading-time";
+import { RecentSummaries } from "@/components/dashboard/statistics/student/recent-summaries";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import { getSummaryStatistics } from "@/lib/dashboard";
@@ -75,6 +76,10 @@ export default async function () {
 					<Suspense fallback={<Skeleton className="col-span-4 h-[350px]" />}>
 						{/* @ts-ignore */}
 						<ReadingTime uid={user.id} />
+					</Suspense>
+					<Suspense fallback={<Skeleton className="col-span-3 h-[350px]" />}>
+						{/* @ts-ignore */}
+						<RecentSummaries uid={user.id} />
 					</Suspense>
 				</div>
 			</div>

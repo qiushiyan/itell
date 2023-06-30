@@ -1,5 +1,6 @@
 import { Prisma, Summary } from "@prisma/client";
 import db from "./db";
+import { format, subDays } from "date-fns";
 
 export const getSummaryStatistics = async (summaries: Summary[]) => {
 	const scores = summaries.reduce(
@@ -27,24 +28,19 @@ export const getSummaryStatistics = async (summaries: Summary[]) => {
 };
 
 export const getReadingTime = async (uid: string) => {
-	// fetch reading time from a week ago
-	const weekAgo = new Date();
-	weekAgo.setDate(weekAgo.getDate() - 7);
-	const targetDate = weekAgo.toISOString();
+	// fetch reading time during last week
+	const targetDate = subDays(new Date(), 7);
 	const data = await db.focusTime.findMany({
 		where: {
 			userId: uid,
 			created_at: {
-				gte: targetDate,
+				gt: targetDate,
 			},
 		},
 	});
 
-	const dateOptions = { month: "short", day: "numeric" } as const;
 	const readingTimeByDay = data.reduce((acc, entry) => {
-		const date = new Date(entry.created_at)
-			.toLocaleTimeString("en-GB", dateOptions)
-			.split(",")[0] as string;
+		const date = format(entry.created_at, "LLL, dd");
 		const totalViewTime = (entry.data as { totalViewTime: number }[]).reduce(
 			(acc, cur) => {
 				return acc + cur.totalViewTime;
@@ -57,4 +53,21 @@ export const getReadingTime = async (uid: string) => {
 	}, new Map());
 
 	return readingTimeByDay;
+};
+
+export const getRecentSummaries = async (uid: string) => {
+	// fetch summaries during last week
+	const targetDate = subDays(new Date(), 7);
+	const summaries = await db.summary.findMany({
+		where: {
+			userId: uid,
+			created_at: {
+				gt: targetDate,
+			},
+		},
+		orderBy: {
+			created_at: "desc",
+		},
+	});
+	return summaries;
 };

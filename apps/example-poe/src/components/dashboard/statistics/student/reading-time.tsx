@@ -21,7 +21,7 @@ export const ReadingTime = async ({ uid }: Props) => {
 	return (
 		<Card className="col-span-4">
 			<CardHeader>
-				<CardTitle>Total Reading Time During Last Week (minutes)</CardTitle>
+				<CardTitle>Total Reading Time During Last Week</CardTitle>
 				<CardDescription>updated when you made a new summary</CardDescription>
 			</CardHeader>
 			<CardContent className="pl-2">

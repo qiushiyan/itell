@@ -1,5 +1,12 @@
 "use client";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import {
+	Bar,
+	BarChart,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from "recharts";
 
 type Props = {
 	data: { name: string; value: number | string }[];

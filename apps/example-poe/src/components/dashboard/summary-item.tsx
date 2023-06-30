@@ -3,7 +3,7 @@ import { Summary } from "@prisma/client";
 
 import { relativeDate } from "@/lib/utils";
 import { Skeleton } from "@itell/ui/server";
-import { CheckIcon, XIcon } from "lucide-react";
+import { CheckCircle, XCircle } from "lucide-react";
 
 interface PostItemProps {
 	summary: Summary;
@@ -20,7 +20,11 @@ export function SummaryItem({ summary }: PostItemProps) {
 					>
 						{summary.text.slice(0, 50)}
 					</Link>
-					{summary.isPassed ? <CheckIcon /> : <XIcon />}
+					{summary.isPassed ? (
+						<CheckCircle className="w-4 h-4 stroke-info" />
+					) : (
+						<XCircle className="w-4 h-4 stroke-warning" />
+					)}
 				</div>
 
 				<footer className="flex justify-between text-sm text-muted-foreground">
