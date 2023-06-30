@@ -1,5 +1,7 @@
 import { trpc } from "@/trpc/trpc-provider";
 import { useEffect, useRef } from "react";
+import { FOCUS_TIME_COUNT_INTERVAL } from "../constants";
+
 const markTrackingElements = () => {
 	// select direct children of h2, p and div of #section-content
 	const sectionContent = document.getElementById("section-content");
@@ -48,11 +50,11 @@ export const useFocusTime = () => {
 		threshold: 0,
 	};
 
-	let timer: NodeJS.Timer | null = null;
+	let countTimer: NodeJS.Timer | null = null;
 
 	const pause = () => {
-		if (timer) {
-			clearInterval(timer);
+		if (countTimer) {
+			clearInterval(countTimer);
 		}
 	};
 
@@ -61,7 +63,7 @@ export const useFocusTime = () => {
 		data.current?.forEach((entry) => {
 			entry.lastTick = performance.now();
 		});
-		timer = setInterval(() => {
+		countTimer = setInterval(() => {
 			data.current?.forEach((entry) => {
 				if (visibleSections.has(entry.sectionId)) {
 					entry.totalViewTime += Math.round(
@@ -70,7 +72,7 @@ export const useFocusTime = () => {
 				}
 				entry.lastTick = performance.now();
 			});
-		}, 5000);
+		}, FOCUS_TIME_COUNT_INTERVAL);
 	};
 
 	const saveFocusTime = async ({ summaryId }: { summaryId: string }) => {
@@ -78,6 +80,11 @@ export const useFocusTime = () => {
 			await createFocusTime.mutateAsync({
 				summaryId,
 				data: data.current,
+			});
+			// clear past data
+			data.current.forEach((entry) => {
+				entry.totalViewTime = 0;
+				entry.lastTick = performance.now();
 			});
 		}
 	};
@@ -91,10 +98,11 @@ export const useFocusTime = () => {
 	};
 
 	useEffect(() => {
+		// pause when the tab is not visible
+		// start when the tab is visible
 		document.addEventListener("visibilitychange", handleVisibilityChange);
-	});
 
-	useEffect(() => {
+		// had to create the observer inside useEffect to avoid build error
 		const observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
 				const target = entry.target as HTMLElement;
@@ -128,8 +136,8 @@ export const useFocusTime = () => {
 
 		return () => {
 			elements.forEach((el) => observer.unobserve(el));
+			document.removeEventListener("visibilitychange", handleVisibilityChange);
 			pause();
-			document.addEventListener("visibilitychange", handleVisibilityChange);
 		};
 	}, []);
 

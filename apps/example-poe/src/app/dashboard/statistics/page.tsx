@@ -1,10 +1,11 @@
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { Badge } from "@/components/dashboard/statistics/badge";
-import { ReadingTimeChart } from "@/components/dashboard/statistics/reading-time-chart";
+import { ReadingTime } from "@/components/dashboard/statistics/reading-time";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import { getSummaryStatistics } from "@/lib/dashboard";
 import db from "@/lib/db";
+import { Skeleton } from "@itell/ui/server";
 import {
 	ActivityIcon,
 	PencilIcon,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 const title = "Learning Statistics";
 const description = "Understand your learning journey";
@@ -70,7 +72,10 @@ export default async function () {
 					/>
 				</div>
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-					<ReadingTimeChart />
+					<Suspense fallback={<Skeleton className="col-span-4 h-[350px]" />}>
+						{/* @ts-ignore */}
+						<ReadingTime uid={user.id} />
+					</Suspense>
 				</div>
 			</div>
 		</DashboardShell>

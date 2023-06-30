@@ -105,7 +105,7 @@ export function useLockBody() {
 	}, []);
 }
 
-const useWindowSize = () => {
+export const useWindowSize = () => {
 	const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
 	const handleSize = () => {
@@ -125,5 +125,3 @@ const useWindowSize = () => {
 
 	return windowSize;
 };
-
-export default useWindowSize;

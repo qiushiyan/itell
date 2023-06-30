@@ -11,3 +11,5 @@ export const ScoreThreshold: Record<ScoreType, number> = {
 	[ScoreType.similarity]: 0.5,
 	[ScoreType.containment]: 0.6,
 };
+
+export const FOCUS_TIME_COUNT_INTERVAL = 5000;

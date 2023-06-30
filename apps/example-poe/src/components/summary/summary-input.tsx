@@ -34,7 +34,7 @@ export default function SummaryInput() {
 			e.preventDefault();
 
 			// stop counting focus time
-			pauseFocusTimeCounting();
+			// pauseFocusTimeCounting();
 
 			// save summary text for the current section
 			const inputKey = makeInputKey(location);

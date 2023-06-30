@@ -11,10 +11,7 @@ export default config({
 	singletons: {
 		config: singleton({
 			label: "Site Configuration",
-			path:
-				process.env.NODE_ENV === "production"
-					? "apps/example-poe/config/site"
-					: "config/site",
+			path: "config/site",
 			format: "yaml",
 			schema: {
 				title: fields.text({ label: "Title" }),
