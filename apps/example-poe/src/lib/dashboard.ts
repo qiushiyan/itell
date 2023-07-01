@@ -1,6 +1,7 @@
 import { type Prisma, type Summary } from "@prisma/client";
 import db from "./db";
 import { format, subDays } from "date-fns";
+import { getDates } from "./utils";
 
 export const getSummaryStatistics = async ({
 	where,
@@ -30,18 +31,18 @@ export const getSummaryStatistics = async ({
 
 export const getReadingTime = async (uid: string) => {
 	// fetch reading time during last week
-	const targetDate = subDays(new Date(), 7);
+	const today = new Date();
+	const startDate = subDays(new Date(), 6);
 	const data = await db.focusTime.findMany({
 		where: {
 			userId: uid,
 			created_at: {
-				gt: targetDate,
+				gte: startDate,
 			},
 		},
 	});
 
 	const readingTimeByDay = data.reduce((acc, entry) => {
-		const date = format(entry.created_at, "LLL, dd");
 		const totalViewTime = (entry.data as { totalViewTime: number }[]).reduce(
 			(acc, cur) => {
 				return acc + cur.totalViewTime;
@@ -49,11 +50,22 @@ export const getReadingTime = async (uid: string) => {
 			0,
 		);
 
+		const date = format(entry.created_at, "yyyy-MM-dd");
+
 		acc.set(date, (acc.get(date) || 0) + totalViewTime);
 		return acc;
-	}, new Map());
+	}, new Map<string, number>());
 
-	return readingTimeByDay;
+	const dates = getDates(startDate, today).map((d) => format(d, "yyyy-MM-dd"));
+	const result = [];
+	for (const date of dates) {
+		result.push({
+			name: format(new Date(date), "LLL, dd"),
+			value: (readingTimeByDay.get(date) || 0) / 60,
+		});
+	}
+
+	return result;
 };
 
 export const getRecentSummaries = async (uid: string) => {

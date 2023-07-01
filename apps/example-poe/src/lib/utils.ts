@@ -1,6 +1,6 @@
 import { Location, SectionLocation } from "@/types/location";
 import { SidebarSection } from "@/types/section";
-import { formatRelative } from "date-fns";
+import { addDays, formatRelative } from "date-fns";
 
 export const getYoutubeLinkFromEmbed = (url: string) => {
 	const regex = /embed\/([\w-]+)\?/;
@@ -77,4 +77,14 @@ export const isTextbookPage = (location: Location) => {
 		location.chapter !== undefined &&
 		location.section !== undefined
 	);
+};
+
+export const getDates = (startDate: Date, endDate: Date) => {
+	const dates = [];
+	let currentDate = startDate;
+	while (currentDate <= endDate) {
+		dates.push(currentDate);
+		currentDate = addDays(currentDate, 1);
+	}
+	return dates;
 };

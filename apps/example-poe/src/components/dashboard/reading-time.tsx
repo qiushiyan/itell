@@ -14,11 +14,8 @@ type Props = {
 };
 
 export const ReadingTime = async ({ uid }: Props) => {
-	const data = await getReadingTime(uid);
-	const chartData = Array.from(data.entries()).map(([name, value]) => ({
-		name,
-		value: (value / 60).toFixed(1),
-	}));
+	const chartData = await getReadingTime(uid);
+
 	return (
 		<Card className="col-span-4">
 			<CardHeader>
