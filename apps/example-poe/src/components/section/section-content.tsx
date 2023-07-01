@@ -10,7 +10,6 @@ export default function ({ code }: { code: string }) {
 				className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none section-content"
 				id="section-content"
 			>
-				{/* @ts-ignore */}
 				<Mdx code={code} />
 			</article>
 		</>

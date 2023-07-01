@@ -1,4 +1,5 @@
 import NewSummary from "@/components/dashboard/new-summary";
+import { SummaryBackButton } from "@/components/summary/summary-back-button";
 import { getCurrentUser } from "@/lib/auth";
 import { cn } from "@itell/core";
 import { buttonVariants } from "@itell/ui/server";
@@ -15,13 +16,7 @@ export default async function () {
 	return (
 		<div className="w-[800px] mx-auto">
 			<div className="flex justify-start">
-				<Link
-					href="/dashboard"
-					className={cn(buttonVariants({ variant: "ghost" }))}
-				>
-					<ChevronLeft className="mr-2 h-4 w-4" />
-					Back
-				</Link>
+				<SummaryBackButton />
 			</div>
 			<NewSummary />
 		</div>

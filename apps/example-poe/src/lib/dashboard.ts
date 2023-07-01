@@ -1,29 +1,30 @@
-import { Prisma, Summary } from "@prisma/client";
+import { type Prisma, type Summary } from "@prisma/client";
 import db from "./db";
 import { format, subDays } from "date-fns";
 
-export const getSummaryStatistics = async (summaries: Summary[]) => {
-	const scores = summaries.reduce(
-		(acc, summary) => {
-			acc.totalWordingScore += summary.wordingScore || 0;
-			acc.totalContentScore += summary.contentScore || 0;
-			acc.passedNum += summary.isPassed ? 1 : 0;
-			return acc;
+export const getSummaryStatistics = async ({
+	where,
+}: { where: Prisma.SummaryWhereInput }) => {
+	const summaryStats = await db.summary.aggregate({
+		_avg: {
+			wordingScore: true,
+			contentScore: true,
 		},
-		{ totalWordingScore: 0, totalContentScore: 0, passedNum: 0 },
-	);
+		_count: true,
+		where: where,
+	});
+	const passedCount = await db.summary.count({
+		where: {
+			...where,
+			isPassed: true,
+		},
+	});
 
 	return {
-		totalNum: summaries.length,
-		passedNum: scores.passedNum,
-		avgWordingScore:
-			scores.passedNum > 0
-				? (scores.totalWordingScore / scores.passedNum).toFixed(2)
-				: "NA",
-		avgContentScore:
-			scores.passedNum > 0
-				? (scores.totalContentScore / scores.passedNum).toFixed(2)
-				: "NA",
+		avgContentScore: summaryStats._avg.contentScore,
+		avgWordingScore: summaryStats._avg.wordingScore,
+		summaryCount: summaryStats._count,
+		passedCount: passedCount,
 	};
 };
 

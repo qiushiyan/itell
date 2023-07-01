@@ -1,19 +1,25 @@
+import { Badge } from "@/components/dashboard/badge";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import DashboardSummaryHeader from "@/components/dashboard/dashboard-summary-header";
-import SummaryCreateButton from "@/components/dashboard/summary-create-button";
-import { SummaryItem } from "@/components/dashboard/summary-item";
 import { DashboardShell } from "@/components/shell";
+import { Skeleton } from "@itell/ui/server";
 
-export default function DashboardLoading() {
+export default function () {
 	return (
 		<DashboardShell>
-			<DashboardSummaryHeader />
-			<div className="divide-border-200 divide-y rounded-md border">
-				<SummaryItem.Skeleton />
-				<SummaryItem.Skeleton />
-				<SummaryItem.Skeleton />
-				<SummaryItem.Skeleton />
-				<SummaryItem.Skeleton />
+			<DashboardHeader
+				heading="Learning Statistics"
+				text="Understand your learning journey"
+			/>
+			<div className="container space-y-4 p-8 pt-6 rounded-md border bg-background shadow">
+				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+					{[1, 2, 3, 4].map(() => (
+						<Badge.Skeleton />
+					))}
+				</div>
+				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+					<Skeleton className="col-span-4 h-[350px]" />
+					<Skeleton className="col-span-3 h-[350px]" />
+				</div>
 			</div>
 		</DashboardShell>
 	);

@@ -12,15 +12,16 @@ export const dashboardConfig: DashboardConfig = {
 	mainNav: [],
 	sidebarNav: [
 		{
-			title: "Summaries",
-			href: "/dashboard",
-			icon: <FileEditIcon className={iconClasses} />,
-		},
-		{
 			title: "Statistics",
-			href: "/dashboard/statistics",
+			href: "/dashboard",
 			icon: <BarChart4Icon className={iconClasses} />,
 		},
+		{
+			title: "Summaries",
+			href: "/dashboard/summaries",
+			icon: <FileEditIcon className={iconClasses} />,
+		},
+
 		{
 			title: "Class",
 			href: "/dashboard/class",

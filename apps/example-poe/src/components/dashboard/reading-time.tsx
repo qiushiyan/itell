@@ -4,6 +4,7 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
+	Skeleton,
 } from "@itell/ui/server";
 import { ReadingTimeChart } from "./reading-time-chart";
 import { getReadingTime } from "@/lib/dashboard";
@@ -30,3 +31,5 @@ export const ReadingTime = async ({ uid }: Props) => {
 		</Card>
 	);
 };
+
+ReadingTime.Skeleton = () => <Skeleton className="col-span-4 h-[350px]" />;

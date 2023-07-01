@@ -36,9 +36,9 @@ const SelectModule = ({
 	);
 };
 
-export default function ({
+export const SummaryList = ({
 	summariesByModule,
-}: { summariesByModule: Record<string, Summary[]> }) {
+}: { summariesByModule: Record<string, Summary[]> }) => {
 	const modules = keyof(summariesByModule);
 	const [selectedModule, setSelectedModule] = useState(modules[0]);
 	const moduleSummaries = summariesByModule[selectedModule];
@@ -65,4 +65,4 @@ export default function ({
 			</div>
 		</div>
 	);
-}
+};

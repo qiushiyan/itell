@@ -43,7 +43,6 @@ export default function () {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						{/* @ts-ignore */}
 						<form className="space-y-2" action={handleStudent}>
 							<Label htmlFor="code">Code</Label>
 							<Input id="code" name="code" />
@@ -65,8 +64,6 @@ export default function () {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						{/* @ts-ignore */}
-
 						<form className="space-y-2" action={handleTeacher}>
 							<Label htmlFor="message">Message</Label>
 							<textarea

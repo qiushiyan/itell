@@ -4,6 +4,7 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
+	Skeleton,
 	buttonVariants,
 } from "@itell/ui/server";
 import { getRecentSummaries } from "@/lib/dashboard";
@@ -56,3 +57,5 @@ export const RecentSummaries = async ({ uid }: Props) => {
 		</Card>
 	);
 };
+
+RecentSummaries.Skeleton = () => <Skeleton className="col-span-3 h-[350px]" />;
