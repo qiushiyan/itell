@@ -1,7 +1,7 @@
 export { buttonVariants } from "./components/button";
 export * from "./components/typography";
 export * from "./components/callout";
-export * from "./components/table";
+export * from "./components/caption";
 export * from "./components/definition";
 export * from "./components/card";
 export * from "./components/skeleton";

@@ -13,7 +13,7 @@ import Highlighter from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
 import { Fragment } from "react";
 import { allSectionsSorted } from "@/lib/sections";
-import { Button } from "@/components/ui-components";
+import { Button } from "@/components/client-components";
 import { cn } from "@itell/core";
 import { ModuleSidebar } from "@/components/module-sidebar";
 import { TocSidebar } from "@/components/toc-sidebar";

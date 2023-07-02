@@ -15,7 +15,7 @@
         "paths": {
             "@/*": [
                 "./*"
-            ]
+            ],
         },
         // output .d.ts declaration files for consumers
         "declaration": true,

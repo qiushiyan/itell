@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui-components";
+import { Button } from "@/components/client-components";
 import { Typography, Warning } from "@itell/ui/server";
 import Spinner from "../spinner";
 import Feedback from "./summary-feedback";

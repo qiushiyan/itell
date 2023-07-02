@@ -1,7 +1,7 @@
 "use client";
 
 import { Typography } from "@itell/ui/server";
-import { Button } from "@/components/ui-components";
+import { Button } from "@/components/client-components";
 import { Command } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";

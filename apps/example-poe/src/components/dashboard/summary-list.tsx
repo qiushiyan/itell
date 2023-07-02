@@ -7,7 +7,7 @@ import {
 	SelectLabel,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/ui-components";
+} from "@/components/client-components";
 import { keyof } from "@itell/core";
 import { Summary } from "@prisma/client";
 import { useState } from "react";

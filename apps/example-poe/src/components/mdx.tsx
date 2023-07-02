@@ -19,7 +19,7 @@ import {
 	StepperBody,
 	StepperPanel,
 	Image,
-} from "./ui-components";
+} from "./client-components";
 import { Tabs, TabsHeader, Tab, TabPanel, TabsBody } from "./ui/tabs";
 import { TextOverImage } from "./ui/text-over-image";
 

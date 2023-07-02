@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "../ui-components";
+import { Button } from "../client-components";
 
 export default function () {
 	return (

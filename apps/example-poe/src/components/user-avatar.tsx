@@ -9,7 +9,7 @@ import {
 	DropdownMenuGroup,
 	DropdownMenuItem,
 	Button,
-} from "./ui-components";
+} from "./client-components";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

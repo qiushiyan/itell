@@ -7,7 +7,7 @@ import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
-} from "./ui-components";
+} from "./client-components";
 
 type ModuleSidebarProps = {
 	chapters: Chapter[];

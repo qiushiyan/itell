@@ -15,7 +15,7 @@ import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
-import { Button } from "../ui-components";
+import { Button } from "../client-components";
 import { useNotes } from "@/lib/hooks/use-notes";
 import { useSectionContent } from "@/lib/hooks/use-section-content";
 

@@ -13,7 +13,7 @@ import {
 	useNoteColor,
 } from "@/lib/hooks/use-note-color";
 import Spinner from "../spinner";
-import { Button } from "../ui-components";
+import { Button } from "../client-components";
 import { useEffect, useState } from "react";
 
 type SelectionData = ReturnType<typeof useTextSelection>;

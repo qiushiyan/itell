@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn, signOut } from "next-auth/react";
-import { Button } from "../ui-components";
+import { Button } from "../client-components";
 import { LogOutIcon } from "lucide-react";
 import { useState } from "react";
 import Spinner from "../spinner";

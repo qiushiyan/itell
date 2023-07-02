@@ -6,8 +6,9 @@ import {
 	CardTitle,
 } from "@itell/ui/server";
 import { LogoutButton } from "../auth/auth-buttons";
+import { ClassRegisterForm } from "./class-register-form";
 
-export default function () {
+export const Settings = () => {
 	return (
 		<Card>
 			<CardHeader>
@@ -19,7 +20,9 @@ export default function () {
 					<LogoutButton />
 				</div>
 			</CardHeader>
-			<CardContent>settings content</CardContent>
+			<CardContent>
+				<ClassRegisterForm />
+			</CardContent>
 		</Card>
 	);
-}
+};

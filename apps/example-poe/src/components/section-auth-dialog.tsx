@@ -6,7 +6,7 @@ import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
-} from "./ui-components";
+} from "./client-components";
 import {
 	Dialog,
 	DialogContent,

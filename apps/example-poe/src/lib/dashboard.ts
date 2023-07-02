@@ -84,3 +84,27 @@ export const getRecentSummaries = async (uid: string) => {
 	});
 	return summaries;
 };
+
+export const userIsTeacher = async (uid: string) => {
+	return Boolean(
+		(
+			await db.user.findUnique({
+				where: {
+					id: uid,
+				},
+			})
+		)?.isTeacher,
+	);
+};
+
+export const userIsStudent = async (uid: string) => {
+	return Boolean(
+		(
+			await db.user.findUnique({
+				where: {
+					id: uid,
+				},
+			})
+		)?.classId,
+	);
+};

@@ -58,4 +58,4 @@ export const RecentSummaries = async ({ uid }: Props) => {
 	);
 };
 
-RecentSummaries.Skeleton = () => <Skeleton className="col-span-3 h-[350px]" />;
+RecentSummaries.Skeleton = () => <Skeleton className="col-span-3" />;

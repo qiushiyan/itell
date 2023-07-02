@@ -31,6 +31,22 @@ export const ReadingTimeChart = ({ data }: Props) => {
 					tickFormatter={(value) => `${value} min`}
 				/>
 				<Bar dataKey="value" fill="#adfa1d" radius={[4, 4, 0, 0]} />
+				<Tooltip
+					cursor={{ fill: "transparent" }}
+					content={({ active, payload, label }) => {
+						if (active && payload && payload.length) {
+							const value =
+								typeof payload[0].value === "number"
+									? payload[0].value.toFixed(2)
+									: payload[0].value;
+							return (
+								<div className="bg-background p-4 text-foreground rounded-md shadow border border-border">
+									<p className="label">{`${label} : ${value} min`}</p>
+								</div>
+							);
+						}
+					}}
+				/>
 			</BarChart>
 		</ResponsiveContainer>
 	);

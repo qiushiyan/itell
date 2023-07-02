@@ -2,7 +2,7 @@ import db from "../src/lib/db";
 
 const CLASS_ID = "test_class_id";
 const TEACHER_EMAIL = "qiushi.yann@gmail.com";
-const STUDENT_EMAILS = ["jchoi92@gsu.edu"];
+const STUDENT_EMAILS = ["jchoi92@gsu.edu", "langdonholmes@gmail.com"];
 
 const main = async () => {
 	const me = await db.user.findFirst({

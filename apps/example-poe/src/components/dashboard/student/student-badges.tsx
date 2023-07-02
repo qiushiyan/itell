@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { User } from "@prisma/client";
 import { getSummaryStatistics } from "@/lib/dashboard";
-import { cn } from "@itell/core";
 
 export const StudentBadges = async ({ user }: { user: User }) => {
 	const classId = user.classId;
@@ -17,9 +16,7 @@ export const StudentBadges = async ({ user }: { user: User }) => {
 			id: true,
 		},
 		where: {
-			classId: {
-				equals: classId,
-			},
+			classId: classId,
 		},
 	});
 	const studentStats = await getSummaryStatistics({

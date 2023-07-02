@@ -9,9 +9,9 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogTrigger,
-} from "@/components/ui-components";
+} from "@/components/client-components";
 
-import { Button } from "../ui-components";
+import { Button } from "../client-components";
 import { useEffect } from "react";
 
 type Props = {

@@ -2,7 +2,6 @@ import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 	Input,
@@ -14,7 +13,7 @@ import {
 	TabsContent,
 	TabsList,
 	TabsTrigger,
-} from "@/components/ui-components";
+} from "@/components/client-components";
 
 async function handleStudent(data: FormData) {
 	"use server";
@@ -27,7 +26,7 @@ async function handleTeacher(data: FormData) {
 	console.log(data.get("message"));
 }
 
-export default function () {
+export const ClassRegisterForm = () => {
 	return (
 		<Tabs defaultValue="student" className="w-[600px]">
 			<TabsList className="grid w-full grid-cols-2">
@@ -79,4 +78,4 @@ export default function () {
 			</TabsContent>
 		</Tabs>
 	);
-}
+};
