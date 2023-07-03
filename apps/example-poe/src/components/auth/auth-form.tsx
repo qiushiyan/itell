@@ -7,6 +7,7 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { LoginGoogle } from "./auth-buttons";
 import { useLastVisitedSectionUrl } from "@/lib/hooks/use-last-visisted-section";
+import { toast } from "sonner";
 
 export const AuthButtons = {
 	google: (
@@ -28,10 +29,12 @@ export const AuthButtons = {
 export default function AuthForm() {
 	const { data: session } = useSession();
 	const router = useRouter();
-	const lastVisitedSectionUrl = useLastVisitedSectionUrl();
 
 	if (session?.user) {
-		router.push(lastVisitedSectionUrl || "/");
+		toast.success(
+			"You are already logged in, re-directing to the previous page.",
+		);
+		router.back();
 	}
 
 	return (

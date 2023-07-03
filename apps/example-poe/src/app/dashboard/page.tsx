@@ -3,6 +3,7 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { ReadingTime } from "@/components/dashboard/reading-time";
 import { RecentSummaries } from "@/components/dashboard/recent-summaries";
 import { StudentBadges } from "@/components/dashboard/student/student-badges";
+import { UserStatistics } from "@/components/dashboard/user-statistics";
 import { UserBadges } from "@/components/dashboard/user/user-badges";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
@@ -37,29 +38,11 @@ export default async function () {
 		return redirect("/auth");
 	}
 
-	const isStudent = Boolean(dbUser.classId);
-
 	return (
 		<DashboardShell>
 			<DashboardHeader heading={title} text={description} />
 			<div className="container space-y-4 p-8 pt-6 rounded-md border bg-background shadow">
-				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-					<Suspense fallback={<Badge.Skeletons />}>
-						{isStudent ? (
-							<StudentBadges user={dbUser} />
-						) : (
-							<UserBadges uid={user.id} />
-						)}
-					</Suspense>
-				</div>
-				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-					<Suspense fallback={<ReadingTime.Skeleton />}>
-						<ReadingTime uid={user.id} />
-					</Suspense>
-					<Suspense fallback={<RecentSummaries.Skeleton />}>
-						<RecentSummaries uid={user.id} />
-					</Suspense>
-				</div>
+				<UserStatistics user={dbUser} />
 			</div>
 		</DashboardShell>
 	);

@@ -15,6 +15,7 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 			classId,
 		},
 		select: {
+			id: true,
 			name: true,
 			email: true,
 			chapter: true,
@@ -29,6 +30,7 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 	});
 
 	const studentData: StudentData[] = students.map((s) => ({
+		id: s.id,
 		name: s.name,
 		email: s.email,
 		created_at: s.created_at,

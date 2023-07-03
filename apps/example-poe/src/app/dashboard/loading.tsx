@@ -12,9 +12,7 @@ export default function () {
 			/>
 			<div className="container space-y-4 p-8 pt-6 rounded-md border bg-background shadow">
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-					{[1, 2, 3, 4].map(() => (
-						<Badge.Skeleton />
-					))}
+					<Badge.Skeletons />
 				</div>
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
 					<Skeleton className="col-span-4 h-[350px]" />

@@ -5,6 +5,7 @@ import {
 	CardContent,
 	Skeleton,
 } from "@itell/ui/server";
+import { TrendingDown, TrendingUp } from "lucide-react";
 
 type Props = {
 	className?: string;
@@ -36,11 +37,20 @@ export const Badge = ({
 					{rounding && typeof text === "number" ? text.toFixed(2) : text}
 				</div>
 				{description && (
-					<p className="text-xs text-muted-foreground">
-						{rounding && typeof description === "number"
-							? description.toFixed(2)
-							: description}
-						{comparing && " compared to classmates"}
+					<p className="text-xs text-muted-foreground mt-2">
+						{typeof description === "number" ? (
+							<span className="inline-flex items-center gap-2">
+								{description > 0 ? (
+									<TrendingUp className="w-4 h-4" />
+								) : (
+									<TrendingDown className="w-4 h-4" />
+								)}
+								{rounding ? description.toFixed(2) : description}
+								{comparing && " compared to class"}
+							</span>
+						) : (
+							description
+						)}
 					</p>
 				)}
 			</CardContent>

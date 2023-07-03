@@ -12,9 +12,10 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/client-components";
+import Link from "next/link";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type StudentData = Pick<User, "email" | "name" | "created_at"> & {
+export type StudentData = Pick<User, "id" | "email" | "name" | "created_at"> & {
 	progress: string;
 	summaryCounts: number;
 };
@@ -89,7 +90,11 @@ export const columns: ColumnDef<StudentData>[] = [
 					<DropdownMenuContent align="end">
 						<DropdownMenuLabel>Actions</DropdownMenuLabel>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>View student details</DropdownMenuItem>
+						<DropdownMenuItem>
+							<Link href={`/dashboard/student/${row.original.id}`}>
+								View student details
+							</Link>
+						</DropdownMenuItem>
 						<DropdownMenuItem>Send notifications</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

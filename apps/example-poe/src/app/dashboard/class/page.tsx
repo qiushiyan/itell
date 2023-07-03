@@ -6,6 +6,7 @@ import db from "@/lib/db";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Errorbox } from "@itell/ui/server";
+import { getUserTeacherStatus } from "@/lib/dashboard";
 
 const title = "Manage Your Class";
 const description = "View students' progress";
@@ -22,11 +23,7 @@ export default async function () {
 		return redirect("/auth");
 	}
 
-	const teacher = await db.teacher.findUnique({
-		where: {
-			id: user.id,
-		},
-	});
+	const teacher = await getUserTeacherStatus(user.id);
 
 	return (
 		<DashboardShell>
