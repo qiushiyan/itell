@@ -164,6 +164,7 @@ export const useSummary = ({
 	useLocalStorage,
 }: { useLocalStorage?: boolean }) => {
 	const location = useLocation();
+	const forwardUserSection = trpc.user.forwardSection.useMutation();
 	const addSummary = trpc.summary.create.useMutation();
 	const updateSummary = trpc.summary.update.useMutation();
 
@@ -272,6 +273,9 @@ export const useSummary = ({
 					isPassed: feedback.isPassed,
 					score: score,
 				});
+				if (feedback.isPassed) {
+					await forwardUserSection.mutateAsync(location as SectionLocation);
+				}
 				toast.success("Summary updated!");
 				dispatch({ type: "update_summary_finished" });
 			} catch (err) {
@@ -306,6 +310,7 @@ export const useSummary = ({
 					},
 				});
 				if (feedback.isPassed) {
+					await forwardUserSection.mutateAsync(location);
 					toast.success("You can now proceed to the next section.");
 				}
 				dispatch({ type: "save_summary_finished" });
