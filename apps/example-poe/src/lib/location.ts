@@ -19,7 +19,10 @@ export const forwardLocation = (location: SectionLocation): SectionLocation => {
 	}
 	let nextSection = allSectionsSorted.at(currentSectionIndex + 1);
 	if (nextSection && nextSection.title === "Key Terms") {
-		nextSection = allSectionsSorted.at(currentSectionIndex + 2) || nextSection;
+		nextSection = allSectionsSorted.at(currentSectionIndex + 3);
+		if (!nextSection) {
+			return allSectionsSorted[-1].location;
+		}
 	} else {
 		return location;
 	}

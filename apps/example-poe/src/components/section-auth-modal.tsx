@@ -3,9 +3,11 @@
 import { AuthButtons } from "./auth/auth-form";
 import { useSession } from "next-auth/react";
 import {
+	Button,
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
+	DialogFooter,
 } from "./client-components";
 import {
 	Dialog,
@@ -83,6 +85,7 @@ export default function SectionAuthModal() {
 		);
 
 		if (userIndex < currentIndex) {
+			const href = makeLocationHref(userLocation as SectionLocation);
 			return (
 				<Dialog
 					open={open}
@@ -96,15 +99,20 @@ export default function SectionAuthModal() {
 						<DialogHeader>
 							<DialogTitle>You haven't unlocked this section yet</DialogTitle>
 						</DialogHeader>
-						<p>
-							You need to submit a passing summary for
-							<Link href={makeLocationHref(userLocation as SectionLocation)}>
+						<div>
+							Submit a passing summary for
+							<Link href={href}>
 								<span className="font-medium underline">
 									{` Chapter ${userLocation.chapter} Section ${userLocation.section} `}
 								</span>
 							</Link>
 							first.
-						</p>
+						</div>
+						<DialogFooter>
+							<Button>
+								<Link href={href}>Go to section</Link>
+							</Button>
+						</DialogFooter>
 					</DialogContent>
 				</Dialog>
 			);
