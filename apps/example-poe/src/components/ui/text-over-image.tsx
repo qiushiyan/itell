@@ -21,7 +21,7 @@ export const TextOverImage = ({
 	priority?: boolean;
 }) => {
 	return (
-		<div className="flex justify-center items-center relative group">
+		<div className="hidden md:flex justify-center items-center relative group">
 			<Image
 				src={src}
 				alt={alt}

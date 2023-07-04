@@ -49,8 +49,8 @@ model User {
   created_at    DateTime  @default(now())
   updated_at    DateTime  @updatedAt
   module        Int       @default(1)
-  chapter       Int?      @default(1)
-  section       Int?      @default(1)
+  chapter       Int       @default(1)
+  section       Int       @default(1)
 
   classId String? @map("class_id")
 

@@ -1,5 +1,6 @@
 import { Inter as FontSans } from "next/font/google";
 import "@/styles/globals.css";
+
 import AppProvider from "@/components/providers";
 import ShowToast from "@/components/toast";
 import { Suspense } from "react";

@@ -1,7 +1,6 @@
 "use client";
 
 import { AuthButtons } from "./auth/auth-form";
-import { useSession } from "next-auth/react";
 import {
 	Button,
 	Collapsible,
@@ -17,106 +16,80 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import { useLocation } from "@/lib/hooks/utils";
-import { trpc } from "@/trpc/trpc-provider";
-import { allSectionsSorted } from "@/lib/sections";
 import Link from "next/link";
 import { makeLocationHref } from "@/lib/utils";
-import { SectionLocation } from "@/types/location";
-type Props = {
-	type?: "unauthorized" | "unlocked";
-};
+import { useSectionStatus } from "@/lib/hooks/use-section-status";
 
 export default function SectionAuthModal() {
-	const { data: session, status } = useSession();
-	const { data: userLocation } = trpc.user.getLocation.useQuery();
-	const location = useLocation();
+	const { status, userLocation } = useSectionStatus();
 	const [open, setOpen] = useState(true);
 
-	if (status === "loading") return null;
+	if (status === undefined || status === "unlocked" || !userLocation)
+		return null;
 
-	// for visitors, only the chapter-1/section-1 is visible
-	if (!session) {
-		if (location && (location.chapter > 1 || location.section > 0)) {
-			return (
-				<Dialog
-					open={open}
-					onOpenChange={() => {
-						if (process.env.NODE_ENV === "development") {
-							setOpen(false);
-						}
-					}}
-				>
-					<DialogContent canClose={false}>
-						<DialogHeader>
-							<DialogTitle>Login in to view the textbook</DialogTitle>
-							<DialogDescription>
-								<Collapsible>
-									<CollapsibleTrigger className="m-0 p-0">
-										Why do I need to have an account?
-									</CollapsibleTrigger>
-									<CollapsibleContent>
-										We collects anonymous data to improve learning experience.
-										See <span className="underline">here</span> for more
-										details.
-									</CollapsibleContent>
-								</Collapsible>
-							</DialogDescription>
-						</DialogHeader>
-						<div className="mt-5">{AuthButtons.google}</div>
-					</DialogContent>
-				</Dialog>
-			);
-		}
+	if (status === "unauthorized") {
+		return (
+			<Dialog
+				open={open}
+				onOpenChange={() => {
+					if (process.env.NODE_ENV === "development") {
+						setOpen(false);
+					}
+				}}
+			>
+				<DialogContent canClose={false}>
+					<DialogHeader>
+						<DialogTitle>Login in to view the textbook</DialogTitle>
+						<DialogDescription>
+							<Collapsible>
+								<CollapsibleTrigger className="m-0 p-0">
+									Why do I need to have an account?
+								</CollapsibleTrigger>
+								<CollapsibleContent>
+									We collects anonymous data to improve learning experience. See{" "}
+									<span className="underline">here</span> for more details.
+								</CollapsibleContent>
+							</Collapsible>
+						</DialogDescription>
+					</DialogHeader>
+					<div className="mt-5">{AuthButtons.google}</div>
+				</DialogContent>
+			</Dialog>
+		);
 	}
 
-	// for logged-in users, if their current location is smaller than the current section
-	// then they can't access it
-	if (session?.user && location && userLocation) {
-		const currentIndex = allSectionsSorted.findIndex(
-			(s) =>
-				s.location.chapter === location.chapter &&
-				s.location.section === location.section,
+	if (status === "locked") {
+		const href = makeLocationHref(userLocation);
+		return (
+			<Dialog
+				open={open}
+				onOpenChange={() => {
+					if (process.env.NODE_ENV === "development") {
+						setOpen(false);
+					}
+				}}
+			>
+				<DialogContent canClose={false}>
+					<DialogHeader>
+						<DialogTitle>You haven't unlocked this section yet</DialogTitle>
+					</DialogHeader>
+					<div>
+						Submit a passing summary for
+						<Link href={href}>
+							<span className="font-medium underline">
+								{` Chapter ${userLocation.chapter} Section ${userLocation.section} `}
+							</span>
+						</Link>
+						first.
+					</div>
+					<DialogFooter>
+						<Button>
+							<Link href={href}>Go to section</Link>
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 		);
-		const userIndex = allSectionsSorted.findIndex(
-			(s) =>
-				s.location.chapter === userLocation.chapter &&
-				s.location.section === userLocation.section,
-		);
-
-		if (userIndex < currentIndex) {
-			const href = makeLocationHref(userLocation as SectionLocation);
-			return (
-				<Dialog
-					open={open}
-					onOpenChange={() => {
-						if (process.env.NODE_ENV === "development") {
-							setOpen(false);
-						}
-					}}
-				>
-					<DialogContent canClose={false}>
-						<DialogHeader>
-							<DialogTitle>You haven't unlocked this section yet</DialogTitle>
-						</DialogHeader>
-						<div>
-							Submit a passing summary for
-							<Link href={href}>
-								<span className="font-medium underline">
-									{` Chapter ${userLocation.chapter} Section ${userLocation.section} `}
-								</span>
-							</Link>
-							first.
-						</div>
-						<DialogFooter>
-							<Button>
-								<Link href={href}>Go to section</Link>
-							</Button>
-						</DialogFooter>
-					</DialogContent>
-				</Dialog>
-			);
-		}
 	}
 
 	return null;

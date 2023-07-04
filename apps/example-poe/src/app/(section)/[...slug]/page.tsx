@@ -1,6 +1,5 @@
-import { Typography, buttonVariants } from "@itell/ui/server";
+import { Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
-import { Mdx } from "@/components/mdx";
 import Summary from "@/components/summary";
 import { notFound } from "next/navigation";
 import { SectionLocation } from "@/types/location";
@@ -14,7 +13,6 @@ import { ArrowUpIcon, PencilIcon } from "lucide-react";
 import { Fragment } from "react";
 import { allSectionsSorted } from "@/lib/sections";
 import { Button } from "@/components/client-components";
-import { cn } from "@itell/core";
 import { ModuleSidebar } from "@/components/module-sidebar";
 import { TocSidebar } from "@/components/toc-sidebar";
 import SectionContent from "@/components/section/section-content";

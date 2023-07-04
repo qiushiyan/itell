@@ -48,7 +48,7 @@ export const DefaultThemeConfig: ThemeConfig = {
 		secondaryForeground: "215.4 16.3% 46.9%",
 		accent: "210 40% 96.1%",
 		accentForeground: "215.4 16.3% 46.9%",
-		destructive: "210 40% 96.1%",
+		destructive: "0 100% 50%",
 		destructiveForeground: "215.4 16.3% 46.9%",
 		ring: "210 40% 96.1%",
 		radius: "0.5rem",

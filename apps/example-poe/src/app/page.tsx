@@ -1,4 +1,3 @@
-import LabIcon from "@/components/lab-icon";
 import TextbookNavbar from "@/components/nav/textbook-nav";
 import { Site, allSites } from "contentlayer/generated";
 import { Mdx } from "@/components/mdx";
@@ -12,9 +11,6 @@ export default async function Home() {
 		<section className="h-screen flex flex-col">
 			<TextbookNavbar />
 			<div className="flex-1 px-6 md:px-10 lg:px-16 py-8 mx-auto max-w-3xl space-y-6">
-				<div className="flex justify-center items-center">
-					<LabIcon />
-				</div>
 				<Mdx code={home.body.code} />
 				<div className="flex justify-center items-center">
 					<StartOrContinueReading />

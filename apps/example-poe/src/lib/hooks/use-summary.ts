@@ -164,7 +164,7 @@ export const useSummary = ({
 	useLocalStorage,
 }: { useLocalStorage?: boolean }) => {
 	const location = useLocation();
-	const forwardUserSection = trpc.user.forwardSection.useMutation();
+	const incrementUserLocation = trpc.user.incrementLocation.useMutation();
 	const addSummary = trpc.summary.create.useMutation();
 	const updateSummary = trpc.summary.update.useMutation();
 
@@ -274,7 +274,7 @@ export const useSummary = ({
 					score: score,
 				});
 				if (feedback.isPassed) {
-					await forwardUserSection.mutateAsync(location as SectionLocation);
+					await incrementUserLocation.mutateAsync(location as SectionLocation);
 				}
 				toast.success("Summary updated!");
 				dispatch({ type: "update_summary_finished" });
@@ -310,7 +310,7 @@ export const useSummary = ({
 					},
 				});
 				if (feedback.isPassed) {
-					await forwardUserSection.mutateAsync(location);
+					await incrementUserLocation.mutateAsync(location);
 					toast.success("You can now proceed to the next section.");
 				}
 				dispatch({ type: "save_summary_finished" });

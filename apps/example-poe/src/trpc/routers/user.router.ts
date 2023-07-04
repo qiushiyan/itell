@@ -2,7 +2,7 @@ import { allSectionsSorted } from "@/lib/sections";
 import { SectionLocationSchema } from "../schema";
 import { protectedProcedure, router } from "../utils";
 import { z } from "zod";
-import { forwardLocation } from "@/lib/location";
+import { incrementLocation } from "@/lib/location";
 
 export const userRouter = router({
 	getLocation: protectedProcedure.query(async ({ ctx }) => {
@@ -17,11 +17,11 @@ export const userRouter = router({
 			},
 		});
 	}),
-	forwardSection: protectedProcedure
+	incrementLocation: protectedProcedure
 		.input(SectionLocationSchema)
 		.mutation(async ({ ctx, input }) => {
 			const { id } = ctx.user;
-			const newLocation = forwardLocation(input);
+			const newLocation = incrementLocation(input);
 			const {
 				module: nextModule,
 				chapter: nextChapter,

@@ -24,10 +24,8 @@ export const Image = ({
 	return (
 		<figure
 			className={cn({
-				"float-left": floatLeft,
-				"float-right": floatRight,
-				"mr-4": floatLeft,
-				"ml-4": floatRight,
+				"md:float-left md:mr-4": floatLeft,
+				"md:float-right md:ml-4": floatRight,
 			})}
 		>
 			<div className="flex justify-center items-center">
