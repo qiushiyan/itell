@@ -4,7 +4,7 @@ import { allSectionsSorted } from "@/lib/sections";
 import SectionCombobox from "./section-combobox";
 import { useState } from "react";
 import { SectionLocation } from "@/types/location";
-import SectionDialog from "../section-dialog";
+import SectionModal from "../section-modal";
 import { ScoreResponse } from "@/lib/hooks/use-summary";
 import { Badge } from "@itell/ui/server";
 import { ScoreBadge } from "../score/badge";
@@ -73,7 +73,7 @@ export default function () {
 					)}
 				</aside>
 				<div className="space-y-2 text-center">
-					{section && <SectionDialog section={section} />}
+					{section && <SectionModal section={section} />}
 					<div className="max-w-2xl mx-auto">
 						{selectedLocation && (
 							<SummaryEditor

@@ -12,7 +12,6 @@ import {
 } from "@/components/client-components";
 
 import { Button } from "../client-components";
-import { useEffect } from "react";
 
 type Props = {
 	onDelete: () => Promise<void>;

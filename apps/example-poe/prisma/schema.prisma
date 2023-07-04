@@ -50,10 +50,9 @@ model User {
   updated_at    DateTime  @updatedAt
   module        Int       @default(1)
   chapter       Int?      @default(1)
-  section       Int?      @default(2)
+  section       Int?      @default(1)
 
-  isTeacher Boolean @default(false) @map("is_teacher")
-  classId   String? @map("class_id")
+  classId String? @map("class_id")
 
   accounts  Account[]
   sessions  Session[]

@@ -1,22 +1,5 @@
-import { Location, SectionLocation } from "@/types/location";
+import { SectionLocation } from "@/types/location";
 import { allSectionsSorted } from "./sections";
-
-export const parseLocation = (
-	x: string,
-	defaultVal: number | undefined = undefined,
-) => (x ? parseInt(x.split("-")[1]) : defaultVal);
-
-export const getLocationFromFlattenedPath = (
-	path: string,
-): Partial<Location> => {
-	const slugSplit = path.substring(1).split("/");
-	const [_, module, chapter, section] = slugSplit;
-	return {
-		module: parseLocation(module),
-		chapter: parseLocation(chapter),
-		section: parseLocation(section, 0),
-	};
-};
 
 export const forwardLocation = (location: SectionLocation): SectionLocation => {
 	const { module, chapter, section } = location;

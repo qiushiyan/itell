@@ -1,4 +1,3 @@
-import { getLocationFromFlattenedPath } from "./src/lib/location";
 import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeKatex from "rehype-katex";
@@ -6,6 +5,19 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import GithubSlugger from "github-slugger";
+
+const parseLocation = (x: string, defaultVal: number | undefined = undefined) =>
+	x ? parseInt(x.split("-")[1]) : defaultVal;
+
+const getLocationFromFlattenedPath = (path: string) => {
+	const slugSplit = path.substring(1).split("/");
+	const [_, module, chapter, section] = slugSplit;
+	return {
+		module: parseLocation(module),
+		chapter: parseLocation(chapter),
+		section: parseLocation(section, 0),
+	};
+};
 
 const Site = defineDocumentType(() => ({
 	name: "Site",
@@ -45,7 +57,7 @@ const Section = defineDocumentType(() => ({
 				const regXHeader = /\n(?<flag>#{1,6})\s+(?<content>.+)/g;
 				const slugger = new GithubSlugger();
 				const headings = Array.from(doc.body.raw.matchAll(regXHeader)).map(
-					({ groups }) => {
+					({ groups }: any) => {
 						const flag = groups?.flag;
 						const content = groups?.content;
 						return {

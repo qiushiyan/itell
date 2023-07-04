@@ -1,7 +1,7 @@
 import SummaryEditor from "@/components/dashboard/summary-editor";
 import SummaryOperations from "@/components/dashboard/summary-operations";
 import { ScoreBadge } from "@/components/score/badge";
-import SectionDialog from "@/components/section-dialog";
+import SectionModal from "@/components/section-modal";
 import { SummaryBackButton } from "@/components/summary/summary-back-button";
 import { getCurrentUser } from "@/lib/auth";
 import { ScoreType } from "@/lib/constants";
@@ -87,7 +87,7 @@ export default async function ({ params }: PageProps) {
 					</div>
 				</aside>
 				<div className="space-y-2 text-center">
-					<SectionDialog section={section} />
+					<SectionModal section={section} />
 
 					<p className="text-sm text-muted-foreground">
 						{`Last updated at ${relativeDate(summary.updated_at)}`}

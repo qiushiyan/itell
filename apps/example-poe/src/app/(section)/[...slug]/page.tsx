@@ -5,7 +5,7 @@ import Summary from "@/components/summary";
 import { notFound } from "next/navigation";
 import { SectionLocation } from "@/types/location";
 import getChapters from "@/lib/sidebar";
-import SectionAuthDialog from "@/components/section-auth-dialog";
+import SectionAuthModal from "@/components/section-auth-modal";
 import SectionPager from "@/components/section-pager";
 import { getPagerForSection } from "@/lib/pager";
 import NoteList from "@/components/note/note-list";
@@ -84,7 +84,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	return (
 		<Fragment>
 			<div className="grid grid-cols-12 gap-6 px-2">
-				<SectionAuthDialog />
+				<SectionAuthModal />
 				<aside className="module-sidebar col-span-2 sticky top-20 h-fit">
 					<ModuleSidebar
 						chapters={chapters}

@@ -5,6 +5,18 @@ import { z } from "zod";
 import { forwardLocation } from "@/lib/location";
 
 export const userRouter = router({
+	getLocation: protectedProcedure.query(async ({ ctx }) => {
+		return await ctx.prisma.user.findUnique({
+			select: {
+				module: true,
+				chapter: true,
+				section: true,
+			},
+			where: {
+				id: ctx.user.id,
+			},
+		});
+	}),
 	forwardSection: protectedProcedure
 		.input(SectionLocationSchema)
 		.mutation(async ({ ctx, input }) => {
