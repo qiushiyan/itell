@@ -95,21 +95,16 @@ export default function SectionAuthModal() {
 					<DialogContent canClose={false}>
 						<DialogHeader>
 							<DialogTitle>You haven't unlocked this section yet</DialogTitle>
-							<DialogDescription>
-								<p>
-									You need to submit a passing summary for
-									<Link
-										href={makeLocationHref(userLocation as SectionLocation)}
-									>
-										<span className="font-medium underline">
-											{` Chapter ${userLocation.chapter} Section ${userLocation.section} `}
-										</span>
-									</Link>
-									first.
-								</p>
-							</DialogDescription>
 						</DialogHeader>
-						<div className="mt-5">{AuthButtons.google}</div>
+						<p>
+							You need to submit a passing summary for
+							<Link href={makeLocationHref(userLocation as SectionLocation)}>
+								<span className="font-medium underline">
+									{` Chapter ${userLocation.chapter} Section ${userLocation.section} `}
+								</span>
+							</Link>
+							first.
+						</p>
 					</DialogContent>
 				</Dialog>
 			);
