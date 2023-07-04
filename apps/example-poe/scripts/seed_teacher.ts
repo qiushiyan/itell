@@ -12,15 +12,6 @@ const main = async () => {
 	});
 
 	if (me) {
-		await db.user.update({
-			where: {
-				email: TEACHER_EMAIL,
-			},
-			data: {
-				isTeacher: true,
-			},
-		});
-
 		await db.teacher.upsert({
 			where: {
 				id: me.id,
