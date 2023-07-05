@@ -1,4 +1,5 @@
 import { Inter as FontSans } from "next/font/google";
+import { IBM_Plex_Mono as FontMono } from "next/font/google";
 import "@/styles/globals.css";
 import AppProvider from "@/components/providers";
 import ShowToast from "@/components/toast";
@@ -31,6 +32,12 @@ const fontSans = FontSans({
 	variable: "--font-sans",
 });
 
+const fontMono = FontMono({
+	subsets: ["latin"],
+	weight: ["400", "700"],
+	variable: "--font-mono",
+});
+
 export default async function RootLayout({
 	children,
 }: { children: React.ReactNode }) {
@@ -45,6 +52,7 @@ export default async function RootLayout({
 				className={cn(
 					"min-h-screen bg-background font-sans antialiased",
 					fontSans.variable,
+					fontMono.variable,
 				)}
 			>
 				<AppProvider>

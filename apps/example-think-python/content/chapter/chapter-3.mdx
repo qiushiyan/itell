@@ -247,11 +247,21 @@ As you might expect, you have to create a function before you can execute it. In
   Move the last line of this program to the top, so the function call appears
   before the definitions. Run the program and see what error message you get.
 </Exercise>
-### Exercise 2<Exercise>Move the function call back to the bottom and move the definition of print_lyrics after the definition of repeat_lyrics. What happens when you run this program?</Exercise>
+
+### Exercise 2
+
+<Exercise>
+  Move the function call back to the bottom and move the definition of
+  print_lyrics after the definition of repeat_lyrics. What happens when you run
+  this program?
+</Exercise>
 
 ## Flow of execution
 
-<YoutubeVideo src="https://www.youtube.com/embed/seLcRCulwl4?start=931">
+<YoutubeVideo
+  title="Execution Flow"
+  src="https://www.youtube.com/embed/seLcRCulwl4?start=931"
+>
   In order to ensure that a function is defined before its first use, you have
   to know the order in which statements are executed, which is called the **flow
   of execution**.
@@ -326,31 +336,60 @@ The name of the variable we pass as an argument (michael) has nothing to do with
 
 ## Variables and parameters are local
 
-<YoutubeVideo src="https://www.youtube.com/embed/Ol3Dwucax9U?start=9"></YoutubeVideo>
+<YoutubeVideo
+  title="Function Parameters"
+  src="https://www.youtube.com/embed/Ol3Dwucax9U?start=9"
+/>
+
 When you create a variable inside a function, it is **local**, which means that
-it only exists inside the function. For example: ```python def cat_twice(part1,
-part2): cat = part1 + part2 print_twice(cat) ``` This function takes two
-arguments, concatenates them, and prints the result twice. Here is an example
-that uses it: ```python >>> line1 = 'Bing tiddle ' >>> line2 = 'tiddle bang.'
->>> cat_twice(line1, line2) Bing tiddle tiddle bang. Bing tiddle tiddle bang.
-``` When `cat_twice` terminates, the variable cat is destroyed. If we try to
-print it, we get an exception: ```python >>> print cat NameError: name 'cat' is
-not defined ``` Parameters are also local. For example, outside `print_twice`,
-there is no such thing as bruce. ## Stack diagrams
-<YoutubeVideo src="https://www.youtube.com/embed/Ol3Dwucax9U?start=298">
+it only exists inside the function. For example:
+
+```python
+  def cat_twice(part1,  part2):
+      cat = part1 + part2
+      print_twice(cat)
+```
+
+This function takes two arguments, concatenates them, and prints the result twice. Here is an example that uses it:
+
+```python
+>>> line1 = 'Bing tiddle '
+>>> line2 = 'tiddle bang.'
+>>> cat_twice(line1, line2)
+Bing tiddle tiddle bang. Bing tiddle tiddle bang.
+```
+
+When `cat_twice` terminates, the variable cat is destroyed. If we try to
+print it, we get an exception:
+
+```python
+>>> print cat NameError: name 'cat' is not defined
+```
+
+Parameters are also local. For example, outside `print_twice`, there is no such thing as bruce.
+
+## Stack diagrams
+
+<YoutubeVideo
+  title="stack diagram"
+  src="https://www.youtube.com/embed/Ol3Dwucax9U?start=298"
+>
   To keep track of which variables can be used where, it is sometimes useful to
   draw a **stack diagram**.
 </YoutubeVideo>
+
 Like state diagrams, stack diagrams show the value of each variable, but they
 also show the function each variable belongs to.
 
 Each function is represented by a frame. A frame is a box with the name of a function beside it and the parameters and variables of the function inside it. The stack diagram for the previous example is shown in Figure [3.1](#figure3.1)
 
-<div id="figure3.1">
-  > ![Image
-  Description](https://www.greenteapress.com/thinkpython/html/thinkpython004.png)
+<Image
+  alt="Stack diagram."
+  src="https://www.greenteapress.com/thinkpython/html/thinkpython004.png"
+>
   Figure 3.1: Stack diagram.
-</div>
+</Image>
+
 The frames are arranged in a stack that indicates which function called which, and
 so on. In this example, `print_twice` was called by `cat_twice`, and `cat_twice`
 was called by `__main__`, which is a special name for the topmost frame. When you
@@ -362,7 +401,7 @@ If an error occurs during a function call, Python prints the name of the functio
 
 For example, if you try to access cat from within `print_twice`, you get a `NameError`:
 
-```
+```python
 Traceback (innermost last):
   File "test.py", line 13, in __main__
     cat_twice(line1, line2)

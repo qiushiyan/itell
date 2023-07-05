@@ -1,43 +1,61 @@
 import db from "../src/lib/db";
 
-const CLASS_ID = "test_class_id";
-const TEACHER_EMAIL = "qiushi.yann@gmail.com";
-const STUDENT_EMAILS = ["jchoi92@gsu.edu", "langdonholmes@gmail.com"];
+const teachers = [
+	{
+		teacher_email: "qiushi.yann@gmail.com",
+		student_emails: ["jchoi92@gsu.edu", "langdonholmes@gmail.com"],
+		class_id: "test_class_id",
+	},
+	{
+		teacher_email: "jchoi92@gsu.edu",
+		student_emails: ["choijoonsuh@gmail.com", "lydialiu2003@gmail.com"],
+		class_id: "test_class_id_2",
+	},
+	{
+		teacher_email: "langdonholmes@gmail.com",
+		student_emails: ["lear.lab.vu@gmail.com"],
+		class_id: "test_class_id_3",
+	},
+];
 
 const main = async () => {
-	const me = await db.user.findFirst({
-		where: {
-			email: TEACHER_EMAIL,
-		},
-	});
+	teachers.forEach(async (entry) => {
+		const teacher = await db.user.findFirst({
+			where: {
+				email: entry.teacher_email,
+			},
+		});
 
-	if (me) {
+		if (!teacher) {
+			return console.log("can't find teacher with email", entry.teacher_email);
+		}
+
 		await db.teacher.upsert({
 			where: {
-				id: me.id,
+				id: teacher.id,
 			},
 			update: {
 				isApproved: true,
-				classId: CLASS_ID,
+				classId: entry.class_id,
 			},
 			create: {
-				id: me.id,
+				id: teacher.id,
 				isApproved: true,
-				classId: CLASS_ID,
+				classId: entry.class_id,
 			},
 		});
 
 		await db.user.updateMany({
 			where: {
 				email: {
-					in: STUDENT_EMAILS,
+					in: entry.student_emails,
 				},
 			},
 			data: {
-				classId: CLASS_ID,
+				classId: entry.class_id,
 			},
 		});
-	}
+	});
 };
 
 main();

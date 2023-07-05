@@ -18,15 +18,16 @@ export default function () {
 				<CardHeader>
 					<CardTitle>
 						<div className="flex items-center justify-between">
-							<Skeleton className="w-24" />
-							<Skeleton className="w-40" />
+							<Skeleton className="w-24 h-8" />
+							<Skeleton className="w-40 h-8" />
 						</div>
 					</CardTitle>
 					<CardDescription>
 						<div className="flex items-center justify-between">
-							<Skeleton className="w-40" />
-							<Skeleton className="w-64" />
+							<Skeleton className="w-40 h-8" />
+							<Skeleton className="w-64 h-8" />
 						</div>
+						<Skeleton className="w-48 h-8 mt-4" />
 					</CardDescription>
 				</CardHeader>
 				<CardContent>

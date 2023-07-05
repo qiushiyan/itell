@@ -15,7 +15,6 @@ export default async function DashboardLayout({
 	if (!user) {
 		return redirect("/auth");
 	}
-	3;
 
 	return (
 		<div className="flex min-h-screen flex-col space-y-6">

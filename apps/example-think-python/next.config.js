@@ -7,6 +7,14 @@ module.exports = withContentlayer({
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "www.greenteapress.com",
+			},
+		],
+	},
 });
 
 const ContentSecurityPolicy = `
