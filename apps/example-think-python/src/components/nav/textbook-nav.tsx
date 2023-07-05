@@ -1,22 +1,33 @@
-import { cn } from "@itell/core";
 import Link from "next/link";
-import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
-import { Typography } from "@itell/ui/server";
+import { buttonVariants } from "@itell/ui/server";
 import TextbookScrollProgress from "./textbook-scroll-progress";
 import SiteNav from "./site-nav";
 import { getSiteConfig } from "@/lib/config";
 import ThemeToggle from "../theme/theme-toggle";
 import UserAvatar from "../user-avatar";
+import { cn } from "@itell/core";
 
 export default async function TextbookNavbar() {
 	const { title } = await getSiteConfig();
 
 	return (
 		<SiteNav>
-			<div className="container flex h-16 w-full items-center space-x-4 sm:justify-between sm:space-x-0">
-				<Link href="/" className="hidden items-center space-x-2 md:flex">
-					<span className="hidden font-bold sm:inline-block">{title}</span>
-				</Link>
+			<div className="container flex h-16 items-center space-x-4 justify-between sm:space-x-0">
+				<div className="flex gap-4 items-center">
+					<Link href="/" className="hidden items-center space-x-2 md:flex">
+						<span className="hidden font-bold sm:inline-block">{title}</span>
+					</Link>
+					<Link
+						href="/chapter-0"
+						className={cn(
+							buttonVariants({ variant: "ghost" }),
+							"flex items-center space-x-2 text-base",
+						)}
+					>
+						<span className="font-bold sm:inline-block">Read</span>
+					</Link>
+				</div>
+
 				<div className="ml-auto flex items-center gap-2">
 					<ThemeToggle />
 					<UserAvatar />

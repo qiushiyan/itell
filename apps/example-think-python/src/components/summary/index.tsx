@@ -16,7 +16,7 @@ export default function Summary({ chapter }: { chapter: number }) {
 	return (
 		<section
 			className="flex flex-col lg:flex-row gap-8 mt-10 border-t-2 py-4"
-			id="section-summary"
+			id="chapter-summary"
 		>
 			<section className="lg:basis-1/3">
 				<SummaryDescription />

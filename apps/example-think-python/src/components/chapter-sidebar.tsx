@@ -27,7 +27,7 @@ export function ChapterSidebar({
 					>
 						<a href={`/${chapter.url}`}>
 							<Typography variant="small" className="m-0 p-0">
-								<Balancer>{chapter.title}</Balancer>
+								<Balancer>{`${chapter.chapter}. ${chapter.title}`}</Balancer>
 							</Typography>
 						</a>
 					</li>

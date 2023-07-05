@@ -81,19 +81,19 @@ export default async function ({ params }: { params: { slug: string } }) {
 							<AnchorLink
 								icon={<PencilIcon className="w-4 h-4" />}
 								text="Write a Summary"
-								href="#section-summary"
+								href="#chapter-summary"
 							/>
 							<AnchorLink
 								icon={<ArrowUpIcon className="w-4 h-4" />}
 								text="Back to Top"
-								href="#section-title"
+								href="#chapter-title"
 							/>
 						</div>
 					</div>
 				</aside>
 
 				<section className="chapter-content relative col-span-8">
-					<div className="mb-4 text-center" id="section-title">
+					<div className="mb-4 text-center" id="chapter-title">
 						<Typography variant="h1">
 							<Balancer className="text-3xl">{chapter.title}</Balancer>
 						</Typography>
