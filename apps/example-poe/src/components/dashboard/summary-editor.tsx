@@ -51,11 +51,16 @@ export default function (props: Props) {
 		if (isScored && scoreResponse) {
 			setPending({ ...pending, update: true });
 			if (props.published) {
-				await update(
-					props.summary,
-					scoreResponse.result,
-					scoreResponse.feedback,
-				);
+				await update({
+					summary: props.summary,
+					score: scoreResponse.result,
+					feedback: scoreResponse.feedback,
+					location: {
+						module: props.summary.module,
+						chapter: props.summary.chapter,
+						section: props.summary.section,
+					},
+				});
 				router.refresh();
 			} else {
 				await create(

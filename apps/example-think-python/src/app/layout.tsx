@@ -1,43 +1,45 @@
-import { Metadata } from "next";
-import { Raleway as FontSans } from "next/font/google";
-import { Space_Mono as FontMono } from "next/font/google";
-
+import { Inter as FontSans } from "next/font/google";
 import "@/styles/globals.css";
 import AppProvider from "@/components/providers";
-import { siteConfig } from "@/config/site";
 import ShowToast from "@/components/toast";
 import { Suspense } from "react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { cn } from "@itell/core";
+import { Metadata, ResolvingMetadata } from "next";
+import { reader } from "@/lib/keystatic";
+import { getSiteConfig } from "@/lib/config";
 
-export const metadata: Metadata = {
-	title: {
-		default: siteConfig.title,
-		template: `%s | ${siteConfig.title}`,
-	},
-	description: siteConfig.description,
-	authors: siteConfig.authors,
+type SiteConfig = {
+	title: string;
+	description: string;
+	latex: boolean;
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+	const siteConfig = await getSiteConfig();
+	return {
+		title: {
+			default: siteConfig.title,
+			template: `%s | ${siteConfig.title}`,
+		},
+		description: siteConfig.description,
+	};
+}
 
 const fontSans = FontSans({
 	subsets: ["latin"],
-	weight: ["300", "600"],
 	variable: "--font-sans",
 });
 
-const fontMono = FontMono({
-	subsets: ["latin"],
-	weight: ["400", "700"],
-	variable: "--font-mono",
-});
-
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: { children: React.ReactNode }) {
+	const { favicon } = await getSiteConfig();
+
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
-				<link rel="icon" type="image/x-icon" href="/favicon.png" />
+				<link rel="icon" type="image/x-icon" href={favicon || "/favicon.ico"} />
 			</head>
 			<body
 				className={cn(
@@ -50,7 +52,7 @@ export default function RootLayout({
 						<ShowToast />
 					</Suspense>
 					<TailwindIndicator />
-					<main>{children}</main>
+					<main> {children}</main>
 				</AppProvider>
 			</body>
 		</html>

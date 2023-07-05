@@ -2,28 +2,29 @@
 
 import { cn } from "@itell/core";
 import { HighlighterIcon, CopyIcon, PencilIcon } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Popover } from "react-text-selection-popover";
 import { toast } from "sonner";
-import { useNotes } from "@/lib/hooks";
+import { useNotes } from "@/lib/hooks/use-notes";
 import { useTextSelection } from "use-text-selection";
-import { SectionLocation } from "@/types/location";
 import { trpc } from "@/trpc/trpc-provider";
-import { defaultHighlightColor } from "@/contexts/note-highlight";
+import {
+	defaultHighlightColor,
+	useNoteColor,
+} from "@/lib/hooks/use-note-color";
 import Spinner from "../spinner";
-import { Button } from "../ui-components";
+import { Button } from "../client-components";
+import { useEffect, useState } from "react";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
-export default function HighlightToolbar({
-	location,
-}: { location: SectionLocation }) {
+export default function HighlightToolbar({ chapter }: { chapter: number }) {
 	const [target, setTarget] = useState<HTMLElement | null>(null);
+	const noteColor = useNoteColor();
 	const { createNote, markNote, markHighlight } = useNotes();
 	const createHighlight = trpc.note.create.useMutation();
 
 	useEffect(() => {
-		const el = document.getElementById("section-content") as HTMLElement;
+		const el = document.getElementById("chapter-content") as HTMLElement;
 		if (el) {
 			setTarget(el);
 		}
@@ -35,12 +36,12 @@ export default function HighlightToolbar({
 			icon: <PencilIcon className="w-5 h-5" />,
 			action: ({ clientRect, textContent }: SelectionData) => {
 				if (textContent) {
-					markNote({ textContent });
+					markNote({ textContent, color: noteColor });
 					if (clientRect) {
 						createNote({
 							y: clientRect.y + window.scrollY,
 							highlightedText: textContent,
-							location,
+							chapter: chapter,
 						});
 					}
 				}
@@ -55,13 +56,13 @@ export default function HighlightToolbar({
 						const newHighlight = await createHighlight.mutateAsync({
 							y: clientRect.y + window.scrollY,
 							highlightedText: textContent,
-							location,
+							chapter: chapter,
 							color: defaultHighlightColor,
 						});
 						markHighlight({
 							textContent,
 							id: newHighlight.id,
-							backgroundColor: newHighlight.color,
+							color: newHighlight.color,
 						});
 					}
 				}
@@ -96,12 +97,12 @@ export default function HighlightToolbar({
 				return (
 					<div
 						className={cn(
-							"fixed rounded-md shadow-sm px-2 py-1 flex flex-row gap-2 border-2 border-gray-100 items-center justify-between bg-white dark:bg-black -ml-[75px]",
+							"fixed rounded-md shadow-sm px-2 py-1 flex flex-row gap-2 border-2 border-gray-100 items-center justify-between bg-background -ml-[75px]",
 						)}
 						style={style}
 					>
 						{createHighlight.isLoading ? (
-							<Spinner className="w-5 h-5" />
+							<Spinner className="w-5 h-5 text-foreground" />
 						) : (
 							commands.map((command) => (
 								<Button

@@ -26,7 +26,3 @@ const isAuthed = t.middleware(({ next, ctx }) => {
 export const router = t.router;
 export const procedure = t.procedure;
 export const protectedProcedure = t.procedure.use(isAuthed);
-
-export const ZLocation = z.object({
-	chapter: z.number(),
-});

@@ -35,43 +35,47 @@ export default function () {
 			</div>
 
 			<div className="grid gap-12 md:grid-cols-[200px_1fr] mt-4">
-				<aside className="hidden w-[200px] flex-col md:flex space-y-4">
-					{scoreResponse ? (
-						<>
-							<div className="flex items-center justify-center">
-								<Badge
-									variant={
-										scoreResponse.feedback.isPassed ? "default" : "destructive"
-									}
-								>
-									{scoreResponse.feedback.isPassed ? "Passed" : "Failed"}
-								</Badge>
-							</div>
-							<div className="flex flex-col gap-2">
-								<ScoreBadge
-									type={ScoreType.containment}
-									score={scoreResponse.result.containment}
-								/>
-								<ScoreBadge
-									type={ScoreType.similarity}
-									score={scoreResponse.result.similarity}
-								/>
-								<ScoreBadge
-									type={ScoreType.wording}
-									score={scoreResponse.result.wording}
-								/>
-								<ScoreBadge
-									type={ScoreType.content}
-									score={scoreResponse.result.content}
-								/>
-							</div>
-						</>
-					) : (
-						<p className="text-muted-foreground text-sm">
-							you score will be shown here
-						</p>
-					)}
-				</aside>
+				{selectedLocation && (
+					<aside className="hidden w-[200px] flex-col md:flex space-y-4 border p-4">
+						{scoreResponse ? (
+							<>
+								<div className="flex items-center justify-center">
+									<Badge
+										variant={
+											scoreResponse.feedback.isPassed
+												? "default"
+												: "destructive"
+										}
+									>
+										{scoreResponse.feedback.isPassed ? "Passed" : "Failed"}
+									</Badge>
+								</div>
+								<div className="flex flex-col gap-2">
+									<ScoreBadge
+										type={ScoreType.containment}
+										score={scoreResponse.result.containment}
+									/>
+									<ScoreBadge
+										type={ScoreType.similarity}
+										score={scoreResponse.result.similarity}
+									/>
+									<ScoreBadge
+										type={ScoreType.wording}
+										score={scoreResponse.result.wording}
+									/>
+									<ScoreBadge
+										type={ScoreType.content}
+										score={scoreResponse.result.content}
+									/>
+								</div>
+							</>
+						) : (
+							<p className="text-muted-foreground text-sm">
+								you score will be shown here
+							</p>
+						)}
+					</aside>
+				)}
 				<div className="space-y-2 text-center">
 					{section && <SectionModal section={section} />}
 					<div className="max-w-2xl mx-auto">

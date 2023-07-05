@@ -41,7 +41,7 @@ export default async function () {
 	return (
 		<DashboardShell>
 			<DashboardHeader heading={title} text={description} />
-			<div className="container space-y-4 p-8 pt-6 rounded-md border bg-background shadow">
+			<div className="space-y-4">
 				<UserStatistics user={dbUser} />
 			</div>
 		</DashboardShell>

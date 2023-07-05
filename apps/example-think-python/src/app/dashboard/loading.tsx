@@ -1,20 +1,24 @@
-export default function DashboardLoading() {
+import { Badge } from "@/components/dashboard/badge";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { DashboardShell } from "@/components/shell";
+import { Skeleton } from "@itell/ui/server";
+
+export default function () {
 	return (
-		<div className="flex">
-			<div className="flex-shrink-0">
-				<span className="w-12 h-12 block bg-gray-200 rounded-full dark:bg-gray-700" />
+		<DashboardShell>
+			<DashboardHeader
+				heading="Learning Statistics"
+				text="Understand your learning journey"
+			/>
+			<div className="container space-y-4 p-8 pt-6 rounded-md border bg-background shadow">
+				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+					<Badge.Skeletons />
+				</div>
+				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+					<Skeleton className="col-span-4 h-[350px]" />
+					<Skeleton className="col-span-3 h-[350px]" />
+				</div>
 			</div>
-
-			<div className="ml-4 mt-2 w-full">
-				<h3 className="h-4 bg-gray-200 rounded-md dark:bg-gray-700 w-[40%]" />
-
-				<ul className="mt-5 space-y-3">
-					<li className="w-full h-4 bg-gray-200 rounded-md dark:bg-gray-700" />
-					<li className="w-full h-4 bg-gray-200 rounded-md dark:bg-gray-700" />
-					<li className="w-full h-4 bg-gray-200 rounded-md dark:bg-gray-700" />
-					<li className="w-full h-4 bg-gray-200 rounded-md dark:bg-gray-700" />
-				</ul>
-			</div>
-		</div>
+		</DashboardShell>
 	);
 }

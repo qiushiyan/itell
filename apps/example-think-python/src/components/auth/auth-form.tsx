@@ -1,17 +1,19 @@
 "use client";
 
 import { Typography } from "@itell/ui/server";
-import { Button } from "@/components/ui-components";
+import { Button } from "@/components/client-components";
 import { Command } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { LoginGoogle } from "./auth-buttons";
+import { toast } from "sonner";
 
 export const AuthButtons = {
 	google: (
 		<Button
 			variant="secondary"
 			color="blue-gray"
-			className="flex items-center gap-3 w-60 mx-auto mt-5"
+			className="flex items-center gap-3 w-60 mx-auto my-2"
 			onClick={(e) => {
 				e.preventDefault();
 				signIn("google");
@@ -28,7 +30,10 @@ export default function AuthForm() {
 	const router = useRouter();
 
 	if (session?.user) {
-		router.push("/");
+		toast.success(
+			"You are already logged in, re-directing to the previous page.",
+		);
+		router.back();
 	}
 
 	return (
@@ -41,7 +46,9 @@ export default function AuthForm() {
 				<Typography variant="small">
 					Use your social accounts to register
 				</Typography>
-				{AuthButtons.google}
+				<div className="mt-2 space-y-2">
+					<LoginGoogle />
+				</div>
 			</form>
 		</div>
 	);

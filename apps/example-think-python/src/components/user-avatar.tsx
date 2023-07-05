@@ -9,7 +9,7 @@ import {
 	DropdownMenuGroup,
 	DropdownMenuItem,
 	Button,
-} from "./ui-components";
+} from "./client-components";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -34,11 +34,6 @@ export default function UserAvatar() {
 			text: "Dashboard",
 			icon: <BarChart4Icon className="mr-2 h-4 w-4" />,
 			action: () => router.push("/dashboard"),
-		},
-		{
-			text: "Settings",
-			icon: <SettingsIcon className="mr-2 h-4 w-4" />,
-			action: () => router.push("/settings"),
 		},
 		{
 			text: "Logout",

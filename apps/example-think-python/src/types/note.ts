@@ -1,9 +1,7 @@
-import { SectionLocation } from "./location";
-
 export type CreateNoteInput = {
 	y: number;
 	highlightedText: string;
-	location: SectionLocation;
+	chapter: number;
 };
 
 export type NoteCard = {

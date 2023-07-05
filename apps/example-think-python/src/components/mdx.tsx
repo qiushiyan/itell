@@ -5,10 +5,11 @@ import {
 	Keyterm,
 	Callout,
 	Caption,
+	Typography,
+	Blockquote,
 	Definition,
 } from "@itell/ui/server";
 import { useMDXComponent } from "next-contentlayer/hooks";
-import { Exercise } from "./exercise";
 import {
 	YoutubeVideo,
 	Accordion,
@@ -19,23 +20,25 @@ import {
 	StepperBody,
 	StepperPanel,
 	Image,
-	Link,
-} from "./ui-components";
+} from "./client-components";
 import { Tabs, TabsHeader, Tab, TabPanel, TabsBody } from "./ui/tabs";
+import { TextOverImage } from "./ui/text-over-image";
+import { Exercise } from "./exercise";
 
 const MdxComponents = {
-	a: Link,
 	YoutubeVideo,
 	Image,
+	Blockquote,
 	Accordion,
 	AccordionItem,
+	TextOverImage,
 	Info,
 	Warning,
-	Exercise,
 	Keyterm,
 	Callout,
 	Caption,
 	Definition,
+	Exercise,
 	// tab related
 	Tabs,
 	TabsHeader,
@@ -48,6 +51,7 @@ const MdxComponents = {
 	Step,
 	StepperBody,
 	StepperPanel,
+	Typography,
 };
 interface MdxProps {
 	code: string;
@@ -56,10 +60,6 @@ interface MdxProps {
 export function Mdx({ code }: MdxProps) {
 	const Component = useMDXComponent(code);
 
-	return (
-		<article className="prose prose-quoteless prose-stone dark:prose-invert max-w-none">
-			{/* @ts-ignore */}
-			<Component components={MdxComponents} />
-		</article>
-	);
+	// @ts-ignore
+	return <Component components={MdxComponents} />;
 }

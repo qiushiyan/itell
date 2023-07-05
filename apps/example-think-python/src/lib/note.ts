@@ -1,4 +1,8 @@
-import { defaultNoteColor } from "@/contexts/note-highlight";
+const textContentToRegex = (textContent: string) => {
+	// escape potential characters in selection
+	const regexString = textContent.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+	return new RegExp(regexString, "i");
+};
 
 export const removeExistingMarks = async (target: HTMLElement) => {
 	// Remove all existing tags before applying new highlighting
@@ -12,42 +16,47 @@ export const removeExistingMarks = async (target: HTMLElement) => {
 	}
 };
 
-export const highlightTextAsNote = async ({
+export const highlightTextAsMark = async ({
 	target,
 	textContent,
-	color = defaultNoteColor,
-	backgroundColor,
+	color,
 	id,
 }: {
 	target: HTMLElement;
 	textContent: string;
-	color?: string;
-	backgroundColor?: string;
+	color: string;
 	id?: string;
 }) => {
 	// escape potential characters in selection
-	const regexString = textContent.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-	const regex = new RegExp(regexString, "i");
+	const regex = textContentToRegex(textContent);
 
-	let newText = "";
-	if (backgroundColor) {
-		// highlight
-		newText = target.innerHTML.replace(
-			regex,
-			`<mark class="highlight" id="${id}" style="background-color:${backgroundColor}">$&</mark>`,
-		);
-	} else {
-		// note
-		newText = target.innerHTML.replace(
-			regex,
-			`<span class="note" style="color:${color}">$&</span>`,
-		);
-	}
+	const newText = target.innerHTML.replace(
+		regex,
+		`<mark class="highlight" id="${id}" style="background-color:${color}">$&</mark>`,
+	);
+	target.innerHTML = newText;
+};
+
+export const highlightTextAsNote = async ({
+	target,
+	textContent,
+	color,
+}: {
+	target: HTMLElement;
+	textContent: string;
+	color: string;
+}) => {
+	const regex = textContentToRegex(textContent);
+
+	const newText = target.innerHTML.replace(
+		regex,
+		`<span class="note" style="color:${color}">$&</span>`,
+	);
 
 	target.innerHTML = newText;
 };
 
-const modifyhighlightedText = async ({
+const modifyHighlightedText = async ({
 	target,
 	textContent,
 	fn,
@@ -68,15 +77,21 @@ const modifyhighlightedText = async ({
 };
 
 export const unHighlightNote = (target: HTMLElement, textContent: string) => {
-	modifyhighlightedText({
+	modifyHighlightedText({
 		target,
 		textContent,
-		fn: (el) => el.classList.add("unhighlighted"),
+		fn: (el) => {
+			el.classList.remove("emphasized");
+			el.style.border = "none";
+			el.style.borderRadius = "0px";
+			el.style.color = "unset";
+			el.classList.add("unhighlighted");
+		},
 	});
 };
 
-export const unemphasizeNote = (target: HTMLElement, textContent: string) => {
-	modifyhighlightedText({
+export const deemphasizeNote = (target: HTMLElement, textContent: string) => {
+	modifyHighlightedText({
 		target,
 		textContent,
 		fn: (el) => {
@@ -88,14 +103,12 @@ export const unemphasizeNote = (target: HTMLElement, textContent: string) => {
 };
 
 export const emphasizeNote = (target: HTMLElement, textContent: string) => {
-	modifyhighlightedText({
+	modifyHighlightedText({
 		target,
 		textContent,
 		fn: (el) => {
 			el.classList.add("emphasized");
-			el.style.border = `2px solid ${
-				el.style.color ? el.style.color : defaultNoteColor
-			}`;
+			el.style.border = `2px solid ${el.style.color}`;
 			el.style.borderRadius = "5px";
 		},
 	});

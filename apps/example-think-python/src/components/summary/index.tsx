@@ -1,19 +1,18 @@
-import { useLocation } from "@/lib/hooks";
 import SummaryDescription from "./summary-description";
 import SummaryInput from "./summary-input";
-import { Typography } from "@itell/ui/server";
-import { SectionLocation } from "@/types/location";
+import { Info } from "@itell/ui/server";
 
-export default function Summary({ location }: { location: SectionLocation }) {
-	if (location.chapter === 0) {
+export default function Summary({ chapter }: { chapter: number }) {
+	if (chapter === 0) {
 		return (
-			<div className="mt-10 border-l-4 border-accent bg-background p-4">
-				<Typography className="mb-0">
+			<section className="mt-2 w-[800px] mx-auto">
+				<Info>
 					No summary is required for this section. You are good to go!
-				</Typography>
-			</div>
+				</Info>
+			</section>
 		);
 	}
+
 	return (
 		<section
 			className="flex flex-col lg:flex-row gap-8 mt-10 border-t-2 py-4"

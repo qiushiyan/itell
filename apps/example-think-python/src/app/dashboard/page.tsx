@@ -1,50 +1,42 @@
-import DashboardStudentSummaries from "@/components/dashboard/dashboard-student-summaries";
-import { getServerAuthSession } from "@/lib/auth";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { UserStatistics } from "@/components/dashboard/user-statistics";
+import { DashboardShell } from "@/components/shell";
+import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
-import { delay, relativeDate } from "@/lib/utils";
-import { groupby } from "@itell/core";
+import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-const Warning = ({ children }: { children: React.ReactNode }) => (
-	<div className="border-l-4 border-orange-400 bg-orange-50 px-4 py-2">
-		<p className="ml-3">{children}</p>
-	</div>
-);
+const title = "Learning Statistics";
+const description = "Understand your learning journey";
+
+export const metadata: Metadata = {
+	title,
+	description,
+};
 
 export default async function () {
-	const session = await getServerAuthSession();
-	if (!session) {
-		return null;
+	const user = await getCurrentUser();
+
+	if (!user) {
+		return redirect("/auth");
 	}
 
-	const id = session.user.id;
-	const user = await db.user.findUnique({
+	const dbUser = await db.user.findUnique({
 		where: {
-			id,
-		},
-		include: {
-			summaries: true,
+			id: user.id,
 		},
 	});
 
-	if (!user) {
-		return <Warning>user not found</Warning>;
+	if (!dbUser) {
+		return redirect("/auth");
 	}
 
-	if (user.summaries.length === 0) {
-		return <Warning>no summaries found</Warning>;
-	}
-
-	// convert date here since they will be passed from server components to client components
-	const summariesByChapter = groupby(
-		user.summaries,
-		(summary) => summary.chapter,
+	return (
+		<DashboardShell>
+			<DashboardHeader heading={title} text={description} />
+			<div className="space-y-4">
+				<UserStatistics user={dbUser} />
+			</div>
+		</DashboardShell>
 	);
-
-	// .map((s) => ({
-	// 	...s,
-	// 	created_at: relativeDate(s.created_at),
-	// 	updated_at: relativeDate(s.updated_at),
-	// })),
-
-	return <DashboardStudentSummaries summariesByChapter={summariesByChapter} />;
 }

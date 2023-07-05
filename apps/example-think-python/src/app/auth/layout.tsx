@@ -1,7 +1,7 @@
 import { cn } from "@itell/core";
 import Link from "next/link";
 import { ChevronLeftIcon } from "lucide-react";
-import { Button } from "@/components/ui-components";
+import { Button } from "@/components/client-components";
 import FlipCard from "@/components/flip-card";
 
 export default async function AuthLayout({

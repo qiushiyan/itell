@@ -1,24 +1,25 @@
 "use client";
 
-import { FormEvent, Fragment, useEffect, useRef } from "react";
+import { FormEvent, Fragment, useState } from "react";
 import TextArea from "../ui/textarea";
-import { EditIcon, TrashIcon } from "lucide-react";
+import { EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
-import { useClickOutside, useNotes } from "@/lib/hooks";
+import { useClickOutside } from "@/lib/hooks/utils";
 import { trpc } from "@/trpc/trpc-provider";
-import { SectionLocation } from "@/types/location";
 import NoteDelete from "./node-delete";
-import { emphasizeNote, unHighlightNote, unemphasizeNote } from "@/lib/note";
+import { emphasizeNote, unHighlightNote, deemphasizeNote } from "@/lib/note";
 import { relativeDate } from "@/lib/utils";
 import { cn } from "@itell/core";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
-import { Button } from "../ui-components";
+import { Button } from "../client-components";
+import { useNotes } from "@/lib/hooks/use-notes";
+import { useSectionContent } from "@/lib/hooks/use-chapter-content";
 
 interface Props extends NoteCard {
-	location: SectionLocation;
+	chapter: number;
 }
 
 type EditState = {
@@ -38,8 +39,9 @@ type EditDispatch =
 	| { type: "toggle_editing" }
 	| { type: "set_show_edit"; payload: boolean }
 	| { type: "set_editing"; payload: boolean }
-	| { type: "toggle_delete_modal" }
+	| { type: "set_show_delete_modal"; payload: boolean }
 	| { type: "finish_delete" }
+	| { type: "finish_upsert" }
 	| { type: "set_color"; payload: string };
 
 // existing notes are wrapped in <mark class = "highlight"> </mark>
@@ -51,7 +53,7 @@ export default function ({
 	y,
 	highlightedText,
 	noteText,
-	location,
+	chapter,
 	updated_at,
 	created_at,
 	color,
@@ -80,12 +82,16 @@ export default function ({
 				case "set_editing":
 					draft.editing = action.payload;
 					break;
-				case "toggle_delete_modal":
-					draft.showDeleteModal = !draft.showDeleteModal;
+				case "set_show_delete_modal":
+					draft.showDeleteModal = action.payload;
 					break;
 				case "finish_delete":
 					draft.showDeleteModal = false;
 					draft.editing = false;
+					break;
+				case "finish_upsert":
+					draft.editing = false;
+					draft.collapsed = true;
 					break;
 				case "set_color":
 					draft.color = action.payload;
@@ -102,29 +108,23 @@ export default function ({
 			showEdit: false, // show edit overlay
 		},
 	);
-	const sectionContentRef = useRef<HTMLElement>();
+	const sectionContentRef = useSectionContent();
+	const [isHidden, setIsHidden] = useState(false);
 	const { deleteNote: deleteContextNote, markNote } = useNotes();
 	const updateNote = trpc.note.update.useMutation({
 		onSuccess: () => {
-			dispatch({ type: "set_editing", payload: false });
+			dispatch({ type: "finish_upsert" });
 		},
 	});
 	const createNote = trpc.note.create.useMutation({
 		onSuccess: () => {
-			dispatch({ type: "set_editing", payload: false });
+			dispatch({ type: "finish_upsert" });
 		},
 	});
 	const deleteNote = trpc.note.delete.useMutation();
 	const containerRef = useClickOutside<HTMLDivElement>(() => {
 		dispatch({ type: "collapse_note" });
 	});
-
-	useEffect(() => {
-		const t = document.getElementById("section-content") as HTMLElement;
-		if (t) {
-			sectionContentRef.current = t;
-		}
-	}, []);
 
 	const isUnsaved = !id || editState.input !== noteText;
 	const isLoading =
@@ -142,23 +142,27 @@ export default function ({
 			// create new note
 			await createNote.mutateAsync({
 				y,
+				chapter,
 				noteText: editState.input,
 				highlightedText,
-				location,
 				color: editState.color,
 			});
 		}
 	};
 
 	const handleDelete = async () => {
+		if (sectionContentRef.current) {
+			unHighlightNote(sectionContentRef.current, highlightedText);
+		}
 		if (id) {
+			// delete note in database
 			deleteContextNote(id);
 			await deleteNote.mutateAsync({ id });
-			if (sectionContentRef.current) {
-				unHighlightNote(sectionContentRef.current, highlightedText);
-			}
-			dispatch({ type: "finish_delete" });
+		} else {
+			// just hide this card
+			setIsHidden(true);
 		}
+		dispatch({ type: "finish_delete" });
 	};
 
 	const triggers = {
@@ -174,7 +178,7 @@ export default function ({
 			if (sectionContentRef.current) {
 				dispatch({ type: "set_show_edit", payload: false });
 
-				unemphasizeNote(sectionContentRef.current, highlightedText);
+				deemphasizeNote(sectionContentRef.current, highlightedText);
 			}
 		},
 	};
@@ -182,9 +186,11 @@ export default function ({
 	return (
 		<Fragment>
 			<div
-				className={cn("absolute z-20 w-64 rounded-md border-2 bg-white", {
-					"z-50": editState.editing,
-				})}
+				className={cn(
+					"absolute w-48 lg:w-64 rounded-md border-2 bg-background",
+					editState.collapsed ? "z-10" : "z-50",
+					isHidden && "hidden",
+				)}
 				style={{ top: y, borderColor: editState.color }}
 				ref={containerRef}
 				{...triggers}
@@ -210,15 +216,13 @@ export default function ({
 						</button>
 					)}
 
-					<div className="font-light tracking-tight text-sm relative px-1 py-2">
-						{editState.collapsed && (
-							<p className="line-clamp-3 px-1 text-sm mb-0">
+					<div className="font-light tracking-tight text-sm relative p-2">
+						{editState.collapsed ? (
+							<p className="line-clamp-3 text-sm mb-0">
 								{editState.input || "Note"}
 							</p>
-						)}
-
-						{!editState.collapsed && (
-							<div className="px-2 mt-1 text-sm text-gray-800">
+						) : (
+							<div className="mt-1">
 								<NoteColorPicker
 									color={editState.color}
 									onChange={(color) => {
@@ -235,7 +239,7 @@ export default function ({
 										<TextArea
 											placeholder="leave a note here"
 											value={editState.input}
-											setValue={(val) =>
+											onValueChange={(val) =>
 												dispatch({ type: "set_input", payload: val })
 											}
 											autoFocus
@@ -247,7 +251,7 @@ export default function ({
 										onClick={() =>
 											dispatch({ type: "set_editing", payload: true })
 										}
-										className="flex w-full text-left px-1 py-2 rounded-md hover:bg-secondary"
+										className="flex w-full text-left px-1 py-2 rounded-md hover:bg-accent"
 									>
 										<span className="mb-0">
 											{editState.input || <EditIcon className="w-4 h-4" />}
@@ -255,9 +259,21 @@ export default function ({
 									</button>
 								)}
 								<footer className="mt-2">
-									{isUnsaved && <p className="text-xs mb-0">unsaved</p>}
+									{isUnsaved && (
+										<p className="text-sm text-muted-foreground">unsaved</p>
+									)}
 									<div className="flex justify-end">
-										{id && !isLoading && <NoteDelete onDelete={handleDelete} />}
+										{!isLoading && (
+											<NoteDelete
+												onDelete={handleDelete}
+												onOpen={() => {
+													dispatch({
+														type: "set_show_delete_modal",
+														payload: true,
+													});
+												}}
+											/>
+										)}
 										{editState.editing && (
 											<Button
 												disabled={isLoading}
@@ -266,7 +282,7 @@ export default function ({
 												onClick={handleSubmit}
 											>
 												{updateNote.isLoading || createNote.isLoading ? (
-													<Spinner className="w-5 h-5" />
+													<Spinner className="w-4 h-4" />
 												) : (
 													<ForwardIcon className="w-4 h-4" />
 												)}
@@ -275,7 +291,7 @@ export default function ({
 									</div>
 								</footer>
 								{(updated_at || created_at) && (
-									<p className="text-xs  text-gray-500 text-right mt-2 mb-0">
+									<p className="text-xs text-right mt-2 mb-0">
 										updated at{" "}
 										{relativeDate((updated_at || created_at) as Date)}
 									</p>

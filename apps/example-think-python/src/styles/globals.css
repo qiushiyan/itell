@@ -5,11 +5,6 @@
 @import url("@itell/ui/dist/style.css");
 
 
-pre {
-  font-family: var(--font-mono);
-}
-
-
 .inset-center {
   position: absolute;
   top: 50%;
@@ -18,7 +13,7 @@ pre {
 }
 
 .note .unhighlighted {
-  @apply text-black font-normal !important;
+  @apply text-foreground font-normal !important;
 }
 
 mark.highlight {
@@ -29,7 +24,7 @@ svg {
   transition: all 0.3s;
 }
 
-/* @media (max-width: 768px) {
+@media (max-width: 768px) {
   .module-sidebar {
     display: none;
   }
@@ -38,7 +33,7 @@ svg {
     display: none;
   }
 
-  #section-content {
+  .section-content {
     grid-column: span 12;
   }
-} */
+}

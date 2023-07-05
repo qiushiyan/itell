@@ -1,19 +1,8 @@
 const { withContentlayer } = require("next-contentlayer");
 
 module.exports = withContentlayer({
-	redirects: async () => {
-		return [
-			{
-				source: "/module-1",
-				destination: "/module-1/chapter-1",
-				permanent: true,
-			},
-			{
-				source: "/module-2",
-				destination: "/module-2/chapter-5",
-				permanent: true,
-			},
-		];
+	experimental: {
+		serverActions: true,
 	},
 	eslint: {
 		ignoreDuringBuilds: true,

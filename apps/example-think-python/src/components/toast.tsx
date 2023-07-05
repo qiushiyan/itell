@@ -1,21 +1,21 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 export default function ShowToast() {
 	const searchParams = useSearchParams();
 	const { data: session } = useSession();
 
 	useEffect(() => {
 		if (searchParams) {
-			const authRedirect = searchParams.get("auth-redirect");
-			if (session && authRedirect) {
+			const isAuthRedirect = searchParams.get("auth-redirect");
+			if (session && isAuthRedirect) {
 				toast.success("Successfully signed in!");
 			}
 
-			if (!session && authRedirect) {
+			if (!session && isAuthRedirect) {
 				toast.success("You are now logged out.");
 			}
 		}

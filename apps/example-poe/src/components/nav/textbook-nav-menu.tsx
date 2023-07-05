@@ -10,13 +10,9 @@ import {
 	NavigationMenuLink,
 	NavigationMenuList,
 	NavigationMenuTrigger,
-	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Typography } from "@itell/ui/server";
 import React, { useState } from "react";
-import TextbookScrollProgress from "./textbook-scroll-progress";
 import { allSectionsSorted } from "@/lib/sections";
-import SiteNav from "./site-nav";
 import UserAvatar from "../user-avatar";
 import ThemeToggle from "../theme/theme-toggle";
 import { MenuIcon, XIcon } from "lucide-react";

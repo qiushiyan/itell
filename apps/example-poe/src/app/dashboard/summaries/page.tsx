@@ -5,6 +5,7 @@ import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
 import { groupby } from "@itell/core";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 export default async function () {
@@ -25,6 +26,26 @@ export default async function () {
 
 	if (!userSummaries) {
 		return notFound();
+	}
+
+	if (userSummaries.summaries.length === 0) {
+		return (
+			<DashboardShell>
+				<DashboardHeader heading="Summary" text="Create and manage summaries.">
+					<SummaryCreateButton />
+				</DashboardHeader>
+				<p className="p-2">
+					You have not made any summary yet. Start with{" "}
+					<Link
+						href="/module-1/chapter-1/section-1"
+						className="underline font-medium"
+					>
+						Section 1
+					</Link>
+					!
+				</p>
+			</DashboardShell>
+		);
 	}
 
 	// // convert date here since they will be passed from server components to client components

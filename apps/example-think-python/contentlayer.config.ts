@@ -1,4 +1,3 @@
-import { getLocationFromFlattenedPath } from "./src/lib/location";
 import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeKatex from "rehype-katex";
@@ -8,9 +7,21 @@ import remarkMath from "remark-math";
 import rehypePrism from "rehype-prism-plus";
 import GithubSlugger from "github-slugger";
 
-const Section = defineDocumentType(() => ({
+const Site = defineDocumentType(() => ({
+	name: "Site",
+	filePathPattern: "site/**/*.{md,mdx}",
+	contentType: "mdx",
+	computedFields: {
+		slug: {
+			type: "string",
+			resolve: (doc) => `${doc._raw.flattenedPath.replace("site/", "")}`,
+		},
+	},
+}));
+
+const Chapter = defineDocumentType(() => ({
 	name: "Chapter",
-	filePathPattern: "**/*.{md,mdx}",
+	filePathPattern: "chapter/**/*.{md,mdx}",
 	contentType: "mdx",
 
 	fields: {
@@ -23,11 +34,11 @@ const Section = defineDocumentType(() => ({
 	computedFields: {
 		url: {
 			type: "string",
-			resolve: (doc) => `${doc._raw.flattenedPath}`,
+			resolve: (doc) => `${doc._raw.flattenedPath.replace("chapter/", "")}`,
 		},
-		location: {
-			type: "json",
-			resolve: (doc) => getLocationFromFlattenedPath(doc._raw.flattenedPath),
+		chapter: {
+			type: "number",
+			resolve: (doc) => Number(doc._raw.flattenedPath.split("-")[1]),
 		},
 		headings: {
 			type: "json",
@@ -58,7 +69,7 @@ const Section = defineDocumentType(() => ({
 
 export default makeSource({
 	contentDirPath: "content",
-	documentTypes: [Section],
+	documentTypes: [Chapter, Site],
 	mdx: {
 		remarkPlugins: [remarkGfm, remarkMath],
 		rehypePlugins: [

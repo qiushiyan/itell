@@ -1,7 +1,6 @@
-import { env } from "@/env.mjs";
-import { ZLocation, protectedProcedure, router } from "../utils";
+import { protectedProcedure, router } from "../utils";
 import { z } from "zod";
-import { ZScore } from "@/lib/summary";
+import { SummaryScoreSchema } from "../schema";
 
 const SummaryRouter = router({
 	getAllByUser: protectedProcedure.query(({ ctx }) => {
@@ -13,36 +12,12 @@ const SummaryRouter = router({
 		});
 	}),
 
-	getScore: protectedProcedure
-		.input(
-			z.object({
-				text: z.string(),
-				location: ZLocation,
-			}),
-		)
-		.output(ZScore)
-		.mutation(async ({ input }) => {
-			const response = await fetch(`${env.SCORE_API_URL}`, {
-				method: "POST",
-				body: JSON.stringify({
-					summary: input.text,
-					chapter_index: input.location.chapter,
-					section_index: input.location.chapter,
-				}),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-			const data = await response.json();
-			return ZScore.parse(data);
-		}),
-
 	create: protectedProcedure
 		.input(
 			z.object({
 				text: z.string(),
-				location: ZLocation,
-				score: ZScore,
+				chapter: z.number(),
+				score: SummaryScoreSchema,
 				isPassed: z.boolean(),
 			}),
 		)
@@ -51,7 +26,7 @@ const SummaryRouter = router({
 			return await ctx.prisma.summary.create({
 				data: {
 					text: input.text,
-					chapter: input.location.chapter,
+					chapter: input.chapter,
 					isPassed: input.isPassed,
 					contentScore: input.score.content,
 					wordingScore: input.score.wording,
@@ -62,6 +37,41 @@ const SummaryRouter = router({
 							id,
 						},
 					},
+				},
+			});
+		}),
+
+	update: protectedProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				text: z.string(),
+				score: SummaryScoreSchema,
+				isPassed: z.boolean(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			await ctx.prisma.summary.update({
+				where: {
+					id: input.id,
+				},
+				data: {
+					text: input.text,
+					contentScore: input.score.content,
+					wordingScore: input.score.wording,
+					similarityScore: input.score.similarity,
+					containmentScore: input.score.containment,
+					isPassed: input.isPassed,
+				},
+			});
+		}),
+
+	delete: protectedProcedure
+		.input(z.object({ id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.summary.delete({
+				where: {
+					id: input.id,
 				},
 			});
 		}),

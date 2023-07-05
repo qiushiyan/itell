@@ -7,7 +7,7 @@ export default function ({ code }: { code: string }) {
 		<>
 			<TrackLastVisitedSection />
 			<article
-				className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none section-content"
+				className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none"
 				id="section-content"
 			>
 				<Mdx code={code} />

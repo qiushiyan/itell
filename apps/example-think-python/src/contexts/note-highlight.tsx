@@ -1,6 +1,12 @@
-import { highlightTextAsNote } from "@/lib/note";
+import {
+	defaultNoteColorDark,
+	defaultNoteColorLight,
+} from "@/lib/hooks/use-note-color";
+import { useSectionContent } from "@/lib/hooks/use-chapter-content";
+import { highlightTextAsMark, highlightTextAsNote } from "@/lib/note";
 import { CreateNoteInput, Highlight, NoteCard } from "@/types/note";
-import { createContext, useCallback, useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
+import { createContext } from "react";
 import { useImmerReducer } from "use-immer";
 
 type NoteContextType = {
@@ -13,17 +19,15 @@ type NoteContextType = {
 	deleteHighlight: (id: string) => void;
 	markNote: (args: {
 		textContent: string;
-		color?: string;
+		color: string;
 	}) => void;
 	markHighlight: (args: {
-		textContent: string;
 		id: string;
-		backgroundColor?: string;
+		textContent: string;
+		color: string;
 	}) => void;
 };
 
-export const defaultNoteColor = "#3730a3";
-export const defaultHighlightColor = "yellow";
 type State = {
 	notes: NoteCard[];
 	highlights: Highlight[];
@@ -53,7 +57,8 @@ export const NoteContext = createContext<NoteContextType>(
 export default function NoteProvider({
 	children,
 }: { children: React.ReactNode }) {
-	const targetRef = useRef<HTMLElement | null>(null);
+	const sectionContentRef = useSectionContent();
+	const { theme } = useTheme();
 	const [state, dispatch] = useImmerReducer<State, Action>(
 		(draft, action) => {
 			switch (action.type) {
@@ -67,7 +72,8 @@ export default function NoteProvider({
 					draft.notes.push({
 						...action.payload,
 						noteText: "",
-						color: defaultNoteColor,
+						color:
+							theme === "light" ? defaultNoteColorLight : defaultNoteColorDark,
 					});
 					break;
 				case "delete_note":
@@ -106,23 +112,16 @@ export default function NoteProvider({
 		dispatch({ type: "delete_highlight", payload: id });
 	};
 
-	useEffect(() => {
-		const el = document.getElementById("section-content");
-		if (el) {
-			targetRef.current = el;
-		}
-	}, []);
-
 	const markNote = ({
 		textContent,
-		color = defaultNoteColor,
+		color,
 	}: {
 		textContent: string;
-		color?: string;
+		color: string;
 	}) => {
-		if (textContent && targetRef.current) {
+		if (textContent && sectionContentRef.current) {
 			highlightTextAsNote({
-				target: targetRef.current,
+				target: sectionContentRef.current,
 				textContent,
 				color,
 			});
@@ -132,17 +131,17 @@ export default function NoteProvider({
 	const markHighlight = ({
 		textContent,
 		id,
-		backgroundColor = defaultHighlightColor,
+		color,
 	}: {
 		textContent: string;
 		id: string;
-		backgroundColor?: string;
+		color: string;
 	}) => {
-		if (targetRef.current && textContent) {
-			highlightTextAsNote({
-				target: targetRef.current,
+		if (sectionContentRef.current && textContent) {
+			highlightTextAsMark({
+				target: sectionContentRef.current,
 				textContent,
-				backgroundColor,
+				color,
 				id,
 			});
 		}

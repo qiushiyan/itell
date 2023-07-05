@@ -1,5 +1,4 @@
 import {
-	defaultHighlightColor,
 	defaultNoteColorDark,
 	defaultNoteColorLight,
 } from "@/lib/hooks/use-note-color";

@@ -14,12 +14,12 @@ export default function AppProvider({
 		<SessionProvider>
 			<TRPCProvider>
 				<BalancerProvider>
-					<NoteProvider>
-						<ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+					<ThemeProvider attribute="class" defaultTheme="light">
+						<NoteProvider>
 							{children}
 							<Toaster richColors visibleToasts={1} />
-						</ThemeProvider>
-					</NoteProvider>
+						</NoteProvider>
+					</ThemeProvider>
 				</BalancerProvider>
 			</TRPCProvider>
 		</SessionProvider>

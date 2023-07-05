@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import NoteCard from "./note-card";
 import { trpc } from "@/trpc/trpc-provider";
-import { SectionLocation } from "@/types/location";
 import Spinner from "../spinner";
-import { useNotes } from "@/lib/hooks";
+import { useNotes } from "@/lib/hooks/use-notes";
 import { useSession } from "next-auth/react";
 import { Typography } from "@itell/ui/server";
 import { Highlight, NoteCard as NoteCardType } from "@/types/note";
 import { removeExistingMarks } from "@/lib/note";
+import { useSectionContent } from "@/lib/hooks/use-chapter-content";
+import { useCurrentChapter } from "@/lib/hooks/utils";
 
-export default function NoteList({ location }: { location: SectionLocation }) {
+export default function NoteList({ chapter }: { chapter: number }) {
 	const {
 		notes,
 		setNotes,
@@ -22,23 +23,16 @@ export default function NoteList({ location }: { location: SectionLocation }) {
 	} = useNotes();
 	const { data: session } = useSession();
 	const deleteNote = trpc.note.delete.useMutation();
-	const { data, isLoading } = trpc.note.getByLocation.useQuery(
-		{ location },
+	const { data, isFetching } = trpc.note.getByChapter.useQuery(
+		{ chapter },
 		{ enabled: Boolean(session?.user) },
 	);
-	const ref = useRef<HTMLElement | null>(null);
-
-	useEffect(() => {
-		const el = document.getElementById("section-content") as HTMLElement;
-		if (el) {
-			ref.current = el;
-		}
-	}, []);
+	const sectionContentRef = useSectionContent();
 
 	useEffect(() => {
 		if (data) {
-			if (ref.current) {
-				removeExistingMarks(ref.current as HTMLElement);
+			if (sectionContentRef.current) {
+				removeExistingMarks(sectionContentRef.current as HTMLElement);
 				const notes: NoteCardType[] = [];
 				const highlights: Highlight[] = [];
 				for (const entry of data) {
@@ -50,8 +44,9 @@ export default function NoteList({ location }: { location: SectionLocation }) {
 						notes.push(entry as NoteCardType);
 					} else {
 						markHighlight({
-							textContent: entry.highlightedText,
 							id: entry.id,
+							textContent: entry.highlightedText,
+							color: entry.color,
 						});
 						highlights.push({ id: entry.id });
 					}
@@ -96,16 +91,16 @@ export default function NoteList({ location }: { location: SectionLocation }) {
 
 	return (
 		<div className="flex flex-col space-y-4 mt-4">
-			{isLoading ? (
+			{isFetching ? (
 				<div className="flex items-center">
-					<Spinner className="w-8 h-8" />
+					<Spinner className="w-6 h-6 mr-2 text-foreground" />
 					<Typography as="div" variant="small">
 						loading notes
 					</Typography>
 				</div>
 			) : (
 				notes.map((note) => (
-					<NoteCard key={note.y} {...note} location={location} />
+					<NoteCard key={note.y} {...note} chapter={chapter} />
 				))
 			)}
 		</div>

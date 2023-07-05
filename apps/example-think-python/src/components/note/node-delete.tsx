@@ -1,39 +1,47 @@
 "use client";
 import { TrashIcon } from "lucide-react";
 import {
-	Button,
-	Dialog,
-	DialogTrigger,
-	DialogHeader,
-	DialogContent,
-	DialogTitle,
-	DialogContentBody,
-	DialogFooter,
-} from "../ui-components";
-import { useState } from "react";
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/client-components";
+
+import { Button } from "../client-components";
 
 type Props = {
 	onDelete: () => Promise<void>;
+	onOpen: () => void;
 };
 
-export default function NoteDeleteModal({ onDelete }: Props) {
+export default function NoteDeleteModal({ onDelete, onOpen }: Props) {
 	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button variant="ghost" size="sm">
+		<AlertDialog>
+			<AlertDialogTrigger asChild onClick={onOpen}>
+				<Button variant="outline">
 					<TrashIcon className="w-4 h-4" />
 				</Button>
-			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Delete this Note?</DialogTitle>
-				</DialogHeader>
-				<DialogFooter>
-					<Button type="submit" onClick={onDelete}>
-						Yes
-					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+			</AlertDialogTrigger>
+			<AlertDialogContent className="z-50">
+				<AlertDialogHeader>
+					<AlertDialogTitle>Delete this Note</AlertDialogTitle>
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					<AlertDialogCancel>Cancel</AlertDialogCancel>
+					<AlertDialogAction
+						onClick={async () => {
+							await onDelete();
+						}}
+						className="bg-red-600 focus:ring-red-600"
+					>
+						<span>Delete</span>
+					</AlertDialogAction>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
 	);
 }

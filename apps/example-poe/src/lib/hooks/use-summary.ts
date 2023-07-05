@@ -259,11 +259,17 @@ export const useSummary = ({
 		}
 	};
 
-	const update = async (
-		summary: Summary,
-		score: SummaryScore | null,
-		feedback: SummaryFeedback | null,
-	) => {
+	const update = async ({
+		summary,
+		score,
+		feedback,
+		location,
+	}: {
+		summary: Summary;
+		score: SummaryScore | null;
+		feedback: SummaryFeedback | null;
+		location: SectionLocation;
+	}) => {
 		if (score && feedback) {
 			dispatch({ type: "update_summary" });
 			try {
@@ -274,7 +280,7 @@ export const useSummary = ({
 					score: score,
 				});
 				if (feedback.isPassed) {
-					await incrementUserLocation.mutateAsync(location as SectionLocation);
+					await incrementUserLocation.mutateAsync(location);
 				}
 				toast.success("Summary updated!");
 				dispatch({ type: "update_summary_finished" });

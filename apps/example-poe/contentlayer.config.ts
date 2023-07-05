@@ -57,6 +57,7 @@ const Section = defineDocumentType(() => ({
 				const regXHeader = /\n(?<flag>#{1,6})\s+(?<content>.+)/g;
 				const slugger = new GithubSlugger();
 				const headings = Array.from(doc.body.raw.matchAll(regXHeader)).map(
+					// rome-ignore lint/suspicious/noExplicitAny: <explanation>
 					({ groups }: any) => {
 						const flag = groups?.flag;
 						const content = groups?.content;
