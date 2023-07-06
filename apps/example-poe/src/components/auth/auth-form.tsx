@@ -31,10 +31,8 @@ export default function AuthForm() {
 	const router = useRouter();
 
 	if (session?.user) {
-		toast.success(
-			"You are already logged in, re-directing to the previous page.",
-		);
-		router.back();
+		toast.success("You are already logged in.");
+		router.push("/");
 	}
 
 	return (

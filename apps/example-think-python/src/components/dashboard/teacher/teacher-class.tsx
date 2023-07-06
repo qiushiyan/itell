@@ -42,7 +42,12 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 			<CardHeader>
 				<CardTitle>Your Class</CardTitle>
 				<CardDescription>
-					where you monitor students' progress and send notifications
+					<p>
+						{`You have ${students.length} ${
+							students.length > 1 ? "students" : "student"
+						} under class code `}
+						<span className="font-medium">{classId}</span>
+					</p>
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
