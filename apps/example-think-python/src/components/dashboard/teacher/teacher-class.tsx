@@ -18,7 +18,7 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 		name: s.name,
 		email: s.email,
 		created_at: s.created_at,
-		progress: `${s.chapter}.${s.section}`,
+		progress: `Chapter ${s.chapter}`,
 		summaryCounts: s._count.summaries,
 	}));
 
