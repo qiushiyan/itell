@@ -3,7 +3,7 @@ import db from "./db";
 import { format, subDays } from "date-fns";
 import { getDates } from "./utils";
 
-export const getSummaryStatistics = async ({
+export const getSummaryStats = async ({
 	where,
 }: { where: Prisma.SummaryWhereInput }) => {
 	const summaryStats = await db.summary.aggregate({
@@ -24,9 +24,46 @@ export const getSummaryStatistics = async ({
 	return {
 		avgContentScore: summaryStats._avg.contentScore,
 		avgWordingScore: summaryStats._avg.wordingScore,
-		summaryCount: summaryStats._count,
+		totalCount: summaryStats._count,
 		passedCount: passedCount,
 	};
+};
+
+export const getClassStudents = async (classId: string) => {
+	return await db.user.findMany({
+		where: {
+			classId,
+		},
+	});
+};
+
+export const getClassStudentStats = async (classId: string) => {
+	return await db.user.findMany({
+		where: {
+			classId,
+		},
+		select: {
+			id: true,
+			name: true,
+			email: true,
+			chapter: true,
+			section: true,
+			created_at: true,
+			_count: {
+				select: {
+					summaries: true,
+				},
+			},
+		},
+	});
+};
+
+export const getStudentsCount = async (classId: string) => {
+	return await db.user.count({
+		where: {
+			classId,
+		},
+	});
 };
 
 export const getReadingTime = async (uid: string) => {

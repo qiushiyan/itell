@@ -8,26 +8,10 @@ import {
 import { StudentsTable } from "./students-table";
 import db from "@/lib/db";
 import { StudentData, columns } from "./students-columns";
+import { getClassStudentStats } from "@/lib/dashboard";
 
 export const TeacherClass = async ({ classId }: { classId: string }) => {
-	const students = await db.user.findMany({
-		where: {
-			classId,
-		},
-		select: {
-			id: true,
-			name: true,
-			email: true,
-			chapter: true,
-			section: true,
-			created_at: true,
-			_count: {
-				select: {
-					summaries: true,
-				},
-			},
-		},
-	});
+	const students = await getClassStudentStats(classId);
 
 	const studentData: StudentData[] = students.map((s) => ({
 		id: s.id,

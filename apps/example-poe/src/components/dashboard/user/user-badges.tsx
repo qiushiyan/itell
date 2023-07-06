@@ -1,4 +1,3 @@
-import db from "@/lib/db";
 import { Badge } from "../badge";
 import {
 	FileTextIcon,
@@ -6,10 +5,10 @@ import {
 	PencilIcon,
 	WholeWordIcon,
 } from "lucide-react";
-import { getSummaryStatistics } from "@/lib/dashboard";
+import { getSummaryStats } from "@/lib/dashboard";
 
 export const UserBadges = async ({ uid }: { uid: string }) => {
-	const summaryStats = await getSummaryStatistics({
+	const summaryStats = await getSummaryStats({
 		where: {
 			userId: uid,
 		},
@@ -18,28 +17,22 @@ export const UserBadges = async ({ uid }: { uid: string }) => {
 		<>
 			<Badge
 				title="Total Summaries"
-				text={summaryStats.summaryCount}
-				description={"description"}
+				value={summaryStats.totalCount}
 				icon={<PencilIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
 			<Badge
 				title="Passed Summaries"
-				text={summaryStats.passedCount}
-				description={"description"}
+				value={summaryStats.passedCount}
 				icon={<FlagIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
 			<Badge
 				title="Average Content Score"
-				text={summaryStats.avgContentScore || "NA"}
-				description={"description"}
-				rounding
+				value={summaryStats.avgContentScore}
 				icon={<FileTextIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
 			<Badge
 				title="Average Wording Score"
-				text={summaryStats.avgWordingScore || "NA"}
-				description={"description"}
-				rounding
+				value={summaryStats.avgWordingScore}
 				icon={<WholeWordIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
 		</>

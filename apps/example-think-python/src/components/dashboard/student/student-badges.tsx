@@ -1,4 +1,3 @@
-import db from "@/lib/db";
 import { Badge } from "../badge";
 import {
 	FileTextIcon,
@@ -7,24 +6,16 @@ import {
 	WholeWordIcon,
 } from "lucide-react";
 import { User } from "@prisma/client";
-import { getSummaryStatistics } from "@/lib/dashboard";
+import { getClassStudents, getSummaryStats } from "@/lib/dashboard";
 
 export const StudentBadges = async ({ user }: { user: User }) => {
-	const classId = user.classId;
-	const students = await db.user.findMany({
-		select: {
-			id: true,
-		},
-		where: {
-			classId: classId,
-		},
-	});
-	const studentStats = await getSummaryStatistics({
+	const students = await getClassStudents(user.classId as string);
+	const studentStats = await getSummaryStats({
 		where: {
 			userId: user.id,
 		},
 	});
-	const otherStats = await getSummaryStatistics({
+	const otherStats = await getSummaryStats({
 		where: {
 			userId: {
 				in: students.map((student) => student.id),
@@ -34,8 +25,10 @@ export const StudentBadges = async ({ user }: { user: User }) => {
 	});
 
 	const comparisons = {
-		summaryCount: studentStats.summaryCount - otherStats.summaryCount,
-		passedCount: studentStats.passedCount - otherStats.passedCount,
+		totalCount:
+			studentStats.totalCount - otherStats.totalCount / students.length,
+		passedCount:
+			studentStats.passedCount - otherStats.passedCount / students.length,
 		avgContentScore:
 			studentStats.avgContentScore && otherStats.avgContentScore
 				? studentStats.avgContentScore - otherStats.avgContentScore
@@ -50,11 +43,11 @@ export const StudentBadges = async ({ user }: { user: User }) => {
 		<>
 			<Badge
 				className={
-					comparisons.summaryCount > 0 ? "border-info" : "border-destructive"
+					comparisons.totalCount > 0 ? "border-info" : "border-destructive"
 				}
 				title="Total Summaries"
-				text={studentStats.summaryCount}
-				description={comparisons.summaryCount}
+				value={studentStats.totalCount}
+				description={comparisons.totalCount}
 				comparing
 				icon={<PencilIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
@@ -63,7 +56,7 @@ export const StudentBadges = async ({ user }: { user: User }) => {
 					comparisons.passedCount > 0 ? "border-info" : "border-destructive"
 				}
 				title="Passed Summaries"
-				text={studentStats.passedCount}
+				value={studentStats.passedCount}
 				description={comparisons.passedCount}
 				comparing
 				icon={<FlagIcon className="w-4 h-4 text-muted-foreground" />}
@@ -75,9 +68,8 @@ export const StudentBadges = async ({ user }: { user: User }) => {
 						: "border-destructive"
 				}
 				title="Average Content Score"
-				text={studentStats.avgContentScore || "NA"}
+				value={studentStats.avgContentScore}
 				description={comparisons.avgContentScore}
-				rounding
 				comparing
 				icon={<FileTextIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
@@ -88,9 +80,8 @@ export const StudentBadges = async ({ user }: { user: User }) => {
 						: "border-destructive"
 				}
 				title="Average Wording Score"
-				text={studentStats.avgWordingScore || "NA"}
+				value={studentStats.avgWordingScore}
 				description={comparisons.avgWordingScore}
-				rounding
 				comparing
 				icon={<WholeWordIcon className="w-4 h-4 text-muted-foreground" />}
 			/>

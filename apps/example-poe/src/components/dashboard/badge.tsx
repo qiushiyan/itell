@@ -10,19 +10,24 @@ import { TrendingDown, TrendingUp } from "lucide-react";
 type Props = {
 	className?: string;
 	title: string;
-	text: string | number | null;
+	value: number | null;
 	description?: string | number | null;
 	comparing?: boolean;
 	icon?: React.ReactNode;
-	rounding?: boolean;
 };
 
+const roundNumber = (num: number | null) => {
+	if (!num) {
+		return "NA";
+	}
+
+	return Number.isInteger(num) ? num : Number(num.toFixed(2));
+};
 export const Badge = ({
 	title,
-	text,
+	value,
 	description,
 	icon,
-	rounding,
 	comparing,
 	className,
 }: Props) => {
@@ -33,9 +38,7 @@ export const Badge = ({
 				{icon}
 			</CardHeader>
 			<CardContent>
-				<div className="text-2xl font-bold">
-					{rounding && typeof text === "number" ? text.toFixed(2) : text}
-				</div>
+				<div className="text-2xl font-bold">{roundNumber(value)}</div>
 				{description && (
 					<p className="text-xs text-muted-foreground mt-2">
 						{typeof description === "number" ? (
@@ -45,7 +48,7 @@ export const Badge = ({
 								) : (
 									<TrendingDown className="w-4 h-4" />
 								)}
-								{rounding ? description.toFixed(2) : description}
+								{`${description > 0 ? "+ " : ""}${roundNumber(description)}`}
 								{comparing && " compared to class"}
 							</span>
 						) : (

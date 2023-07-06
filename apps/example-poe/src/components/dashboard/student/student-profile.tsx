@@ -7,11 +7,6 @@ import {
 	buttonVariants,
 } from "@itell/ui/server";
 import { User } from "@prisma/client";
-import { Suspense } from "react";
-import { StudentBadges } from "./student-badges";
-import { ReadingTime } from "../reading-time";
-import { RecentSummaries } from "../recent-summaries";
-import { Badge } from "../badge";
 import { UserStatistics } from "../user-statistics";
 import Link from "next/link";
 

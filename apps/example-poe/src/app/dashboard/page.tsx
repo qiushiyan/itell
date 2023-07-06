@@ -58,12 +58,12 @@ export default async function () {
 						other students.
 					</p>
 				) : (
-					<p className="p-2">
+					<p className="p-2 text-muted-foreground">
 						You are not enrolled in any class. Enter your class code in{" "}
 						<Link href="/dashboard/settings#enroll" className="underline">
 							Settings
 						</Link>{" "}
-						to enroll in a class
+						to enroll in a class.
 					</p>
 				)}
 				<UserStatistics user={dbUser} />
