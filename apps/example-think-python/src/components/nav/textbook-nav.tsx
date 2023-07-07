@@ -6,6 +6,7 @@ import { getSiteConfig } from "@/lib/config";
 import ThemeToggle from "../theme/theme-toggle";
 import UserAvatar from "../user-avatar";
 import { cn } from "@itell/core";
+import { CommandMenu } from "../command-menu";
 
 export default async function TextbookNavbar() {
 	const { title } = await getSiteConfig();
@@ -29,6 +30,7 @@ export default async function TextbookNavbar() {
 				</div>
 
 				<div className="ml-auto flex items-center gap-2">
+					<CommandMenu />
 					<ThemeToggle />
 					<UserAvatar />
 				</div>

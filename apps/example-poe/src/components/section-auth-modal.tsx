@@ -77,7 +77,7 @@ export default function SectionAuthModal() {
 						Submit a passing summary for
 						<Link href={href}>
 							<span className="font-medium underline">
-								{` Chapter ${userLocation.chapter} Section ${userLocation.section} `}
+								{` Chapter ${userLocation.chapter}.${userLocation.section} `}
 							</span>
 						</Link>
 						first.

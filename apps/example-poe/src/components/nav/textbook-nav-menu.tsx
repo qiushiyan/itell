@@ -17,6 +17,7 @@ import UserAvatar from "../user-avatar";
 import ThemeToggle from "../theme/theme-toggle";
 import { MenuIcon, XIcon } from "lucide-react";
 import { MobileNav } from "./mobile-nav";
+import { CommandMenu } from "../command-menu";
 
 const moduleChapters = groupby(
 	allSectionsSorted.filter((section) => section.location.section === 0),
@@ -100,6 +101,7 @@ export default function TextbookNavMenu() {
 					})}
 				</NavigationMenuList>
 				<div className="ml-auto flex items-center gap-2">
+					<CommandMenu />
 					<ThemeToggle />
 					<UserAvatar />
 				</div>

@@ -33,7 +33,7 @@ export default function AuthForm() {
 		toast.success(
 			"You are already logged in, re-directing to the previous page.",
 		);
-		router.back();
+		router.push("/");
 	}
 
 	return (

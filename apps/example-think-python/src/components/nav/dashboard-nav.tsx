@@ -14,7 +14,7 @@ export async function DashboardNav(props: Props) {
 	const { title } = await getSiteConfig();
 
 	return (
-		<div className="flex gap-6 md:gap-10">
+		<div className="flex gap-6 md:gap-10 justify-between">
 			<Link href="/" className="hidden items-center space-x-2 md:flex">
 				<span className="hidden font-bold sm:inline-block">{title}</span>
 			</Link>

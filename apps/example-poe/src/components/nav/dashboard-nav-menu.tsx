@@ -9,6 +9,9 @@ import { MobileNav } from "@/components/nav/mobile-nav";
 import { DashboardNavItem } from "@/types/nav";
 import { MenuIcon, XIcon } from "lucide-react";
 import { useState } from "react";
+import { CommandMenu } from "../command-menu";
+import ThemeToggle from "../theme/theme-toggle";
+import UserAvatar from "../user-avatar";
 
 interface Props {
 	items?: DashboardNavItem[];
@@ -20,7 +23,7 @@ export function DashboardNavMenu({ items, children }: Props) {
 	const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
 
 	return (
-		<>
+		<div className="flex items-center justify-between flex-1 md:flex-initial">
 			{items?.length ? (
 				<nav className="hidden gap-6 md:flex">
 					{items?.map((item) => (
@@ -50,6 +53,11 @@ export function DashboardNavMenu({ items, children }: Props) {
 			{showMobileMenu && items && (
 				<MobileNav items={items}>{children}</MobileNav>
 			)}
-		</>
+			<div className="hidden sm:flex items-center gap-2">
+				<CommandMenu />
+				<ThemeToggle />
+				<UserAvatar />
+			</div>
+		</div>
 	);
 }

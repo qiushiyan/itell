@@ -1,16 +1,10 @@
-import { Badge } from "@/components/dashboard/badge";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { ReadingTime } from "@/components/dashboard/reading-time";
-import { RecentSummaries } from "@/components/dashboard/recent-summaries";
-import { StudentBadges } from "@/components/dashboard/student/student-badges";
 import { StudentClassCount } from "@/components/dashboard/student/student-class-description";
 import { UserStatistics } from "@/components/dashboard/user-statistics";
-import { UserBadges } from "@/components/dashboard/user/user-badges";
 import { DashboardShell } from "@/components/shell";
 import Spinner from "@/components/spinner";
 import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
-import { User } from "@prisma/client";
 import { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";

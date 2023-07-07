@@ -7,6 +7,9 @@
                 "useButtonType": "off",
                 "useIframeTitle": "off",
                 "noSvgWithoutTitle": "off"
+            },
+            "suspicious": {
+                "noEmptyInterface": "off"
             }
         }
     }

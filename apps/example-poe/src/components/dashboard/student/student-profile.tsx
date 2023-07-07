@@ -20,7 +20,7 @@ export const StudentProfile = ({ student }: Props) => (
 			<CardTitle>
 				<div className="flex items-center justify-between">
 					<p>{student.name}</p>
-					<p className="text-muted-foreground text-sm font-medium">{`at Chapter ${student.chapter} Section ${student.section}`}</p>
+					<p className="text-muted-foreground text-sm font-medium">{`at Chapter ${student.chapter}.${student.section}`}</p>
 				</div>
 			</CardTitle>
 			<CardDescription className="space-y-4">
