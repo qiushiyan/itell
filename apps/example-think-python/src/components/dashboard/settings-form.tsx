@@ -5,24 +5,30 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@itell/ui/server";
-import { LogoutButton } from "../auth/auth-buttons";
-import { ClassRegisterForm } from "./class-register-form";
+import { Separator } from "@/components/client-components";
+import { User } from "@prisma/client";
+import { getTeacherWithClassId } from "@/lib/class";
+import { ClassInfo } from "./settings/class-info";
+import { Profile } from "./settings/profile";
+import { ClassRequestModal } from "./settings/class-request-modal";
 
-export const Settings = () => {
+export const Settings = async ({ user }: { user: User }) => {
+	const teacher = await getTeacherWithClassId(user.classId);
+
 	return (
-		<Card>
-			<CardHeader>
-				<div className="flex flex-col sm:flex-row justify-between items-center gap-2">
-					<div>
-						<CardTitle>Edit your settings</CardTitle>
-						<CardDescription>description</CardDescription>
-					</div>
-					<LogoutButton />
-				</div>
-			</CardHeader>
-			<CardContent>
-				<ClassRegisterForm />
-			</CardContent>
-		</Card>
+		<div>
+			<Card>
+				<CardHeader>
+					<CardTitle>Edit your settings</CardTitle>
+					<CardDescription>configure the textbook to your need</CardDescription>
+				</CardHeader>
+				<CardContent className="space-y-4">
+					<Profile user={user} />
+					<Separator />
+					<ClassInfo teacher={teacher} />
+				</CardContent>
+			</Card>
+			<ClassRequestModal user={user} />
+		</div>
 	);
 };

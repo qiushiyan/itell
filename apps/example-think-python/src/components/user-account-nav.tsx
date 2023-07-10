@@ -9,7 +9,6 @@ import {
 	DropdownMenuSeparator,
 } from "./client-components";
 import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
 	ChevronDownIcon,
@@ -17,7 +16,6 @@ import {
 	FileBoxIcon,
 	LineChartIcon,
 	LogOutIcon,
-	PieChartIcon,
 	SettingsIcon,
 } from "lucide-react";
 import Spinner from "./spinner";

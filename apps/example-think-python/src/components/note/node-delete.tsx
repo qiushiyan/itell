@@ -12,6 +12,8 @@ import {
 } from "@/components/client-components";
 
 import { Button } from "../client-components";
+import Spinner from "../spinner";
+import { useState } from "react";
 
 type Props = {
 	onDelete: () => Promise<void>;
@@ -19,6 +21,8 @@ type Props = {
 };
 
 export default function NoteDeleteModal({ onDelete, onOpen }: Props) {
+	const [isLoading, setIsLoading] = useState(false);
+
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger asChild onClick={onOpen}>
@@ -33,12 +37,14 @@ export default function NoteDeleteModal({ onDelete, onOpen }: Props) {
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
 					<AlertDialogAction
+						disabled={isLoading}
 						onClick={async () => {
+							setIsLoading(true);
 							await onDelete();
+							setIsLoading(false);
 						}}
-						className="bg-red-600 focus:ring-red-600"
 					>
-						<span>Delete</span>
+						{isLoading ? <Spinner /> : <span>Delete</span>}
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>

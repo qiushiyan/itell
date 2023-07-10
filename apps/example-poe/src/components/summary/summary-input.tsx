@@ -81,11 +81,11 @@ export default function SummaryInput() {
 				{state.error && <Warning>{state.error}</Warning>}
 				<div className="flex justify-end">
 					<Button onClick={handleSubmit} disabled={state.pending}>
-						{state.pending && <Spinner />}
+						{state.pending && <Spinner className="mr-2" />}
 						{sessionStatus === "authenticated" ? (
 							state.prompt
 						) : (
-							<Link href="/auth">Log in to create a summary</Link>
+							<Link href="/auth">Login</Link>
 						)}
 					</Button>
 				</div>

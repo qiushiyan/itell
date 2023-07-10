@@ -6,5 +6,5 @@ type Props = {
 };
 
 export default function Spinner({ className }: Props) {
-	return <Loader2 className={cn("mr-2 h-4 w-4 animate-spin", className)} />;
+	return <Loader2 className={cn("h-4 w-4 animate-spin", className)} />;
 }

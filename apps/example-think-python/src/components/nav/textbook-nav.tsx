@@ -4,9 +4,9 @@ import TextbookScrollProgress from "./textbook-scroll-progress";
 import SiteNav from "./site-nav";
 import { getSiteConfig } from "@/lib/config";
 import ThemeToggle from "../theme/theme-toggle";
-import UserAvatar from "../user-avatar";
 import { cn } from "@itell/core";
 import { CommandMenu } from "../command-menu";
+import { UserAccountNav } from "../user-account-nav";
 
 export default async function TextbookNavbar() {
 	const { title } = await getSiteConfig();
@@ -32,7 +32,7 @@ export default async function TextbookNavbar() {
 				<div className="ml-auto flex items-center gap-2">
 					<CommandMenu />
 					<ThemeToggle />
-					<UserAvatar />
+					<UserAccountNav />
 				</div>
 			</div>
 

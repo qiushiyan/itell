@@ -39,7 +39,7 @@ export default async function () {
 				{user.classId ? (
 					<p className="p-2 text-muted-foreground">
 						You are enrolled in a class with{" "}
-						<Suspense fallback={<Spinner className="inline mr-0" />}>
+						<Suspense fallback={<Spinner className="inline" />}>
 							<StudentClassCount classId={user.classId} />
 						</Suspense>{" "}
 						other students

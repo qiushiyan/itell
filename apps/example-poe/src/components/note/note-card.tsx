@@ -283,7 +283,7 @@ export default function ({
 												onClick={handleSubmit}
 											>
 												{updateNote.isLoading || createNote.isLoading ? (
-													<Spinner className="mr-0" />
+													<Spinner />
 												) : (
 													<ForwardIcon className="w-4 h-4" />
 												)}

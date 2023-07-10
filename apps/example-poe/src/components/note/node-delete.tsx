@@ -39,10 +39,12 @@ export default function NoteDeleteModal({ onDelete, onOpen }: Props) {
 					<AlertDialogAction
 						disabled={isLoading}
 						onClick={async () => {
+							setIsLoading(true);
 							await onDelete();
+							setIsLoading(false);
 						}}
 					>
-						{isLoading ? <Spinner className="mr-0" /> : <span>Delete</span>}
+						{isLoading ? <Spinner /> : <span>Delete</span>}
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>

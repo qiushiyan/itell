@@ -11,7 +11,7 @@ import { MenuIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { CommandMenu } from "../command-menu";
 import ThemeToggle from "../theme/theme-toggle";
-import UserAvatar from "../user-avatar";
+import { UserAccountNav } from "../user-account-nav";
 
 interface Props {
 	items?: DashboardNavItem[];
@@ -56,7 +56,7 @@ export function DashboardNavMenu({ items, children }: Props) {
 			<div className="hidden sm:flex items-center gap-2">
 				<CommandMenu />
 				<ThemeToggle />
-				<UserAvatar />
+				<UserAccountNav />
 			</div>
 		</div>
 	);

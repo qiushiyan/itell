@@ -38,7 +38,6 @@ export const ClassRequestModal = ({ className, user }: Props) => {
 				message,
 			}),
 		});
-
 		if (response.status === 400) {
 			toast.error(
 				"An error happened while sending your message. Email lear.lab.vu@gmail.com directly to let us know.",

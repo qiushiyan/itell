@@ -82,7 +82,7 @@ export default function ({ summary }: { summary: Summary }) {
 							className="bg-red-600 focus:ring-red-600"
 						>
 							{isDeleteLoading ? (
-								<Spinner className="mr-2 h-4 w-4" />
+								<Spinner className="mr-2" />
 							) : (
 								<TrashIcon className="mr-2 h-4 w-4" />
 							)}

@@ -2,6 +2,7 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { Settings } from "@/components/dashboard/settings-form";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
+import { getUser } from "@/lib/user";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -14,16 +15,21 @@ export const metadata: Metadata = {
 };
 
 export default async function () {
-	const user = await getCurrentUser();
+	const currentUser = await getCurrentUser();
 
+	if (!currentUser) {
+		return redirect("/auth");
+	}
+
+	const user = await getUser(currentUser.id);
 	if (!user) {
-		redirect("/auth");
+		return redirect("/auth");
 	}
 
 	return (
 		<DashboardShell>
 			<DashboardHeader heading={title} text={description} />
-			<Settings />
+			<Settings user={user} />
 		</DashboardShell>
 	);
 }

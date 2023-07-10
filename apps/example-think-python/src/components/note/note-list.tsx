@@ -93,10 +93,8 @@ export default function NoteList({ chapter }: { chapter: number }) {
 		<div className="flex flex-col space-y-4 mt-4">
 			{isFetching ? (
 				<div className="flex items-center">
-					<Spinner className="w-6 h-6 mr-2 text-foreground" />
-					<Typography as="div" variant="small">
-						loading notes
-					</Typography>
+					<Spinner className="mr-2" />
+					<p className="text-sm text-muted-foreground">loading notes</p>
 				</div>
 			) : (
 				notes.map((note) => (

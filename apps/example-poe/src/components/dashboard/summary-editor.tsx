@@ -118,7 +118,7 @@ export default function (props: Props) {
 				<div className="flex justify-between">
 					{canUpdate && (
 						<Button disabled={state.pending} onClick={handleUpsert}>
-							{pending.update && <Spinner className="w-6 h-6 mr-1" />}
+							{pending.update && <Spinner className="mr-2" />}
 							{props.published ? "Save and update" : "Create"}
 						</Button>
 					)}
@@ -127,7 +127,7 @@ export default function (props: Props) {
 						onClick={handleScore}
 						className="ml-auto"
 					>
-						{pending.score && <Spinner className="w-6 h-6 mr-1" />}
+						{pending.score && <Spinner className="mr-2" />}
 						Get score
 					</Button>
 				</div>

@@ -102,7 +102,7 @@ export default function HighlightToolbar({ chapter }: { chapter: number }) {
 						style={style}
 					>
 						{createHighlight.isLoading ? (
-							<Spinner className="w-5 h-5 text-foreground" />
+							<Spinner />
 						) : (
 							commands.map((command) => (
 								<Button

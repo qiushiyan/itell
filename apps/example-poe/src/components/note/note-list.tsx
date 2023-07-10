@@ -93,7 +93,7 @@ export default function NoteList({ location }: { location: SectionLocation }) {
 		<div className="flex flex-col space-y-4 mt-4">
 			{isFetching ? (
 				<div className="flex items-center">
-					<Spinner />
+					<Spinner className="mr-2" />
 					<p className="text-sm text-muted-foreground">loading notes</p>
 				</div>
 			) : (

@@ -1,6 +1,5 @@
 "use client";
 
-import { AuthButtons } from "./auth/auth-form";
 import {
 	Button,
 	Collapsible,
@@ -19,6 +18,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useChapterStatus } from "@/lib/hooks/use-chapter-status";
 import { makeChapterHref } from "@/lib/utils";
+import { GoogleLoginButton } from "./auth/login-button";
 
 export default function SectionAuthModal() {
 	const { status, userChapter } = useChapterStatus();
@@ -52,7 +52,9 @@ export default function SectionAuthModal() {
 							</Collapsible>
 						</DialogDescription>
 					</DialogHeader>
-					<div className="mt-5">{AuthButtons.google}</div>
+					<div className="mt-6">
+						<GoogleLoginButton />
+					</div>
 				</DialogContent>
 			</Dialog>
 		);

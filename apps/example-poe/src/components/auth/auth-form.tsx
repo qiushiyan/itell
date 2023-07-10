@@ -1,15 +1,8 @@
 "use client";
 
-import { Typography, buttonVariants } from "@itell/ui/server";
-import { Button } from "@/components/client-components";
-import { Command } from "lucide-react";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useLastVisitedSectionUrl } from "@/lib/hooks/use-last-visisted-section";
 import { toast } from "sonner";
-import { cn } from "@itell/core";
-import { useState } from "react";
-import Spinner from "../spinner";
 import { GoogleLoginButton } from "./login-button";
 
 export const AuthForm = () => {

@@ -1,55 +1,32 @@
 "use client";
 
-import { Typography } from "@itell/ui/server";
-import { Button } from "@/components/client-components";
-import { Command } from "lucide-react";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { LoginGoogle } from "./auth-buttons";
 import { toast } from "sonner";
+import { GoogleLoginButton } from "./login-button";
 
-export const AuthButtons = {
-	google: (
-		<Button
-			variant="secondary"
-			color="blue-gray"
-			className="flex items-center gap-3 w-60 mx-auto my-2"
-			onClick={(e) => {
-				e.preventDefault();
-				signIn("google");
-			}}
-		>
-			<img src="/icons/google.svg" alt="metamask" className="h-6 w-6" />
-			Continue with Google
-		</Button>
-	),
-};
-
-export default function AuthForm() {
+export const AuthForm = () => {
 	const { data: session } = useSession();
 	const router = useRouter();
 
 	if (session?.user) {
-		toast.success(
-			"You are already logged in, re-directing to the previous page.",
-		);
+		toast.success("You are already logged in.");
 		router.push("/");
 	}
 
 	return (
-		<div>
-			<form className="w-80 max-w-screen-lg sm:w-96 flex flex-col items-center">
-				<Command className="mx-auto h-6 w-6" />
-				<Typography variant="h4" color="blue-gray" className="mt-4">
-					Get your account
-				</Typography>
-				<Typography variant="small">
-					Use your social accounts to register
-				</Typography>
-				<div className="mt-2 space-y-2">
-					<LoginGoogle />
+		<div className="grid gap-6">
+			<div className="relative">
+				<div className="absolute inset-0 flex items-center">
+					<span className="w-full border-t" />
 				</div>
-			</form>
+				<div className="relative flex justify-center text-xs uppercase">
+					<span className="bg-background px-2 text-muted-foreground">
+						Or continue with
+					</span>
+				</div>
+			</div>
+			<GoogleLoginButton />
 		</div>
 	);
-}
+};
