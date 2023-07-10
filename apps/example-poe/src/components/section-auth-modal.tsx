@@ -1,12 +1,10 @@
 "use client";
 
-import { AuthButtons } from "./auth/auth-form";
 import {
 	Button,
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
-	DialogFooter,
 } from "./client-components";
 import {
 	Dialog,
@@ -14,11 +12,13 @@ import {
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
+	DialogFooter,
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import Link from "next/link";
 import { makeLocationHref } from "@/lib/utils";
 import { useSectionStatus } from "@/lib/hooks/use-section-status";
+import { GoogleLoginButton } from "./auth/login-button";
 
 export default function SectionAuthModal() {
 	const { status, userLocation } = useSectionStatus();
@@ -52,7 +52,9 @@ export default function SectionAuthModal() {
 							</Collapsible>
 						</DialogDescription>
 					</DialogHeader>
-					<div className="mt-5">{AuthButtons.google}</div>
+					<div className="mt-6">
+						<GoogleLoginButton />
+					</div>
 				</DialogContent>
 			</Dialog>
 		);

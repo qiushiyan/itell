@@ -1,4 +1,4 @@
-import { Typography } from "@itell/ui/server";
+import { Info, Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
 import Summary from "@/components/summary";
 import { notFound } from "next/navigation";
@@ -16,6 +16,7 @@ import { Button } from "@/components/client-components";
 import { ModuleSidebar } from "@/components/module-sidebar";
 import { TocSidebar } from "@/components/toc-sidebar";
 import SectionContent from "@/components/section/section-content";
+import { Section } from "contentlayer/generated";
 
 export const generateStaticParams = async () => {
 	return allSectionsSorted.map((section) => {
@@ -68,7 +69,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 		return notFound();
 	}
 
-	const section = allSectionsSorted[sectionIndex];
+	const section = allSectionsSorted[sectionIndex] as Section;
 	const currentLocation = section.location as SectionLocation;
 	const pager = getPagerForSection({
 		allSections: allSectionsSorted,
@@ -120,7 +121,15 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 				</aside>
 			</div>
 
-			<Summary location={currentLocation} />
+			{currentLocation.section === 0 || section.title === "Key Terms" ? (
+				<section className="mt-2 w-[800px] mx-auto">
+					<Info>
+						No summary is required for this section. You are good to go!
+					</Info>
+				</section>
+			) : (
+				<Summary />
+			)}
 		</Fragment>
 	);
 }

@@ -9,6 +9,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { getUser } from "@/lib/user";
 
 const title = "Learning Statistics";
 const description = "Understand your learning journey";
@@ -19,19 +20,15 @@ export const metadata: Metadata = {
 };
 
 export default async function () {
-	const user = await getCurrentUser();
+	const currentUser = await getCurrentUser();
 
-	if (!user) {
+	if (!currentUser) {
 		return redirect("/auth");
 	}
 
-	const dbUser = await db.user.findUnique({
-		where: {
-			id: user.id,
-		},
-	});
+	const user = await getUser(currentUser.id);
 
-	if (!dbUser) {
+	if (!user) {
 		return redirect("/auth");
 	}
 
@@ -39,17 +36,13 @@ export default async function () {
 		<DashboardShell>
 			<DashboardHeader heading={title} text={description} />
 			<div className="space-y-4">
-				{dbUser.classId ? (
+				{user.classId ? (
 					<p className="p-2 text-muted-foreground">
 						You are enrolled in a class with{" "}
-						<Suspense
-							fallback={
-								<Spinner className="text-muted-foreground w-5 h-5 inline" />
-							}
-						>
-							<StudentClassCount classId={dbUser.classId} />
+						<Suspense fallback={<Spinner className="inline mr-0" />}>
+							<StudentClassCount classId={user.classId} />
 						</Suspense>{" "}
-						other students.
+						other students
 					</p>
 				) : (
 					<p className="p-2 text-muted-foreground">
@@ -57,10 +50,10 @@ export default async function () {
 						<Link href="/dashboard/settings#enroll" className="underline">
 							Settings
 						</Link>{" "}
-						to enroll in a class.
+						to enroll in a class
 					</p>
 				)}
-				<UserStatistics user={dbUser} />
+				<UserStatistics user={user} />
 			</div>
 		</DashboardShell>
 	);

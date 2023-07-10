@@ -37,6 +37,7 @@ export default function ({
 	>(undefined);
 
 	const findSectionByValue = (value: string) => {
+		// example value: 1.1 Introduction
 		const [chapter, section] = value.split(" ")[0].split(".");
 		return sections.find(
 			(s) => String(s.chapter) === chapter && String(s.section) === section,

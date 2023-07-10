@@ -1,5 +1,5 @@
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { Settings } from "@/components/dashboard/settings-form";
+import { Settings } from "@/components/dashboard/settings";
 import { StudentProfile } from "@/components/dashboard/student/student-profile";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";

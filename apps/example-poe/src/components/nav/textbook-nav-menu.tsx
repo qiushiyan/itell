@@ -18,6 +18,7 @@ import ThemeToggle from "../theme/theme-toggle";
 import { MenuIcon, XIcon } from "lucide-react";
 import { MobileNav } from "./mobile-nav";
 import { CommandMenu } from "../command-menu";
+import { UserAccountNav } from "../user-account-nav";
 
 const moduleChapters = groupby(
 	allSectionsSorted.filter((section) => section.location.section === 0),
@@ -103,7 +104,7 @@ export default function TextbookNavMenu() {
 				<div className="ml-auto flex items-center gap-2">
 					<CommandMenu />
 					<ThemeToggle />
-					<UserAvatar />
+					<UserAccountNav />
 				</div>
 			</NavigationMenu>
 			<div className="flex w-full items-center justify-between space-x-2 md:hidden">
@@ -122,7 +123,7 @@ export default function TextbookNavMenu() {
 						}))}
 					/>
 				)}
-				<UserAvatar />
+				<UserAccountNav />
 			</div>
 		</>
 	);

@@ -1,5 +1,6 @@
 import { Typography } from "@itell/ui/server";
 import { cn } from "@itell/core";
+import { BookmarkIcon } from "lucide-react";
 
 type Heading = {
 	level: "one" | "two" | "three";
@@ -13,7 +14,10 @@ type TocSidebarProps = {
 export function TocSidebar({ headings }: TocSidebarProps) {
 	return (
 		<div className="sticky top-20">
-			<Typography variant="small">ON THIS PAGE</Typography>
+			<p className="font-medium text-sm flex items-center">
+				<span>ON THIS PAGE</span>
+				<BookmarkIcon className="ml-2 w-4 h-4" />
+			</p>
 			<ul className="mt-2 space-y-1">
 				{headings
 					.filter(

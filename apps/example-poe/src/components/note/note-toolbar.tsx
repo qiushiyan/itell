@@ -105,7 +105,7 @@ export default function HighlightToolbar({
 						style={style}
 					>
 						{createHighlight.isLoading ? (
-							<Spinner className="w-5 h-5 text-foreground" />
+							<Spinner className="mr-0" />
 						) : (
 							commands.map((command) => (
 								<Button

@@ -21,17 +21,15 @@ export const dashboardConfig: DashboardConfig = {
 			href: "/dashboard/summaries",
 			icon: <FileEditIcon className={iconClasses} />,
 		},
-
-		{
-			title: "Class",
-			href: "/dashboard/class",
-			icon: <UsersIcon className={iconClasses} />,
-		},
-
 		{
 			title: "Settings",
 			href: "/dashboard/settings",
 			icon: <SettingsIcon className={iconClasses} />,
+		},
+		{
+			title: "Class",
+			href: "/dashboard/class",
+			icon: <UsersIcon className={iconClasses} />,
 		},
 	],
 };

@@ -44,7 +44,7 @@ export const SummaryList = ({
 	const moduleSummaries = summariesByModule[selectedModule];
 
 	return (
-		<div className="p-2">
+		<div className="p-4">
 			<div className="flex items-center justify-between">
 				<SelectModule
 					modules={modules}
