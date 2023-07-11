@@ -79,6 +79,8 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 		module: currentLocation.module,
 		allSections: allSectionsSorted,
 	});
+	const noSummary =
+		currentLocation.section === 0 || section.title === "Key Terms";
 
 	return (
 		<Fragment>
@@ -90,11 +92,13 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 						currentLocation={currentLocation}
 					/>
 					<div className="mt-12 flex flex-col">
-						<AnchorLink
-							icon={<PencilIcon className="w-4 h-4" />}
-							text="Write a Summary"
-							href="#section-summary"
-						/>
+						{!noSummary && (
+							<AnchorLink
+								icon={<PencilIcon className="w-4 h-4" />}
+								text="Write a Summary"
+								href="#section-summary"
+							/>
+						)}
 						<AnchorLink
 							icon={<ArrowUpIcon className="w-4 h-4" />}
 							text="Back to Top"
@@ -121,7 +125,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 				</aside>
 			</div>
 
-			{currentLocation.section === 0 || section.title === "Key Terms" ? (
+			{noSummary ? (
 				<section className="mt-2 w-[800px] mx-auto">
 					<Info>
 						No summary is required for this section. You are good to go!

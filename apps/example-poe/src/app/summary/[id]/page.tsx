@@ -8,11 +8,8 @@ import { ScoreType } from "@/lib/constants";
 import db from "@/lib/db";
 import { allSectionsSorted } from "@/lib/sections";
 import { relativeDate } from "@/lib/utils";
-import { cn } from "@itell/core";
-import { Badge, Typography, buttonVariants } from "@itell/ui/server";
+import { Badge } from "@itell/ui/server";
 import { Summary, User } from "@prisma/client";
-import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 async function getSummaryForUser(summaryId: Summary["id"], userId: User["id"]) {
@@ -70,8 +67,10 @@ export default async function ({ params }: PageProps) {
 					</div>
 					<p className="tracking-tight text-sm text-muted-foreground">
 						Revise your summary here. After getting a new score, you can choose
-						to update the old summary. Click on the title the review this
-						section's content.
+						to update the old summary.
+					</p>
+					<p className="tracking-tight text-sm text-muted-foreground">
+						Click on the title to review this section's content.
 					</p>
 					<div className="flex flex-col gap-2">
 						<ScoreBadge
