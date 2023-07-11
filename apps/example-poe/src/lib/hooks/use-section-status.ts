@@ -17,7 +17,7 @@ export const useSectionStatus = () => {
 
 	useEffect(() => {
 		// when either of the location is not defined, we don't know the status
-		if (!currentLocation || !userLocation) {
+		if (!currentLocation) {
 			return setStatus(undefined);
 		}
 
@@ -26,18 +26,19 @@ export const useSectionStatus = () => {
 			return setStatus("unlocked");
 		}
 
-		// for later sections, the user at least needs to be logged in
-		if (!session) {
+		if (!session && sessionStatus !== "loading") {
 			return setStatus("unauthorized");
 		}
 
+		// for later sections, the user at least needs to be logged in
+
 		// if the user is at the same location or after the current location, it is unlocked
-		if (isLocationAfter(currentLocation, userLocation as SectionLocation)) {
+		if (userLocation && isLocationAfter(currentLocation, userLocation)) {
 			return setStatus("locked");
 		} else {
 			setStatus("unlocked");
 		}
-	}, [sessionStatus, currentLocation, userLocation]);
+	}, [session, sessionStatus, currentLocation, userLocation]);
 
 	return { status, userLocation };
 };

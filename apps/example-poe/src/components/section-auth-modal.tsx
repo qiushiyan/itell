@@ -24,8 +24,7 @@ export default function SectionAuthModal() {
 	const { status, userLocation } = useSectionStatus();
 	const [open, setOpen] = useState(true);
 
-	if (status === undefined || status === "unlocked" || !userLocation)
-		return null;
+	if (status === undefined || status === "unlocked") return null;
 
 	if (status === "unauthorized") {
 		return (
@@ -60,7 +59,7 @@ export default function SectionAuthModal() {
 		);
 	}
 
-	if (status === "locked") {
+	if (status === "locked" && userLocation) {
 		const href = makeLocationHref(userLocation);
 		return (
 			<Dialog

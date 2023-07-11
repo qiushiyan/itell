@@ -79,8 +79,9 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 		module: currentLocation.module,
 		allSections: allSectionsSorted,
 	});
+
 	const hasSummary =
-		currentLocation.section !== 0 && section.title === "Key Terms";
+		currentLocation.section !== 0 && section.title !== "Key Terms";
 
 	return (
 		<Fragment>
