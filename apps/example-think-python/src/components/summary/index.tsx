@@ -2,17 +2,7 @@ import SummaryDescription from "./summary-description";
 import SummaryInput from "./summary-input";
 import { Info } from "@itell/ui/server";
 
-export default function Summary({ chapter }: { chapter: number }) {
-	if (chapter === 0) {
-		return (
-			<section className="mt-2 w-[800px] mx-auto">
-				<Info>
-					No summary is required for this section. You are good to go!
-				</Info>
-			</section>
-		);
-	}
-
+export default function Summary() {
 	return (
 		<section
 			className="flex flex-col lg:flex-row gap-8 mt-10 border-t-2 py-4"

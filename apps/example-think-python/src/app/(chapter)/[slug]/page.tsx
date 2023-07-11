@@ -68,6 +68,8 @@ export default async function ({ params }: { params: { slug: string } }) {
 		index: chapterIndex,
 	});
 
+	const hasSummary = chapter.chapter !== 0;
+
 	return (
 		<Fragment>
 			<div className="max-w-[1440px] mx-auto grid grid-cols-12 gap-6 px-2">
@@ -78,11 +80,13 @@ export default async function ({ params }: { params: { slug: string } }) {
 							chapters={allChaptersSorted}
 						/>
 						<div className="mt-12 flex flex-col">
-							<AnchorLink
-								icon={<PencilIcon className="w-4 h-4" />}
-								text="Write a Summary"
-								href="#chapter-summary"
-							/>
+							{hasSummary && (
+								<AnchorLink
+									icon={<PencilIcon className="w-4 h-4" />}
+									text="Write a Summary"
+									href="#chapter-summary"
+								/>
+							)}
 							<AnchorLink
 								icon={<ArrowUpIcon className="w-4 h-4" />}
 								text="Back to Top"
@@ -110,7 +114,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 				</aside>
 			</div>
 
-			<Summary chapter={chapter.chapter} />
+			{hasSummary && <Summary />}
 		</Fragment>
 	);
 }

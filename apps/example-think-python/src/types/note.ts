@@ -4,6 +4,11 @@ export type CreateNoteInput = {
 	chapter: number;
 };
 
+export type UpdateNoteInput = {
+	id: string;
+	noteText: string;
+};
+
 export type NoteCard = {
 	y: number;
 	noteText: string;

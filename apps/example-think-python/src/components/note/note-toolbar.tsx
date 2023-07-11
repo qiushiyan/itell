@@ -14,6 +14,7 @@ import {
 import Spinner from "../spinner";
 import { Button } from "../client-components";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
@@ -22,6 +23,7 @@ export default function HighlightToolbar({ chapter }: { chapter: number }) {
 	const noteColor = useNoteColor();
 	const { createNote, markNote, markHighlight } = useNotes();
 	const createHighlight = trpc.note.create.useMutation();
+	const { data: session } = useSession();
 
 	useEffect(() => {
 		const el = document.getElementById("chapter-content") as HTMLElement;
@@ -109,7 +111,12 @@ export default function HighlightToolbar({ chapter }: { chapter: number }) {
 									variant="ghost"
 									color="blue-gray"
 									className="flex items-center gap-2 p-2"
-									onClick={() => command.action(data)}
+									onClick={() => {
+										if (!session?.user && command.label !== "Copy") {
+											return toast.error("You need to be logged in.");
+										}
+										command.action(data);
+									}}
 									key={command.label}
 								>
 									{command.icon}
