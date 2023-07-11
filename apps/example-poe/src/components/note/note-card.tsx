@@ -111,7 +111,11 @@ export default function ({
 	);
 	const sectionContentRef = useSectionContent();
 	const [isHidden, setIsHidden] = useState(false);
-	const { deleteNote: deleteContextNote, markNote } = useNotes();
+	const {
+		deleteNote: deleteContextNote,
+		markNote,
+		updateNote: updateContextNote,
+	} = useNotes();
 	const updateNote = trpc.note.update.useMutation({
 		onSuccess: () => {
 			dispatch({ type: "finish_upsert" });
@@ -135,6 +139,7 @@ export default function ({
 		e.preventDefault();
 		if (id) {
 			// edit existing note
+			updateContextNote({ id, noteText: editState.input });
 			await updateNote.mutateAsync({
 				id,
 				noteText: editState.input,

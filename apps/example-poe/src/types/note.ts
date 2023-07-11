@@ -6,6 +6,11 @@ export type CreateNoteInput = {
 	location: SectionLocation;
 };
 
+export type UpdateNoteInput = {
+	id: string;
+	noteText: string;
+};
+
 export type NoteCard = {
 	y: number;
 	noteText: string;

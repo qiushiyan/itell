@@ -4,7 +4,12 @@ import {
 } from "@/lib/hooks/use-note-color";
 import { useSectionContent } from "@/lib/hooks/use-section-content";
 import { highlightTextAsMark, highlightTextAsNote } from "@/lib/note";
-import { CreateNoteInput, Highlight, NoteCard } from "@/types/note";
+import {
+	CreateNoteInput,
+	Highlight,
+	NoteCard,
+	UpdateNoteInput,
+} from "@/types/note";
 import { useTheme } from "next-themes";
 import { createContext } from "react";
 import { useImmerReducer } from "use-immer";
@@ -15,6 +20,7 @@ type NoteContextType = {
 	setNotes: (notes: NoteCard[]) => void;
 	setHighlights: (highlights: Highlight[]) => void;
 	createNote: (note: CreateNoteInput) => void;
+	updateNote: (note: UpdateNoteInput) => void;
 	deleteNote: (id: string) => void;
 	deleteHighlight: (id: string) => void;
 	markNote: (args: {
@@ -47,6 +53,10 @@ type Action =
 			payload: CreateNoteInput;
 	  }
 	| {
+			type: "update_note";
+			payload: UpdateNoteInput;
+	  }
+	| {
 			type: "delete_note";
 			payload: string;
 	  }
@@ -76,6 +86,18 @@ export default function NoteProvider({
 							theme === "light" ? defaultNoteColorLight : defaultNoteColorDark,
 					});
 					break;
+				case "update_note":
+					draft.notes = draft.notes.map((note) => {
+						if (note.id === action.payload.id) {
+							return {
+								...note,
+								noteText: action.payload.noteText,
+							};
+						}
+						return note;
+					});
+
+					break;
 				case "delete_note":
 					draft.notes = draft.notes.filter(
 						(note) => note.id !== action.payload,
@@ -103,6 +125,10 @@ export default function NoteProvider({
 
 	const createNote = (note: CreateNoteInput) => {
 		dispatch({ type: "create_note", payload: note });
+	};
+
+	const updateNote = (note: UpdateNoteInput) => {
+		dispatch({ type: "update_note", payload: note });
 	};
 
 	const deleteNote = (id: string) => {
@@ -155,6 +181,7 @@ export default function NoteProvider({
 				setNotes,
 				setHighlights,
 				createNote,
+				updateNote,
 				deleteNote,
 				deleteHighlight,
 				markNote,

@@ -21,7 +21,7 @@ const ErrorFeedback: Record<ErrorType, string> = {
 	[ErrorType.LANGUAGE_NOT_EN]: "Please use English for your summary.",
 	[ErrorType.WORD_COUNT]: "Your summary must be between 50 and 200 words.",
 	[ErrorType.OFFENSIVE]:
-		"Your summary includes inoffensive language. Please remove the offensive language and resubmit.",
+		"Your summary includes offensive language. Please remove the offensive language and resubmit.",
 };
 
 type State = {
