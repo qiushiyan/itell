@@ -17,7 +17,7 @@ type Props = {
 };
 
 const roundNumber = (num: number | null) => {
-	if (!num) {
+	if (num === null) {
 		return "NA";
 	}
 

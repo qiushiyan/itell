@@ -10,7 +10,8 @@ export default function () {
 				heading="Learning Statistics"
 				text="Understand your learning journey"
 			/>
-			<div className="container space-y-4 p-8 pt-6 rounded-md border bg-background shadow">
+			<div className="space-y-4">
+				<Skeleton className="w-96 h-8" />
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 					<Badge.Skeletons />
 				</div>

@@ -17,6 +17,7 @@ import { trpc } from "@/trpc/trpc-provider";
 import Spinner from "@/components/spinner";
 import { useRouter } from "next/navigation";
 import { ClassRegister } from "./class-register";
+import { env } from "@/env.mjs";
 
 export const ClassInfo = async ({ teacher }: { teacher: User | null }) => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -33,38 +34,40 @@ export const ClassInfo = async ({ teacher }: { teacher: User | null }) => {
 			<p className="text-muted-foreground text-sm max-w-lg">
 				You are enrolled in a class taught by {teacher.name}.
 			</p>
-			<div className="mt-4 flex">
-				<AlertDialog>
-					<AlertDialogTrigger>
-						<Button variant="destructive">Quit Class</Button>
-					</AlertDialogTrigger>
-					<AlertDialogContent className="z-50">
-						<AlertDialogHeader>
-							<AlertDialogTitle>
-								Are you sure you want to leave the class?
-							</AlertDialogTitle>
-							<AlertDialogDescription>
-								You will no longer receive class-based feedback.
-							</AlertDialogDescription>
-						</AlertDialogHeader>
-						<AlertDialogFooter>
-							<AlertDialogCancel>Cancel</AlertDialogCancel>
-							<AlertDialogAction
-								disabled={isLoading}
-								onClick={async () => {
-									setIsLoading(true);
-									await quitClass.mutateAsync();
+			{process.env.NODE_ENV === "development" && (
+				<div className="mt-4 flex">
+					<AlertDialog>
+						<AlertDialogTrigger>
+							<Button variant="destructive">Quit Class</Button>
+						</AlertDialogTrigger>
+						<AlertDialogContent className="z-50">
+							<AlertDialogHeader>
+								<AlertDialogTitle>
+									Are you sure you want to leave the class?
+								</AlertDialogTitle>
+								<AlertDialogDescription>
+									You will no longer receive class-based feedback.
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogAction
+									disabled={isLoading}
+									onClick={async () => {
+										setIsLoading(true);
+										await quitClass.mutateAsync();
 
-									setIsLoading(false);
-									router.refresh();
-								}}
-							>
-								{isLoading ? <Spinner /> : <span>Confirm</span>}
-							</AlertDialogAction>
-						</AlertDialogFooter>
-					</AlertDialogContent>
-				</AlertDialog>
-			</div>
+										setIsLoading(false);
+										router.refresh();
+									}}
+								>
+									{isLoading ? <Spinner /> : <span>Confirm</span>}
+								</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
+				</div>
+			)}
 		</div>
 	);
 };

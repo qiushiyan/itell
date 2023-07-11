@@ -9,6 +9,7 @@ import {
 import { User } from "@prisma/client";
 import { UserStatistics } from "../user-statistics";
 import Link from "next/link";
+import { UserProgress } from "../user/user-progress";
 
 type Props = {
 	student: User;
@@ -28,6 +29,7 @@ export const StudentProfile = ({ student }: Props) => (
 					<p>{student.email}</p>
 					<p>joined at {student.created_at.toLocaleString("en-us")}</p>
 				</div>
+				<UserProgress user={student} />
 				<div>
 					<Link
 						className={buttonVariants({ variant: "secondary" })}
