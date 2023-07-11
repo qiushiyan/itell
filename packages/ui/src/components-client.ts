@@ -17,3 +17,4 @@ export * from "./components/dialog";
 export * from "./components/table";
 export * from "./components/command";
 export * from "./components/separator";
+export * from "./components/form";

@@ -125,6 +125,8 @@ model FocusTime {
 
   data Json
 
+  totalViewTime Float?
+
   summaryId String  @map("summary_id")
   summary   Summary @relation(fields: [summaryId], references: [id])
 

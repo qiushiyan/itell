@@ -6,6 +6,7 @@ export const FocusTimeRouter = router({
 		.input(
 			z.object({
 				summaryId: z.string(),
+				totalViewTime: z.number(),
 				data: z.array(
 					z.object({
 						sectionId: z.string(),
@@ -21,6 +22,7 @@ export const FocusTimeRouter = router({
 				data: {
 					data: input.data,
 					summaryId: input.summaryId,
+					totalViewTime: input.totalViewTime,
 					userId,
 				},
 			});

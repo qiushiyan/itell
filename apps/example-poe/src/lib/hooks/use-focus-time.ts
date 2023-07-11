@@ -1,6 +1,7 @@
 import { trpc } from "@/trpc/trpc-provider";
 import { useEffect, useRef } from "react";
 import { FOCUS_TIME_COUNT_INTERVAL } from "../constants";
+import { getTotalViewTime } from "../focus-time";
 
 const markTrackingElements = () => {
 	// select direct children of h2, p and div of #section-content
@@ -80,6 +81,7 @@ export const useFocusTime = () => {
 			await createFocusTime.mutateAsync({
 				summaryId,
 				data: data.current,
+				totalViewTime: getTotalViewTime(data.current),
 			});
 			// clear past data
 			data.current.forEach((entry) => {

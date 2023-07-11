@@ -14,10 +14,6 @@ export default function ShowToast() {
 			if (session && isAuthRedirect) {
 				toast.success("Successfully signed in!");
 			}
-
-			if (!session && isAuthRedirect) {
-				toast.success("You are now logged out.");
-			}
 		}
 	}, [searchParams, session]);
 

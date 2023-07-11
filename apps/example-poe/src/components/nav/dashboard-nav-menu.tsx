@@ -11,7 +11,6 @@ import { MenuIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { CommandMenu } from "../command-menu";
 import ThemeToggle from "../theme/theme-toggle";
-import UserAvatar from "../user-avatar";
 import { UserAccountNav } from "../user-account-nav";
 
 interface Props {

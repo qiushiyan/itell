@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hello-pangea/color-picker": "^3.2.2",
+    "@hookform/resolvers": "^3.1.1",
     "@itell/core": "workspace:^",
     "@itell/tailwind": "workspace:^",
     "@itell/ui": "workspace:*",
@@ -42,6 +43,7 @@
     "react": "18.2.0",
     "react-confetti-explosion": "^2.1.2",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.1",
     "react-text-selection-popover": "^2.0.2",
     "react-wrap-balancer": "^0.4.1",
     "recharts": "^2.7.2",

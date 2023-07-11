@@ -93,15 +93,19 @@ export const getReadingTime = async (uid: string) => {
 	}, new Map<string, number>());
 
 	const dates = getDates(startDate, today).map((d) => format(d, "yyyy-MM-dd"));
-	const result = [];
+	const chartData = [];
+	let totalViewTime = 0;
+
 	for (const date of dates) {
-		result.push({
+		totalViewTime += readingTimeByDay.get(date) || 0;
+
+		chartData.push({
 			name: format(new Date(date), "LLL, dd"),
 			value: (readingTimeByDay.get(date) || 0) / 60,
 		});
 	}
 
-	return result;
+	return { chartData, totalViewTime };
 };
 
 export const getRecentSummaries = async (uid: string) => {

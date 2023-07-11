@@ -58,7 +58,6 @@ export const ClassInfo = async ({ teacher }: { teacher: User | null }) => {
 									setIsLoading(false);
 									router.refresh();
 								}}
-								className="bg-red-600 focus:ring-red-600"
 							>
 								{isLoading ? <Spinner /> : <span>Confirm</span>}
 							</AlertDialogAction>

@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { trpc } from "@/trpc/trpc-provider";
 import { toast } from "sonner";
 import Spinner from "@/components/spinner";
@@ -14,20 +14,55 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	Button,
-	Label,
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
 } from "@/components/client-components";
 import { Input } from "@itell/ui/server";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 export const JoinClassForm = () => {
 	const router = useRouter();
-	const [getTeacherLoading, setGetTeacherLoading] = useState(false);
-	const [joinClassLoading, setJoinClassLoading] = useState(false);
 	const [joinClassModalOpen, setJoinClassModalOpen] = useState(false);
-	const [code, setCode] = useState("");
-	const [teacherName, setTeacherName] = useState("");
 	const getTeacher = trpc.class.getTeacherWithCode.useMutation();
-	const getCurrentClass = trpc.class.getCurrentClass.useMutation();
+	const [teacherName, setTeacherName] = useState("");
+
+	const formSchema = z.object({
+		code: z.string().refine(async (val) => {
+			const teacher = await getTeacher.mutateAsync({ code: val });
+			if (!teacher) {
+				return false;
+			}
+			setTeacherName(teacher.name || "unknown");
+
+			return val;
+		}, "Invalid class code"),
+	});
+
+	const [code, setCode] = useState("");
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			code: "",
+		},
+		reValidateMode: "onSubmit",
+	});
+
+	async function onSubmit(values: z.infer<typeof formSchema>) {
+		// Do something with the form values.
+		// ✅ This will be type-safe and validated.
+		setCode(values.code);
+
+		setJoinClassModalOpen(true);
+	}
+
+	const [joinClassLoading, setJoinClassLoading] = useState(false);
 	const joinClass = trpc.class.joinClass.useMutation({
 		onSuccess: () => {
 			setJoinClassLoading(false);
@@ -38,47 +73,31 @@ export const JoinClassForm = () => {
 		},
 	});
 
-	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-		e.preventDefault();
-		setGetTeacherLoading(true);
-		const code = e.currentTarget.code.value;
-		const teacher = await getTeacher.mutateAsync({
-			code,
-		});
-		if (!teacher) {
-			setGetTeacherLoading(false);
-			return toast.error(
-				`No teacher found with class code "${code}". Make sure you enter the exact code received from your teacher.`,
-			);
-		}
-
-		const currentClass = await getCurrentClass.mutateAsync();
-		if (currentClass === code) {
-			setGetTeacherLoading(false);
-			return toast.success("You are already in this class.");
-		}
-
-		setTeacherName(teacher.name || "unknown");
-		setCode(code);
-		setJoinClassModalOpen(true);
-
-		setGetTeacherLoading(false);
-	}
-
 	return (
 		<div className="space-y-4">
 			<p className="text-muted-foreground text-sm">
-				Enter your class code here to join a class.
+				Enter your class code here to join a class
 			</p>
-			<form className="max-w-lg space-y-4" onSubmit={handleSubmit}>
-				<Label htmlFor="code">Code</Label>
-				<Input id="code" name="code" />
-				<div className="flex justify-end">
-					<Button variant="outline" type="submit" disabled={getTeacherLoading}>
-						{getTeacherLoading ? <Spinner /> : "Join"}
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+					<FormField
+						control={form.control}
+						name="code"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Class Code</FormLabel>
+								<FormControl>
+									<Input {...field} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<Button type="submit" disabled={form.formState.isSubmitting}>
+						{form.formState.isSubmitting ? <Spinner /> : "Join"}
 					</Button>
-				</div>
-			</form>
+				</form>
+			</Form>
 			{/* dialog to confirm joining a class */}
 			<AlertDialog
 				open={joinClassModalOpen}

@@ -17,6 +17,9 @@ importers:
       '@hello-pangea/color-picker':
         specifier: ^3.2.2
         version: 3.2.2(react@18.2.0)
+      '@hookform/resolvers':
+        specifier: ^3.1.1
+        version: 3.1.1(react-hook-form@7.45.1)
       '@itell/core':
         specifier: workspace:^
         version: link:../../packages/core
@@ -113,6 +116,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      react-hook-form:
+        specifier: ^7.45.1
+        version: 7.45.1(react@18.2.0)
       react-text-selection-popover:
         specifier: ^2.0.2
         version: 2.0.2(postcss@8.4.23)(react-dom@18.2.0)(react@18.2.0)
@@ -180,6 +186,9 @@ importers:
       '@hello-pangea/color-picker':
         specifier: ^3.2.2
         version: 3.2.2(react@18.2.0)
+      '@hookform/resolvers':
+        specifier: ^3.1.1
+        version: 3.1.1(react-hook-form@7.45.1)
       '@itell/core':
         specifier: workspace:^
         version: link:../../packages/core
@@ -276,6 +285,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      react-hook-form:
+        specifier: ^7.45.1
+        version: 7.45.1(react@18.2.0)
       react-text-selection-popover:
         specifier: ^2.0.2
         version: 2.0.2(postcss@8.4.23)(react-dom@18.2.0)(react@18.2.0)
@@ -493,6 +505,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      react-hook-form:
+        specifier: ^7.45.1
+        version: 7.45.1(react@18.2.0)
       react-wrap-balancer:
         specifier: ^0.4.1
         version: 0.4.1(react@18.2.0)
@@ -1642,6 +1657,14 @@ packages:
       lodash: 4.17.21
       react: 18.2.0
       tinycolor2: 1.6.0
+    dev: false
+
+  /@hookform/resolvers@3.1.1(react-hook-form@7.45.1):
+    resolution: {integrity: sha512-tS16bAUkqjITNSvbJuO1x7MXbn7Oe8ZziDTJdA9mMvsoYthnOOiznOTGBYwbdlYBgU+tgpI/BtTU3paRbCuSlg==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.45.1(react@18.2.0)
     dev: false
 
   /@internationalized/date@3.3.0:
@@ -11039,6 +11062,15 @@ packages:
 
   /react-error-overlay@6.0.9:
     resolution: {integrity: sha512-nQTTcUu+ATDbrSD1BZHr5kgSD4oF8OFjxun8uAaL8RwPBacGBNPf/yAuVVdx17N8XNzRDMrZ9XcKZHCjPW+9ew==}
+    dev: false
+
+  /react-hook-form@7.45.1(react@18.2.0):
+    resolution: {integrity: sha512-6dWoFJwycbuFfw/iKMcl+RdAOAOHDiF11KWYhNDRN/OkUt+Di5qsZHwA0OwsVnu9y135gkHpTw9DJA+WzCeR9w==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is@16.13.1:
