@@ -80,8 +80,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 		allSections: allSectionsSorted,
 	});
 
-	const hasSummary =
-		currentLocation.section !== 0 && section.title !== "Key Terms";
+	const hasSummary = section.summary;
 
 	return (
 		<Fragment>

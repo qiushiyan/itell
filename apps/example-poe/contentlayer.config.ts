@@ -42,6 +42,12 @@ const Section = defineDocumentType(() => ({
 			description: "The title of the Section",
 			required: true,
 		},
+		summary: {
+			type: "boolean",
+			default: true,
+			description: "Whether the section requires a summary",
+			required: false,
+		},
 	},
 	computedFields: {
 		url: {
