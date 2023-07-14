@@ -2,14 +2,17 @@ import { cn } from "@itell/core";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
 import { Typography } from "./typography";
 import { InfoIcon, AlertCircleIcon, AlertTriangleIcon } from "lucide-react";
+import { Card, CardContent } from "./card";
 
 export const Callout = ({ children }: { children: React.ReactNode }) => {
 	return (
-		<div className="border-l-4 border-l-primary my-12">
-			<Typography as="div" className="text-xl max-w-2xl mx-auto text-center">
-				{children}
-			</Typography>
-		</div>
+		<Card className="my-12 max-w-2xl mx-auto ">
+			<CardContent>
+				<div className="text-xl text-center font-serif tracking-tight">
+					{children}
+				</div>
+			</CardContent>
+		</Card>
 	);
 };
 

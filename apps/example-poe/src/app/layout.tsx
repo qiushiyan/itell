@@ -1,4 +1,4 @@
-import { Inter as FontSans } from "next/font/google";
+import { Inter as FontSans, Roboto_Slab as FontSerif } from "next/font/google";
 import "@/styles/globals.css";
 
 import AppProvider from "@/components/providers";
@@ -32,6 +32,11 @@ const fontSans = FontSans({
 	variable: "--font-sans",
 });
 
+const fontSerif = FontSerif({
+	subsets: ["latin"],
+	variable: "--font-serif",
+});
+
 export default async function RootLayout({
 	children,
 }: { children: React.ReactNode }) {
@@ -54,6 +59,7 @@ export default async function RootLayout({
 				className={cn(
 					"min-h-screen bg-background font-sans antialiased",
 					fontSans.variable,
+					fontSerif.variable,
 				)}
 			>
 				<AppProvider>
