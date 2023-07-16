@@ -9,6 +9,10 @@
     ".": {
       "require": "./dist/index.cjs.js",
       "import": "./dist/index.es.js"
+    },
+    "./hooks": {
+      "require": "./dist/hooks.cjs.js",
+      "import": "./dist/hooks.es.js"
     }
   },
   "typings": "./index.d.ts",

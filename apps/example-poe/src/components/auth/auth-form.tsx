@@ -1,7 +1,7 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { GoogleLoginButton } from "./login-button";
 import { Label } from "../client-components";

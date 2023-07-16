@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 
 import { cn } from "@itell/core";
-import { useLockBody } from "@itell/core";
+import { useLockBody } from "@itell/core/hooks";
 import { DashboardNavItem } from "@/types/nav";
 
 // had to accept title as a prop here

@@ -4,7 +4,7 @@ import { FormEvent, Fragment, useState } from "react";
 import TextArea from "../ui/textarea";
 import { EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
-import { useClickOutside } from "@/lib/hooks/utils";
+import { useClickOutside } from "@itell/core/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDelete from "./node-delete";

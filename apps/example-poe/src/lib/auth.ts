@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { NextAuthOptions, getServerSession } from "next-auth";
 import { getServerSession as getServerSessionNext } from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
-import EmailProvider from "next-auth/providers/email";
 
 import db from "./db";
 import { env } from "@/env.mjs";
@@ -15,10 +14,6 @@ export const authOptions: NextAuthOptions = {
 		GoogleProvider({
 			clientId: env.GOOGLE_CLIENT_ID,
 			clientSecret: env.GOOGLE_CLIENT_SECRET,
-		}),
-		EmailProvider({
-			server: env.EMAIL_SERVER,
-			from: env.EMAIL_FROM,
 		}),
 	],
 	callbacks: {
