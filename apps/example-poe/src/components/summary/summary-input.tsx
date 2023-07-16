@@ -75,8 +75,7 @@ export default function SummaryInput() {
 					onValueChange={(val) => setInput(val)}
 					rows={10}
 					className="resize-none rounded-md shadow-md p-4 w-full"
-					onFocus={() => pauseFocusTimeCounting()}
-					onBlur={() => startFocusTimeCounting()}
+					disabled={sessionStatus !== "authenticated"}
 				/>
 				{state.error && <Warning>{state.error}</Warning>}
 				<div className="flex justify-end">

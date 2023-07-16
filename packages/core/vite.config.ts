@@ -11,12 +11,23 @@ const app = async (): Promise<UserConfigExport> => {
 		],
 		build: {
 			lib: {
-				entry: path.resolve(__dirname, "src/index.ts"),
+				entry: {
+					index: path.resolve(__dirname, "src/index.ts"),
+					hooks: path.resolve(__dirname, "src/hooks/index.ts"),
+				},
 				name: "ui",
 				formats: ["es", "cjs"],
-				fileName: (format) => `index.${format}.js`,
+				fileName: (format, name) => `${name}.${format}.js`,
 			},
 			emptyOutDir: true,
+			rollupOptions: {
+				external: ["react"],
+				output: {
+					globals: {
+						react: "React",
+					},
+				},
+			},
 		},
 	});
 };

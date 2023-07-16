@@ -6,8 +6,7 @@ import ShowToast from "@/components/toast";
 import { Suspense } from "react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { cn } from "@itell/core";
-import { Metadata, ResolvingMetadata } from "next";
-import { reader } from "@/lib/keystatic";
+import { Metadata } from "next";
 import { getSiteConfig } from "@/lib/config";
 
 type SiteConfig = {

@@ -1,6 +1,6 @@
-import { SectionLocation } from "@/types/location";
 import { useEffect, useState } from "react";
-import { useLocalStorage, useLocation } from "./utils";
+import { useLocation } from "./utils";
+import { useLocalStorage } from "@itell/core/hooks";
 import { makeLocationHref } from "../utils";
 import { SectionLocationSchema } from "@/trpc/schema";
 

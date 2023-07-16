@@ -1,9 +1,8 @@
 import { RequestClassCodeTemplate } from "@/components/email-templates/request-class-code";
 import { env } from "@/env.mjs";
+import { resend } from "@/lib/resend";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Resend } from "resend";
-
-const resend = new Resend(env.RESEND_API_KEY);
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const { email, message } = JSON.parse(req.body) as {
