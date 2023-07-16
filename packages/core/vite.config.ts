@@ -17,6 +17,14 @@ const app = async (): Promise<UserConfigExport> => {
 				fileName: (format) => `index.${format}.js`,
 			},
 			emptyOutDir: true,
+			rollupOptions: {
+				external: ["react"],
+				output: {
+					globals: {
+						react: "React",
+					},
+				},
+			},
 		},
 	});
 };

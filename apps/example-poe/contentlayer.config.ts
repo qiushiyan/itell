@@ -4,21 +4,11 @@ import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
-import GithubSlugger from "github-slugger";
-
-const parseLocation = (x: string, defaultVal: number | undefined = undefined) =>
-	x ? parseInt(x.split("-")[1]) : defaultVal;
-
-const getLocationFromFlattenedPath = (path: string) => {
-	// example path "/section/module-1/chapter-1/section-1"
-	const slugSplit = path.substring(1).split("/");
-	const [_, module, chapter, section] = slugSplit;
-	return {
-		module: parseLocation(module),
-		chapter: parseLocation(chapter),
-		section: parseLocation(section, 0),
-	};
-};
+import {
+	getHeadings,
+	getLocationFromFlattenedPath,
+	getSlugFromFlattenedPath,
+} from "./src/lib/contentlayer";
 
 const Site = defineDocumentType(() => ({
 	name: "Site",
@@ -27,7 +17,8 @@ const Site = defineDocumentType(() => ({
 	computedFields: {
 		slug: {
 			type: "string",
-			resolve: (doc) => `${doc._raw.flattenedPath.replace("site/", "")}`,
+			resolve: (doc) =>
+				getSlugFromFlattenedPath(doc._raw.flattenedPath, "site/"),
 		},
 	},
 }));
@@ -52,7 +43,8 @@ const Section = defineDocumentType(() => ({
 	computedFields: {
 		url: {
 			type: "string",
-			resolve: (doc) => `${doc._raw.flattenedPath.replace("section/", "")}`,
+			resolve: (doc) =>
+				getSlugFromFlattenedPath(doc._raw.flattenedPath, "section/"),
 		},
 		location: {
 			type: "json",
@@ -60,28 +52,7 @@ const Section = defineDocumentType(() => ({
 		},
 		headings: {
 			type: "json",
-			resolve: async (doc) => {
-				const regXHeader = /\n(?<flag>#{1,6})\s+(?<content>.+)/g;
-				const slugger = new GithubSlugger();
-				const headings = Array.from(doc.body.raw.matchAll(regXHeader)).map(
-					// rome-ignore lint/suspicious/noExplicitAny: <explanation>
-					({ groups }: any) => {
-						const flag = groups?.flag;
-						const content = groups?.content;
-						return {
-							level:
-								flag?.length === 1
-									? "one"
-									: flag?.length === 2
-									? "two"
-									: "three",
-							text: content,
-							slug: content ? slugger.slug(content) : undefined,
-						};
-					},
-				);
-				return headings;
-			},
+			resolve: (doc) => getHeadings(doc.body.raw),
 		},
 	},
 }));

@@ -22,7 +22,6 @@ export default async function () {
 						<p className="text-sm text-muted-foreground">
 							Enter your email to sign in to your account
 						</p>
-						<p className="text-sm text-muted-foreground">TBD</p>
 					</div>
 					<AuthForm />
 				</div>

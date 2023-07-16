@@ -3,7 +3,7 @@
 import { cn } from "@itell/core";
 import { useState } from "react";
 import { TwitterPicker } from "@hello-pangea/color-picker";
-import { useClickOutside } from "@/lib/hooks/utils";
+import { useClickOutside } from "@itell/core";
 
 type Props = {
 	color: string;

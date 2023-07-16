@@ -12,6 +12,8 @@ const server = z.object({
 	NEXTAUTH_SECRET: z.string(),
 	DATABASE_URL: z.string(),
 	RESEND_API_KEY: z.string(),
+	EMAIL_SERVER: z.string(),
+	EMAIL_FROM: z.string(),
 });
 
 /**
@@ -38,6 +40,8 @@ const processEnv = {
 	DATABASE_URL: process.env.DATABASE_URL,
 	NEXT_PUBLIC_SCORE_API_URL: process.env.NEXT_PUBLIC_SCORE_API_URL,
 	RESEND_API_KEY: process.env.RESEND_API_KEY,
+	EMAIL_SERVER: process.env.EMAIL_SERVER,
+	EMAIL_FROM: process.env.EMAIL_FROM,
 };
 
 // Don't touch the part below

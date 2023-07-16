@@ -180,6 +180,9 @@ importers:
       typescript:
         specifier: 5.1.6
         version: 5.1.6
+      vitest:
+        specifier: ^0.31.4
+        version: 0.31.4
 
   apps/example-think-python:
     dependencies:
@@ -386,6 +389,9 @@ importers:
       clsx:
         specifier: ^1.2.1
         version: 1.2.1
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
       tailwind-merge:
         specifier: ^1.12.0
         version: 1.12.0
@@ -393,6 +399,9 @@ importers:
       '@types/node':
         specifier: ^20.3.1
         version: 20.3.1
+      '@types/react':
+        specifier: ^18.2.15
+        version: 18.2.15
       vite:
         specifier: ^4.3.2
         version: 4.3.2(@types/node@20.3.1)
@@ -1761,7 +1770,7 @@ packages:
       '@emotion/weak-memoize': 0.3.1
       '@floating-ui/react': 0.24.3(react-dom@18.2.0)(react@18.2.0)
       '@hapi/iron': 7.0.1
-      '@markdoc/markdoc': 0.3.0(@types/react@18.2.14)(react@18.2.0)
+      '@markdoc/markdoc': 0.3.0(@types/react@18.2.15)(react@18.2.0)
       '@react-aria/focus': 3.13.0(react@18.2.0)
       '@react-aria/i18n': 3.8.0(react@18.2.0)
       '@react-aria/interactions': 3.16.0(react@18.2.0)
@@ -1777,7 +1786,7 @@ packages:
       '@sindresorhus/slugify': 1.1.2
       '@ts-gql/tag': 0.7.0(graphql@16.7.1)
       '@types/node': 16.11.13
-      '@types/react': 18.2.14
+      '@types/react': 18.2.15
       '@types/react-dom': 18.0.11
       '@urql/core': 4.0.10(graphql@16.7.1)
       '@urql/exchange-auth': 2.1.4(graphql@16.7.1)
@@ -1870,7 +1879,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.3
       '@keystatic/core': 0.0.107(react-dom@18.2.0)(react@18.2.0)
-      '@types/react': 18.2.14
+      '@types/react': 18.2.15
       chokidar: 3.5.3
       next: 13.4.8(@opentelemetry/api@1.4.1)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
@@ -1936,7 +1945,7 @@ packages:
     dev: false
     optional: true
 
-  /@markdoc/markdoc@0.3.0(@types/react@18.2.14)(react@18.2.0):
+  /@markdoc/markdoc@0.3.0(@types/react@18.2.15)(react@18.2.0):
     resolution: {integrity: sha512-QWCF8krIIw52ulflfnoff0yG1eKl9CCGA3KAiOjHyYtHNzSEouFh8lO52nAaO3qV2Ctj1GTB8TTb2rTfvISQfA==}
     engines: {node: '>=14.7.0'}
     peerDependencies:
@@ -1948,7 +1957,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@types/react': 18.2.14
+      '@types/react': 18.2.15
       react: 18.2.0
     optionalDependencies:
       '@types/markdown-it': 12.2.3
@@ -1997,7 +2006,7 @@ packages:
       react: '>=16'
     dependencies:
       '@types/mdx': 2.0.5
-      '@types/react': 18.2.14
+      '@types/react': 18.2.15
       react: 18.2.0
     dev: false
 
@@ -5706,10 +5715,17 @@ packages:
   /@types/react-dom@18.0.11:
     resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
     dependencies:
-      '@types/react': 18.2.14
+      '@types/react': 18.2.15
 
   /@types/react@18.2.14:
     resolution: {integrity: sha512-A0zjq+QN/O0Kpe30hA1GidzyFjatVvrpIvWLxD+xv67Vt91TWWgco9IvrJBkeyHm1trGaFS/FSGqPlhyeZRm0g==}
+    dependencies:
+      '@types/prop-types': 15.7.5
+      '@types/scheduler': 0.16.3
+      csstype: 3.1.2
+
+  /@types/react@18.2.15:
+    resolution: {integrity: sha512-oEjE7TQt1fFTFSbf8kkNuc798ahTUzn3Le67/PWjE8MAfYAD/qB7O8hSTcromLFqHCt9bcdOg5GXMokzTjJ5SA==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
@@ -7247,7 +7263,7 @@ packages:
       js-string-escape: 1.0.1
       lodash: 4.17.21
       md5-hex: 3.0.1
-      semver: 7.5.0
+      semver: 7.5.1
       well-known-symbols: 2.0.0
     dev: true
 
@@ -11673,21 +11689,12 @@ packages:
       lru-cache: 6.0.0
     dev: true
 
-  /semver@7.5.0:
-    resolution: {integrity: sha512-+XC0AD/R7Q2mPSRuy2Id0+CGTZ98+8f+KvwirxOKIEyid+XSx6HbC63p+O4IndTHuX5Z+JxQ0TghCkO5Cg/2HA==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
-    dev: true
-
   /semver@7.5.1:
     resolution: {integrity: sha512-Wvss5ivl8TMRZXXESstBA4uR5iXgEN/VC5/sOcuXdVLzcdkz4HWetIoRfG5gb5X+ij/G9rw9YoGn3QoQ8OCSpw==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
-    dev: false
 
   /server-only@0.0.1:
     resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}

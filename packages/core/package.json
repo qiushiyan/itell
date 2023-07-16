@@ -5,14 +5,13 @@
   "private": true,
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.es.js",
-  "typings": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.cjs.js",
       "import": "./dist/index.es.js"
-    },
-    "./dist/style.css": "./dist/style.css"
+    }
   },
+  "typings": "./index.d.ts",
   "files": [
     "dist"
   ],
@@ -26,8 +25,12 @@
     "clsx": "^1.2.1",
     "tailwind-merge": "^1.12.0"
   },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
   "devDependencies": {
     "@types/node": "^20.3.1",
+    "@types/react": "^18.2.15",
     "vite": "^4.3.2",
     "vite-plugin-dts": "^2.3.0"
   }
