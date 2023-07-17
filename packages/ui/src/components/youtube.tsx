@@ -1,5 +1,5 @@
 import Balancer from "react-wrap-balancer";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { Typography } from "./typography";
 import { Button } from "./button";
 

@@ -1,4 +1,4 @@
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 
 function Skeleton({
 	className,

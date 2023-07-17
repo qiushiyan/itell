@@ -8,7 +8,7 @@ import {
 	CollapsibleContent as BaseCollapsibleContent,
 	CollapsibleTrigger as BaseCollapsibleTrigger,
 } from "./collapsible";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 
 export function CollapsibleTrigger({
 	children,

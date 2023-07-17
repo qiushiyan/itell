@@ -1,4 +1,4 @@
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
 import { Typography } from "./typography";
 import { InfoIcon, AlertCircleIcon, AlertTriangleIcon } from "lucide-react";

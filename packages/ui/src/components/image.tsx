@@ -1,4 +1,4 @@
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import NextImage from "next/image";
 import Balancer from "react-wrap-balancer";
 

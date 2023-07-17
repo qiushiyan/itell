@@ -1,7 +1,7 @@
 import React from "react";
 import typographyStyles from "./typography-styles";
 import typographyColors from "./typography-colors";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 
 // rome-ignore lint/suspicious/noExplicitAny: <explanation>
 interface TypographyProps extends React.ComponentProps<any> {

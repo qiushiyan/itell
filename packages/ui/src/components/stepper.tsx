@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { CheckCircleIcon } from "lucide-react";
 import { createContext, useContext } from "react";
 import { Typography } from "./typography";
