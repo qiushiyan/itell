@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { useState } from "react";
 import { TwitterPicker } from "@hello-pangea/color-picker";
 import { useClickOutside } from "@/lib/hooks/utils";

@@ -1,6 +1,6 @@
 import { getSiteConfig } from "@/lib/config";
 import { reader } from "@/lib/keystatic";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { GithubIcon } from "lucide-react";
 import * as React from "react";
 

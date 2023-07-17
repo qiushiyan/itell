@@ -1,5 +1,5 @@
 import { Typography } from "@itell/ui/server";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 
 type Heading = {
 	level: "one" | "two" | "three";

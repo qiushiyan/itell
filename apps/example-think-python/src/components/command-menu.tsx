@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Circle, File, Laptop, Moon, SunMedium } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 
 import {
 	Button,

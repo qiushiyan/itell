@@ -1,4 +1,4 @@
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import Image from "next/image";
 
 export const TextOverImage = ({

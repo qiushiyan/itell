@@ -1,4 +1,4 @@
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { Typography } from "@itell/ui/server";
 import { Chapter } from "contentlayer/generated";
 import Balancer from "react-wrap-balancer";

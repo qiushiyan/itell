@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { HighlighterIcon, CopyIcon, PencilIcon } from "lucide-react";
 import { Popover } from "react-text-selection-popover";
 import { toast } from "sonner";

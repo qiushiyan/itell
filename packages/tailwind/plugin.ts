@@ -1,6 +1,6 @@
 import plugin from "tailwindcss/plugin";
 import { fontFamily } from "tailwindcss/defaultTheme";
-import { DefaultThemeConfig, type ItellThemeColors } from "@itell/core";
+import { DefaultThemeConfig, type ItellThemeColors } from "@itell/core/config";
 
 const camelToKebab = (str: string) => {
 	return str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);

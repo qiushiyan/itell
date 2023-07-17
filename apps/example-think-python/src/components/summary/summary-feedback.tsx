@@ -1,6 +1,6 @@
 import { ScoreType } from "@/lib/constants";
 import { SummaryFeedback } from "@/lib/summary";
-import { keyof } from "@itell/core";
+import { keyof } from "@itell/core/utils";
 import { Info, Typography, Warning } from "@itell/ui/server";
 
 type Props = {

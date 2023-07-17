@@ -4,7 +4,7 @@ import TextbookScrollProgress from "./textbook-scroll-progress";
 import SiteNav from "./site-nav";
 import { getSiteConfig } from "@/lib/config";
 import ThemeToggle from "../theme/theme-toggle";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { CommandMenu } from "../command-menu";
 import { UserAccountNav } from "../user-account-nav";
 

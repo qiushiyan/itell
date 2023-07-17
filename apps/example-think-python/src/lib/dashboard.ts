@@ -1,7 +1,7 @@
 import { type Prisma, type Summary } from "@prisma/client";
 import db from "./db";
 import { format, subDays } from "date-fns";
-import { getDates } from "./utils";
+import { getDatesBetween } from "@itell/core/utils";
 
 export const getSummaryStats = async ({
 	where,
@@ -92,7 +92,9 @@ export const getReadingTime = async (uid: string) => {
 		return acc;
 	}, new Map<string, number>());
 
-	const dates = getDates(startDate, today).map((d) => format(d, "yyyy-MM-dd"));
+	const dates = getDatesBetween(startDate, today).map((d) =>
+		format(d, "yyyy-MM-dd"),
+	);
 	const chartData = [];
 	let totalViewTime = 0;
 

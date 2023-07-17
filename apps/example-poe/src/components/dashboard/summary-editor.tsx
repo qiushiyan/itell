@@ -6,7 +6,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { Button } from "../client-components";
 import { ScoreResponse, useSummary } from "@/lib/hooks/use-summary";
 import Feedback from "../summary/summary-feedback";
-import { numOfWords } from "@/lib/utils";
+import { numOfWords } from "@itell/core/utils";
 import Spinner from "../spinner";
 import { useRouter } from "next/navigation";
 import { SectionLocation } from "@/types/location";

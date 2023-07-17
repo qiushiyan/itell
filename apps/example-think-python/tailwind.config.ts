@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 import tailwindPreset from "@itell/tailwind";
-import { getThemeConfig } from "@itell/core";
+import { getThemeConfig } from "@itell/core/config";
 
 import themeConfig from "./config/theme.json";
 

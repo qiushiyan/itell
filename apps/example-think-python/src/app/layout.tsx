@@ -5,7 +5,7 @@ import AppProvider from "@/components/providers";
 import ShowToast from "@/components/toast";
 import { Suspense } from "react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { Metadata, ResolvingMetadata } from "next";
 import { reader } from "@/lib/keystatic";
 import { getSiteConfig } from "@/lib/config";

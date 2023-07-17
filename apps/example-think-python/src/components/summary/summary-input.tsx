@@ -5,7 +5,7 @@ import { Typography, Warning } from "@itell/ui/server";
 import Spinner from "../spinner";
 import Feedback from "./summary-feedback";
 import TextArea from "../ui/textarea";
-import { makeInputKey, numOfWords } from "@/lib/utils";
+import { makeInputKey } from "@/lib/utils";
 import { useSummary } from "@/lib/hooks/use-summary";
 import { useFocusTime } from "@/lib/hooks/use-focus-time";
 import { useSession } from "next-auth/react";
@@ -14,6 +14,7 @@ import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import ConfettiExplosion from "react-confetti-explosion";
 import { useCurrentChapter } from "@/lib/hooks/utils";
+import { numOfWords } from "@itell/core/utils";
 
 export default function SummaryInput() {
 	const { state, setInput, score, create } = useSummary({

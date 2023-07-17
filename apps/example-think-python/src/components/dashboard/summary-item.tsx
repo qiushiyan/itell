@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Summary } from "@prisma/client";
 
-import { relativeDate } from "@/lib/utils";
+import { relativeDate } from "@itell/core/utils";
 import { Skeleton } from "@itell/ui/server";
 import { CheckCircle, XCircle } from "lucide-react";
 

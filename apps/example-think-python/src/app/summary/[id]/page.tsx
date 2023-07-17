@@ -7,12 +7,9 @@ import { getCurrentUser } from "@/lib/auth";
 import { allChaptersSorted } from "@/lib/chapters";
 import { ScoreType } from "@/lib/constants";
 import db from "@/lib/db";
-import { relativeDate } from "@/lib/utils";
-import { cn } from "@itell/core";
-import { Badge, Typography, buttonVariants } from "@itell/ui/server";
+import { relativeDate } from "@itell/core/utils";
+import { Badge } from "@itell/ui/server";
 import { Summary, User } from "@prisma/client";
-import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 async function getSummaryForUser(summaryId: Summary["id"], userId: User["id"]) {

@@ -1,6 +1,5 @@
 import { FocusTime } from "@prisma/client";
 import db from "../src/lib/db";
-import { format, subDays } from "date-fns";
 
 type FocusTimeData = {
 	sectionId: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { Typography } from "@itell/ui/server";
 import {
 	Tabs as BaseTabs,

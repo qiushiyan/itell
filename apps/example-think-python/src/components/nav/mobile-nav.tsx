@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { useLockBody } from "@/lib/hooks/utils";
 import { DashboardNavItem } from "@/types/nav";
 

@@ -8,7 +8,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/client-components";
-import { keyof } from "@itell/core";
+import { keyof } from "@itell/core/utils";
 import { Summary } from "@prisma/client";
 import { useState } from "react";
 import { SummaryItem } from "./summary-item";

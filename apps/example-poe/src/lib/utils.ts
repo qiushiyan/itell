@@ -1,6 +1,5 @@
 import { Location, SectionLocation } from "@/types/location";
 import { SidebarSection } from "@/types/section";
-import { addDays, formatRelative } from "date-fns";
 
 export const getYoutubeLinkFromEmbed = (url: string) => {
 	const regex = /embed\/([\w-]+)\?/;

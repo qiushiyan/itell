@@ -1,5 +1,5 @@
 import { Pager } from "@/lib/pager";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
