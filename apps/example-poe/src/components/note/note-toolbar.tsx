@@ -1,10 +1,9 @@
 "use client";
 
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { HighlighterIcon, CopyIcon, PencilIcon } from "lucide-react";
 import { Popover } from "react-text-selection-popover";
 import { toast } from "sonner";
-import { useNotes } from "@/lib/hooks/use-notes";
 import { useTextSelection } from "use-text-selection";
 import { SectionLocation } from "@/types/location";
 import { trpc } from "@/trpc/trpc-provider";
@@ -16,15 +15,17 @@ import Spinner from "../spinner";
 import { Button } from "../client-components";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { markHighlight, markNote, useNotesStore } from "@/lib/store";
+import { useTheme } from "next-themes";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
 export default function HighlightToolbar({
 	location,
 }: { location: SectionLocation }) {
-	const [target, setTarget] = useState<HTMLElement | null>(null);
+	const [target, setTarget] = useState<HTMLElement | undefined>(undefined);
 	const noteColor = useNoteColor();
-	const { createNote, markNote, markHighlight } = useNotes();
+	const { createNote } = useNotesStore();
 	const createHighlight = trpc.note.create.useMutation();
 	const { data: session } = useSession();
 
@@ -41,12 +42,12 @@ export default function HighlightToolbar({
 			icon: <PencilIcon className="w-5 h-5" />,
 			action: ({ clientRect, textContent }: SelectionData) => {
 				if (textContent) {
-					markNote({ textContent, color: noteColor });
+					markNote({ textContent, color: noteColor, target });
 					if (clientRect) {
 						createNote({
 							y: clientRect.y + window.scrollY,
 							highlightedText: textContent,
-							location,
+							color: noteColor,
 						});
 					}
 				}
@@ -68,6 +69,7 @@ export default function HighlightToolbar({
 							textContent,
 							id: newHighlight.id,
 							color: newHighlight.color,
+							target,
 						});
 					}
 				}

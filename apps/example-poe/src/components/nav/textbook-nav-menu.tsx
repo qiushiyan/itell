@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, groupby, keyof } from "@itell/core";
+import { cn, groupby, keyof } from "@itell/core/utils";
 import Link from "next/link";
 import { useLocation } from "@/lib/hooks/utils";
 import {

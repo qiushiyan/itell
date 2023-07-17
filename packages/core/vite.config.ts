@@ -14,6 +14,8 @@ const app = async (): Promise<UserConfigExport> => {
 				entry: {
 					index: path.resolve(__dirname, "src/index.ts"),
 					hooks: path.resolve(__dirname, "src/hooks/index.ts"),
+					utils: path.resolve(__dirname, "src/utils.ts"),
+					config: path.resolve(__dirname, "src/config.ts"),
 				},
 				name: "ui",
 				formats: ["es", "cjs"],

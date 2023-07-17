@@ -50,25 +50,13 @@ export const sortSections = (sections: SidebarSection[]) => {
 
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-export const relativeDate = (date: Date, relativeTo: Date = new Date()) => {
-	return formatRelative(new Date(date), relativeTo);
-};
-
-export const numOfWords = (str: string): number => {
-	if (str.trim() === "") {
-		return 0;
-	}
-	const strWithoutSpace = str.replace(/[\s\t]+/g, " ");
-	return strWithoutSpace.split(" ").length;
-};
-
 export const makeInputKey = (location: SectionLocation) => {
 	return `chapter-${location.chapter}-section-${location.section}-summary`;
 };
 
 export const makeLocationHref = (location: SectionLocation) => {
-	const sectionSlug = location.section ? `section-${location.section}` : "";
-	return `/module-${location.module}/chapter-${location.chapter}/${sectionSlug}`;
+	const sectionSlug = location.section ? `/section-${location.section}` : "";
+	return `/module-${location.module}/chapter-${location.chapter}${sectionSlug}`;
 };
 
 export const isTextbookPage = (location: Location) => {
@@ -77,14 +65,4 @@ export const isTextbookPage = (location: Location) => {
 		location.chapter !== undefined &&
 		location.section !== undefined
 	);
-};
-
-export const getDates = (startDate: Date, endDate: Date) => {
-	const dates = [];
-	let currentDate = startDate;
-	while (currentDate <= endDate) {
-		dates.push(currentDate);
-		currentDate = addDays(currentDate, 1);
-	}
-	return dates;
 };

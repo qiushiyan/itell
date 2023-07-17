@@ -1,7 +1,7 @@
 "use client";
 
 import { useAutosizeTextArea } from "@itell/core/hooks";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { useEffect, useRef } from "react";
 
 interface TextAreaProps

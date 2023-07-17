@@ -1,4 +1,4 @@
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import Link from "next/link";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import { Typography } from "@itell/ui/server";

@@ -1,7 +1,7 @@
 import { Chapter } from "@/types/section";
 import { Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { SectionLocation } from "@/types/location";
 import {
 	Collapsible,

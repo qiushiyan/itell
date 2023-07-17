@@ -9,7 +9,7 @@ import { Input, buttonVariants } from "@itell/ui/server";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import Spinner from "../spinner";
 import { useEffect, useState } from "react";
 

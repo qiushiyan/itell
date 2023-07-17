@@ -1,31 +1,26 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import NoteCard from "./note-card";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import Spinner from "../spinner";
-import { useNotes } from "@/lib/hooks/use-notes";
 import { useSession } from "next-auth/react";
-import { Typography } from "@itell/ui/server";
 import { Highlight, NoteCard as NoteCardType } from "@/types/note";
 import { removeExistingMarks } from "@/lib/note";
 import { useSectionContent } from "@/lib/hooks/use-section-content";
+import { markHighlight, markNote, useNotesStore } from "@/lib/store";
 
 export default function NoteList({ location }: { location: SectionLocation }) {
-	const {
-		notes,
-		setNotes,
-		setHighlights,
-		highlights,
-		markNote,
-		markHighlight,
-	} = useNotes();
+	const { notes, setNotes, setHighlights, highlights } = useNotesStore();
 	const { data: session } = useSession();
 	const deleteNote = trpc.note.delete.useMutation();
 	const { data, isFetching } = trpc.note.getByLocation.useQuery(
 		{ location },
-		{ enabled: Boolean(session?.user) },
+		{
+			enabled: Boolean(session?.user),
+			refetchOnWindowFocus: false,
+		},
 	);
 	const sectionContentRef = useSectionContent();
 
@@ -40,6 +35,7 @@ export default function NoteList({ location }: { location: SectionLocation }) {
 						markNote({
 							textContent: entry.highlightedText,
 							color: entry.color,
+							target: sectionContentRef.current,
 						});
 						notes.push(entry as NoteCardType);
 					} else {
@@ -47,6 +43,7 @@ export default function NoteList({ location }: { location: SectionLocation }) {
 							id: entry.id,
 							textContent: entry.highlightedText,
 							color: entry.color,
+							target: sectionContentRef.current,
 						});
 						highlights.push({ id: entry.id });
 					}

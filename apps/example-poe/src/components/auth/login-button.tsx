@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { buttonVariants } from "@itell/ui/server";
 import { signIn } from "next-auth/react";
 import { useState } from "react";

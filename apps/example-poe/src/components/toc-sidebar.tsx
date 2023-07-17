@@ -1,5 +1,5 @@
 import { Typography } from "@itell/ui/server";
-import { cn } from "@itell/core";
+import { cn } from "@itell/core/utils";
 import { BookmarkIcon } from "lucide-react";
 
 type Heading = {

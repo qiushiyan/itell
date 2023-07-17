@@ -9,8 +9,7 @@ import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDelete from "./node-delete";
 import { emphasizeNote, unHighlightNote, deemphasizeNote } from "@/lib/note";
-import { relativeDate } from "@/lib/utils";
-import { cn } from "@itell/core";
+import { relativeDate, cn } from "@itell/core/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
@@ -18,6 +17,7 @@ import NoteColorPicker from "./note-color-picker";
 import { Button } from "../client-components";
 import { useNotes } from "@/lib/hooks/use-notes";
 import { useSectionContent } from "@/lib/hooks/use-section-content";
+import { markNote, useNotesStore } from "@/lib/store";
 
 interface Props extends NoteCard {
 	location: SectionLocation;
@@ -111,21 +111,14 @@ export default function ({
 	);
 	const sectionContentRef = useSectionContent();
 	const [isHidden, setIsHidden] = useState(false);
-	const {
-		deleteNote: deleteContextNote,
-		markNote,
-		updateNote: updateContextNote,
-	} = useNotes();
+	const { deleteNote: deleteContextNote, updateNote: updateContextNote } =
+		useNotesStore();
 	const updateNote = trpc.note.update.useMutation({
 		onSuccess: () => {
 			dispatch({ type: "finish_upsert" });
 		},
 	});
-	const createNote = trpc.note.create.useMutation({
-		onSuccess: () => {
-			dispatch({ type: "finish_upsert" });
-		},
-	});
+	const createNote = trpc.note.create.useMutation({});
 	const deleteNote = trpc.note.delete.useMutation();
 	const containerRef = useClickOutside<HTMLDivElement>(() => {
 		dispatch({ type: "collapse_note" });
@@ -153,6 +146,7 @@ export default function ({
 				location,
 				color: editState.color,
 			});
+			dispatch({ type: "set_input", payload: editState.input });
 		}
 	};
 
@@ -233,7 +227,11 @@ export default function ({
 									color={editState.color}
 									onChange={(color) => {
 										dispatch({ type: "set_color", payload: color });
-										markNote({ textContent: highlightedText, color });
+										markNote({
+											textContent: highlightedText,
+											color,
+											target: sectionContentRef.current,
+										});
 										if (id) {
 											updateNote.mutate({ id, color });
 										}

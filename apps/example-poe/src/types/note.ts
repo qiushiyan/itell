@@ -3,7 +3,7 @@ import { SectionLocation } from "./location";
 export type CreateNoteInput = {
 	y: number;
 	highlightedText: string;
-	location: SectionLocation;
+	color: string;
 };
 
 export type UpdateNoteInput = {

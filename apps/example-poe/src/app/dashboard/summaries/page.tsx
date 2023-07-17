@@ -4,7 +4,7 @@ import { SummaryList } from "@/components/dashboard/summary-list";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
-import { groupby } from "@itell/core";
+import { groupby } from "@itell/core/utils";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 

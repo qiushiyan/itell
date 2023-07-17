@@ -13,20 +13,34 @@
     "./hooks": {
       "require": "./dist/hooks.cjs.js",
       "import": "./dist/hooks.es.js"
+    },
+    "./utils": {
+      "require": "./dist/utils.cjs.js",
+      "import": "./dist/utils.es.js"
+    },
+    "./config": {
+      "require": "./dist/config.cjs.js",
+      "import": "./dist/config.es.js"
     }
   },
   "typings": "./index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "index.d.ts",
+    "hooks.d.ts",
+    "utils.d.ts",
+    "config.d.ts"
   ],
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "clsx": "^1.2.1",
+    "date-fns": "2.29.3",
     "tailwind-merge": "^1.12.0"
   },
   "peerDependencies": {
@@ -36,6 +50,7 @@
     "@types/node": "^20.3.1",
     "@types/react": "^18.2.15",
     "vite": "^4.3.2",
-    "vite-plugin-dts": "^2.3.0"
+    "vite-plugin-dts": "^2.3.0",
+    "vitest": "^0.31.4"
   }
 }
