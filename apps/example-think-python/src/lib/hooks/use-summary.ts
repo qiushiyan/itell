@@ -1,6 +1,6 @@
 import { trpc } from "@/trpc/trpc-provider";
 import { SummaryFeedback, getFeedback } from "../summary";
-import { makeInputKey, numOfWords } from "../utils";
+import { makeInputKey } from "../utils";
 import { useEffect, useReducer } from "react";
 import { toast } from "sonner";
 import cld3 from "../cld";
@@ -9,6 +9,7 @@ import offensiveWords from "public/offensive-words.json";
 import { SummaryResponse, SummaryScore } from "@/trpc/schema";
 import { getScore } from "../score";
 import { useCurrentChapter } from "./utils";
+import { numOfWords } from "@itell/core/utils";
 
 enum ErrorType {
 	LANGUAGE_NOT_EN = "LANGUAGE_NOT_EN",
