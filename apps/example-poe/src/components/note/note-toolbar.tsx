@@ -15,9 +15,12 @@ import Spinner from "../spinner";
 import { Button } from "../client-components";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { markHighlight, markNote, useNotesStore } from "@/lib/store";
-import { useTheme } from "next-themes";
-import { deleteHighlight } from "@/lib/note";
+import { useNotesStore } from "@/lib/store";
+import {
+	deleteHighlightListener,
+	transformHighlight,
+	transformNote,
+} from "@/lib/note";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
@@ -26,7 +29,8 @@ export default function HighlightToolbar({
 }: { location: SectionLocation }) {
 	const [target, setTarget] = useState<HTMLElement | undefined>(undefined);
 	const noteColor = useNoteColor();
-	const { createNote } = useNotesStore();
+	const { createNote, incrementHighlightCount, incrementNoteCount } =
+		useNotesStore();
 	const createHighlight = trpc.note.create.useMutation();
 	const { data: session } = useSession();
 
@@ -41,15 +45,17 @@ export default function HighlightToolbar({
 		{
 			label: "Note",
 			icon: <PencilIcon className="w-5 h-5" />,
-			action: ({ clientRect, textContent }: SelectionData) => {
-				if (textContent) {
-					markNote({ textContent, color: noteColor, target });
+			action: async ({ clientRect, textContent }: SelectionData) => {
+				if (textContent && target) {
+					await transformNote({ textContent, color: noteColor, target });
 					if (clientRect) {
 						createNote({
 							y: clientRect.y + window.scrollY,
 							highlightedText: textContent,
 							color: noteColor,
 						});
+
+						incrementNoteCount();
 					}
 				}
 			},
@@ -59,24 +65,29 @@ export default function HighlightToolbar({
 			icon: <HighlighterIcon className="w-5 h-5" />,
 			action: async ({ clientRect, textContent }: SelectionData) => {
 				if (textContent) {
-					if (clientRect) {
+					if (clientRect && target) {
 						const newHighlight = await createHighlight.mutateAsync({
 							y: clientRect.y + window.scrollY,
 							highlightedText: textContent,
 							location,
 							color: defaultHighlightColor,
 						});
-						markHighlight({
+
+						await transformHighlight({
+							id: newHighlight.id,
 							textContent,
 							target,
-							id: newHighlight.id,
-							color: newHighlight.color,
+							color: defaultHighlightColor,
 						});
-						const highlightElement = document.getElementById(
-							`${newHighlight.id}`,
-						);
+
+						incrementHighlightCount();
+
+						const highlightElement = document.getElementById(newHighlight.id);
 						if (highlightElement) {
-							highlightElement.addEventListener("click", deleteHighlight);
+							highlightElement.addEventListener("click", (event) => {
+								deleteHighlightListener(event);
+								incrementHighlightCount(-1);
+							});
 						}
 					}
 				}

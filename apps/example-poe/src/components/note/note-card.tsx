@@ -8,7 +8,12 @@ import { useClickOutside } from "@itell/core/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDelete from "./node-delete";
-import { emphasizeNote, unHighlightNote, deemphasizeNote } from "@/lib/note";
+import {
+	emphasizeNote,
+	unHighlightNote,
+	deemphasizeNote,
+	transformNote,
+} from "@/lib/note";
 import { relativeDate, cn } from "@itell/core/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
@@ -16,7 +21,7 @@ import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
 import { Button } from "../client-components";
 import { useSectionContent } from "@/lib/hooks/use-section-content";
-import { markNote, useNotesStore } from "@/lib/store";
+import { useNotesStore } from "@/lib/store";
 
 interface Props extends NoteCard {
 	location: SectionLocation;
@@ -110,8 +115,11 @@ export default function ({
 	);
 	const sectionContentRef = useSectionContent();
 	const [isHidden, setIsHidden] = useState(false);
-	const { deleteNote: deleteContextNote, updateNote: updateContextNote } =
-		useNotesStore();
+	const {
+		deleteNote: deleteContextNote,
+		updateNote: updateContextNote,
+		incrementNoteCount,
+	} = useNotesStore();
 	const updateNote = trpc.note.update.useMutation({
 		onSuccess: () => {
 			dispatch({ type: "finish_upsert" });
@@ -157,6 +165,7 @@ export default function ({
 			unHighlightNote(sectionContentRef.current, highlightedText);
 		}
 		setIsHidden(true);
+		incrementNoteCount(-1);
 		if (id) {
 			// delete note in database
 			deleteContextNote(id);
@@ -184,7 +193,7 @@ export default function ({
 	};
 
 	useEffect(() => {
-		markNote({
+		transformNote({
 			textContent: highlightedText,
 			color,
 			target: sectionContentRef.current,
@@ -199,7 +208,10 @@ export default function ({
 					editState.collapsed ? "z-10" : "z-50",
 					isHidden && "hidden",
 				)}
-				style={{ top: y - 100, borderColor: editState.color }}
+				style={{
+					top: y - 100,
+					borderColor: editState.color,
+				}}
 				ref={containerRef}
 				{...triggers}
 			>
@@ -235,7 +247,7 @@ export default function ({
 									color={editState.color}
 									onChange={(color) => {
 										dispatch({ type: "set_color", payload: color });
-										markNote({
+										transformNote({
 											textContent: highlightedText,
 											color,
 											target: sectionContentRef.current,

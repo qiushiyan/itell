@@ -1,10 +1,9 @@
 "use client";
 
 import { useSectionContent } from "@/lib/hooks/use-section-content";
-import { deleteHighlight, deleteNote } from "@/lib/note";
-import { markHighlight } from "@/lib/store";
-import { trpc } from "@/trpc/trpc-provider";
-import { useEffect } from "react";
+import { deleteHighlightListener, transformHighlight } from "@/lib/note";
+import { useNotesStore } from "@/lib/store";
+import { useEffect, useState } from "react";
 
 type Props = {
 	id: string;
@@ -14,27 +13,33 @@ type Props = {
 
 export const Highlight = ({ id, highlightedText, color }: Props) => {
 	const sectionContentRef = useSectionContent();
-
+	const incrementHighlightCount = useNotesStore(
+		(store) => store.incrementHighlightCount,
+	);
 	let el: HTMLElement | null = null;
 
 	useEffect(() => {
-		markHighlight({
+		transformHighlight({
 			id,
 			color,
 			textContent: highlightedText,
 			target: sectionContentRef.current,
+		}).then(() => {
+			el = document.getElementById(id);
+			if (el) {
+				el.addEventListener("click", (event) => {
+					deleteHighlightListener(event);
+					incrementHighlightCount(-1);
+				});
+			}
 		});
 
-		if (id) {
-			el = document.getElementById(`${id}`);
+		return () => {
 			if (el) {
-				el.addEventListener("click", deleteHighlight);
-			}
-		}
-
-		() => {
-			if (el) {
-				el.removeEventListener("click", deleteHighlight);
+				el.removeEventListener("click", (event) => {
+					deleteHighlightListener(event);
+					incrementHighlightCount(-1);
+				});
 			}
 		};
 	}, []);

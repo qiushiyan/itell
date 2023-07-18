@@ -7,67 +7,35 @@ import {
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import { highlightTextAsMark, highlightTextAsNote } from "./note";
+export type Count = {
+	note: number; // total number of notes
+	highlight: number; // total number of highlights
+};
 
 type State = {
-	notes: NoteCard[];
-	highlights: Highlight[];
-};
-
-export const markNote = ({
-	textContent,
-	color,
-	target,
-}: {
-	textContent: string;
-	color: string;
-	target: HTMLElement | undefined;
-}) => {
-	if (textContent && target) {
-		highlightTextAsNote({
-			target,
-			textContent,
-			color,
-		});
-	}
-};
-
-export const markHighlight = ({
-	textContent,
-	id,
-	color,
-	target,
-}: {
-	textContent: string;
-	id: string;
-	color: string;
-	target: HTMLElement | undefined;
-}) => {
-	if (textContent && target) {
-		highlightTextAsMark({
-			target,
-			textContent,
-			color,
-			id,
-		});
-	}
+	notes: NoteCard[]; // only the newly created notes
+	highlights: Highlight[]; // only the newly created highlights
+	count: Count;
 };
 
 type Actions = {
-	setNotes: (notes: NoteCard[]) => void;
-	setHighlights: (highlights: Highlight[]) => void;
 	createNote: (note: CreateNoteInput, theme?: string) => void;
 	updateNote: (note: UpdateNoteInput) => void;
 	deleteNote: (id: string) => void;
 	deleteHighlight: (id: string) => void;
+	setCount: (count: Count) => void;
+	incrementNoteCount: (num?: number) => void;
+	incrementHighlightCount: (num?: number) => void;
 };
 
 export const useNotesStore = create(
 	immer<State & Actions>((set) => ({
 		notes: [],
 		highlights: [],
-		setNotes: (notes) => set(() => ({ notes })),
-		setHighlights: (highlights) => set(() => ({ highlights })),
+		count: {
+			note: 0,
+			highlight: 0,
+		},
 		createNote: ({ y, highlightedText, color }) =>
 			set((state) => {
 				state.notes.push({
@@ -98,5 +66,20 @@ export const useNotesStore = create(
 					state.highlights.splice(index, 1);
 				}
 			}),
+		setCount: (count) => {
+			set((state) => {
+				state.count = count;
+			});
+		},
+		incrementNoteCount: (num) => {
+			set((state) => {
+				state.count.note += num || 1;
+			});
+		},
+		incrementHighlightCount: (num) => {
+			set((state) => {
+				state.count.highlight += num || 1;
+			});
+		},
 	})),
 );

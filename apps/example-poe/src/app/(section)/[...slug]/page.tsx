@@ -120,7 +120,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					<SectionPager pager={pager} />
 				</section>
 
-				<aside className="toc-sidebar col-span-2 relative ">
+				<aside className="toc-sidebar col-span-2 relative">
 					<div className="sticky top-20">
 						<TocSidebar headings={section.headings} />
 					</div>

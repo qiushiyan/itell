@@ -16,44 +16,48 @@ export const removeExistingMarks = async (target: HTMLElement) => {
 	}
 };
 
-export const highlightTextAsMark = async ({
+export const transformHighlight = async ({
 	target,
 	textContent,
 	color,
 	id,
 }: {
-	target: HTMLElement;
+	target: HTMLElement | undefined;
 	textContent: string;
 	color: string;
 	id?: string;
 }) => {
 	// escape potential characters in selection
-	const regex = textContentToRegex(textContent);
+	if (target) {
+		const regex = textContentToRegex(textContent);
 
-	const newText = target.innerHTML.replace(
-		regex,
-		`<span class="highlight" id="${id}" style="background-color:${color}">$&</span>`,
-	);
-	target.innerHTML = newText;
+		const newText = target.innerHTML.replace(
+			regex,
+			`<span class="highlight" id="${id}" style="background-color:${color}">$&</span>`,
+		);
+		target.innerHTML = newText;
+	}
 };
 
-export const highlightTextAsNote = async ({
+export const transformNote = async ({
 	target,
 	textContent,
 	color,
 }: {
-	target: HTMLElement;
+	target: HTMLElement | undefined;
 	textContent: string;
 	color: string;
 }) => {
-	const regex = textContentToRegex(textContent);
+	if (target) {
+		const regex = textContentToRegex(textContent);
 
-	const newText = target.innerHTML.replace(
-		regex,
-		`<span class="note" style="color:${color}">$&</span>`,
-	);
+		const newText = target.innerHTML.replace(
+			regex,
+			`<span class="note" style="color:${color}">$&</span>`,
+		);
 
-	target.innerHTML = newText;
+		target.innerHTML = newText;
+	}
 };
 
 const modifyHighlightedText = async ({
@@ -126,7 +130,7 @@ export const deleteNote = async (id: string) => {
 	});
 };
 
-export const deleteHighlight = (event: Event) => {
+export const deleteHighlightListener = (event: Event) => {
 	event.preventDefault();
 	const el = event.currentTarget as HTMLElement;
 	if (el.id) {

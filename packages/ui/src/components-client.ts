@@ -19,3 +19,4 @@ export * from "./components/command";
 export * from "./components/separator";
 export * from "./components/form";
 export * from "./components/progress";
+export * from "./components/hover-card";

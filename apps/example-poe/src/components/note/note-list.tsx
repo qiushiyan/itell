@@ -5,6 +5,7 @@ import db from "@/lib/db";
 import { Highlight } from "./highlight";
 import { NewNoteList } from "./new-note-list";
 import { delay } from "@/lib/utils";
+import { NoteCount } from "./note-count";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,12 @@ export default async function NoteList({
 			{highlights.map((highlight) => (
 				<Highlight key={highlight.y} {...highlight} />
 			))}
+			<div className="mt-8">
+				{/* for rendering notes that are newly created */}
+				<NoteCount
+					count={{ note: notes.length, highlight: highlights.length }}
+				/>
+			</div>
 			<NewNoteList location={location} />
 		</div>
 	);
