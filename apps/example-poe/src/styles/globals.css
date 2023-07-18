@@ -16,8 +16,9 @@
   @apply text-foreground font-normal !important;
 }
 
-mark.highlight {
+span.highlight {
   cursor: pointer !important;
+  @apply text-background;
 }
 
 svg {

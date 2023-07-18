@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { markHighlight, markNote, useNotesStore } from "@/lib/store";
 import { useTheme } from "next-themes";
+import { deleteHighlight } from "@/lib/note";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
@@ -67,10 +68,16 @@ export default function HighlightToolbar({
 						});
 						markHighlight({
 							textContent,
+							target,
 							id: newHighlight.id,
 							color: newHighlight.color,
-							target,
 						});
+						const highlightElement = document.getElementById(
+							`${newHighlight.id}`,
+						);
+						if (highlightElement) {
+							highlightElement.addEventListener("click", deleteHighlight);
+						}
 					}
 				}
 			},

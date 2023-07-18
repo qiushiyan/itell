@@ -10,13 +10,14 @@ import { getPagerForSection } from "@/lib/pager";
 import NoteList from "@/components/note/note-list";
 import Highlighter from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 import { allSectionsSorted } from "@/lib/sections";
 import { Button } from "@/components/client-components";
 import { ModuleSidebar } from "@/components/module-sidebar";
 import { TocSidebar } from "@/components/toc-sidebar";
 import SectionContent from "@/components/section/section-content";
 import { Section } from "contentlayer/generated";
+import Spinner from "@/components/spinner";
 
 export const generateStaticParams = async () => {
 	return allSectionsSorted.map((section) => {
@@ -119,9 +120,20 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					<SectionPager pager={pager} />
 				</section>
 
-				<aside className="toc-sidebar col-span-2">
-					<TocSidebar headings={section.headings} />
-					<NoteList location={currentLocation} />
+				<aside className="toc-sidebar col-span-2 relative ">
+					<div className="sticky top-20">
+						<TocSidebar headings={section.headings} />
+					</div>
+					<Suspense
+						fallback={
+							<p className="text-sm text-muted-foreground mt-8">
+								<Spinner className="inline mr-2" />
+								loading notes
+							</p>
+						}
+					>
+						<NoteList location={currentLocation} />
+					</Suspense>
 				</aside>
 			</div>
 

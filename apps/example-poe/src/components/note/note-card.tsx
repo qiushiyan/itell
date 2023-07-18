@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, Fragment, useState } from "react";
+import { FormEvent, Fragment, useEffect, useState } from "react";
 import TextArea from "../ui/textarea";
 import { EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
@@ -15,7 +15,6 @@ import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
 import { Button } from "../client-components";
-import { useNotes } from "@/lib/hooks/use-notes";
 import { useSectionContent } from "@/lib/hooks/use-section-content";
 import { markNote, useNotesStore } from "@/lib/store";
 
@@ -118,7 +117,11 @@ export default function ({
 			dispatch({ type: "finish_upsert" });
 		},
 	});
-	const createNote = trpc.note.create.useMutation({});
+	const createNote = trpc.note.create.useMutation({
+		onSuccess: () => {
+			dispatch({ type: "finish_upsert" });
+		},
+	});
 	const deleteNote = trpc.note.delete.useMutation();
 	const containerRef = useClickOutside<HTMLDivElement>(() => {
 		dispatch({ type: "collapse_note" });
@@ -146,7 +149,6 @@ export default function ({
 				location,
 				color: editState.color,
 			});
-			dispatch({ type: "set_input", payload: editState.input });
 		}
 	};
 
@@ -154,13 +156,11 @@ export default function ({
 		if (sectionContentRef.current) {
 			unHighlightNote(sectionContentRef.current, highlightedText);
 		}
+		setIsHidden(true);
 		if (id) {
 			// delete note in database
 			deleteContextNote(id);
 			await deleteNote.mutateAsync({ id });
-		} else {
-			// just hide this card
-			setIsHidden(true);
 		}
 		dispatch({ type: "finish_delete" });
 	};
@@ -183,15 +183,23 @@ export default function ({
 		},
 	};
 
+	useEffect(() => {
+		markNote({
+			textContent: highlightedText,
+			color,
+			target: sectionContentRef.current,
+		});
+	}, []);
+
 	return (
 		<Fragment>
 			<div
 				className={cn(
-					"absolute w-48 lg:w-64 rounded-md border-2 bg-background",
+					"absolute w-full rounded-md border-2 bg-background",
 					editState.collapsed ? "z-10" : "z-50",
 					isHidden && "hidden",
 				)}
-				style={{ top: y, borderColor: editState.color }}
+				style={{ top: y - 100, borderColor: editState.color }}
 				ref={containerRef}
 				{...triggers}
 			>

@@ -32,7 +32,7 @@ export const highlightTextAsMark = async ({
 
 	const newText = target.innerHTML.replace(
 		regex,
-		`<mark class="highlight" id="${id}" style="background-color:${color}">$&</mark>`,
+		`<span class="highlight" id="${id}" style="background-color:${color}">$&</span>`,
 	);
 	target.innerHTML = newText;
 };
@@ -112,4 +112,30 @@ export const emphasizeNote = (target: HTMLElement, textContent: string) => {
 			el.style.borderRadius = "5px";
 		},
 	});
+};
+
+export const deleteNote = async (id: string) => {
+	return await fetch("/api/note", {
+		method: "POST",
+		body: JSON.stringify({
+			id,
+		}),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+};
+
+export const deleteHighlight = (event: Event) => {
+	event.preventDefault();
+	const el = event.currentTarget as HTMLElement;
+	if (el.id) {
+		const id = el.id;
+		if (confirm("Delete this highlight?")) {
+			el.style.backgroundColor = "";
+			el.id = "";
+			el.classList.remove("highlight");
+			deleteNote(id);
+		}
+	}
 };

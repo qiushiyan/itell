@@ -1,7 +1,5 @@
-import { allSectionsSorted } from "@/lib/sections";
 import { SectionLocationSchema } from "../schema";
 import { protectedProcedure, router } from "../utils";
-import { z } from "zod";
 import { incrementLocation } from "@/lib/location";
 
 export const userRouter = router({
