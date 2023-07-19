@@ -1,7 +1,7 @@
 const textContentToRegex = (textContent: string) => {
 	// escape potential characters in selection
 	const regexString = textContent.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-	return new RegExp(regexString, "i");
+	return new RegExp(`(${regexString})(?![^<]*<\/span>)`, "gi");
 };
 
 export const removeExistingMarks = async (target: HTMLElement) => {
@@ -50,7 +50,6 @@ export const transformNote = async ({
 }) => {
 	if (target) {
 		const regex = textContentToRegex(textContent);
-
 		const newText = target.innerHTML.replace(
 			regex,
 			`<span class="note" style="color:${color}">$&</span>`,
@@ -106,13 +105,17 @@ export const deemphasizeNote = (target: HTMLElement, textContent: string) => {
 	});
 };
 
-export const emphasizeNote = (target: HTMLElement, textContent: string) => {
+export const emphasizeNote = (
+	target: HTMLElement,
+	textContent: string,
+	color?: string,
+) => {
 	modifyHighlightedText({
 		target,
 		textContent,
 		fn: (el) => {
 			el.classList.add("emphasized");
-			el.style.border = `2px solid ${el.style.color}`;
+			el.style.border = `2px solid ${color || el.style.color}`;
 			el.style.borderRadius = "5px";
 		},
 	});

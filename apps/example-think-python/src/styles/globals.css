@@ -4,6 +4,9 @@
 
 @import url("@itell/ui/dist/style.css");
 
+pre {
+  font-family: "IBM Plex Mono", monospace;
+}
 
 .inset-center {
   position: absolute;
@@ -23,6 +26,7 @@ mark.highlight {
 svg {
   transition: all 0.3s;
 }
+
 
 @media (max-width: 768px) {
   .module-sidebar {

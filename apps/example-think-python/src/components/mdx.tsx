@@ -1,4 +1,3 @@
-"use client";
 import {
 	Info,
 	Warning,
@@ -9,19 +8,9 @@ import {
 	Blockquote,
 	Definition,
 } from "@itell/ui/server";
+import { CodeExample } from "@/components/exercise/code-example";
 import { useMDXComponent } from "next-contentlayer/hooks";
-import {
-	YoutubeVideo,
-	Accordion,
-	AccordionItem,
-	Stepper,
-	StepperHeader,
-	Step,
-	StepperBody,
-	StepperPanel,
-	Image,
-} from "./client-components";
-import { Tabs, TabsHeader, Tab, TabPanel, TabsBody } from "./ui/tabs";
+import { YoutubeVideo, Image } from "./client-components";
 import { TextOverImage } from "./ui/text-over-image";
 import { Exercise } from "./exercise";
 
@@ -29,8 +18,7 @@ const MdxComponents = {
 	YoutubeVideo,
 	Image,
 	Blockquote,
-	Accordion,
-	AccordionItem,
+
 	TextOverImage,
 	Info,
 	Warning,
@@ -38,20 +26,10 @@ const MdxComponents = {
 	Callout,
 	Caption,
 	Definition,
-	Exercise,
-	// tab related
-	Tabs,
-	TabsHeader,
-	Tab,
-	TabPanel,
-	TabsBody,
-	// stepper related
-	Stepper,
-	StepperHeader,
-	Step,
-	StepperBody,
-	StepperPanel,
 	Typography,
+	// exercise related
+	Exercise,
+	CodeExample,
 };
 interface MdxProps {
 	code: string;

@@ -180,7 +180,11 @@ export default function ({
 				if (editState.collapsed) {
 					dispatch({ type: "set_show_edit", payload: true });
 				}
-				emphasizeNote(sectionContentRef.current, highlightedText);
+				emphasizeNote(
+					sectionContentRef.current,
+					highlightedText,
+					editState.color,
+				);
 			}
 		},
 		onMouseLeave: () => {

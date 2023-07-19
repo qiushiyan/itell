@@ -46,7 +46,7 @@ const NoteRouter = router({
 					y: input.y,
 					module: input.location.module,
 					chapter: input.location.chapter,
-					section: input.location.section || 0,
+					section: input.location.section,
 					color: input.color,
 					userId: id,
 				},

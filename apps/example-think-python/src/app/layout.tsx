@@ -6,15 +6,8 @@ import ShowToast from "@/components/toast";
 import { Suspense } from "react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { cn } from "@itell/core/utils";
-import { Metadata, ResolvingMetadata } from "next";
-import { reader } from "@/lib/keystatic";
+import { Metadata } from "next";
 import { getSiteConfig } from "@/lib/config";
-
-type SiteConfig = {
-	title: string;
-	description: string;
-	latex: boolean;
-};
 
 export async function generateMetadata(): Promise<Metadata> {
 	const siteConfig = await getSiteConfig();
@@ -60,7 +53,7 @@ export default async function RootLayout({
 						<ShowToast />
 					</Suspense>
 					<TailwindIndicator />
-					<main> {children}</main>
+					<main>{children}</main>
 				</AppProvider>
 			</body>
 		</html>

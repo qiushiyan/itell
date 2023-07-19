@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import { TRPCProvider } from "@/trpc/trpc-provider";
 import NoteProvider from "@/contexts/note-highlight";
 import { ThemeProvider } from "./theme/theme-provider";
+import { PythonProvider } from "react-py";
 
 export default function AppProvider({
 	children,
@@ -16,8 +17,10 @@ export default function AppProvider({
 				<BalancerProvider>
 					<ThemeProvider attribute="class" defaultTheme="light">
 						<NoteProvider>
-							{children}
-							<Toaster richColors visibleToasts={1} />
+							<PythonProvider>
+								{children}
+								<Toaster richColors visibleToasts={1} />
+							</PythonProvider>
 						</NoteProvider>
 					</ThemeProvider>
 				</BalancerProvider>

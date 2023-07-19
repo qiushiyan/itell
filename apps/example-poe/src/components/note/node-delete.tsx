@@ -26,7 +26,7 @@ export default function NoteDeleteModal({ onDelete, onOpen }: Props) {
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger asChild onClick={onOpen}>
-				<Button variant="outline">
+				<Button variant="ghost" size="sm">
 					<TrashIcon className="w-4 h-4" />
 				</Button>
 			</AlertDialogTrigger>
