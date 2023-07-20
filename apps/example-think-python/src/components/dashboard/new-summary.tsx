@@ -7,7 +7,6 @@ import { Badge } from "@itell/ui/server";
 import { ScoreBadge } from "../score/badge";
 import { ScoreType } from "@/lib/constants";
 import { allChaptersSorted } from "@/lib/chapters";
-import ChapterModal from "../chapter-modal";
 
 export default function () {
 	const [selectedChapter, setSelectedChapter] = useState<number | null>(null);
@@ -71,7 +70,6 @@ export default function () {
 					</aside>
 				)}
 				<div className="space-y-2 text-center">
-					{chapter && <ChapterModal chapter={chapter} />}
 					<div className="max-w-2xl mx-auto">
 						{selectedChapter && (
 							<SummaryEditor

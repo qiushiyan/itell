@@ -1,8 +1,6 @@
 import Balancer from "react-wrap-balancer";
 import { cn } from "@itell/core/utils";
-import { Typography } from "./typography";
-import { buttonVariants } from "./button";
-
+import { Typography, buttonVariants } from "@itell/ui/server";
 const getYoutubeLinkFromEmbed = (url: string) => {
 	const regex = /embed\/([\w-]+)\?/;
 	const match = url.match(regex);

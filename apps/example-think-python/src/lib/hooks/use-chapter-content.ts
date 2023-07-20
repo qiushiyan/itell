@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export const useSectionContent = () => {
+export const useChapterContent = () => {
 	const sectionContentRef = useRef<HTMLElement>();
 
 	useEffect(() => {

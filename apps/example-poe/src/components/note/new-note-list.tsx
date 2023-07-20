@@ -8,6 +8,6 @@ export const NewNoteList = ({ location }: { location: SectionLocation }) => {
 	const notes = useNotesStore((store) => store.notes);
 
 	return notes.map((note) => (
-		<NoteCard key={note.y} {...note} location={location} />
+		<NoteCard key={note.id} {...note} location={location} newNote={true} />
 	));
 };

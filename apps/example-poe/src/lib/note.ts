@@ -16,109 +16,38 @@ export const removeExistingMarks = async (target: HTMLElement) => {
 	}
 };
 
-export const transformHighlight = async ({
+export const generateNoteElement = async ({
 	target,
 	textContent,
 	color,
 	id,
+	highlight,
 }: {
 	target: HTMLElement | undefined;
 	textContent: string;
 	color: string;
-	id?: string;
-}) => {
-	// escape potential characters in selection
-	if (target) {
-		const regex = textContentToRegex(textContent);
-
-		const newText = target.innerHTML.replace(
-			regex,
-			`<span class="highlight" id="${id}" style="background-color:${color}">$&</span>`,
-		);
-		target.innerHTML = newText;
-	}
-};
-
-export const transformNote = async ({
-	target,
-	textContent,
-	color,
-}: {
-	target: HTMLElement | undefined;
-	textContent: string;
-	color: string;
+	id: string;
+	highlight?: boolean;
 }) => {
 	if (target) {
 		const regex = textContentToRegex(textContent);
-		const newText = target.innerHTML.replace(
-			regex,
-			`<span class="note" style="color:${color}">$&</span>`,
-		);
-
-		target.innerHTML = newText;
-	}
-};
-
-const modifyHighlightedText = async ({
-	target,
-	textContent,
-	fn,
-	query = ".note",
-}: {
-	target: HTMLElement;
-	textContent: string;
-	fn: (mark: HTMLElement) => void;
-	query?: string;
-}) => {
-	const els = target.querySelectorAll(query);
-	for (let i = els.length - 1; i >= 0; i--) {
-		const el = els[i] as HTMLElement;
-		if (el.textContent === textContent) {
-			fn(el);
+		let newText = "";
+		if (highlight) {
+			newText = target.innerHTML.replace(
+				regex,
+				`<span class="highlight" id="${id}" style="background-color:${color}">$&</span>`,
+			);
+		} else {
+			newText = target.innerHTML.replace(
+				regex,
+				`<span class="note" style="color:${color}" id="${id}">$&</span>`,
+			);
 		}
+		target.innerHTML = newText;
+		return id;
 	}
-};
 
-export const unHighlightNote = (target: HTMLElement, textContent: string) => {
-	modifyHighlightedText({
-		target,
-		textContent,
-		fn: (el) => {
-			el.classList.remove("emphasized");
-			el.style.border = "none";
-			el.style.borderRadius = "0px";
-			el.style.color = "unset";
-			el.classList.add("unhighlighted");
-		},
-	});
-};
-
-export const deemphasizeNote = (target: HTMLElement, textContent: string) => {
-	modifyHighlightedText({
-		target,
-		textContent,
-		fn: (el) => {
-			el.classList.remove("emphasized");
-			el.style.border = "none";
-			el.style.borderRadius = "0px";
-		},
-	});
-};
-
-export const emphasizeNote = (
-	target: HTMLElement,
-	textContent: string,
-	color?: string,
-) => {
-	modifyHighlightedText({
-		target,
-		textContent,
-		fn: (el) => {
-			el.classList.add("emphasized");
-			el.style.border = `2px solid ${color || el.style.color}`;
-			el.style.borderRadius = "5px";
-		},
-	});
+	return undefined;
 };
 
 export const deleteNote = async (id: string) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, Fragment, useEffect, useState } from "react";
+import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import TextArea from "../ui/textarea";
 import { EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
@@ -8,12 +8,7 @@ import { useClickOutside } from "@itell/core/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
 import NoteDelete from "./node-delete";
-import {
-	emphasizeNote,
-	unHighlightNote,
-	deemphasizeNote,
-	transformNote,
-} from "@/lib/note";
+import { generateNoteElement } from "@/lib/note";
 import { relativeDate, cn } from "@itell/core/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
@@ -25,6 +20,7 @@ import { useNotesStore } from "@/lib/store";
 
 interface Props extends NoteCard {
 	location: SectionLocation;
+	newNote?: boolean;
 }
 
 type EditState = {
@@ -62,7 +58,12 @@ export default function ({
 	updated_at,
 	created_at,
 	color,
+	newNote = false,
 }: Props) {
+	const elementRef = useRef<HTMLElement>();
+	const element = elementRef.current;
+	const [shouldCreate, setShouldCreate] = useState(newNote);
+	const [recordId, setRecordId] = useState<string>(newNote ? "" : id);
 	const [editState, dispatch] = useImmerReducer<EditState, EditDispatch>(
 		(draft, action) => {
 			switch (action.type) {
@@ -106,8 +107,8 @@ export default function ({
 		{
 			input: noteText, // textarea input
 			color, // border color: ;
-			editing: !id, // true: show textarea, false: show noteText
-			collapsed: !!id, // if the note card is expanded
+			editing: newNote, // true: show textarea, false: show noteText
+			collapsed: !newNote, // if the note card is expanded
 			showDeleteModal: false, // show delete modal
 			showColorPicker: false, // show color picker
 			showEdit: false, // show edit overlay
@@ -141,28 +142,51 @@ export default function ({
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-		if (id) {
-			// edit existing note
-			updateContextNote({ id, noteText: editState.input });
-			await updateNote.mutateAsync({
-				id,
-				noteText: editState.input,
-			});
-		} else {
+		if (shouldCreate) {
 			// create new note
-			await createNote.mutateAsync({
+			const { id } = await createNote.mutateAsync({
 				y,
 				noteText: editState.input,
 				highlightedText,
 				location,
 				color: editState.color,
 			});
+			setRecordId(id);
+			setShouldCreate(false);
+		} else {
+			// edit existing note
+			updateContextNote({ id, noteText: editState.input });
+			await updateNote.mutateAsync({
+				id: recordId,
+				noteText: editState.input,
+			});
 		}
 	};
 
+	const emphasizeNote = (element: HTMLElement) => {
+		element.classList.add("emphasized");
+		element.style.color = editState.color;
+		element.style.border = `2px solid ${editState.color}`;
+		element.style.borderRadius = "5px";
+	};
+
+	const deemphasizeNote = (element: HTMLElement) => {
+		element.classList.remove("emphasized");
+		element.style.border = "none";
+		element.style.borderRadius = "0px";
+	};
+
+	const unHighlightNote = (element: HTMLElement) => {
+		element.classList.remove("emphasized");
+		element.style.border = "none";
+		element.style.borderRadius = "0px";
+		element.style.color = "unset";
+		element.classList.add("unhighlighted");
+	};
+
 	const handleDelete = async () => {
-		if (sectionContentRef.current) {
-			unHighlightNote(sectionContentRef.current, highlightedText);
+		if (element) {
+			unHighlightNote(element);
 		}
 		setIsHidden(true);
 		incrementNoteCount(-1);
@@ -176,31 +200,30 @@ export default function ({
 
 	const triggers = {
 		onMouseEnter: () => {
-			if (sectionContentRef.current) {
-				if (editState.collapsed) {
-					dispatch({ type: "set_show_edit", payload: true });
-				}
-				emphasizeNote(
-					sectionContentRef.current,
-					highlightedText,
-					editState.color,
-				);
+			if (editState.collapsed) {
+				dispatch({ type: "set_show_edit", payload: true });
+			}
+			if (element) {
+				emphasizeNote(element);
 			}
 		},
 		onMouseLeave: () => {
-			if (sectionContentRef.current) {
-				dispatch({ type: "set_show_edit", payload: false });
+			dispatch({ type: "set_show_edit", payload: false });
 
-				deemphasizeNote(sectionContentRef.current, highlightedText);
+			if (element) {
+				deemphasizeNote(element);
 			}
 		},
 	};
 
 	useEffect(() => {
-		transformNote({
+		generateNoteElement({
 			textContent: highlightedText,
 			color,
 			target: sectionContentRef.current,
+			id,
+		}).then(() => {
+			elementRef.current = document.getElementById(id) || undefined;
 		});
 	}, []);
 
@@ -251,11 +274,9 @@ export default function ({
 									color={editState.color}
 									onChange={(color) => {
 										dispatch({ type: "set_color", payload: color });
-										transformNote({
-											textContent: highlightedText,
-											color,
-											target: sectionContentRef.current,
-										});
+										if (element) {
+											element.style.color = color;
+										}
 										if (id) {
 											updateNote.mutate({ id, color });
 										}

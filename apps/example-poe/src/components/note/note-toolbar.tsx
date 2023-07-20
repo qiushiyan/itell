@@ -16,11 +16,7 @@ import { Button } from "../client-components";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useNotesStore } from "@/lib/store";
-import {
-	deleteHighlightListener,
-	transformHighlight,
-	transformNote,
-} from "@/lib/note";
+import { deleteHighlightListener, generateNoteElement } from "@/lib/note";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
@@ -47,9 +43,16 @@ export default function HighlightToolbar({
 			icon: <PencilIcon className="w-5 h-5" />,
 			action: async ({ clientRect, textContent }: SelectionData) => {
 				if (textContent && target) {
-					await transformNote({ textContent, color: noteColor, target });
+					const id = crypto.randomUUID();
+					await generateNoteElement({
+						textContent,
+						color: noteColor,
+						target,
+						id,
+					});
 					if (clientRect) {
 						createNote({
+							id,
 							y: clientRect.y + window.scrollY,
 							highlightedText: textContent,
 							color: noteColor,
@@ -73,11 +76,12 @@ export default function HighlightToolbar({
 							color: defaultHighlightColor,
 						});
 
-						await transformHighlight({
+						await generateNoteElement({
 							id: newHighlight.id,
 							textContent,
 							target,
 							color: defaultHighlightColor,
+							highlight: true,
 						});
 
 						incrementHighlightCount();

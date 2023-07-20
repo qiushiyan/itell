@@ -7,12 +7,13 @@ import { getPagerForChapter } from "@/lib/pager";
 import NoteList from "@/components/note/note-list";
 import Highlighter from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 import { allChaptersSorted } from "@/lib/chapters";
 import { Button } from "@/components/client-components";
 import { TocSidebar } from "@/components/toc-sidebar";
 import { ChapterSidebar } from "@/components/chapter-sidebar";
 import ChapterContent from "@/components/chapter/chapter-content";
+import Spinner from "@/components/spinner";
 
 export const generateStaticParams = async () => {
 	return allChaptersSorted.map((chapter) => {
@@ -108,9 +109,20 @@ export default async function ({ params }: { params: { slug: string } }) {
 					<ChapterPager pager={pager} />
 				</section>
 
-				<aside className="toc-sidebar col-span-2">
-					<TocSidebar headings={chapter.headings} />
-					<NoteList chapter={chapter.chapter} />
+				<aside className="toc-sidebar col-span-2 relative">
+					<div className="sticky top-20">
+						<TocSidebar headings={chapter.headings} />
+					</div>
+					<Suspense
+						fallback={
+							<p className="text-sm text-muted-foreground mt-8">
+								<Spinner className="inline mr-2" />
+								loading notes
+							</p>
+						}
+					>
+						<NoteList chapter={chapter.chapter} />
+					</Suspense>
 				</aside>
 			</div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSectionContent } from "@/lib/hooks/use-section-content";
+import { useChapterContent } from "@/lib/hooks/use-chapter-content";
 import { deleteHighlightListener, generateNoteElement } from "@/lib/note";
 import { useNotesStore } from "@/lib/store";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const Highlight = ({ id, highlightedText, color }: Props) => {
-	const sectionContentRef = useSectionContent();
+	const chapterContentRef = useChapterContent();
 	const incrementHighlightCount = useNotesStore(
 		(store) => store.incrementHighlightCount,
 	);
@@ -23,7 +23,7 @@ export const Highlight = ({ id, highlightedText, color }: Props) => {
 			id,
 			color,
 			textContent: highlightedText,
-			target: sectionContentRef.current,
+			target: chapterContentRef.current,
 			highlight: true,
 		}).then(() => {
 			// wait until the element is created

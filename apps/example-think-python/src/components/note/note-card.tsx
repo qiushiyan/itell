@@ -1,25 +1,25 @@
 "use client";
 
-import { FormEvent, Fragment, useState } from "react";
+import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import TextArea from "../ui/textarea";
 import { EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
-import { useClickOutside } from "@/lib/hooks/utils";
+import { useClickOutside } from "@itell/core/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import NoteDelete from "./node-delete";
-import { emphasizeNote, unHighlightNote, deemphasizeNote } from "@/lib/note";
-import { relativeDate } from "@itell/core/utils";
-import { cn } from "@itell/core/utils";
+import { generateNoteElement } from "@/lib/note";
+import { relativeDate, cn } from "@itell/core/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
 import { Button } from "../client-components";
-import { useNotes } from "@/lib/hooks/use-notes";
-import { useSectionContent } from "@/lib/hooks/use-chapter-content";
+import { useChapterContent } from "@/lib/hooks/use-chapter-content";
+import { useNotesStore } from "@/lib/store";
 
 interface Props extends NoteCard {
 	chapter: number;
+	newNote?: boolean;
 }
 
 type EditState = {
@@ -57,7 +57,12 @@ export default function ({
 	updated_at,
 	created_at,
 	color,
+	newNote = false,
 }: Props) {
+	const elementRef = useRef<HTMLElement>();
+	const [shouldCreate, setShouldCreate] = useState(newNote);
+	const [recordId, setRecordId] = useState<string>(newNote ? "" : id);
+	const element = elementRef.current;
 	const [editState, dispatch] = useImmerReducer<EditState, EditDispatch>(
 		(draft, action) => {
 			switch (action.type) {
@@ -101,20 +106,20 @@ export default function ({
 		{
 			input: noteText, // textarea input
 			color, // border color: ;
-			editing: !id, // true: show textarea, false: show noteText
-			collapsed: !!id, // if the note card is expanded
+			editing: newNote, // true: show textarea, false: show noteText
+			collapsed: !newNote, // if the note card is expanded
 			showDeleteModal: false, // show delete modal
 			showColorPicker: false, // show color picker
 			showEdit: false, // show edit overlay
 		},
 	);
-	const sectionContentRef = useSectionContent();
+	const chapterContentRef = useChapterContent();
 	const [isHidden, setIsHidden] = useState(false);
 	const {
 		deleteNote: deleteContextNote,
-		markNote,
 		updateNote: updateContextNote,
-	} = useNotes();
+		incrementNoteCount,
+	} = useNotesStore();
 	const updateNote = trpc.note.update.useMutation({
 		onSuccess: () => {
 			dispatch({ type: "finish_upsert" });
@@ -136,68 +141,104 @@ export default function ({
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-		if (id) {
-			// edit existing note
-			updateContextNote({ id, noteText: editState.input });
-
-			await updateNote.mutateAsync({
-				id,
-				noteText: editState.input,
-			});
-		} else {
+		if (shouldCreate) {
 			// create new note
-			await createNote.mutateAsync({
+			const { id } = await createNote.mutateAsync({
 				y,
-				chapter,
 				noteText: editState.input,
 				highlightedText,
+				chapter,
 				color: editState.color,
+			});
+			setRecordId(id);
+			setShouldCreate(false);
+		} else {
+			// edit existing note
+			updateContextNote({ id, noteText: editState.input });
+			await updateNote.mutateAsync({
+				id: recordId,
+				noteText: editState.input,
 			});
 		}
 	};
 
+	const emphasizeNote = (element: HTMLElement) => {
+		element.classList.add("emphasized");
+		element.style.color = editState.color;
+		element.style.border = `2px solid ${editState.color}`;
+		element.style.borderRadius = "5px";
+	};
+
+	const deemphasizeNote = (element: HTMLElement) => {
+		element.classList.remove("emphasized");
+		element.style.border = "none";
+		element.style.borderRadius = "0px";
+	};
+
+	const unHighlightNote = (element: HTMLElement) => {
+		element.classList.remove("emphasized");
+		element.style.border = "none";
+		element.style.borderRadius = "0px";
+		element.style.color = "unset";
+		element.classList.add("unhighlighted");
+	};
+
 	const handleDelete = async () => {
-		if (sectionContentRef.current) {
-			unHighlightNote(sectionContentRef.current, highlightedText);
+		if (element) {
+			unHighlightNote(element);
 		}
+		setIsHidden(true);
+		incrementNoteCount(-1);
 		if (id) {
 			// delete note in database
 			deleteContextNote(id);
 			await deleteNote.mutateAsync({ id });
-		} else {
-			// just hide this card
-			setIsHidden(true);
 		}
 		dispatch({ type: "finish_delete" });
 	};
 
 	const triggers = {
 		onMouseEnter: () => {
-			if (sectionContentRef.current) {
-				if (editState.collapsed) {
-					dispatch({ type: "set_show_edit", payload: true });
-				}
-				emphasizeNote(sectionContentRef.current, highlightedText);
+			if (editState.collapsed) {
+				dispatch({ type: "set_show_edit", payload: true });
+			}
+			console.log(element);
+			if (element) {
+				emphasizeNote(element);
 			}
 		},
 		onMouseLeave: () => {
-			if (sectionContentRef.current) {
-				dispatch({ type: "set_show_edit", payload: false });
+			dispatch({ type: "set_show_edit", payload: false });
 
-				deemphasizeNote(sectionContentRef.current, highlightedText);
+			if (element) {
+				deemphasizeNote(element);
 			}
 		},
 	};
+
+	useEffect(() => {
+		generateNoteElement({
+			textContent: highlightedText,
+			color,
+			target: chapterContentRef.current,
+			id,
+		}).then(() => {
+			elementRef.current = document.getElementById(id) || undefined;
+		});
+	}, []);
 
 	return (
 		<Fragment>
 			<div
 				className={cn(
-					"absolute w-48 lg:w-64 rounded-md border-2 bg-background",
+					"absolute w-full rounded-md border-2 bg-background",
 					editState.collapsed ? "z-10" : "z-50",
 					isHidden && "hidden",
 				)}
-				style={{ top: y, borderColor: editState.color }}
+				style={{
+					top: y - 100,
+					borderColor: editState.color,
+				}}
 				ref={containerRef}
 				{...triggers}
 			>
@@ -233,7 +274,9 @@ export default function ({
 									color={editState.color}
 									onChange={(color) => {
 										dispatch({ type: "set_color", payload: color });
-										markNote({ textContent: highlightedText, color });
+										if (element) {
+											element.style.color = color;
+										}
 										if (id) {
 											updateNote.mutate({ id, color });
 										}

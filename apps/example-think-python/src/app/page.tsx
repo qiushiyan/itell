@@ -3,8 +3,6 @@ import { Site, allSites } from "contentlayer/generated";
 import { Mdx } from "@/components/mdx";
 import { SiteFooter } from "@/components/site-footer";
 import { StartOrContinueReading } from "@/components/start-or-continue-reading";
-import { CodeEditor } from "@/components/exercise/code-editor";
-import { CodeExample } from "@/components/exercise/code-example";
 
 const home = allSites.find((doc) => doc.slug === "home") as Site;
 

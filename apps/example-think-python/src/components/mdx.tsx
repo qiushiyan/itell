@@ -8,18 +8,15 @@ import {
 	Blockquote,
 	Definition,
 } from "@itell/ui/server";
-import { CodeExample } from "@/components/exercise/code-example";
 import { useMDXComponent } from "next-contentlayer/hooks";
-import { YoutubeVideo, Image } from "./client-components";
-import { TextOverImage } from "./ui/text-over-image";
 import { Exercise } from "./exercise";
+import { CodeExample } from "@/components/exercise/code-example";
+import { YoutubeVideo } from "@/components/ui/youtube";
+import { Image } from "./ui/image";
 
 const MdxComponents = {
-	YoutubeVideo,
-	Image,
+	// YoutubeVideo,
 	Blockquote,
-
-	TextOverImage,
 	Info,
 	Warning,
 	Keyterm,
@@ -30,6 +27,8 @@ const MdxComponents = {
 	// exercise related
 	Exercise,
 	CodeExample,
+	YoutubeVideo,
+	Image,
 };
 interface MdxProps {
 	code: string;

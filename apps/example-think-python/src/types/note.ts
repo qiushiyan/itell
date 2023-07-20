@@ -1,7 +1,8 @@
 export type CreateNoteInput = {
+	id: string;
 	y: number;
 	highlightedText: string;
-	chapter: number;
+	color: string;
 };
 
 export type UpdateNoteInput = {
@@ -10,11 +11,11 @@ export type UpdateNoteInput = {
 };
 
 export type NoteCard = {
+	id: string;
 	y: number;
 	noteText: string;
 	highlightedText: string;
 	color: string;
-	id?: string;
 	updated_at?: Date;
 	created_at?: Date;
 };

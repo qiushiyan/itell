@@ -4,7 +4,6 @@ import { cn } from "@itell/core/utils";
 import { HighlighterIcon, CopyIcon, PencilIcon } from "lucide-react";
 import { Popover } from "react-text-selection-popover";
 import { toast } from "sonner";
-import { useNotes } from "@/lib/hooks/use-notes";
 import { useTextSelection } from "use-text-selection";
 import { trpc } from "@/trpc/trpc-provider";
 import {
@@ -15,13 +14,16 @@ import Spinner from "../spinner";
 import { Button } from "../client-components";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { deleteHighlightListener, generateNoteElement } from "@/lib/note";
+import { useNotesStore } from "@/lib/store";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
 export default function HighlightToolbar({ chapter }: { chapter: number }) {
 	const [target, setTarget] = useState<HTMLElement | null>(null);
 	const noteColor = useNoteColor();
-	const { createNote, markNote, markHighlight } = useNotes();
+	const { createNote, incrementHighlightCount, incrementNoteCount } =
+		useNotesStore();
 	const createHighlight = trpc.note.create.useMutation();
 	const { data: session } = useSession();
 
@@ -36,36 +38,58 @@ export default function HighlightToolbar({ chapter }: { chapter: number }) {
 		{
 			label: "Note",
 			icon: <PencilIcon className="w-5 h-5" />,
-			action: ({ clientRect, textContent }: SelectionData) => {
-				if (textContent) {
-					markNote({ textContent, color: noteColor });
+			action: async ({ clientRect, textContent }: SelectionData) => {
+				if (textContent && target) {
+					const id = crypto.randomUUID();
+					await generateNoteElement({
+						textContent,
+						color: noteColor,
+						target,
+						id,
+					});
 					if (clientRect) {
 						createNote({
+							id,
 							y: clientRect.y + window.scrollY,
 							highlightedText: textContent,
-							chapter: chapter,
+							color: noteColor,
 						});
+
+						incrementNoteCount();
 					}
 				}
 			},
 		},
 		{
-			label: "Mark",
+			label: "Highlight",
 			icon: <HighlighterIcon className="w-5 h-5" />,
 			action: async ({ clientRect, textContent }: SelectionData) => {
 				if (textContent) {
-					if (clientRect) {
+					if (clientRect && target) {
 						const newHighlight = await createHighlight.mutateAsync({
 							y: clientRect.y + window.scrollY,
 							highlightedText: textContent,
-							chapter: chapter,
+							chapter,
 							color: defaultHighlightColor,
 						});
-						markHighlight({
-							textContent,
+
+						await generateNoteElement({
 							id: newHighlight.id,
-							color: newHighlight.color,
+							textContent,
+							target,
+							color: defaultHighlightColor,
+							highlight: true,
 						});
+
+						incrementHighlightCount();
+
+						const highlightElement = document.getElementById(newHighlight.id);
+						if (highlightElement) {
+							highlightElement.addEventListener("click", (event) => {
+								deleteHighlightListener(event);
+								incrementHighlightCount(-1);
+							});
+						}
 					}
 				}
 			},

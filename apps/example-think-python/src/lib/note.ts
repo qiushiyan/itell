@@ -1,7 +1,7 @@
 const textContentToRegex = (textContent: string) => {
 	// escape potential characters in selection
 	const regexString = textContent.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-	return new RegExp(regexString, "i");
+	return new RegExp(`(${regexString})(?![^<]*<\/span>)`, "gi");
 };
 
 export const removeExistingMarks = async (target: HTMLElement) => {
@@ -16,100 +16,62 @@ export const removeExistingMarks = async (target: HTMLElement) => {
 	}
 };
 
-export const highlightTextAsMark = async ({
+export const generateNoteElement = async ({
 	target,
 	textContent,
 	color,
 	id,
+	highlight,
 }: {
-	target: HTMLElement;
+	target: HTMLElement | undefined;
 	textContent: string;
 	color: string;
-	id?: string;
+	id: string;
+	highlight?: boolean;
 }) => {
-	// escape potential characters in selection
-	const regex = textContentToRegex(textContent);
+	if (target) {
+		const regex = textContentToRegex(textContent);
+		let newText = "";
+		if (highlight) {
+			newText = target.innerHTML.replace(
+				regex,
+				`<span class="highlight" id="${id}" style="background-color:${color}">$&</span>`,
+			);
+		} else {
+			newText = target.innerHTML.replace(
+				regex,
+				`<span class="note" style="color:${color}" id="${id}">$&</span>`,
+			);
+		}
+		target.innerHTML = newText;
+		return id;
+	}
 
-	const newText = target.innerHTML.replace(
-		regex,
-		`<mark class="highlight" id="${id}" style="background-color:${color}">$&</mark>`,
-	);
-	target.innerHTML = newText;
+	return undefined;
 };
 
-export const highlightTextAsNote = async ({
-	target,
-	textContent,
-	color,
-}: {
-	target: HTMLElement;
-	textContent: string;
-	color: string;
-}) => {
-	const regex = textContentToRegex(textContent);
-
-	const newText = target.innerHTML.replace(
-		regex,
-		`<span class="note" style="color:${color}">$&</span>`,
-	);
-
-	target.innerHTML = newText;
+export const deleteNote = async (id: string) => {
+	return await fetch("/api/note", {
+		method: "POST",
+		body: JSON.stringify({
+			id,
+		}),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
 };
 
-const modifyHighlightedText = async ({
-	target,
-	textContent,
-	fn,
-	query = ".note",
-}: {
-	target: HTMLElement;
-	textContent: string;
-	fn: (mark: HTMLElement) => void;
-	query?: string;
-}) => {
-	const els = target.querySelectorAll(query);
-	for (let i = els.length - 1; i >= 0; i--) {
-		const el = els[i] as HTMLElement;
-		if (el.textContent === textContent) {
-			fn(el);
+export const deleteHighlightListener = (event: Event) => {
+	event.preventDefault();
+	const el = event.currentTarget as HTMLElement;
+	if (el.id) {
+		const id = el.id;
+		if (confirm("Delete this highlight?")) {
+			el.style.backgroundColor = "";
+			el.id = "";
+			el.classList.remove("highlight");
+			deleteNote(id);
 		}
 	}
-};
-
-export const unHighlightNote = (target: HTMLElement, textContent: string) => {
-	modifyHighlightedText({
-		target,
-		textContent,
-		fn: (el) => {
-			el.classList.remove("emphasized");
-			el.style.border = "none";
-			el.style.borderRadius = "0px";
-			el.style.color = "unset";
-			el.classList.add("unhighlighted");
-		},
-	});
-};
-
-export const deemphasizeNote = (target: HTMLElement, textContent: string) => {
-	modifyHighlightedText({
-		target,
-		textContent,
-		fn: (el) => {
-			el.classList.remove("emphasized");
-			el.style.border = "none";
-			el.style.borderRadius = "0px";
-		},
-	});
-};
-
-export const emphasizeNote = (target: HTMLElement, textContent: string) => {
-	modifyHighlightedText({
-		target,
-		textContent,
-		fn: (el) => {
-			el.classList.add("emphasized");
-			el.style.border = `2px solid ${el.style.color}`;
-			el.style.borderRadius = "5px";
-		},
-	});
 };
