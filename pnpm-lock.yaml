@@ -165,9 +165,6 @@ importers:
         specifier: ^4.3.9
         version: 4.3.9(immer@9.0.21)(react@18.2.0)
     devDependencies:
-      '@types/mdx':
-        specifier: ^2.0.5
-        version: 2.0.5
       '@types/react':
         specifier: 18.2.14
         version: 18.2.14
@@ -6200,6 +6197,7 @@ packages:
 
   /@types/mdx@2.0.5:
     resolution: {integrity: sha512-76CqzuD6Q7LC+AtbPqrvD9AqsN0k8bsYo2bM2J8pmNldP1aIPAbzUQ7QbobyXL4eLr1wK5x8FZFe8eF/ubRuBg==}
+    dev: false
 
   /@types/ms@0.7.31:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
