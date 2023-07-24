@@ -14,13 +14,19 @@ type Props = {
 };
 
 // rendered by NoteList to set the count in the store
-export const NoteCount = (props: Props) => {
-	const { count, setCount } = useNotesStore();
+export const SetNoteCount = (props: Props) => {
+	const setCount = useNotesStore((store) => store.setCount);
 
 	useEffect(() => {
 		setCount(props.count);
 	}, []);
 
+	return null;
+};
+
+// rendered by TocSidebar
+export const NoteCount = () => {
+	const count = useNotesStore((store) => store.count);
 	return (
 		<HoverCard>
 			<HoverCardTrigger asChild>

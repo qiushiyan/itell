@@ -1,42 +1,20 @@
-import {
-	Info,
-	Warning,
-	Keyterm,
-	Callout,
-	Caption,
-	Typography,
-	Blockquote,
-	Definition,
-} from "@itell/ui/server";
 import { useMDXComponent } from "next-contentlayer/hooks";
-import { Exercise } from "./exercise";
-import { CodeExample } from "@/components/exercise/code-example";
-import { YoutubeVideo } from "@/components/ui/youtube";
-import { Image } from "./ui/image";
+import { MdxComponents } from "./mdx-components";
 
-const MdxComponents = {
-	// YoutubeVideo,
-	Blockquote,
-	Info,
-	Warning,
-	Keyterm,
-	Callout,
-	Caption,
-	Definition,
-	Typography,
-	// exercise related
-	Exercise,
-	CodeExample,
-	YoutubeVideo,
-	Image,
-};
 interface MdxProps {
 	code: string;
+	// quick fix for MdxComponents from @types/mdx
+	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+	components: Record<string, any>;
 }
 
-export function Mdx({ code }: MdxProps) {
+export const Mdx = ({ code, components }: MdxProps) => {
 	const Component = useMDXComponent(code);
 
 	// @ts-ignore
-	return <Component components={MdxComponents} />;
-}
+	return <Component components={components} />;
+};
+
+export const MainMdx = ({ code }: { code: string }) => {
+	return <Mdx components={MdxComponents} code={code} />;
+};

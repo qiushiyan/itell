@@ -85,7 +85,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 
 	return (
 		<Fragment>
-			<div className="grid grid-cols-12 gap-6 px-2">
+			<div className="grid grid-cols-12 gap-6 px-2 relative">
 				<SectionAuthModal />
 				<aside className="module-sidebar col-span-2 sticky top-20 h-fit">
 					<ModuleSidebar

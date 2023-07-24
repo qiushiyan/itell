@@ -60,9 +60,9 @@ export default function ({
 	newNote = false,
 }: Props) {
 	const elementRef = useRef<HTMLElement>();
+	const element = elementRef.current;
 	const [shouldCreate, setShouldCreate] = useState(newNote);
 	const [recordId, setRecordId] = useState<string>(newNote ? "" : id);
-	const element = elementRef.current;
 	const [editState, dispatch] = useImmerReducer<EditState, EditDispatch>(
 		(draft, action) => {
 			switch (action.type) {

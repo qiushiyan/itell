@@ -7,7 +7,6 @@ import {
 	AccordionItem as BaseAccordionItem,
 	AccordionTrigger as BaseAccordionTrigger,
 } from "./accordion";
-import { Typography } from "../typography";
 
 type Props = {
 	children: React.ReactNode;
@@ -21,13 +20,12 @@ export const AccordionItem = ({
 }: { value: string; title?: string; children: React.ReactNode }) => {
 	return (
 		<BaseAccordionItem value={value}>
-			<BaseAccordionTrigger className="py-2">
+			{/* radix accordion title uses h3, which is too large in mdx components */}
+			<BaseAccordionTrigger className="text-lg py-1">
 				{title || value}
 			</BaseAccordionTrigger>
 			<BaseAccordionContent>
-				<Typography as="div" className="prose dark:prose-invert max-w-none">
-					{children}
-				</Typography>
+				<div className="font-light leading-relaxed">{children}</div>
 			</BaseAccordionContent>
 		</BaseAccordionItem>
 	);

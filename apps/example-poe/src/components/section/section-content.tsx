@@ -1,6 +1,6 @@
-import { SectionLocation } from "@/types/location";
-import { Mdx } from "../mdx";
+import { MainMdx } from "../mdx";
 import { TrackLastVisitedSection } from "./section-last-visited";
+import { MdxComponents } from "../mdx-components";
 
 export default function ({ code }: { code: string }) {
 	return (
@@ -10,7 +10,7 @@ export default function ({ code }: { code: string }) {
 				className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none"
 				id="section-content"
 			>
-				<Mdx code={code} />
+				<MainMdx code={code} />
 			</article>
 		</>
 	);

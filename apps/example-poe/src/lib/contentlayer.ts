@@ -30,7 +30,13 @@ export const getHeadings = (doc: string) => {
 			const content = groups?.content;
 			return {
 				level:
-					flag?.length === 1 ? "one" : flag?.length === 2 ? "two" : "three",
+					flag?.length === 1
+						? "one"
+						: flag?.length === 2
+						? "two"
+						: flag?.length === 3
+						? "three"
+						: "other",
 				text: content,
 				slug: content ? slugger.slug(content) : undefined,
 			};

@@ -1,9 +1,8 @@
 import Balancer from "react-wrap-balancer";
 import { cn } from "@itell/core/utils";
-import { Typography } from "./typography";
 import { buttonVariants } from "./button";
 
-const getYoutubeLinkFromEmbed = (url: string) => {
+export const getYoutubeLinkFromEmbed = (url: string) => {
 	const regex = /embed\/([\w-]+)\?/;
 	const match = url.match(regex);
 
@@ -14,6 +13,15 @@ const getYoutubeLinkFromEmbed = (url: string) => {
 	return url;
 };
 
+type Props = {
+	src: string;
+	width?: number;
+	height?: number;
+	youtube?: boolean;
+	title?: string;
+	children?: React.ReactNode;
+};
+
 export const YoutubeVideo = ({
 	src,
 	width = 500,
@@ -21,14 +29,7 @@ export const YoutubeVideo = ({
 	youtube = true,
 	title,
 	children,
-}: {
-	src: string;
-	width: number;
-	height: number;
-	youtube?: boolean;
-	title?: string;
-	children?: React.ReactNode;
-}) => {
+}: Props) => {
 	return (
 		<div
 			className={cn("mb-4 rounded-md max-w-2xl mx-auto", {
@@ -45,18 +46,20 @@ export const YoutubeVideo = ({
 					allowFullScreen
 				/>
 				{title && (
-					<Typography variant="h5" className="m-0">
+					<h5
+						className="text-xl font-semibold leading-snug"
+						data-testid="title"
+					>
 						<Balancer as="div">{title}</Balancer>
-					</Typography>
+					</h5>
 				)}
-				{children && (
-					<Typography as="div" variant="small">
-						{children}
-					</Typography>
-				)}
+				{children && <div className="text-sm font-light">{children}</div>}
 				{youtube && (
 					<a href={getYoutubeLinkFromEmbed(src)} className="no-underline">
-						<button className={buttonVariants({ variant: "secondary" })}>
+						<button
+							className={buttonVariants({ variant: "secondary" })}
+							data-testid="link"
+						>
 							View on youtube
 						</button>
 					</a>

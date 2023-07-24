@@ -1,4 +1,4 @@
-import { Mdx } from "../mdx";
+import { MainMdx, Mdx } from "../mdx";
 import { TrackLastVisitedChapter } from "./chapter-last-visited";
 
 export default function ({ code }: { code: string }) {
@@ -9,7 +9,7 @@ export default function ({ code }: { code: string }) {
 				className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none"
 				id="chapter-content"
 			>
-				<Mdx code={code} />
+				<MainMdx code={code} />
 			</article>
 		</>
 	);

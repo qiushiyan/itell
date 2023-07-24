@@ -3,7 +3,7 @@ import { BookmarkIcon } from "lucide-react";
 import { NoteCount } from "./note/note-count";
 
 type Heading = {
-	level: "one" | "two" | "three";
+	level: "one" | "two" | "three" | "other";
 	text: string | undefined;
 	slug: string | undefined;
 };
@@ -15,14 +15,12 @@ export function TocSidebar({ headings }: TocSidebarProps) {
 	return (
 		<div>
 			<p className="font-medium text-sm flex items-center">
+				<BookmarkIcon className="mr-2 w-4 h-4" />
 				<span>ON THIS PAGE</span>
-				<BookmarkIcon className="ml-2 w-4 h-4" />
 			</p>
 			<ul className="mt-2 space-y-1">
 				{headings
-					.filter(
-						(heading) => !heading.text?.startsWith("Please write your summary"),
-					)
+					.filter((heading) => heading.level !== "other")
 					.map((heading) => (
 						<li
 							key={heading.slug}
@@ -43,6 +41,9 @@ export function TocSidebar({ headings }: TocSidebarProps) {
 						</li>
 					))}
 			</ul>
+			<div className="mt-8">
+				<NoteCount />
+			</div>
 		</div>
 	);
 }

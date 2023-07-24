@@ -15,6 +15,8 @@ Every day we are faced with a myriad of decisions.
 What is economics and why should you spend your time learning it?
 
 ### Details
+
+#### Learn with Videos
 `;
 
 it("generates url", () => {
@@ -58,6 +60,11 @@ it("generates headings", () => {
 			level: "three",
 			slug: "details",
 			text: "Details",
+		},
+		{
+			level: "other",
+			slug: "learn-with-videos",
+			text: "Learn with Videos",
 		},
 	]);
 });

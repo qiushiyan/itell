@@ -1,61 +1,22 @@
 "use client";
-import {
-	Info,
-	Warning,
-	Keyterm,
-	Callout,
-	Caption,
-	Typography,
-	Blockquote,
-} from "@itell/ui/server";
-import { useMDXComponent } from "next-contentlayer/hooks";
-import {
-	YoutubeVideo,
-	Accordion,
-	AccordionItem,
-	Stepper,
-	StepperHeader,
-	Step,
-	StepperBody,
-	StepperPanel,
-	Image,
-} from "./client-components";
-import { Tabs, TabsHeader, Tab, TabPanel, TabsBody } from "./ui/tabs";
-import { TextOverImage } from "./ui/text-over-image";
 
-const MdxComponents = {
-	YoutubeVideo,
-	Image,
-	Blockquote,
-	Accordion,
-	AccordionItem,
-	TextOverImage,
-	Info,
-	Warning,
-	Keyterm,
-	Callout,
-	Caption,
-	// tab related
-	Tabs,
-	TabsHeader,
-	Tab,
-	TabPanel,
-	TabsBody,
-	// stepper related
-	Stepper,
-	StepperHeader,
-	Step,
-	StepperBody,
-	StepperPanel,
-	Typography,
-};
+import { useMDXComponent } from "next-contentlayer/hooks";
+import { MdxComponents } from "./mdx-components";
+
 interface MdxProps {
 	code: string;
+	// quick fix for MdxComponents from @types/mdx
+	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+	components: Record<string, any>;
 }
 
-export function Mdx({ code }: MdxProps) {
+export const Mdx = ({ code, components }: MdxProps) => {
 	const Component = useMDXComponent(code);
 
 	// @ts-ignore
-	return <Component components={MdxComponents} />;
-}
+	return <Component components={components} />;
+};
+
+export const MainMdx = ({ code }: { code: string }) => {
+	return <Mdx components={MdxComponents} code={code} />;
+};

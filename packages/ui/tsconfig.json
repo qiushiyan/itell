@@ -6,6 +6,10 @@
         "index.d.ts"
     ],
     "compilerOptions": {
+        "types": [
+            "vitest/globals",
+            "@testing-library/jest-dom",
+        ],
         "module": "esnext",
         "lib": [
             "dom",
@@ -14,7 +18,7 @@
         "baseUrl": ".",
         "paths": {
             "@/*": [
-                "./*"
+                "./src/*"
             ],
         },
         // output .d.ts declaration files for consumers
@@ -34,7 +38,7 @@
         // use Node's module resolution algorithm, instead of the legacy TS one
         "moduleResolution": "node",
         // transpile JSX to React.createElement
-        "jsx": "preserve",
+        "jsx": "react-jsx",
         // interop between ESM and CJS modules. Recommended by TS
         "esModuleInterop": true,
         // significant perf increase by skipping checking .d.ts files, particularly those in node_modules. Recommended by TS
