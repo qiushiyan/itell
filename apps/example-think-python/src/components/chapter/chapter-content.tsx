@@ -1,4 +1,5 @@
-import { MainMdx, Mdx } from "../mdx";
+import { MainMdx } from "../main-mdx";
+import { Mdx } from "../mdx";
 import { TrackLastVisitedChapter } from "./chapter-last-visited";
 
 export default function ({ code }: { code: string }) {

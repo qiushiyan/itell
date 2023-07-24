@@ -5,7 +5,7 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import {
-	getHeadings,
+	getHeadingsFromRawBody,
 	getLocationFromFlattenedPath,
 	getSlugFromFlattenedPath,
 } from "./src/lib/contentlayer";
@@ -52,7 +52,7 @@ const Section = defineDocumentType(() => ({
 		},
 		headings: {
 			type: "json",
-			resolve: (doc) => getHeadings(doc.body.raw),
+			resolve: (doc) => getHeadingsFromRawBody(doc.body.raw),
 		},
 	},
 }));

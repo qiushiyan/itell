@@ -14,7 +14,3 @@ export const Mdx = ({ code, components }: MdxProps) => {
 	// @ts-ignore
 	return <Component components={components} />;
 };
-
-export const MainMdx = ({ code }: { code: string }) => {
-	return <Mdx components={MdxComponents} code={code} />;
-};

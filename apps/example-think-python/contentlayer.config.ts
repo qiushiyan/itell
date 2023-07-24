@@ -5,8 +5,7 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypePrism from "rehype-prism-plus";
-import GithubSlugger from "github-slugger";
-
+import { getHeadingsFromRawBody } from "./src/lib/contentlayer";
 const Site = defineDocumentType(() => ({
 	name: "Site",
 	filePathPattern: "site/**/*.{md,mdx}",
@@ -42,27 +41,7 @@ const Chapter = defineDocumentType(() => ({
 		},
 		headings: {
 			type: "json",
-			resolve: async (doc) => {
-				const regXHeader = /(?<!`|\w+)\n(?<flag>#{2,6})\s+(?<content>.+)/g;
-				const slugger = new GithubSlugger();
-				const headings = Array.from(doc.body.raw.matchAll(regXHeader)).map(
-					({ groups }) => {
-						const flag = groups?.flag;
-						const content = groups?.content;
-						return {
-							level:
-								flag?.length === 1
-									? "one"
-									: flag?.length === 2
-									? "two"
-									: "three",
-							text: content,
-							slug: content ? slugger.slug(content) : undefined,
-						};
-					},
-				);
-				return headings;
-			},
+			resolve: (doc) => getHeadingsFromRawBody(doc.body.raw),
 		},
 	},
 }));
