@@ -1,4 +1,4 @@
-import { type Prisma, type Summary } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 import db from "./db";
 import { format, subDays } from "date-fns";
 import { getDatesBetween } from "@itell/core/utils";
@@ -7,20 +7,22 @@ import { FocusTimeData, getTotalViewTime } from "./focus-time";
 export const getSummaryStats = async ({
 	where,
 }: { where: Prisma.SummaryWhereInput }) => {
-	const summaryStats = await db.summary.aggregate({
-		_avg: {
-			wordingScore: true,
-			contentScore: true,
-		},
-		_count: true,
-		where: where,
-	});
-	const passedCount = await db.summary.count({
-		where: {
-			...where,
-			isPassed: true,
-		},
-	});
+	const [summaryStats, passedCount] = await Promise.all([
+		db.summary.aggregate({
+			_avg: {
+				wordingScore: true,
+				contentScore: true,
+			},
+			_count: true,
+			where: where,
+		}),
+		db.summary.count({
+			where: {
+				...where,
+				isPassed: true,
+			},
+		}),
+	]);
 
 	return {
 		avgContentScore: summaryStats._avg.contentScore,
@@ -39,7 +41,7 @@ export const getClassStudents = async (classId: string) => {
 };
 
 export const getClassStudentStats = async (classId: string) => {
-	return await db.user.findMany({
+	const students = await db.user.findMany({
 		where: {
 			classId,
 		},
@@ -57,6 +59,8 @@ export const getClassStudentStats = async (classId: string) => {
 			},
 		},
 	});
+
+	return students;
 };
 
 export const getStudentsCount = async (classId: string) => {

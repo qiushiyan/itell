@@ -6,8 +6,6 @@ import { Highlight } from "./highlight";
 import { NewNoteList } from "./new-note-list";
 import { NoteCount, SetNoteCount } from "./note-count";
 
-export const dynamic = "force-dynamic";
-
 export default async function NoteList({
 	location,
 }: { location: SectionLocation }) {

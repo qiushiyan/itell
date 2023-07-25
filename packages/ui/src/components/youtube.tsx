@@ -32,7 +32,7 @@ export const YoutubeVideo = ({
 }: Props) => {
 	return (
 		<div
-			className={cn("mb-4 rounded-md max-w-2xl mx-auto", {
+			className={cn("my-4 rounded-md max-w-2xl mx-auto", {
 				"border-2 p-2": youtube,
 			})}
 		>

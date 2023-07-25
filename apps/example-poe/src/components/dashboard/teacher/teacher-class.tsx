@@ -4,11 +4,13 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
+	Skeleton,
 } from "@itell/ui/server";
 import { StudentsTable } from "./students-table";
-import db from "@/lib/db";
 import { StudentData, columns } from "./students-columns";
 import { getClassStudentStats } from "@/lib/dashboard";
+import { TeacherBadges } from "./teacher-badges";
+import { Suspense } from "react";
 
 export const TeacherClass = async ({ classId }: { classId: string }) => {
 	const students = await getClassStudentStats(classId);
@@ -35,7 +37,15 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 					</p>
 				</CardDescription>
 			</CardHeader>
-			<CardContent>
+			<CardContent className="space-y-6">
+				<h3 className="mb-4 text-lg font-medium">Average Class Statistics</h3>
+
+				<Suspense fallback={<TeacherBadges.Skeleton />}>
+					<TeacherBadges studentIds={students.map((student) => student.id)} />
+				</Suspense>
+
+				<h3 className="mb-4 text-lg font-medium">All Students</h3>
+
 				<StudentsTable columns={columns} data={studentData} />
 			</CardContent>
 		</Card>

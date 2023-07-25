@@ -7,6 +7,8 @@ import {
 	Typography,
 	Blockquote,
 	Steps,
+	Columns,
+	Column,
 } from "@itell/ui/server";
 import {
 	YoutubeVideo,
@@ -37,6 +39,8 @@ export const MdxComponents = {
 	Caption,
 	Typography,
 	Steps,
+	Columns,
+	Column,
 	// tab related
 	Tabs,
 	TabsHeader,

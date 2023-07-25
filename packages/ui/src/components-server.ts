@@ -9,3 +9,4 @@ export * from "./components/badge";
 export * from "./components/input";
 export * from "./components/blockquote";
 export * from "./components/steps";
+export * from "./components/columns";

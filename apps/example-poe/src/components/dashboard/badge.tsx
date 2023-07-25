@@ -1,3 +1,4 @@
+import { cn } from "@itell/core/utils";
 import {
 	Card,
 	CardHeader,
@@ -32,7 +33,7 @@ export const Badge = ({
 	className,
 }: Props) => {
 	return (
-		<Card className={className}>
+		<Card className={cn("flex flex-col justify-between", className)}>
 			<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 				<CardTitle className="text-sm font-medium">{title}</CardTitle>
 				{icon}

@@ -4,6 +4,14 @@
 
 @import url("@itell/ui/dist/style.css");
 
+.columns .column figure:first-child,
+.columns .column figure:first-child img {
+  margin-top: 0;
+}
+
+.columns .column p:first-child {
+  margin-top: 0;
+}
 
 .inset-center {
   position: absolute;

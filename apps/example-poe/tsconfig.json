@@ -45,7 +45,8 @@
     ".next/types/**/*.ts",
     "src/env.mjs",
     "tailwind.config.cjs",
-    "tailwind.config.ts"
+    "tailwind.config.ts",
+    "next.export.config.js"
   ],
   "exclude": [
     "node_modules",
