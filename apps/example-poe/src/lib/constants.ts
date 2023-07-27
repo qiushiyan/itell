@@ -13,3 +13,4 @@ export const ScoreThreshold: Record<ScoreType, number> = {
 };
 
 export const FOCUS_TIME_COUNT_INTERVAL = 5000;
+export const TEXTBOOK_NAME = "macroeconomics-2e";

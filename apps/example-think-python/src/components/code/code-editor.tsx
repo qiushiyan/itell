@@ -19,12 +19,14 @@ type Props = {
 
 export const CodeEditor = (props: Props) => {
 	const [value, setValue] = useState(props.code || "");
+	const [isDisplayResult, setIsDisplayResult] = useState(false);
 	const { theme } = useTheme();
 	const { runPython, stdout, stderr, isLoading, isRunning } = usePython();
 	const isPending = isLoading || isRunning;
 
 	const run = async () => {
 		await runPython(value);
+		setIsDisplayResult(true);
 	};
 
 	return (
@@ -52,13 +54,17 @@ export const CodeEditor = (props: Props) => {
 				/>
 
 				<div className="hidden absolute right-1 bottom-1 group-hover:flex gap-1 lg:gap-2 rounded-md shadow-md bg-foreground">
-					<button className={buttonVariants()} onClick={run}>
+					<button
+						className={buttonVariants()}
+						onClick={run}
+						disabled={isPending}
+					>
 						<PlayIcon className="w-4 h-4" />
 					</button>
 				</div>
 			</div>
 
-			<CodeResult stderr={stderr} stdout={stdout} />
+			{isDisplayResult && <CodeResult stderr={stderr} stdout={stdout} />}
 		</div>
 	);
 };

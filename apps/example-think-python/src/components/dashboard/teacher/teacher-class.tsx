@@ -9,6 +9,8 @@ import { StudentsTable } from "./students-table";
 import db from "@/lib/db";
 import { StudentData, columns } from "./students-columns";
 import { getClassStudentStats } from "@/lib/dashboard";
+import { Suspense } from "react";
+import { TeacherBadges } from "./teacher-badges";
 
 export const TeacherClass = async ({ classId }: { classId: string }) => {
 	const students = await getClassStudentStats(classId);
@@ -36,7 +38,15 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<StudentsTable columns={columns} data={studentData} />
+				<h3 className="mb-4 text-lg font-medium">Average Class Statistics</h3>
+
+				<Suspense fallback={<TeacherBadges.Skeleton />}>
+					<TeacherBadges studentIds={students.map((student) => student.id)} />
+				</Suspense>
+
+				<h3 className="mb-4 text-lg font-medium">All Students</h3>
+
+				<StudentsTable columns={columns} data={studentData} />{" "}
 			</CardContent>
 		</Card>
 	);

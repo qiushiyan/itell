@@ -6,20 +6,22 @@ import { getDatesBetween } from "@itell/core/utils";
 export const getSummaryStats = async ({
 	where,
 }: { where: Prisma.SummaryWhereInput }) => {
-	const summaryStats = await db.summary.aggregate({
-		_avg: {
-			wordingScore: true,
-			contentScore: true,
-		},
-		_count: true,
-		where: where,
-	});
-	const passedCount = await db.summary.count({
-		where: {
-			...where,
-			isPassed: true,
-		},
-	});
+	const [summaryStats, passedCount] = await Promise.all([
+		db.summary.aggregate({
+			_avg: {
+				wordingScore: true,
+				contentScore: true,
+			},
+			_count: true,
+			where: where,
+		}),
+		db.summary.count({
+			where: {
+				...where,
+				isPassed: true,
+			},
+		}),
+	]);
 
 	return {
 		avgContentScore: summaryStats._avg.contentScore,

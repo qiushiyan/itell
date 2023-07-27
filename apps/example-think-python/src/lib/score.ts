@@ -1,5 +1,6 @@
 import { env } from "@/env.mjs";
 import { SummaryResponseSchema } from "@/trpc/schema";
+import { TEXTBOOK_NAME } from "./constants";
 
 export const getScore = async ({
 	input,
@@ -10,7 +11,8 @@ export const getScore = async ({
 		body: JSON.stringify({
 			summary: input,
 			chapter_index: chapter,
-			section_index: 1,
+			textbook_name: TEXTBOOK_NAME,
+			section_index: null,
 		}),
 		headers: {
 			"Content-Type": "application/json",

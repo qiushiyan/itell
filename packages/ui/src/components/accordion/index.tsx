@@ -11,6 +11,7 @@ import {
 type Props = {
 	children: React.ReactNode;
 	value: string[] | string;
+	className?: string;
 };
 
 export const AccordionItem = ({
@@ -31,12 +32,12 @@ export const AccordionItem = ({
 	);
 };
 
-export const Accordion = ({ children, value }: Props) => {
+export const Accordion = ({ children, value, className }: Props) => {
 	if (typeof value === "string") {
 		value = [value];
 	}
 	return (
-		<BaseAccordion type="multiple" defaultValue={value}>
+		<BaseAccordion type="multiple" defaultValue={value} className={className}>
 			{children}
 		</BaseAccordion>
 	);
