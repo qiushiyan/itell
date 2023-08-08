@@ -3,9 +3,12 @@
 import { usePython } from "@webpy/react";
 import { useEffect, useState } from "react";
 import Spinner from "../spinner";
+import { cn } from "@itell/core/utils";
+import { isError } from "@tanstack/react-query";
 
 type Command = {
 	input: string;
+	isError: boolean;
 	result: string | null;
 };
 
@@ -15,6 +18,7 @@ export const Repl = () => {
 	const [commands, setCommands] = useState<Command[]>([
 		{
 			input,
+			isError: false,
 			result: null,
 		},
 	]);
@@ -58,17 +62,24 @@ export const Repl = () => {
 								if (e.key === "Enter") {
 									e.preventDefault();
 									const result = await runPython(input);
+									const isError = result.error !== null;
 
 									setCommands((prev) => {
 										return [
 											...prev.slice(0, prev.length - 1),
 											{
 												input,
-												result: result?.error ? result.error : result?.output,
+												result: isError
+													? result.error
+													: result?.output !== "undefined"
+													? result.output
+													: null,
+												isError,
 											},
 											{
 												input: "",
 												result: null,
+												isError: false,
 											},
 										];
 									});
@@ -85,7 +96,13 @@ export const Repl = () => {
 							<code>{command.input}</code>
 						</div>
 						{command.result && (
-							<pre className="mx-0 p-0 my-2 text-sm">{command.result}</pre>
+							<pre
+								className={cn("mx-0 p-0 my-2 text-sm", {
+									"text-red-400": command.isError,
+								})}
+							>
+								{command.result}
+							</pre>
 						)}
 					</div>
 				);

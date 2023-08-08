@@ -25,7 +25,6 @@ export const CodeEditor = (props: Props) => {
 
 	const run = async () => {
 		const result = await runPython(input);
-		console.log(result);
 		setResult(result);
 	};
 
@@ -65,7 +64,7 @@ export const CodeEditor = (props: Props) => {
 			</div>
 
 			{result?.output && <pre>{result.output}</pre>}
-			{result?.error && <pre className="text-destructive">{result.error}</pre>}
+			{result?.error && <pre className="text-red-500">{result.error}</pre>}
 
 			{/* {isDisplayResult && <CodeResult stderr={stderr} stdout={stdout} />} */}
 		</div>
