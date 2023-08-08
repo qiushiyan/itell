@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@codemirror/lang-python": "^6.1.3",
+    "@codemirror/view": "^6.15.3",
     "@hello-pangea/color-picker": "^3.2.2",
     "@hookform/resolvers": "^3.1.1",
     "@itell/core": "workspace:^",
@@ -31,6 +32,7 @@
     "@uiw/codemirror-theme-github": "^4.21.7",
     "@uiw/codemirror-theme-vscode": "^4.21.7",
     "@uiw/react-codemirror": "^4.21.7",
+    "@webpy/react": "^0.0.10",
     "cld3-asm": "^3.1.1",
     "cmdk": "^0.2.0",
     "contentlayer": "^0.3.4",
@@ -48,7 +50,6 @@
     "react-confetti-explosion": "^2.1.2",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.1",
-    "react-py": "^1.9.1",
     "react-text-selection-popover": "^2.0.2",
     "react-wrap-balancer": "^0.4.1",
     "recharts": "^2.7.2",

@@ -3,30 +3,30 @@
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 import { githubDark, githubLight } from "@uiw/codemirror-theme-github";
-import { Button } from "../client-components";
 import { PlayIcon } from "lucide-react";
 import { useState } from "react";
-import { usePython } from "react-py";
 import Spinner from "../spinner";
 import { cn } from "@itell/core/utils";
-import { CodeResult } from "./code-result";
 import { useTheme } from "next-themes";
 import { buttonVariants } from "@itell/ui/server";
+import { usePython } from "@webpy/react";
+import { EditorView } from "@codemirror/view";
+import { PythonResult, extensions } from "./editor";
 
 type Props = {
 	code?: string;
 };
 
 export const CodeEditor = (props: Props) => {
-	const [value, setValue] = useState(props.code || "");
-	const [isDisplayResult, setIsDisplayResult] = useState(false);
+	const [result, setResult] = useState<PythonResult | null>(null);
+	const [input, setInput] = useState(props.code || "");
 	const { theme } = useTheme();
-	const { runPython, stdout, stderr, isLoading, isRunning } = usePython();
-	const isPending = isLoading || isRunning;
+	const { runPython, isLoading, isRunning } = usePython();
 
 	const run = async () => {
-		await runPython(value);
-		setIsDisplayResult(true);
+		const result = await runPython(input);
+		console.log(result);
+		setResult(result);
 	};
 
 	return (
@@ -44,9 +44,9 @@ export const CodeEditor = (props: Props) => {
 					</div>
 				</div>
 				<CodeMirror
-					value={value}
-					onChange={(val) => setValue(val)}
-					extensions={[python()]}
+					value={input}
+					onChange={(val) => setInput(val)}
+					extensions={extensions}
 					theme={theme === "light" ? githubLight : githubDark}
 					basicSetup={{
 						lineNumbers: false,
@@ -57,14 +57,17 @@ export const CodeEditor = (props: Props) => {
 					<button
 						className={buttonVariants()}
 						onClick={run}
-						disabled={isPending}
+						disabled={isLoading}
 					>
-						<PlayIcon className="w-4 h-4" />
+						{isRunning ? <Spinner /> : <PlayIcon className="w-4 h-4" />}
 					</button>
 				</div>
 			</div>
 
-			{isDisplayResult && <CodeResult stderr={stderr} stdout={stdout} />}
+			{result?.output && <pre>{result.output}</pre>}
+			{result?.error && <pre className="text-destructive">{result.error}</pre>}
+
+			{/* {isDisplayResult && <CodeResult stderr={stderr} stdout={stdout} />} */}
 		</div>
 	);
 };

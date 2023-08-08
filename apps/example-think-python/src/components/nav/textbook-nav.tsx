@@ -21,7 +21,7 @@ export default async function TextbookNavbar() {
 					<Link
 						href="/chapter-0"
 						className={cn(
-							buttonVariants({ variant: "ghost" }),
+							buttonVariants({ variant: "outline" }),
 							"flex items-center space-x-2 text-base",
 						)}
 					>
