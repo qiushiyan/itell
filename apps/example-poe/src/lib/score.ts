@@ -7,7 +7,7 @@ export const getScore = async ({
 	input,
 	location,
 }: { input: string; location: SectionLocation }) => {
-	const response = await fetch(env.NEXT_PUBLIC_SCORE_API_URL, {
+	const response = await fetch(`${env.NEXT_PUBLIC_SCORE_API_URL}/summary`, {
 		method: "POST",
 		body: JSON.stringify({
 			textbook_name: TEXTBOOK_NAME,
