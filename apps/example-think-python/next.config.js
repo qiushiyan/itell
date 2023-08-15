@@ -1,8 +1,9 @@
 const { withContentlayer } = require("next-contentlayer");
+const path = require("path");
 
 module.exports = withContentlayer({
 	experimental: {
-		serverActions: true,
+		outputFileTracingIncludes: path.join(__dirname, "config"),
 	},
 	eslint: {
 		ignoreDuringBuilds: true,

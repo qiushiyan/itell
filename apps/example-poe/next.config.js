@@ -1,4 +1,5 @@
 const { withContentlayer } = require("next-contentlayer");
+const path = require("path");
 
 module.exports = withContentlayer({
 	redirects: async () => {
@@ -32,6 +33,9 @@ module.exports = withContentlayer({
 	},
 	eslint: {
 		ignoreDuringBuilds: true,
+	},
+	experimental: {
+		outputFileTracingIncludes: path.join(__dirname, "config"),
 	},
 });
 

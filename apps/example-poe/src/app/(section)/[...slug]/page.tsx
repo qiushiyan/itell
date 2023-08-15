@@ -18,6 +18,7 @@ import { TocSidebar } from "@/components/toc-sidebar";
 import SectionContent from "@/components/section/section-content";
 import { Section } from "contentlayer/generated";
 import Spinner from "@/components/spinner";
+import db from "@/lib/db";
 
 export const generateStaticParams = async () => {
 	return allSectionsSorted.map((section) => {
@@ -80,6 +81,15 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 		module: currentLocation.module,
 		allSections: allSectionsSorted,
 	});
+
+	// const sectionId = `0${currentLocation.chapter}-0${currentLocation.section}`;
+	// console.log(
+	// 	await db.subSection.findMany({
+	// 		where: {
+	// 			sectionId: sectionId,
+	// 		},
+	// 	}),
+	// );
 
 	const hasSummary = section.summary;
 
