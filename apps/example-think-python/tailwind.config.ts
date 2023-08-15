@@ -7,6 +7,6 @@ export default {
 	presets: [tailwindPreset],
 	content: ["./src/**/*.{js,ts,jsx,tsx}", "./content/**/*.mdx"],
 	itell: {
-		theme: getSiteTheme(path.join(process.cwd(), "src/config/theme.yaml")),
+		theme: getSiteTheme(path.join(process.cwd(), "public/theme.yaml")),
 	},
 } satisfies Config;
