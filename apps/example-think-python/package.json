@@ -16,8 +16,6 @@
     "@itell/core": "workspace:^",
     "@itell/tailwind": "workspace:^",
     "@itell/ui": "workspace:*",
-    "@keystatic/core": "^0.0.107",
-    "@keystatic/next": "^0.0.11",
     "@next-auth/prisma-adapter": "^1.0.6",
     "@prisma/client": "^5.0.0",
     "@radix-ui/react-dialog": "^1.0.3",

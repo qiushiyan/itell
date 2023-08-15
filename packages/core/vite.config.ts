@@ -1,6 +1,7 @@
 import path from "node:path";
 import dts from "vite-plugin-dts";
 import { UserConfigExport, defineConfig } from "vite";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 const app = async (): Promise<UserConfigExport> => {
 	return defineConfig({
@@ -15,7 +16,7 @@ const app = async (): Promise<UserConfigExport> => {
 					index: path.resolve(__dirname, "src/index.ts"),
 					hooks: path.resolve(__dirname, "src/hooks/index.ts"),
 					utils: path.resolve(__dirname, "src/utils.ts"),
-					config: path.resolve(__dirname, "src/config.ts"),
+					config: path.resolve(__dirname, "src/config/index.ts"),
 					contentlayer: path.resolve(__dirname, "src/contentlayer.ts"),
 				},
 				name: "core",
@@ -24,7 +25,7 @@ const app = async (): Promise<UserConfigExport> => {
 			},
 			emptyOutDir: true,
 			rollupOptions: {
-				external: ["react"],
+				external: ["react", "fs/promises", "fs"],
 				output: {
 					globals: {
 						react: "React",

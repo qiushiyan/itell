@@ -1,13 +1,12 @@
 import type { Config } from "tailwindcss";
 import tailwindPreset from "@itell/tailwind";
-import { getThemeConfig } from "@itell/core/config";
-
-import themeConfig from "./config/theme.json";
+import { getSiteTheme } from "@itell/core/config";
+import path from "path";
 
 export default {
 	presets: [tailwindPreset],
 	content: ["./src/**/*.{js,ts,jsx,tsx}", "./content/**/*.mdx"],
 	itell: {
-		theme: getThemeConfig(themeConfig),
+		theme: getSiteTheme(path.join(process.cwd(), "config/theme.yaml")),
 	},
 } satisfies Config;

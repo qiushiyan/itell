@@ -1,36 +1,9 @@
-import { isObject } from "./utils";
+import { ThemeConfig, UserThemeConfigSchema } from "./schema";
+import path from "path";
+import { load } from "js-yaml";
+import { readFileSync } from "fs";
 
-export type ItellThemeColors = {
-	background: string;
-	foreground: string;
-	muted: string;
-	mutedForeground: string;
-	popover: string;
-	popoverForeground: string;
-	card: string;
-	cardForeground: string;
-	border: string;
-	input: string;
-	primary: string;
-	primaryForeground: string;
-	secondary: string;
-	secondaryForeground: string;
-	accent: string;
-	accentForeground: string;
-	destructive: string;
-	destructiveForeground: string;
-	ring: string;
-	radius: string;
-	info: string;
-	warning: string;
-};
-
-type ThemeConfig = {
-	light: ItellThemeColors;
-	dark: ItellThemeColors;
-};
-
-export const DefaultThemeConfig: ThemeConfig = {
+export const DefaultThemeConfig: Required<ThemeConfig> = {
 	light: {
 		background: "0 0% 100%",
 		foreground: "222.2 47.4% 11.2%",
@@ -81,23 +54,36 @@ export const DefaultThemeConfig: ThemeConfig = {
 	},
 };
 
-export const getThemeConfig = (
-	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
-	userConfig: Record<string, any>,
-): ThemeConfig => {
-	const config = DefaultThemeConfig;
+// this has to be synchronous to use in tailwind config
+export const getSiteTheme = (
+	themePath: string = path.join(process.cwd(), "config/theme.yaml"),
+): Required<ThemeConfig> => {
+	const themeData = load(readFileSync(themePath, "utf-8"));
+	const themeParsed = UserThemeConfigSchema.safeParse(themeData);
+	// here we only warns that some configurations are invalid
+	// but the valid oneswill still be merged in the final output, as only known keys will be
+	if (!themeParsed.success) {
+		console.warn(
+			"site theme is not valid",
+			themeParsed.error,
+			"\nfallback to default configurations when necessary",
+		);
+	}
 
-	if (isObject(userConfig["light"])) {
-		config.light = {
-			...config.light,
-			...userConfig["light"],
+	if (!(themeData instanceof Object)) {
+		return DefaultThemeConfig;
+	} else {
+		return {
+			light: {
+				...DefaultThemeConfig.light,
+				// @ts-ignore
+				...(themeData.light || {}),
+			},
+			dark: {
+				...DefaultThemeConfig.dark,
+				// @ts-ignore
+				...(themeData.dark || {}),
+			},
 		};
 	}
-	if (isObject(userConfig["dark"])) {
-		config.dark = {
-			...config.dark,
-			...userConfig["dark"],
-		};
-	}
-	return config;
 };

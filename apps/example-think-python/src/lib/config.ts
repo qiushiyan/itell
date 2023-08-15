@@ -1,8 +1,6 @@
-import { reader } from "./keystatic";
-import defaultSiteConfig from "@/config/site";
+import { getSiteConfig as getConfig } from "@itell/core/config";
+import path from "path";
 
 export const getSiteConfig = async () => {
-	const config = await reader.singletons.config.read();
-
-	return config || defaultSiteConfig;
+	return getConfig(path.join(process.cwd(), "config/site.yaml"));
 };
