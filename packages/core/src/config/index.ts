@@ -1,8 +1,8 @@
 export { getSiteConfig } from "./site";
-export { getSiteTheme, DefaultThemeConfig } from "./theme";
+export { getSiteTheme, DefaultTheme } from "./theme";
 export type {
-	ThemeConfig,
+	Theme,
 	SiteConfig,
-	ColorConfig,
+	ThemeColor,
 } from "./schema";
-export { ThemeConfigSchema } from "./schema";
+export { ThemeSchema } from "./schema";

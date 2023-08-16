@@ -1,10 +1,17 @@
 import { getSiteConfig as getConfig } from "@itell/core/config";
 import path from "path";
-import { existsSync } from "fs";
+
+// const siteConfigPath = path.join(process.cwd(), "config/site.yaml");
 
 export const getSiteConfig = async () => {
-	const siteConfigPath = path.join(process.cwd(), "config/site.yaml");
-	console.log("existing?", existsSync(siteConfigPath));
-	console.log(siteConfigPath);
-	return getConfig(siteConfigPath);
+	// return getConfig(siteConfigPath);
+
+	return {
+		title: "Think Python, 2nd",
+		description:
+			"This textbook is adopted from https://greenteapress.com/wp/think-python-2e/.",
+		footer:
+			"A project by the Language and Educational Analytics Research (Lear)Lab",
+		favicon: "/images/avatars/favicon.png",
+	};
 };

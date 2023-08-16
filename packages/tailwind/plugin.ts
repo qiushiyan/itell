@@ -1,17 +1,13 @@
 import plugin from "tailwindcss/plugin";
 import { fontFamily } from "tailwindcss/defaultTheme";
-import {
-	ColorConfig,
-	DefaultThemeConfig,
-	ThemeConfig,
-	ThemeConfigSchema,
-} from "@itell/core/config";
+import { DefaultTheme, ThemeSchema } from "@itell/core/config";
+import type { Theme, ThemeColor } from "@itell/core/config";
 
 const camelToKebab = (str: string) => {
 	return str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 };
 
-const extractCssVariables = (obj: ColorConfig) => {
+const extractCssVariables = (obj: ThemeColor) => {
 	const cssVariables: Record<string, string> = {};
 	for (const [key, value] of Object.entries(obj)) {
 		cssVariables[`--${camelToKebab(key)}`] = value;
@@ -23,7 +19,7 @@ const extractCssVariables = (obj: ColorConfig) => {
 export default plugin(
 	function ({ addBase, config }) {
 		const themeConfig = config("itell.theme");
-		const themeParsed = ThemeConfigSchema.safeParse(themeConfig);
+		const themeParsed = ThemeSchema.safeParse(themeConfig);
 		let lightColors = {};
 		let darkColors = {};
 		if (themeParsed.success) {
@@ -31,8 +27,8 @@ export default plugin(
 			darkColors = extractCssVariables(themeConfig.dark);
 		} else {
 			console.warn("site theme is not valid for tailwind, using default theme");
-			lightColors = DefaultThemeConfig.light;
-			darkColors = DefaultThemeConfig.dark;
+			lightColors = DefaultTheme.light;
+			darkColors = DefaultTheme.dark;
 		}
 
 		// css variables

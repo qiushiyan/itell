@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ColorConfigSchema = z.object({
+export const ThemeColorSchema = z.object({
 	background: z.string(),
 	foreground: z.string(),
 	muted: z.string(),
@@ -25,28 +25,26 @@ export const ColorConfigSchema = z.object({
 	warning: z.string(),
 });
 
-export const UserColorConfigSchema = ColorConfigSchema.strict()
-	.partial()
-	.optional();
+export const UserColorSchema = ThemeColorSchema.strict().partial().optional();
 
-export type ColorConfig = z.infer<typeof ColorConfigSchema>;
+export type ThemeColor = z.infer<typeof ThemeColorSchema>;
 // entire object could be undefined, or any of the properties could be undefined
-export type UserColorConfig = z.infer<typeof UserColorConfigSchema>;
+export type UserColor = z.infer<typeof UserColorSchema>;
 
-export const ThemeConfigSchema = z.object({
-	light: ColorConfigSchema,
-	dark: ColorConfigSchema,
+export const ThemeSchema = z.object({
+	light: ThemeColorSchema,
+	dark: ThemeColorSchema,
 });
-export const UserThemeConfigSchema = z
+export const UserThemeSchema = z
 	.object({
-		light: UserColorConfigSchema,
-		dark: UserColorConfigSchema,
+		light: UserColorSchema,
+		dark: UserColorSchema,
 	})
 	.strict()
 	.optional();
 
-export type ThemeConfig = z.infer<typeof ThemeConfigSchema>;
-export type UserThemeConfig = z.infer<typeof UserThemeConfigSchema>;
+export type Theme = z.infer<typeof ThemeSchema>;
+export type UserTheme = z.infer<typeof UserThemeSchema>;
 
 export const SiteConfigSchema = z
 	.object({

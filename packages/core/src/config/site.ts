@@ -12,7 +12,13 @@ export const DefaultSiteConfig: SiteConfig = {
 export const getSiteConfig = async (
 	configPath: string,
 ): Promise<SiteConfig> => {
-	const configData = await readYAML(configPath);
+	let configData;
+	try {
+		configData = await readYAML(configPath);
+	} catch (e) {
+		console.warn("site config not found, fallback to default configurations");
+		return DefaultSiteConfig;
+	}
 	const configParsed = SiteConfigSchema.safeParse(configData);
 	if (!configParsed.success) {
 		console.warn(

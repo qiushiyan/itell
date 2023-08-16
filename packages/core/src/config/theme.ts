@@ -1,8 +1,8 @@
-import { ThemeConfig, UserThemeConfigSchema } from "./schema";
+import { Theme, UserThemeSchema } from "./schema";
 import { load } from "js-yaml";
 import { readFileSync } from "fs";
 
-export const DefaultThemeConfig: Required<ThemeConfig> = {
+export const DefaultTheme: Theme = {
 	light: {
 		background: "0 0% 100%",
 		foreground: "222.2 47.4% 11.2%",
@@ -54,9 +54,16 @@ export const DefaultThemeConfig: Required<ThemeConfig> = {
 };
 
 // this has to be synchronous to use in tailwind config
-export const getSiteTheme = (themePath: string): ThemeConfig => {
-	const themeData = load(readFileSync(themePath, "utf-8"));
-	const themeParsed = UserThemeConfigSchema.safeParse(themeData);
+export const getSiteTheme = (themePath: string): Theme => {
+	let themeData;
+	try {
+		themeData = load(readFileSync(themePath, "utf-8"));
+	} catch (e) {
+		console.warn("site theme not found, fallback to default configurations");
+		return DefaultTheme;
+	}
+
+	const themeParsed = UserThemeSchema.safeParse(themeData);
 	// here we only warns that some configurations are invalid
 	// but the valid oneswill still be merged in the final output, as only known keys will be
 	if (!themeParsed.success) {
@@ -68,16 +75,16 @@ export const getSiteTheme = (themePath: string): ThemeConfig => {
 	}
 
 	if (!(themeData instanceof Object)) {
-		return DefaultThemeConfig;
+		return DefaultTheme;
 	} else {
 		return {
 			light: {
-				...DefaultThemeConfig.light,
+				...DefaultTheme.light,
 				// @ts-ignore
 				...(themeData.light || {}),
 			},
 			dark: {
-				...DefaultThemeConfig.dark,
+				...DefaultTheme.dark,
 				// @ts-ignore
 				...(themeData.dark || {}),
 			},
