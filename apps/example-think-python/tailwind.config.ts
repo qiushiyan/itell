@@ -5,13 +5,6 @@ import path from "path";
 import { spawn } from "child_process";
 
 const themeConfigPath = path.join(process.cwd(), "config/theme.yaml");
-console.log("theme config path", themeConfigPath);
-
-const ls = spawn("ls", ["-lh", ".", "config"]);
-
-ls.stdout.on("data", (data) => {
-	console.log(`stdout: ${data}`);
-});
 
 export default {
 	presets: [tailwindPreset],
