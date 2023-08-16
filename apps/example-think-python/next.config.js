@@ -1,15 +1,4 @@
 const { withContentlayer } = require("next-contentlayer");
-const { spawn } = require("child_process");
-const path = require("path");
-
-const themeConfigPath = path.join(process.cwd(), "config/theme.yaml");
-console.log("theme config path", themeConfigPath);
-
-const ls = spawn("ls", ["-lh", ".", "config"]);
-
-ls.stdout.on("data", (data) => {
-	console.log(`stdout: ${data}`);
-});
 
 module.exports = withContentlayer({
 	experimental: {
