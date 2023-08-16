@@ -3,7 +3,9 @@ const path = require("path");
 
 module.exports = withContentlayer({
 	experimental: {
-		outputFileTracingIncludes: path.join(__dirname, "config"),
+		outputFileTracingIncludes: {
+			"/": ["./config/**/*"],
+		},
 	},
 	eslint: {
 		ignoreDuringBuilds: true,

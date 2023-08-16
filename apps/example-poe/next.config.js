@@ -35,7 +35,9 @@ module.exports = withContentlayer({
 		ignoreDuringBuilds: true,
 	},
 	experimental: {
-		outputFileTracingIncludes: path.join(__dirname, "config"),
+		outputFileTracingIncludes: {
+			"/": ["./config/**/*"],
+		},
 	},
 });
 

@@ -1,17 +1,16 @@
-import path from "path";
 import { readYAML } from "./utils";
 import { SiteConfig, SiteConfigSchema } from "./schema";
 
 export const DefaultSiteConfig: SiteConfig = {
-	title: "My Site",
-	description: "My site description",
-	footer: "My site footer",
+	title: "My iTELL Site",
+	description: "My iTELL site description",
+	footer: "My iTELL site footer",
 	latex: false,
 	favicon: "favicon.ico",
 };
 
 export const getSiteConfig = async (
-	configPath: string = path.join(process.cwd(), "config/site.yaml"),
+	configPath: string,
 ): Promise<SiteConfig> => {
 	const configData = await readYAML(configPath);
 	const configParsed = SiteConfigSchema.safeParse(configData);

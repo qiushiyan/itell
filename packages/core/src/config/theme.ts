@@ -1,5 +1,4 @@
 import { ThemeConfig, UserThemeConfigSchema } from "./schema";
-import path from "path";
 import { load } from "js-yaml";
 import { readFileSync } from "fs";
 
@@ -55,9 +54,7 @@ export const DefaultThemeConfig: Required<ThemeConfig> = {
 };
 
 // this has to be synchronous to use in tailwind config
-export const getSiteTheme = (
-	themePath: string = path.join(process.cwd(), "config/theme.yaml"),
-): Required<ThemeConfig> => {
+export const getSiteTheme = (themePath: string): ThemeConfig => {
 	const themeData = load(readFileSync(themePath, "utf-8"));
 	const themeParsed = UserThemeConfigSchema.safeParse(themeData);
 	// here we only warns that some configurations are invalid
