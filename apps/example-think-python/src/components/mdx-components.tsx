@@ -9,10 +9,11 @@ import {
 	Definition,
 } from "@itell/ui/server";
 import { Exercise } from "./exercise";
-import { CodeExample } from "@/components/code/code-example";
+import { CodeEditor } from "@/components/code/code-editor";
 import { CodeRepl } from "@/components/code/code-repl-wrapper";
 import { YoutubeVideo } from "@/components/ui/youtube";
 import { Image } from "./ui/image";
+import { CodingTime } from "@/components/code/coding-time";
 
 export const MdxComponents = {
 	// YoutubeVideo,
@@ -26,8 +27,9 @@ export const MdxComponents = {
 	Typography,
 	// exercise related
 	Exercise,
-	CodeExample,
+	CodeEditor,
 	CodeRepl,
 	YoutubeVideo,
 	Image,
+	CodingTime,
 };

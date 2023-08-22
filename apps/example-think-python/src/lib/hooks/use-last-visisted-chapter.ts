@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useLocalStorage, useCurrentChapter } from "./utils";
+import { useCurrentChapter } from "./utils";
 import { makeChapterHref } from "../utils";
+import { useLocalStorage } from "@itell/core/hooks";
 
 export const useTrackLastVisitedChapter = () => {
 	const currentChapter = useCurrentChapter();

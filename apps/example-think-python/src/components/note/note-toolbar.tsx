@@ -19,7 +19,7 @@ import { useNotesStore } from "@/lib/store";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
-export default function HighlightToolbar({ chapter }: { chapter: number }) {
+export default function NoteToolbar({ chapter }: { chapter: number }) {
 	const [target, setTarget] = useState<HTMLElement | null>(null);
 	const noteColor = useNoteColor();
 	const { createNote, incrementHighlightCount, incrementNoteCount } =
@@ -27,11 +27,20 @@ export default function HighlightToolbar({ chapter }: { chapter: number }) {
 	const createHighlight = trpc.note.create.useMutation();
 	const { data: session } = useSession();
 
+	const handleClick = (event: Event) => {
+		console.log(event.target);
+	};
+
 	useEffect(() => {
 		const el = document.getElementById("chapter-content") as HTMLElement;
 		if (el) {
 			setTarget(el);
+			window.addEventListener("click", handleClick);
 		}
+
+		return () => {
+			window.removeEventListener("click", handleClick);
+		};
 	}, []);
 
 	const commands = [

@@ -253,8 +253,8 @@ importers:
         specifier: ^4.21.7
         version: 4.21.7(@babel/runtime@7.22.3)(@codemirror/autocomplete@6.9.0)(@codemirror/language@6.8.0)(@codemirror/lint@6.4.0)(@codemirror/search@6.5.0)(@codemirror/state@6.2.1)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.15.3)(codemirror@6.0.1)(react-dom@18.2.0)(react@18.2.0)
       '@webpy/react':
-        specifier: ^0.0.10
-        version: 0.0.10(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^0.0.11
+        version: 0.0.11(react-dom@18.2.0)(react@18.2.0)
       cld3-asm:
         specifier: ^3.1.1
         version: 3.1.1
@@ -5026,15 +5026,16 @@ packages:
       pretty-format: 29.6.1
     dev: true
 
-  /@webpy/react@0.0.10(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-MxzfD8pWj7v0cpsAp+j9fNmh6QzhMQ5wluyzdG/IctU+slRikgzlBfcbM4zoiDOA2v4aVtNtwjK11IyejY3aKQ==}
+  /@webpy/react@0.0.11(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-uqsMo80WIko5+6Wyw8R+1WMo6Wggi9JLwMqRK5NQcy3Gwg9VSVOeWugkmOqWR2KDe/nUOWrQ93Q23L4b6rbiVw==}
     peerDependencies:
       react: ^16.9.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.9.0 || ^17.0.0 || ^18.0.0
     dependencies:
+      comlink: 4.4.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      webpy: 0.0.8
+      webpy: 0.0.9
     dev: false
 
   /abbrev@1.1.1:
@@ -11780,8 +11781,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /webpy@0.0.8:
-    resolution: {integrity: sha512-+KASe3oGYOyIokJObTW5GjBu1VBEAhgR4/NSezG41s1ZjmvZ0EE3o8BZsLMyDUHgQKc8spsMz9BeP3zfcwF4AA==}
+  /webpy@0.0.9:
+    resolution: {integrity: sha512-dRI/WHH9NKcEWwEUBSt1TDEpmPcVXgxvVSZHNXFwR4CNJmwmaGudHPQFvM2/b0AC/9hxtIe7oyI6xtLezh8UQQ==}
     dependencies:
       comlink: 4.4.1
     dev: false

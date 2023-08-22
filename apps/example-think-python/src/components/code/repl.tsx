@@ -40,21 +40,21 @@ export const Repl = () => {
 
 	if (isLoading) {
 		return (
-			<pre className="flex justify-center items-center h-[140px]">
+			<pre className="flex justify-center items-center h-[100px] bg-black border shadow-sm">
 				<Spinner className="mr-2" /> loading python console
 			</pre>
 		);
 	}
 
 	return (
-		<pre>
+		<pre className="code-repl bg-black border shadow-sm">
 			{commands.map((command, index) => {
 				const isActiveInput = index === commands.length - 1;
 				return isActiveInput ? (
 					<div className="flex gap-2 items-center">
 						<code>{">>>"}</code>
 						<input
-							className="flex-1 bg-background"
+							className="flex-1 bg-black"
 							// rome-ignore lint/a11y/noAutofocus: <explanation>
 							autoFocus
 							onChange={(e) => setInput(e.target.value)}

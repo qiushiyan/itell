@@ -35,7 +35,7 @@ export const generateNoteElement = async ({
 		if (highlight) {
 			newText = target.innerHTML.replace(
 				regex,
-				`<span class="highlight" id="${id}" style="background-color:${color}">$&</span>`,
+				`<span class="highlight" id="${id}" style="background-color:${color};color:black">$&</span>`,
 			);
 		} else {
 			newText = target.innerHTML.replace(

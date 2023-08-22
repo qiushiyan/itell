@@ -202,7 +202,6 @@ export default function ({
 			if (editState.collapsed) {
 				dispatch({ type: "set_show_edit", payload: true });
 			}
-			console.log(element);
 			if (element) {
 				emphasizeNote(element);
 			}

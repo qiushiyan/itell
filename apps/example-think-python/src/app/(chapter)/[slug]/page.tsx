@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import ChapterPager from "@/components/chapter-pager";
 import { getPagerForChapter } from "@/lib/pager";
 import NoteList from "@/components/note/note-list";
-import Highlighter from "@/components/note/note-toolbar";
+import NoteToolbar from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import { allChaptersSorted } from "@/lib/chapters";
@@ -105,7 +105,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 					</div>
 
 					<ChapterContent code={chapter.body.code} />
-					<Highlighter chapter={chapter.chapter} />
+					<NoteToolbar chapter={chapter.chapter} />
 					<ChapterPager pager={pager} />
 				</section>
 

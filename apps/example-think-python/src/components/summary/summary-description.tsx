@@ -12,13 +12,15 @@ const description = allSites.find(
 
 export default function SummaryDescription() {
 	return (
-		<Mdx
-			code={description.body.code}
-			components={{
-				Accordion,
-				AccordionItem,
-				Typography,
-			}}
-		/>
+		<div className="summary-description prose dark:prose-invert">
+			<Mdx
+				code={description.body.code}
+				components={{
+					Accordion,
+					AccordionItem,
+					Typography,
+				}}
+			/>
+		</div>
 	);
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAutosizeTextArea } from "@/lib/hooks/utils";
+import { useAutosizeTextArea } from "@itell/core/hooks";
 import { cn } from "@itell/core/utils";
 import { useEffect, useRef } from "react";
 

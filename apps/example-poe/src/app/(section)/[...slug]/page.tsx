@@ -82,15 +82,6 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 		allSections: allSectionsSorted,
 	});
 
-	// const sectionId = `0${currentLocation.chapter}-0${currentLocation.section}`;
-	// console.log(
-	// 	await db.subSection.findMany({
-	// 		where: {
-	// 			sectionId: sectionId,
-	// 		},
-	// 	}),
-	// );
-
 	const hasSummary = section.summary;
 
 	return (
