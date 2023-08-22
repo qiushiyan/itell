@@ -20,6 +20,7 @@ import { useNotesStore } from "@/lib/store";
 type SelectionData = ReturnType<typeof useTextSelection>;
 
 export default function NoteToolbar({ chapter }: { chapter: number }) {
+	const [show, setShow] = useState(true);
 	const [target, setTarget] = useState<HTMLElement | null>(null);
 	const noteColor = useNoteColor();
 	const { createNote, incrementHighlightCount, incrementNoteCount } =
@@ -28,18 +29,29 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 	const { data: session } = useSession();
 
 	const handleClick = (event: Event) => {
-		console.log(event.target);
+		if (event.target instanceof HTMLElement) {
+			if (
+				event.target.tagName === "SPAN" ||
+				event.target.tagName === "PRE" ||
+				event.target.classList.contains("cm-line") ||
+				event.target.classList.contains("cm-editor")
+			) {
+				setShow(false);
+			} else {
+				setShow(true);
+			}
+		}
 	};
 
 	useEffect(() => {
 		const el = document.getElementById("chapter-content") as HTMLElement;
 		if (el) {
 			setTarget(el);
-			window.addEventListener("click", handleClick);
+			el.addEventListener("click", handleClick);
 		}
 
 		return () => {
-			window.removeEventListener("click", handleClick);
+			el.removeEventListener("click", handleClick);
 		};
 	}, []);
 
@@ -115,7 +127,7 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 		},
 	];
 
-	if (!target) return null;
+	if (!target || !show) return null;
 
 	return (
 		<Popover
