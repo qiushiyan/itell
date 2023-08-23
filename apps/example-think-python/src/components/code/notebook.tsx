@@ -1,10 +1,10 @@
-import { Editor } from "./editor";
-import { readScript } from "@/lib/exercise";
+import { getCellCodes, readScript } from "@/lib/exercise";
 import { Errorbox } from "@itell/ui/server";
+import { CellGroup } from "./cell-group";
 
 type Props = { code: string } | { script: string };
 
-export const CodeEditor = async (props: Props) => {
+export const Notebook = async (props: Props) => {
 	let code = "";
 	if ("code" in props) {
 		code = props.code;
@@ -15,5 +15,11 @@ export const CodeEditor = async (props: Props) => {
 		}
 		code = result.trimEnd();
 	}
-	return <Editor code={code} />;
+	const codes = getCellCodes(code);
+
+	return (
+		<div className="notebook">
+			<CellGroup codes={codes} />
+		</div>
+	);
 };

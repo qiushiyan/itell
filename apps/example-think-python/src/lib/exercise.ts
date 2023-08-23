@@ -16,3 +16,13 @@ export const readScript = async (script: string) => {
 		return null;
 	}
 };
+
+export const getCellCodes = (input: string) => {
+	// Split the string by "# %%"
+	const splitArray = input.split("# %%");
+
+	// Filter out empty or whitespace-only strings and trim any excess whitespace
+	return splitArray
+		.map((substring) => substring.trim())
+		.filter((substring) => substring.length > 0);
+};

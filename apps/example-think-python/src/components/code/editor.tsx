@@ -2,7 +2,7 @@
 
 import CodeMirror, { ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import { githubDark, githubLight } from "@uiw/codemirror-theme-github";
-import { PlayIcon, RotateCcwIcon } from "lucide-react";
+import { PlayIcon, RotateCcwIcon, BanIcon } from "lucide-react";
 import { useRef, useState } from "react";
 import Spinner from "../spinner";
 import { cn } from "@itell/core/utils";
@@ -67,6 +67,7 @@ export const Editor = (props: Props) => {
 			})}
 		>
 			<div className="relative group">
+				{/* overlay when loading */}
 				<div
 					className={cn(
 						"absolute top-0 left-0 w-full h-full opacity-50 bg-foreground z-10 flex items-center justify-center",
@@ -78,7 +79,37 @@ export const Editor = (props: Props) => {
 						Setting up ...
 					</div>
 				</div>
-				<header className="flex items-center border gap-1">
+				<div className="flex">
+					<div className="w-fit">
+						<Button size="sm" variant="ghost" onClick={run}>
+							{isRunning ? (
+								<Spinner className="w-4 h-4" />
+							) : (
+								<PlayIcon className="w-4 h-4" />
+							)}
+						</Button>
+					</div>
+
+					<div className="flex-1 border-l">
+						<CodeMirror
+							value={input}
+							onChange={(val) => setInput(val)}
+							extensions={extensions}
+							theme={theme === "light" ? githubLight : githubDark}
+							basicSetup={{
+								lineNumbers: false,
+							}}
+							ref={editorRef}
+						/>
+						{result?.output && result.output !== "undefined" && (
+							<pre className="my-2">{result.output}</pre>
+						)}
+						{result?.error && (
+							<pre className="my-2 text-red-500">{result.error}</pre>
+						)}
+					</div>
+				</div>
+				{/* <header className="flex items-center border gap-1">
 					<Button size="sm" variant="ghost" onClick={run}>
 						{isRunning ? (
 							<Spinner className="w-4 h-4 mr-2" />
@@ -90,34 +121,11 @@ export const Editor = (props: Props) => {
 					<Button size="sm" variant="ghost" onClick={reset}>
 						<RotateCcwIcon className="w-4 h-4 mr-2" /> Reset
 					</Button>
-				</header>
-
-				<CodeMirror
-					value={input}
-					onChange={(val) => setInput(val)}
-					extensions={extensions}
-					theme={theme === "light" ? githubLight : githubDark}
-					basicSetup={{
-						lineNumbers: false,
-					}}
-					ref={editorRef}
-				/>
-
-				<div className="hidden absolute right-1 bottom-1 group-hover:flex gap-1 lg:gap-2 rounded-md shadow-md bg-foreground">
-					<button
-						className={buttonVariants()}
-						onClick={run}
-						disabled={isLoading}
-					>
-						{isRunning ? <Spinner /> : <PlayIcon className="w-4 h-4" />}
-					</button>
-				</div>
+					<Button size="sm" variant="ghost" onClick={reset}>
+						<BanIcon className="w-4 h-4 mr-2" /> Cancel
+					</Button>
+				</header> */}
 			</div>
-
-			{result?.output && result.output !== "undefined" && (
-				<pre className="my-2">{result.output}</pre>
-			)}
-			{result?.error && <pre className="my-2 text-red-500">{result.error}</pre>}
 		</div>
 	);
 };

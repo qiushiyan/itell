@@ -17,23 +17,25 @@ module.exports = withContentlayer({
 			},
 		],
 	},
+	async headers() {
+		return [
+			{
+				source: "/(.*)",
+				headers: securityHeaders,
+			},
+		];
+	},
 });
-
-const ContentSecurityPolicy = `
-    default-src 'self' vercel.live;
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' cdn.vercel-insights.com vercel.live;
-    style-src 'self' 'unsafe-inline';
-    img-src * blob: data:;
-    media-src 'none';
-    connect-src *;
-    font-src 'self';
-`;
 
 const securityHeaders = [
 	// https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 	{
-		key: "Content-Security-Policy",
-		value: ContentSecurityPolicy.replace(/\n/g, ""),
+		key: "Cross-Origin-Embedder-Policy",
+		value: "require-corp",
+	},
+	{
+		key: "Cross-Origin-Opener-Policy",
+		value: "same-origin",
 	},
 	// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
 	{
