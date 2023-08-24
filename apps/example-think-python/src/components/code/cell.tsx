@@ -2,7 +2,13 @@
 
 import CodeMirror, { ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import { githubDark, githubLight } from "@uiw/codemirror-theme-github";
-import { PlayIcon, PlusIcon, RotateCcwIcon, XIcon } from "lucide-react";
+import {
+	PlayIcon,
+	PlusIcon,
+	RotateCcwIcon,
+	XIcon,
+	SquareIcon,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import Spinner from "../spinner";
 import { cn } from "@itell/core/utils";
@@ -26,36 +32,42 @@ const printRegex = /print\((.*?)\)/;
 
 export const Cell = memo(
 	({ id, deleteCell, deletable, code, addCell }: CellData) => {
+		const [input, setInput] = useState(code);
 		const [result, setResult] = useState<PythonResult | null>(null);
 		const [status, setStatus] = useState<CellStatus>(undefined);
-		const [input, setInput] = useState(code || "");
 		const { theme } = useTheme();
-		const { runPython, isLoading, isRunning } = usePython();
+		const [isCellRunning, setIsCellRunning] = useState(false);
+		const { runPython, isRunning, interruptExecution } = usePython();
 		const editorRef = useRef<ReactCodeMirrorRef>(null);
 
 		const run = async () => {
+			setIsCellRunning(true);
 			setResult(null);
-			const code = input.trim().split("\n");
-			const lastLine = code.at(-1);
+			const lines = input.trim().split("\n");
+			const lastLine = lines.at(-1);
 
+			// a hack to support print for now
+			// if the last line is print(<something>)
+			// replace it with <something>
 			if (lastLine) {
 				const match = lastLine.match(printRegex);
 				if (match?.[1]) {
-					const result = match[1].trim().replace(/\s*,\s*/g, " + ");
-					code[code.length - 1] = result;
+					const innerPrint = match[1].trim().replace(/\s*,\s*/g, " + ");
+					lines.push(innerPrint);
 				}
 			}
-			const result = await runPython(code.join("\n"));
+			const result = await runPython(lines.join("\n"));
 			if (result.error) {
 				setStatus("error");
 			} else {
 				setStatus("success");
 			}
+			setIsCellRunning(false);
 			setResult(result);
 		};
 
 		const reset = () => {
-			setInput(code || "");
+			setInput(code);
 			setStatus(undefined);
 			setResult(null);
 			if (editorRef.current) {
@@ -63,37 +75,34 @@ export const Cell = memo(
 			}
 		};
 
+		const cancel = async () => {
+			await interruptExecution();
+			setIsCellRunning(false);
+		};
+
 		return (
 			<div
 				className={cn("cell shadow-md border relative group", {
 					"border-info": status === "success",
 					"border-destructive": status === "error",
-					"animate-border-color": isRunning,
+					"animate-border-color": isCellRunning,
 				})}
 			>
-				{/* overlay when loading */}
-
-				{/* <header className="flex items-center border gap-1">
-					<Button size="sm" variant="ghost" onClick={run}>
-						{isRunning ? (
-							<Spinner className="w-4 h-4 mr-2" />
-						) : (
-							<PlayIcon className="w-4 h-4 mr-2" />
-						)}
-						Run
-					</Button>
-					<Button size="sm" variant="ghost" onClick={reset}>
-						<RotateCcwIcon className="w-4 h-4 mr-2" /> Reset
-					</Button>
-					<Button size="sm" variant="ghost" onClick={reset}>
-						<BanIcon className="w-4 h-4 mr-2" /> Cancel
-					</Button>
-				</header> */}
 				<div className="flex">
 					<div className="w-fit">
-						<Button size="sm" variant="ghost" onClick={run}>
+						<Button
+							size="sm"
+							variant="ghost"
+							onClick={async () => {
+								if (isRunning) {
+									await cancel();
+								} else {
+									await run();
+								}
+							}}
+						>
 							{isRunning ? (
-								<Spinner className="w-4 h-4" />
+								<SquareIcon className="w-4 h-4" />
 							) : (
 								<PlayIcon className="w-4 h-4" />
 							)}
@@ -121,16 +130,20 @@ export const Cell = memo(
 				</div>
 				<div className="add-cell h-3 flex self-center items-center flex-col ">
 					<div className="add-cell-buttons flex flex-column gap-2 opacity-0 group-hover:opacity-100 transition-opacity ease-linear duration-100">
-						<Button size={"sm"} variant={"outline"}>
-							<PlusIcon className="w-4 h-4" onClick={addCell} />
+						<Button size={"sm"} variant={"outline"} onClick={addCell}>
+							<PlusIcon className="w-4 h-4" />
 						</Button>
 						{deletable && (
-							<Button size={"sm"} variant={"outline"}>
-								<XIcon className="w-4 h-4" onClick={() => deleteCell(id)} />
+							<Button
+								size={"sm"}
+								variant={"outline"}
+								onClick={() => deleteCell(id)}
+							>
+								<XIcon className="w-4 h-4" />
 							</Button>
 						)}
-						<Button size={"sm"} variant={"outline"}>
-							<RotateCcwIcon className="w-4 h-4" onClick={reset} />
+						<Button size={"sm"} variant={"outline"} onClick={reset}>
+							<RotateCcwIcon className="w-4 h-4" />
 						</Button>
 					</div>
 				</div>
