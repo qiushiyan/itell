@@ -12,5 +12,5 @@ export const ScoreThreshold: Record<ScoreType, number> = {
 	[ScoreType.containment]: 0.6,
 };
 
-export const FOCUS_TIME_COUNT_INTERVAL = 5000;
+export const FOCUS_TIME_COUNT_INTERVAL = 1000;
 export const TEXTBOOK_NAME = "macroeconomics-2e";

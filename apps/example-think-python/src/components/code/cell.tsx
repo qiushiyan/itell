@@ -10,10 +10,9 @@ import {
 	SquareIcon,
 } from "lucide-react";
 import { useRef, useState } from "react";
-import Spinner from "../spinner";
 import { cn } from "@itell/core/utils";
 import { useTheme } from "next-themes";
-import { PythonResult, extensions } from "./editor-config";
+import { PythonResult, baseExtensions, createShortcuts } from "./editor-config";
 import { Button } from "../client-components";
 import { usePython } from "@/lib/hooks/ues-python";
 import { memo } from "react";
@@ -32,6 +31,20 @@ const printRegex = /print\((.*?)\)/;
 
 export const Cell = memo(
 	({ id, deleteCell, deletable, code, addCell }: CellData) => {
+		const extensions = [
+			...baseExtensions,
+			createShortcuts([
+				{
+					key: "Shift-Enter",
+					run: (view) => {
+						run();
+						return true;
+					},
+					preventDefault: true,
+				},
+			]),
+		];
+
 		const [input, setInput] = useState(code);
 		const [result, setResult] = useState<PythonResult | null>(null);
 		const [status, setStatus] = useState<CellStatus>(undefined);

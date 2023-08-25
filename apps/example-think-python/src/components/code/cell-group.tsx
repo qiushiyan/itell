@@ -35,7 +35,12 @@ export const CellGroup = ({ codes }: { codes: string[] }) => {
 				</div>
 			) : (
 				cells.map((cell) => (
-					<Cell {...cell} addCell={addCell} deleteCell={deleteCell} />
+					<Cell
+						{...cell}
+						addCell={addCell}
+						deleteCell={deleteCell}
+						key={cell.id}
+					/>
 				))
 			)}
 		</div>

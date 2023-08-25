@@ -318,9 +318,6 @@ importers:
       rehype-autolink-headings:
         specifier: ^6.1.1
         version: 6.1.1
-      rehype-katex:
-        specifier: ^6.0.3
-        version: 6.0.3
       rehype-prism-plus:
         specifier: ^1.6.1
         version: 1.6.1
@@ -330,9 +327,6 @@ importers:
       remark-gfm:
         specifier: ^3.0.1
         version: 3.0.1
-      remark-math:
-        specifier: ^5.1.1
-        version: 5.1.1
       resend:
         specifier: ^0.16.0
         version: 0.16.0

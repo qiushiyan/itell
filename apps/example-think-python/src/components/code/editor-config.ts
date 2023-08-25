@@ -1,5 +1,6 @@
 import { EditorView } from "@codemirror/view";
 import { python } from "@codemirror/lang-python";
+import { keymap, KeyBinding } from "@codemirror/view";
 
 export type PythonResult = {
 	output: string | null;
@@ -21,4 +22,8 @@ export const BaseEditorTheme = EditorView.baseTheme({
 	},
 });
 
-export const extensions = [python(), BaseEditorTheme];
+export const createShortcuts = (keybindings: readonly KeyBinding[]) => {
+	return keymap.of(keybindings);
+};
+
+export const baseExtensions = [python(), BaseEditorTheme];
