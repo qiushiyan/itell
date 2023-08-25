@@ -28,7 +28,7 @@ export function SummaryItem({ summary }: PostItemProps) {
 				</div>
 
 				<footer className="flex justify-between text-sm text-muted-foreground">
-					<p>{`Chapter ${summary.chapter} Section`}</p>
+					<p>{`Chapter ${summary.chapter}`}</p>
 					<p>{relativeDate(summary.created_at)}</p>
 				</footer>
 			</div>

@@ -20,7 +20,7 @@ import { useChapterStatus } from "@/lib/hooks/use-chapter-status";
 import { makeChapterHref } from "@/lib/utils";
 import { GoogleLoginButton } from "./auth/login-button";
 
-export default function SectionAuthModal() {
+export default function ChapterAuthModal() {
 	const { status, userChapter } = useChapterStatus();
 	const [open, setOpen] = useState(true);
 
@@ -73,7 +73,7 @@ export default function SectionAuthModal() {
 			>
 				<DialogContent canClose={false}>
 					<DialogHeader>
-						<DialogTitle>You haven't unlocked this section yet</DialogTitle>
+						<DialogTitle>You haven't unlocked this chapter yet</DialogTitle>
 					</DialogHeader>
 					<div>
 						Submit a passing summary for

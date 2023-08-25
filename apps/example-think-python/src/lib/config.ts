@@ -8,6 +8,7 @@ export const getSiteConfig = async () => {
 
 	return {
 		title: "Think Python, 2nd",
+		latex: false,
 		description:
 			"This textbook is adopted from https://greenteapress.com/wp/think-python-2e/.",
 		footer:

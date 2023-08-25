@@ -1,9 +1,7 @@
 import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
 import rehypePrism from "rehype-prism-plus";
 import { getHeadingsFromRawBody } from "./src/lib/contentlayer";
 const Site = defineDocumentType(() => ({
@@ -50,13 +48,8 @@ export default makeSource({
 	contentDirPath: "content",
 	documentTypes: [Chapter, Site],
 	mdx: {
-		remarkPlugins: [remarkGfm, remarkMath],
-		rehypePlugins: [
-			rehypeSlug,
-			rehypeAutolinkHeadings,
-			rehypeKatex,
-			rehypePrism,
-		],
+		remarkPlugins: [remarkGfm],
+		rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, rehypePrism],
 	},
 	disableImportAliasWarning: true,
 });

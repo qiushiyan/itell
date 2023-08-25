@@ -14,6 +14,8 @@ import { TocSidebar } from "@/components/toc-sidebar";
 import { ChapterSidebar } from "@/components/chapter-sidebar";
 import ChapterContent from "@/components/chapter/chapter-content";
 import Spinner from "@/components/spinner";
+import ChapterModal from "@/components/chapter-modal";
+import ChapterAuthModal from "@/components/chapter-auth-modal";
 
 export const generateStaticParams = async () => {
 	return allChaptersSorted.map((chapter) => {
@@ -74,7 +76,9 @@ export default async function ({ params }: { params: { slug: string } }) {
 	return (
 		<Fragment>
 			<div className="max-w-[1440px] mx-auto grid grid-cols-12 gap-6 px-2">
-				<aside className="module-sidebar col-span-2">
+				<ChapterAuthModal />
+
+				<aside className="module-sidebar  md:col-span-2">
 					<div className="sticky top-20">
 						<ChapterSidebar
 							currentChapter={chapter.chapter}
@@ -97,7 +101,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 					</div>
 				</aside>
 
-				<section className="chapter-content relative col-span-8">
+				<section className="chapter-content relative col-span-12 md:col-span-10 lg:col-span-8">
 					<div className="mb-4 text-center" id="chapter-title">
 						<Typography variant="h1">
 							<Balancer className="text-3xl">{chapter.title}</Balancer>
@@ -126,7 +130,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 				</aside>
 			</div>
 
-			{hasSummary && <Summary />}
+			{hasSummary && <Summary chapter={chapter.chapter} />}
 		</Fragment>
 	);
 }

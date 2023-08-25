@@ -81,7 +81,7 @@ Before we can use the functions in a module, we have to import it with an **impo
 This statement creates a **module object** named `math`. If you print the module object, you get some information about it:
 
 ```python
->>> print math
+>>> print(math)
 <module 'math' (built-in)>
 ```
 
@@ -243,29 +243,13 @@ As you might expect, you have to create a function before you can execute it. In
 
 <CodingTime>
 
-1. Move the last line of this program to the top, so the function call appears
-   before the definitions. Run the program and see what error message you get.
+1. Move the last line of this program to the top, so the function call appears before the definitions. Run the program and see what error message you get.
 
 2. Now move the function call back to the bottom and move the definition of print_lyrics after the definition of repeat_lyrics. What happens when you run this program?
 
 <Notebook script="chapter-3/function-def.py" />
 
 </CodingTime>
-
-### Exercise 1
-
-<Exercise>
-  Move the last line of this program to the top, so the function call appears
-  before the definitions. Run the program and see what error message you get.
-</Exercise>
-
-### Exercise 2
-
-<Exercise>
-  Move the function call back to the bottom and move the definition of
-  print_lyrics after the definition of repeat_lyrics. What happens when you run
-  this program?
-</Exercise>
 
 ## Flow of execution
 
@@ -357,9 +341,9 @@ When you create a variable inside a function, it is **local**, which means that
 it only exists inside the function. For example:
 
 ```python
-  def cat_twice(part1,  part2):
-      cat = part1 + part2
-      print_twice(cat)
+def cat_twice(part1, part2):
+    cat = part1 + part2
+    print_twice(cat)
 ```
 
 This function takes two arguments, concatenates them, and prints the result twice. Here is an example that uses it:
@@ -375,7 +359,8 @@ When `cat_twice` terminates, the variable cat is destroyed. If we try to
 print it, we get an exception:
 
 ```python
->>> print cat NameError: name 'cat' is not defined
+>>> print(cat)
+NameError: name 'cat' is not defined
 ```
 
 Parameters are also local. For example, outside `print_twice`, there is no such thing as bruce.
@@ -420,7 +405,7 @@ Traceback (innermost last):
   File "test.py", line 5, in cat_twice
     print_twice(cat)
   File "test.py", line 9, in print_twice
-    print cat
+    print(cat)
 NameError: name 'cat' is not defined
 ```
 

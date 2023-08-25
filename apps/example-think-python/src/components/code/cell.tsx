@@ -88,8 +88,8 @@ export const Cell = memo(
 					"animate-border-color": isCellRunning,
 				})}
 			>
-				<div className="flex">
-					<div className="w-fit">
+				<div className="grid grid-cols-[40px_1fr] gap-4">
+					<div className="border-r">
 						<Button
 							size="sm"
 							variant="ghost"
@@ -109,7 +109,7 @@ export const Cell = memo(
 						</Button>
 					</div>
 
-					<div className="flex-1 border-l">
+					<div>
 						<CodeMirror
 							value={input}
 							onChange={(val) => setInput(val)}
@@ -121,10 +121,10 @@ export const Cell = memo(
 							ref={editorRef}
 						/>
 						{result?.output && result.output !== "undefined" && (
-							<pre className="my-1 py-1">{result.output}</pre>
+							<pre className="my-1 py-2">{result.output}</pre>
 						)}
 						{result?.error && (
-							<pre className="my-1 py-1 text-red-500">{result.error}</pre>
+							<pre className="my-1 py-2 text-red-500">{result.error}</pre>
 						)}
 					</div>
 				</div>
