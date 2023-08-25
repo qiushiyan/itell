@@ -4,7 +4,7 @@ import { allChapters } from "contentlayer/generated";
 
 export const UserProgress = ({ user }: { user: User }) => {
 	const usersIndex = allChapters.findIndex(
-		(section) => section.chapter === user.chapter,
+		(chapter) => chapter.chapter === user.chapter,
 	);
 	const progress = (usersIndex / allChapters.length) * 100;
 

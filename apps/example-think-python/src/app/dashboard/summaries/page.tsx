@@ -6,28 +6,29 @@ import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
+import { ChapterSelect } from "@/components/dashboard/summaries/chapter-select";
 
-export default async function () {
+type PageProps = {
+	searchParams: {
+		chapter?: string;
+	};
+};
+
+export default async function ({ searchParams }: PageProps) {
+	const { chapter } = searchParams;
 	const user = await getCurrentUser();
 	if (!user) {
 		return redirect("/auth");
 	}
 
-	const id = user.id;
-	const userSummaries = await db.user.findUnique({
+	const userSummaries = await db.summary.findMany({
 		where: {
-			id,
-		},
-		include: {
-			summaries: true,
+			userId: user.id,
+			chapter: chapter ? parseInt(chapter) : undefined,
 		},
 	});
 
-	if (!userSummaries) {
-		return notFound();
-	}
-
-	if (userSummaries.summaries.length === 0) {
+	if (userSummaries.length === 0) {
 		return (
 			<DashboardShell>
 				<DashboardHeader heading="Summary" text="Create and manage summaries.">
@@ -49,7 +50,8 @@ export default async function () {
 			<DashboardHeader heading="Summary" text="Create and manage summaries.">
 				<SummaryCreateButton />
 			</DashboardHeader>
-			<SummaryList summaries={userSummaries.summaries} />
+			<ChapterSelect />
+			<SummaryList summaries={userSummaries} />
 		</DashboardShell>
 	);
 }

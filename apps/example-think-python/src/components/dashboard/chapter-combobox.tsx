@@ -15,11 +15,11 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@itell/ui/client";
 import { allChaptersSorted } from "@/lib/chapters";
 
-export default function ({
+export const ChapterCombobox = ({
 	onValueChange,
 }: {
 	onValueChange: (arg: number | null) => void;
-}) {
+}) => {
 	const [value, setValue] = React.useState("");
 
 	const [open, setOpen] = React.useState(false);
@@ -47,15 +47,32 @@ export default function ({
 					aria-expanded={open}
 					className="w-[400px] justify-between text-left"
 				>
-					{value ? selectedChapter?.label : "Select a section"}
+					{value ? selectedChapter?.label : "Select a chapter"}
 					<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className="w-[400px] p-0">
 				<Command className="h-[300px]">
-					<CommandInput placeholder="Search a section" />
-					<CommandEmpty>No section found.</CommandEmpty>
+					<CommandInput placeholder="Search a chapter" />
+					<CommandEmpty>No Chapter found.</CommandEmpty>
 					<CommandGroup className="justify-start overflow-y-auto">
+						<CommandItem
+							key={"all"}
+							onSelect={(currentValue) => {
+								setValue("");
+								setSelectedChapter(undefined);
+								onValueChange(null);
+								setOpen(false);
+							}}
+						>
+							<Check
+								className={cn(
+									"mr-2 h-4 w-4",
+									value === "" ? "opacity-100" : "opacity-0",
+								)}
+							/>
+							All
+						</CommandItem>
 						{chapters.map((chapter) => (
 							<CommandItem
 								key={chapter.label}
@@ -73,7 +90,7 @@ export default function ({
 								<Check
 									className={cn(
 										"mr-2 h-4 w-4",
-										value === chapter.label ? "opacity-100" : "opacity-0",
+										value[0] === chapter.label[0] ? "opacity-100" : "opacity-0",
 									)}
 								/>
 								{chapter.label}
@@ -84,4 +101,4 @@ export default function ({
 			</PopoverContent>
 		</Popover>
 	);
-}
+};

@@ -1,26 +1,12 @@
 "use client";
 
-import { AlertDialogDescription, Button } from "@/components/client-components";
 import { User } from "@prisma/client";
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogTrigger,
-} from "@/components/client-components";
 import { useState } from "react";
-import { trpc } from "@/trpc/trpc-provider";
-import Spinner from "@/components/spinner";
 import { useRouter } from "next/navigation";
 import { ClassRegister } from "./class-register";
 
 export const ClassInfo = async ({ teacher }: { teacher: User | null }) => {
 	const [isLoading, setIsLoading] = useState(false);
-	const quitClass = trpc.class.quitClass.useMutation();
 	const router = useRouter();
 
 	if (!teacher) {
@@ -33,7 +19,8 @@ export const ClassInfo = async ({ teacher }: { teacher: User | null }) => {
 			<p className="text-muted-foreground text-sm max-w-lg">
 				You are enrolled in a class taught by {teacher.name}.
 			</p>
-			<div className="mt-4 flex">
+			{/* disable quitting class for now */}
+			{/* <div className="mt-4 flex">
 				<AlertDialog>
 					<AlertDialogTrigger>
 						<Button variant="destructive">Quit Class</Button>
@@ -65,7 +52,7 @@ export const ClassInfo = async ({ teacher }: { teacher: User | null }) => {
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialog>
-			</div>
+			</div> */}
 		</div>
 	);
 };

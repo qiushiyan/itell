@@ -1,21 +1,21 @@
 "use client";
 import SummaryEditor from "./summary-editor";
-import SectionCombobox from "./chapter-combobox";
 import { useState } from "react";
 import { ScoreResponse } from "@/lib/hooks/use-summary";
 import { Badge } from "@itell/ui/server";
 import { ScoreBadge } from "../score/badge";
 import { ScoreType } from "@/lib/constants";
-import { allChaptersSorted } from "@/lib/chapters";
+import { ChapterCombobox } from "./chapter-combobox";
 
 export default function () {
 	const [selectedChapter, setSelectedChapter] = useState<number | null>(null);
 	const [scoreResponse, setScoreResponse] = useState<ScoreResponse | null>(
 		null,
 	);
-	const chapter = selectedChapter
-		? allChaptersSorted.find((c) => c.chapter === selectedChapter)
-		: null;
+
+	const onSelectChapter = () => {
+		setSelectedChapter(selectedChapter);
+	};
 
 	return (
 		<>
@@ -24,7 +24,7 @@ export default function () {
 					Create a new summary and receive feedbacks. Once you are ready, save a
 					passing summary to unlock the next section.
 				</p>
-				<SectionCombobox onValueChange={setSelectedChapter} />
+				<ChapterCombobox onValueChange={onSelectChapter} />
 			</div>
 
 			<div className="grid gap-12 md:grid-cols-[200px_1fr] auto-rows-fr mt-4">
