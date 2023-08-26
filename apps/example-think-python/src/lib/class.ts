@@ -1,6 +1,8 @@
 import db from "./db";
 
-export const getTeacherWithClassId = async (classId: string | null) => {
+export const getTeacherWithClassId = async (
+	classId: string | null | undefined,
+) => {
 	if (!classId) {
 		return null;
 	}

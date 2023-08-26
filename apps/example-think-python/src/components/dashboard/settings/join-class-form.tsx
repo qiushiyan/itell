@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { trpc } from "@/trpc/trpc-provider";
 import { toast } from "sonner";
 import Spinner from "@/components/spinner";
@@ -22,12 +22,13 @@ import {
 	FormMessage,
 } from "@/components/client-components";
 import { Input } from "@itell/ui/server";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 export const JoinClassForm = () => {
+	const classId = useSearchParams()?.get("class_id");
 	const router = useRouter();
 	const [joinClassModalOpen, setJoinClassModalOpen] = useState(false);
 	const getTeacher = trpc.class.getTeacherWithCode.useMutation();
@@ -72,6 +73,18 @@ export const JoinClassForm = () => {
 			);
 		},
 	});
+
+	useEffect(() => {
+		if (classId) {
+			setCode(classId);
+			getTeacher.mutateAsync({ code: classId }).then((teacher) => {
+				if (teacher) {
+					setTeacherName(teacher.name || "unknown");
+					setJoinClassModalOpen(true);
+				}
+			});
+		}
+	}, []);
 
 	return (
 		<div className="space-y-4">

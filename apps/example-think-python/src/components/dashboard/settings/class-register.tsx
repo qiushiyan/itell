@@ -1,4 +1,6 @@
+import { useSearchParams } from "next/navigation";
 import { JoinClassForm } from "./join-class-form";
+import { getTeacherWithClassId } from "@/lib/class";
 
 export const ClassRegister = async () => {
 	return (
