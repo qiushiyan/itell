@@ -19,10 +19,10 @@ export default async function () {
 					<div className="flex flex-col space-y-2 text-center">
 						<CommandIcon className="mx-auto h-6 w-6" />
 						<h1 className="text-2xl font-semibold tracking-tight">Welcome</h1>
-						<p className="text-sm text-muted-foreground">
+						{/* <p className="text-sm text-muted-foreground">
 							Enter your email to sign in to your account
 						</p>
-						<p className="text-sm text-muted-foreground">TBD</p>
+						<p className="text-sm text-muted-foreground">TBD</p> */}
 					</div>
 					<AuthForm />
 				</div>
