@@ -21,6 +21,7 @@ span.unhighlighted {
 
 span[class^='highlight'] {
   cursor: pointer !important;
+  color: black;
 }
 
 span.emphasized {

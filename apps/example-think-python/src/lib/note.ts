@@ -1,6 +1,3 @@
-import "rangy/lib/rangy-core";
-import "rangy/lib/rangy-classapplier";
-import "rangy/lib/rangy-textrange";
 // @ts-ignore
 import rangy from "rangy/lib/rangy-serializer";
 
@@ -19,9 +16,6 @@ export const serializeRange = (range: Range) => {
 };
 
 export const deserializeRange = (serializedRange: string) => {
-	if (!rangy.deserializeRange) {
-		return null;
-	}
 	return rangy.deserializeRange(
 		serializedRange,
 		document.getElementById("chapter-content"),
@@ -141,7 +135,7 @@ export const getSafeRanges = (dangerousRange: Range) => {
 	return result.filter((r) => r.toString().trim() !== "");
 };
 
-export const createNoteElements = async ({
+export const createNoteElements = ({
 	id,
 	range,
 	color,

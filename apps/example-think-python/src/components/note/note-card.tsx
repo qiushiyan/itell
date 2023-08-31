@@ -15,6 +15,7 @@ import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
 import { Button } from "../client-components";
 import { useNotesStore } from "@/lib/store";
+import { usePython } from "@/lib/hooks/ues-python";
 
 interface Props extends NoteCard {
 	chapter: number;
@@ -61,6 +62,7 @@ export default function ({
 }: Props) {
 	const elementsRef = useRef<HTMLElement[]>();
 	const elements = elementsRef.current;
+	const { isReady } = usePython();
 	const [shouldCreate, setShouldCreate] = useState(newNote);
 	const [recordId, setRecordId] = useState<string>(newNote ? "" : id);
 	const [editState, dispatch] = useImmerReducer<EditState, EditDispatch>(
@@ -212,24 +214,26 @@ export default function ({
 	};
 
 	useEffect(() => {
-		// if the note is loaded from the database, create the .note span elements
-		// for new note, spans are created in note-toolbar.tsx
-		if (!newNote) {
-			try {
-				createNoteElements({
-					id,
-					range: deserializeRange(serializedRange),
-					color,
-				});
-			} catch (err) {
-				console.error("create note element error", err);
-			}
-		}
-
 		elementsRef.current =
 			(Array.from(
 				document.getElementsByClassName(noteClass(id)),
 			) as HTMLElement[]) || undefined;
+
+		// if the note is loaded from the database, create the .note span elements
+		// for new note, spans are created in note-toolbar.tsx
+		setTimeout(() => {
+			if (!newNote) {
+				try {
+					createNoteElements({
+						id,
+						range: deserializeRange(serializedRange),
+						color,
+					});
+				} catch (err) {
+					console.error("create note element error", err);
+				}
+			}
+		}, 1000);
 	}, []);
 
 	return (

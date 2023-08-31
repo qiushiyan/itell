@@ -253,8 +253,8 @@ importers:
         specifier: ^4.21.7
         version: 4.21.7(@babel/runtime@7.22.3)(@codemirror/autocomplete@6.9.0)(@codemirror/language@6.8.0)(@codemirror/lint@6.4.0)(@codemirror/search@6.5.0)(@codemirror/state@6.2.1)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.15.3)(codemirror@6.0.1)(react-dom@18.2.0)(react@18.2.0)
       '@webpy/react':
-        specifier: ^0.0.15
-        version: 0.0.15(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^0.0.17
+        version: 0.0.17(react-dom@18.2.0)(react@18.2.0)
       cld3-asm:
         specifier: ^3.1.1
         version: 3.1.1
@@ -5030,8 +5030,8 @@ packages:
       pretty-format: 29.6.1
     dev: true
 
-  /@webpy/react@0.0.15(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-qTHwiI1WHazyqUzoV0VvrUHEIOW3AD7cjCJG7KPH/DabFCPaTaL8+nPOKVdU9bhYpW1RfIakfJ8HRaTytjfI/g==}
+  /@webpy/react@0.0.17(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-m4oIcIFHC4kaFL7nHxjdB4pup5TyvHdjp+/TyI1ziCq8hFywrEoKB0e+iLH6O8nhqiwFGwMtE7TP9i+C9ogrwg==}
     peerDependencies:
       react: ^16.9.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.9.0 || ^17.0.0 || ^18.0.0

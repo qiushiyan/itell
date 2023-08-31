@@ -70,8 +70,7 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 				if (range && clientRect && textContent) {
 					const id = crypto.randomUUID();
 					const serializedRange = serializeRange(range);
-					console.log(deserializeRange(serializedRange));
-					await createNoteElements({
+					createNoteElements({
 						id,
 						range,
 						color: noteColor,
@@ -96,8 +95,7 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 				if (range && clientRect && textContent) {
 					const id = crypto.randomUUID();
 					const serializedRange = serializeRange(range);
-					console.log(deserializeRange(serializedRange));
-					await createNoteElements({
+					createNoteElements({
 						id,
 						range,
 						color: defaultHighlightColor,

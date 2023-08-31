@@ -8,6 +8,7 @@ import {
 } from "@/lib/note";
 
 import { useNotesStore } from "@/lib/store";
+import { usePython } from "@webpy/react";
 import { useEffect } from "react";
 type Props = {
 	id: string;
@@ -21,19 +22,22 @@ export const Highlight = ({ id, color, range }: Props) => {
 	);
 
 	useEffect(() => {
-		const deserializedRange = deserializeRange(range);
-
-		createNoteElements({
-			id,
-			range: deserializedRange,
-			color,
-			isHighlight: true,
-		});
-
-		createHighlightListeners(id, (event) => {
-			deleteHighlightListener(event);
-			incrementHighlightCount(-1);
-		});
+		setTimeout(() => {
+			try {
+				createNoteElements({
+					id,
+					range: deserializeRange(range),
+					color,
+					isHighlight: true,
+				});
+				createHighlightListeners(id, (event) => {
+					deleteHighlightListener(event);
+					incrementHighlightCount(-1);
+				});
+			} catch (err) {
+				console.error("create highlight error", err);
+			}
+		}, 1000);
 	}, []);
 
 	return null;
