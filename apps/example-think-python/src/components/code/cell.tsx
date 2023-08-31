@@ -24,14 +24,12 @@ import { usePython } from "@/lib/hooks/ues-python";
 import { memo } from "react";
 import { CellData, CellMode, CellStatus } from "./types";
 
+// io and contextlib is imported as setup code in providers
 const codeWithStd = (code: string) => {
 	const lines = code.split("\n");
 	const indentedCode = lines.map((line) => `\t${line}`).join("\n");
 	const output = `
-import io
-from contextlib import redirect_stdout
-
-with redirect_stdout(io.StringIO()) as f:
+with contextlib.redirect_stdout(io.StringIO()) as f:
 ${indentedCode}
 	s = f.getvalue()
 s
