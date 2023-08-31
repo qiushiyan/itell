@@ -36,7 +36,7 @@ export const useNotesStore = create(
 			note: 0,
 			highlight: 0,
 		},
-		createNote: ({ id, y, highlightedText, color }) =>
+		createNote: ({ id, y, highlightedText, color, serializedRange }) =>
 			set((state) => {
 				state.notes.push({
 					id,
@@ -44,6 +44,7 @@ export const useNotesStore = create(
 					highlightedText,
 					noteText: "",
 					color,
+					serializedRange,
 				});
 			}),
 		updateNote: ({ id, noteText }) =>

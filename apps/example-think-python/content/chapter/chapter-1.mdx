@@ -98,12 +98,6 @@ Now let's start by practicing `print`! Replace `<my-name>` with your name and ru
 
 <Notebook script="chapter-1/print.py" />
 
-  <Warning title = "A note on using print in the textbook editor">
-    Due to a technical limitation, the python environment for this textbook currently only shows the result of `print` statements if it is the **last line** of a cell. If you want to have multiple print statements, you can create multiple cells for each of them, like in the following example.
-
-    <Notebook script = "chapter-1/warning-print.py" />
-
-  </Warning>
 </CodingTime>
 
 ## Arithmetic operators
@@ -210,11 +204,11 @@ Natural languages are the languages people speak, such as English, Spanish, and 
 
 **Programming languages are formal languages that have been designed to express computations.**
 
-Formal languages tend to have strict **syntax** rules that govern the structure of statements. For example, in mathematics the statement 3 + 3 = 6 has correct syntax, but 3 + = 3 $ 6 does not. In chemistry H2O is a syntactically correct formula, but 2Zz is not.
+Formal languages tend to have strict **syntax** rules that govern the structure of statements. For example, in mathematics the statement `3 + 3 = 6` has correct syntax, but `3 + = 3 $ 6` does not. In chemistry `H2O` is a syntactically correct formula, but `2Zz` is not.
 
-Syntax rules come in two flavors, pertaining to tokens and structure. Tokens are the basic elements of the language, such as words, numbers, and chemical elements. One of the problems with 3 += 3 $ 6 is that $ is not a legal token in mathematics (at least as far as I know). Similarly, 2Zz is not legal because there is no element with the abbreviation Zz.
+Syntax rules come in two flavors, pertaining to tokens and structure. Tokens are the basic elements of the language, such as words, numbers, and chemical elements. One of the problems with `3 += 3 $ 6` is that `$` is not a legal token in mathematics (at least as far as I know). Similarly, 2Zz is not legal because there is no element with the abbreviation Zz.
 
-The second type of syntax rule pertains to the way tokens are combined. The equation 3 +/ 3 is illegal because even though + and / are legal tokens, you can't have one right after the other. Similarly, in a chemical formula the subscript comes after the element name, not before.
+The second type of syntax rule pertains to the way tokens are combined. The equation `3 +/ 3` is illegal because even though `+` and `/` are legal tokens, you can't have one right after the other. Similarly, in a chemical formula the subscript comes after the element name, not before.
 
 > This is @ well-structured Engli$h sentence with invalid t\*kens in it. This sentence all valid tokens has, but invalid structure with.
 

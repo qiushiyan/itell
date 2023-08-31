@@ -1,6 +1,6 @@
-# click on the run button above to run this code
+# click on the run button on the left to run this code
 def greet():
     return "Welcome to the textbook!"
 
 
-greet()
+print(greet())

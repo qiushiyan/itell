@@ -28,7 +28,13 @@ export default async function NoteList({ chapter }: { chapter: number }) {
 		<div>
 			{notes.map((note) => (
 				// @ts-ignore
-				<NoteCard key={note.id} {...note} chapter={chapter} />
+				<NoteCard
+					key={note.id}
+					{...note}
+					serializedRange={note.range}
+					chapter={chapter}
+					newNote={false}
+				/>
 			))}
 			{highlights.map((highlight) => (
 				<Highlight key={highlight.id} {...highlight} />

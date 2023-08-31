@@ -1,8 +1,11 @@
 import { getCellCodes, readScript } from "@/lib/exercise";
 import { Errorbox } from "@itell/ui/server";
 import { CellGroup } from "./cell-group";
+import { CellMode } from "./types";
 
-type Props = { code: string } | { script: string };
+type Props =
+	| { code: string; mode?: CellMode }
+	| { script: string; mode?: CellMode };
 
 export const Notebook = async (props: Props) => {
 	let code = "";
@@ -19,7 +22,7 @@ export const Notebook = async (props: Props) => {
 
 	return (
 		<div className="notebook">
-			<CellGroup codes={codes} />
+			<CellGroup codes={codes} mode={props.mode} />
 		</div>
 	);
 };

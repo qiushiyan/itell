@@ -32,7 +32,7 @@ export default function NoteDeleteModal({ onDelete, onOpen }: Props) {
 			</AlertDialogTrigger>
 			<AlertDialogContent className="z-50">
 				<AlertDialogHeader>
-					<AlertDialogTitle>Delete this Note</AlertDialogTitle>
+					<AlertDialogTitle>Delete this Note ?</AlertDialogTitle>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>

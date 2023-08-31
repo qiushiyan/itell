@@ -15,12 +15,16 @@ pre {
   transform: translate(-50%, -50%);
 }
 
-.note .unhighlighted {
+span.unhighlighted {
   @apply text-foreground font-normal !important;
 }
 
-mark.highlight {
+span[class^='highlight'] {
   cursor: pointer !important;
+}
+
+span.emphasized {
+  @apply text-foreground font-bold !important;
 }
 
 svg {

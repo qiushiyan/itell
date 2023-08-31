@@ -13,24 +13,35 @@ import { useRef, useState } from "react";
 import { cn } from "@itell/core/utils";
 import { useTheme } from "next-themes";
 import { PythonResult, baseExtensions, createShortcuts } from "./editor-config";
-import { Button } from "../client-components";
+import {
+	Button,
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from "../client-components";
 import { usePython } from "@/lib/hooks/ues-python";
 import { memo } from "react";
+import { CellData, CellMode, CellStatus } from "./types";
 
-type CellData = {
-	id: string;
-	code: string;
-	deletable: boolean;
-	addCell: () => void;
-	deleteCell: (id: string) => void;
+const codeWithStd = (code: string) => {
+	const lines = code.split("\n");
+	const indentedCode = lines.map((line) => `\t${line}`).join("\n");
+	const output = `
+import io
+from contextlib import redirect_stdout
+
+with redirect_stdout(io.StringIO()) as f:
+${indentedCode}
+	s = f.getvalue()
+s
+`;
+
+	return output.trim();
 };
 
-type CellStatus = "success" | "error" | undefined;
-
-const printRegex = /print\((.*?)\)/;
-
 export const Cell = memo(
-	({ id, deleteCell, deletable, code, addCell }: CellData) => {
+	({ id, deleteCell, deletable, code, addCell, mode = "Script" }: CellData) => {
 		const extensions = [
 			...baseExtensions,
 			createShortcuts([
@@ -46,6 +57,7 @@ export const Cell = memo(
 		];
 
 		const [input, setInput] = useState(code);
+		const [cellMode, setCellMode] = useState<CellMode>(mode);
 		const [result, setResult] = useState<PythonResult | null>(null);
 		const [status, setStatus] = useState<CellStatus>(undefined);
 		const { theme } = useTheme();
@@ -56,20 +68,9 @@ export const Cell = memo(
 		const run = async () => {
 			setIsCellRunning(true);
 			setResult(null);
-			const lines = input.trim().split("\n");
-			const lastLine = lines.at(-1);
-
-			// a hack to support print for now
-			// if the last line is print(<something>)
-			// replace it with <something>
-			if (lastLine) {
-				const match = lastLine.match(printRegex);
-				if (match?.[1]) {
-					const innerPrint = match[1].trim().replace(/\s*,\s*/g, " + ");
-					lines.push(innerPrint);
-				}
-			}
-			const result = await runPython(lines.join("\n"));
+			const result = await runPython(
+				cellMode === "Script" ? codeWithStd(input) : input,
+			);
 			if (result.error) {
 				setStatus("error");
 			} else {
@@ -101,8 +102,19 @@ export const Cell = memo(
 					"animate-border-color": isCellRunning,
 				})}
 			>
+				<div className="absolute top-2 right-2 z-10">
+					<Tabs
+						value={cellMode}
+						onValueChange={(val) => setCellMode(val as CellMode)}
+					>
+						<TabsList>
+							<TabsTrigger value="Script">Script</TabsTrigger>
+							<TabsTrigger value="REPL">REPL</TabsTrigger>
+						</TabsList>
+					</Tabs>
+				</div>
 				<div className="grid grid-cols-[40px_1fr] gap-4">
-					<div className="border-r">
+					<div className="border-r flex flex-col gap-1">
 						<Button
 							size="sm"
 							variant="ghost"
@@ -119,6 +131,9 @@ export const Cell = memo(
 							) : (
 								<PlayIcon className="w-4 h-4" />
 							)}
+						</Button>
+						<Button size={"sm"} variant={"ghost"} onClick={reset}>
+							<RotateCcwIcon className="w-4 h-4" />
 						</Button>
 					</div>
 
@@ -155,9 +170,6 @@ export const Cell = memo(
 								<XIcon className="w-4 h-4" />
 							</Button>
 						)}
-						<Button size={"sm"} variant={"outline"} onClick={reset}>
-							<RotateCcwIcon className="w-4 h-4" />
-						</Button>
 					</div>
 				</div>
 			</div>

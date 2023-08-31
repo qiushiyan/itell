@@ -11,8 +11,14 @@ type Props = {
 export default function UserAvatar({ user, className }: Props) {
 	return (
 		<Avatar className={className}>
-			{user.image ? (
-				<AvatarImage alt="Picture" src={user.image} />
+			{/* should use user.image
+				but fetching google profile photo conflicts with same origin header
+			*/}
+			{false ? (
+				<AvatarImage
+					alt="Picture"
+					src={`${user.image}?not-from-cache-please`}
+				/>
 			) : (
 				<AvatarFallback>
 					<span className="sr-only">{user.name}</span>

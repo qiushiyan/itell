@@ -4,8 +4,12 @@ import { useCallback, useState } from "react";
 import { Cell } from "./cell";
 import Spinner from "../spinner";
 import { usePython } from "@/lib/hooks/ues-python";
+import { CellMode } from "./types";
 
-export const CellGroup = ({ codes }: { codes: string[] }) => {
+export const CellGroup = ({
+	codes,
+	mode,
+}: { codes: string[]; mode?: CellMode }) => {
 	const cellsData = codes.map((code) => ({
 		code,
 		deletable: false,
@@ -27,7 +31,7 @@ export const CellGroup = ({ codes }: { codes: string[] }) => {
 	const { isLoading } = usePython();
 
 	return (
-		<div className="cells-group space-y-6 mb-8">
+		<div className="cells-group space-y-6 mb-8 bg-background">
 			{isLoading ? (
 				<div className="rounded-md border p-2 lg:p-4 flex gap-2 items-center justify-center">
 					<Spinner className="w-4 h-4" />
@@ -40,6 +44,7 @@ export const CellGroup = ({ codes }: { codes: string[] }) => {
 						addCell={addCell}
 						deleteCell={deleteCell}
 						key={cell.id}
+						mode={mode}
 					/>
 				))
 			)}

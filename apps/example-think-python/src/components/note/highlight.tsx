@@ -1,49 +1,39 @@
 "use client";
 
-import { useChapterContent } from "@/lib/hooks/use-chapter-content";
-import { deleteHighlightListener, generateNoteElement } from "@/lib/note";
-import { useNotesStore } from "@/lib/store";
-import { useEffect, useState } from "react";
+import {
+	createHighlightListeners,
+	createNoteElements,
+	deleteHighlightListener,
+	deserializeRange,
+} from "@/lib/note";
 
+import { useNotesStore } from "@/lib/store";
+import { useEffect } from "react";
 type Props = {
 	id: string;
-	highlightedText: string;
 	color: string;
+	range: string;
 };
 
-export const Highlight = ({ id, highlightedText, color }: Props) => {
-	const chapterContentRef = useChapterContent();
+export const Highlight = ({ id, color, range }: Props) => {
 	const incrementHighlightCount = useNotesStore(
 		(store) => store.incrementHighlightCount,
 	);
-	let el: HTMLElement | null = null;
 
 	useEffect(() => {
-		generateNoteElement({
+		const deserializedRange = deserializeRange(range);
+
+		createNoteElements({
 			id,
+			range: deserializedRange,
 			color,
-			textContent: highlightedText,
-			target: chapterContentRef.current,
-			highlight: true,
-		}).then(() => {
-			// wait until the element is created
-			el = document.getElementById(id);
-			if (el) {
-				el.addEventListener("click", (event) => {
-					deleteHighlightListener(event);
-					incrementHighlightCount(-1);
-				});
-			}
+			isHighlight: true,
 		});
 
-		return () => {
-			if (el) {
-				el.removeEventListener("click", (event) => {
-					deleteHighlightListener(event);
-					incrementHighlightCount(-1);
-				});
-			}
-		};
+		createHighlightListeners(id, (event) => {
+			deleteHighlightListener(event);
+			incrementHighlightCount(-1);
+		});
 	}, []);
 
 	return null;

@@ -7,14 +7,13 @@ import { NoteCard } from "@/types/note";
 import { useClickOutside } from "@itell/core/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import NoteDelete from "./node-delete";
-import { generateNoteElement } from "@/lib/note";
+import { createNoteElements, deserializeRange, noteClass } from "@/lib/note";
 import { relativeDate, cn } from "@itell/core/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
 import { Button } from "../client-components";
-import { useChapterContent } from "@/lib/hooks/use-chapter-content";
 import { useNotesStore } from "@/lib/store";
 
 interface Props extends NoteCard {
@@ -56,11 +55,12 @@ export default function ({
 	chapter,
 	updated_at,
 	created_at,
+	serializedRange,
 	color,
 	newNote = false,
 }: Props) {
-	const elementRef = useRef<HTMLElement>();
-	const element = elementRef.current;
+	const elementsRef = useRef<HTMLElement[]>();
+	const elements = elementsRef.current;
 	const [shouldCreate, setShouldCreate] = useState(newNote);
 	const [recordId, setRecordId] = useState<string>(newNote ? "" : id);
 	const [editState, dispatch] = useImmerReducer<EditState, EditDispatch>(
@@ -113,7 +113,6 @@ export default function ({
 			showEdit: false, // show edit overlay
 		},
 	);
-	const chapterContentRef = useChapterContent();
 	const [isHidden, setIsHidden] = useState(false);
 	const {
 		deleteNote: deleteContextNote,
@@ -143,12 +142,14 @@ export default function ({
 		e.preventDefault();
 		if (shouldCreate) {
 			// create new note
-			const { id } = await createNote.mutateAsync({
+			await createNote.mutateAsync({
+				id,
 				y,
 				noteText: editState.input,
 				highlightedText,
 				chapter,
 				color: editState.color,
+				range: serializedRange,
 			});
 			setRecordId(id);
 			setShouldCreate(false);
@@ -164,28 +165,23 @@ export default function ({
 
 	const emphasizeNote = (element: HTMLElement) => {
 		element.classList.add("emphasized");
-		element.style.color = editState.color;
-		element.style.border = `2px solid ${editState.color}`;
-		element.style.borderRadius = "5px";
+		element.style.fontStyle = "bold";
 	};
 
 	const deemphasizeNote = (element: HTMLElement) => {
 		element.classList.remove("emphasized");
-		element.style.border = "none";
-		element.style.borderRadius = "0px";
+		element.style.fontStyle = "normal";
 	};
 
 	const unHighlightNote = (element: HTMLElement) => {
 		element.classList.remove("emphasized");
-		element.style.border = "none";
-		element.style.borderRadius = "0px";
-		element.style.color = "unset";
+		element.style.backgroundColor = "unset";
 		element.classList.add("unhighlighted");
 	};
 
 	const handleDelete = async () => {
-		if (element) {
-			unHighlightNote(element);
+		if (elements) {
+			elements.forEach(unHighlightNote);
 		}
 		setIsHidden(true);
 		incrementNoteCount(-1);
@@ -202,28 +198,38 @@ export default function ({
 			if (editState.collapsed) {
 				dispatch({ type: "set_show_edit", payload: true });
 			}
-			if (element) {
-				emphasizeNote(element);
+			if (elements) {
+				elements.forEach(emphasizeNote);
 			}
 		},
 		onMouseLeave: () => {
 			dispatch({ type: "set_show_edit", payload: false });
 
-			if (element) {
-				deemphasizeNote(element);
+			if (elements) {
+				elements.forEach(deemphasizeNote);
 			}
 		},
 	};
 
 	useEffect(() => {
-		generateNoteElement({
-			textContent: highlightedText,
-			color,
-			target: chapterContentRef.current,
-			id,
-		}).then(() => {
-			elementRef.current = document.getElementById(id) || undefined;
-		});
+		// if the note is loaded from the database, create the .note span elements
+		// for new note, spans are created in note-toolbar.tsx
+		if (!newNote) {
+			try {
+				createNoteElements({
+					id,
+					range: deserializeRange(serializedRange),
+					color,
+				});
+			} catch (err) {
+				console.error("create note element error", err);
+			}
+		}
+
+		elementsRef.current =
+			(Array.from(
+				document.getElementsByClassName(noteClass(id)),
+			) as HTMLElement[]) || undefined;
 	}, []);
 
 	return (
@@ -273,8 +279,10 @@ export default function ({
 									color={editState.color}
 									onChange={(color) => {
 										dispatch({ type: "set_color", payload: color });
-										if (element) {
-											element.style.color = color;
+										if (elements) {
+											elements.forEach((element) => {
+												element.style.backgroundColor = color;
+											});
 										}
 										if (id) {
 											updateNote.mutate({ id, color });

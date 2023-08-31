@@ -12,6 +12,7 @@ export const useChapterStatus = () => {
 	const { data: session, status: sessionStatus } = useSession();
 	const { data: userChapter } = trpc.user.getChapter.useQuery(undefined, {
 		enabled: Boolean(session?.user),
+		staleTime: Infinity,
 	});
 
 	useEffect(() => {

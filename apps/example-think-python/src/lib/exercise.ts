@@ -18,6 +18,11 @@ export const readScript = async (script: string) => {
 };
 
 export const getCellCodes = (input: string) => {
+	// If the input doesn't start with "# %%", then it's a single cell
+	if (!input.startsWith("# %%")) {
+		return [input];
+	}
+
 	// Split the string by "# %%"
 	const splitArray = input.split("# %%");
 

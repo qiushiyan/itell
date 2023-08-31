@@ -14,7 +14,13 @@ import Spinner from "../spinner";
 import { Button } from "../client-components";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { deleteHighlightListener, generateNoteElement } from "@/lib/note";
+import {
+	createHighlightListeners,
+	createNoteElements,
+	deleteHighlightListener,
+	deserializeRange,
+	serializeRange,
+} from "@/lib/note";
 import { useNotesStore } from "@/lib/store";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
@@ -60,24 +66,25 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 			label: "Note",
 			icon: <PencilIcon className="w-5 h-5" />,
 			action: async ({ clientRect, textContent }: SelectionData) => {
-				if (textContent && target) {
+				const range = window.getSelection()?.getRangeAt(0);
+				if (range && clientRect && textContent) {
 					const id = crypto.randomUUID();
-					await generateNoteElement({
-						textContent,
-						color: noteColor,
-						target,
+					const serializedRange = serializeRange(range);
+					console.log(deserializeRange(serializedRange));
+					await createNoteElements({
 						id,
+						range,
+						color: noteColor,
 					});
-					if (clientRect) {
-						createNote({
-							id,
-							y: clientRect.y + window.scrollY,
-							highlightedText: textContent,
-							color: noteColor,
-						});
+					createNote({
+						id,
+						y: clientRect.y + window.scrollY,
+						highlightedText: textContent,
+						color: noteColor,
+						serializedRange,
+					});
 
-						incrementNoteCount();
-					}
+					incrementNoteCount();
 				}
 			},
 		},
@@ -85,33 +92,32 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 			label: "Highlight",
 			icon: <HighlighterIcon className="w-5 h-5" />,
 			action: async ({ clientRect, textContent }: SelectionData) => {
-				if (textContent) {
-					if (clientRect && target) {
-						const newHighlight = await createHighlight.mutateAsync({
-							y: clientRect.y + window.scrollY,
-							highlightedText: textContent,
-							chapter,
-							color: defaultHighlightColor,
-						});
+				const range = window.getSelection()?.getRangeAt(0);
+				if (range && clientRect && textContent) {
+					const id = crypto.randomUUID();
+					const serializedRange = serializeRange(range);
+					console.log(deserializeRange(serializedRange));
+					await createNoteElements({
+						id,
+						range,
+						color: defaultHighlightColor,
+						isHighlight: true,
+					});
 
-						await generateNoteElement({
-							id: newHighlight.id,
-							textContent,
-							target,
-							color: defaultHighlightColor,
-							highlight: true,
-						});
+					await createHighlight.mutateAsync({
+						id: id,
+						y: clientRect.y + window.scrollY,
+						highlightedText: textContent,
+						chapter,
+						color: defaultHighlightColor,
+						range: serializedRange,
+					});
 
-						incrementHighlightCount();
-
-						const highlightElement = document.getElementById(newHighlight.id);
-						if (highlightElement) {
-							highlightElement.addEventListener("click", (event) => {
-								deleteHighlightListener(event);
-								incrementHighlightCount(-1);
-							});
-						}
-					}
+					incrementHighlightCount();
+					createHighlightListeners(id, (event) => {
+						deleteHighlightListener(event);
+						incrementHighlightCount(-1);
+					});
 				}
 			},
 		},
