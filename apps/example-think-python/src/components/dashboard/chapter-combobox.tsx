@@ -15,23 +15,36 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@itell/ui/client";
 import { allChaptersSorted } from "@/lib/chapters";
 
-export const ChapterCombobox = ({
-	onValueChange,
-}: {
+const chapters = allChaptersSorted
+	.filter((c) => c.chapter !== 0)
+	.map((c) => ({
+		chapter: c.chapter,
+		label: `${c.chapter}. ${c.title}`,
+	}));
+
+type Props = {
+	defaultChapter?: number;
 	onValueChange: (arg: number | null) => void;
-}) => {
-	const [value, setValue] = React.useState("");
+};
+
+export const ChapterCombobox = ({ defaultChapter, onValueChange }: Props) => {
+	const [value, setValue] = React.useState(() => {
+		if (defaultChapter) {
+			return chapters.filter((c) => c.chapter === defaultChapter)[0].label;
+		} else {
+			return "";
+		}
+	});
 
 	const [open, setOpen] = React.useState(false);
-	const chapters = allChaptersSorted
-		.filter((c) => c.chapter !== 0)
-		.map((c) => ({
-			chapter: c.chapter,
-			label: `${c.chapter}. ${c.title}`,
-		}));
-	const [selectedChapter, setSelectedChapter] = React.useState<
-		typeof chapters[0] | undefined
-	>(undefined);
+
+	const [selectedChapter, setSelectedChapter] = React.useState(() => {
+		if (defaultChapter) {
+			return chapters.find((c) => c.chapter === defaultChapter);
+		} else {
+			return undefined;
+		}
+	});
 
 	const findChapterByValue = (value: string) => {
 		const [chapter, _] = value.split(" ")[0].split(".");
@@ -75,9 +88,10 @@ export const ChapterCombobox = ({
 						</CommandItem>
 						{chapters.map((chapter) => (
 							<CommandItem
-								key={chapter.label}
+								key={chapter.chapter}
 								onSelect={(currentValue) => {
 									const nextVal = currentValue === value ? "" : currentValue;
+									console.log(nextVal);
 									setValue(nextVal);
 									const selectedChapter = findChapterByValue(nextVal);
 									setSelectedChapter(selectedChapter);

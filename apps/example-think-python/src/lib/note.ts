@@ -1,3 +1,4 @@
+import "rangy/lib/rangy-core";
 // @ts-ignore
 import rangy from "rangy/lib/rangy-serializer";
 

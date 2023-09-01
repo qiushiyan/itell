@@ -3,7 +3,9 @@
 import { useRouter } from "next/navigation";
 import { ChapterCombobox } from "../chapter-combobox";
 
-export const ChapterSelect = () => {
+export const ChapterSelect = ({
+	defaultChapter,
+}: { defaultChapter: number | undefined }) => {
 	const router = useRouter();
 	const onSelectChapter = (value: number | null) => {
 		if (value) {
@@ -13,5 +15,13 @@ export const ChapterSelect = () => {
 		}
 	};
 
-	return <ChapterCombobox onValueChange={onSelectChapter} />;
+	return (
+		<div className="flex items-center flex-col sm:flex-row gap-4 p-2">
+			<ChapterCombobox
+				onValueChange={onSelectChapter}
+				defaultChapter={defaultChapter}
+			/>
+			<p className="text-sm text-muted-foreground">Filter by chapter</p>
+		</div>
+	);
 };

@@ -14,6 +14,7 @@ import {
 	ChevronDownIcon,
 	ChevronUpIcon,
 	FileBoxIcon,
+	GraduationCapIcon,
 	LineChartIcon,
 	LogOutIcon,
 	SettingsIcon,
@@ -79,6 +80,11 @@ export const UserAccountNav = () => {
 					<DropdownMenuItem asChild>
 						<Link href="/dashboard/settings">
 							<SettingsIcon className="h-4 w-4 mr-2" /> Settings
+						</Link>
+					</DropdownMenuItem>
+					<DropdownMenuItem asChild>
+						<Link href="/dashboard/class">
+							<GraduationCapIcon className="h-4 w-4 mr-2" /> Class
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />

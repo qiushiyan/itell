@@ -24,5 +24,10 @@ export const CommandMenuConfig = {
 			href: "/dashboard/settings",
 			description: "Configure personal settings",
 		},
+		{
+			title: "Class",
+			href: "/dashboard/class",
+			description: "Monitor student progress",
+		},
 	],
 };

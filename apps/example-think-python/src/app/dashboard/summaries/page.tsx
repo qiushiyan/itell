@@ -21,10 +21,11 @@ export default async function ({ searchParams }: PageProps) {
 		return redirect("/auth");
 	}
 
+	const queryChapter = chapter ? parseInt(chapter) : undefined;
 	const userSummaries = await db.summary.findMany({
 		where: {
 			userId: user.id,
-			chapter: chapter ? parseInt(chapter) : undefined,
+			chapter: queryChapter,
 		},
 	});
 
@@ -50,7 +51,7 @@ export default async function ({ searchParams }: PageProps) {
 			<DashboardHeader heading="Summary" text="Create and manage summaries.">
 				<SummaryCreateButton />
 			</DashboardHeader>
-			<ChapterSelect />
+			<ChapterSelect defaultChapter={queryChapter} />
 			<SummaryList summaries={userSummaries} />
 		</DashboardShell>
 	);

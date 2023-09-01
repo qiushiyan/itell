@@ -33,6 +33,8 @@ export default async function () {
 		return redirect("/auth");
 	}
 
+	const visitors = Math.random();
+
 	return (
 		<DashboardShell>
 			<DashboardHeader heading={title} text={description} />
