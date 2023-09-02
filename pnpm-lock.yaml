@@ -294,9 +294,9 @@ importers:
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@13.4.8)(react-dom@18.2.0)(react@18.2.0)
-      rangy:
-        specifier: ^1.3.1
-        version: 1.3.1
+      range-serializer:
+        specifier: ^0.0.2
+        version: 0.0.2
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -2102,7 +2102,7 @@ packages:
       next-auth: ^4
     dependencies:
       '@prisma/client': 5.0.0(prisma@5.0.0)
-      next-auth: 4.22.1(next@13.4.8)(react-dom@18.2.0)(react@18.2.0)
+      next-auth: 4.22.1(next@13.4.16)(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
   /@next/env@13.4.1:
@@ -9977,8 +9977,8 @@ packages:
       safe-buffer: 5.2.1
     dev: true
 
-  /rangy@1.3.1:
-    resolution: {integrity: sha512-gfo1FOzdvcrcCR+wf0XMKPJBD3p2nHUw2wvNtuKsaHoI2dXQ9vH2QIpSQMV+mWLvKSqPfDNThhlyK8UN1hJijw==}
+  /range-serializer@0.0.2:
+    resolution: {integrity: sha512-1yTKs8ohcuuAQbbz9YgFiz4IqVK02VMMNe6jMW9tveqgE8g4eFV/GFDtmUznuifHCix48b16akgxXgV2dX0L+Q==}
     dev: false
 
   /react-confetti-explosion@2.1.2(react-dom@18.2.0)(react@18.2.0):

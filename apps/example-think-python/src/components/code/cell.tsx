@@ -19,6 +19,10 @@ import {
 	TabsContent,
 	TabsList,
 	TabsTrigger,
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
 } from "../client-components";
 import { usePython } from "@/lib/hooks/ues-python";
 import { memo } from "react";
@@ -101,15 +105,33 @@ export const Cell = memo(
 				})}
 			>
 				<div className="absolute top-2 right-2 z-10">
-					<Tabs
-						value={cellMode}
-						onValueChange={(val) => setCellMode(val as CellMode)}
-					>
-						<TabsList>
-							<TabsTrigger value="Script">Script</TabsTrigger>
-							<TabsTrigger value="REPL">REPL</TabsTrigger>
-						</TabsList>
-					</Tabs>
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Tabs
+									className="hover:shadow-md"
+									value={cellMode}
+									onValueChange={(val) => setCellMode(val as CellMode)}
+								>
+									<TabsList>
+										<TabsTrigger value="Script">Script</TabsTrigger>
+										<TabsTrigger value="REPL">REPL</TabsTrigger>
+									</TabsList>
+								</Tabs>
+							</TooltipTrigger>
+							<TooltipContent className="w-80 lg:w-96">
+								<p>
+									In script mode, you can view code output by{" "}
+									<code>print()</code> them.
+								</p>
+								<p>
+									In REPL mode, the result of the last line is automatically
+									returned. But <code>print()</code> does not work due to a
+									technical limitation.
+								</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 				</div>
 				<div className="grid grid-cols-[40px_1fr] gap-4">
 					<div className="border-r flex flex-col gap-1">

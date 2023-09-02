@@ -221,19 +221,17 @@ export default function ({
 
 		// if the note is loaded from the database, create the .note span elements
 		// for new note, spans are created in note-toolbar.tsx
-		setTimeout(() => {
-			if (!newNote) {
-				try {
-					createNoteElements({
-						id,
-						range: deserializeRange(serializedRange),
-						color,
-					});
-				} catch (err) {
-					console.error("create note element error", err);
-				}
+		if (!newNote) {
+			try {
+				createNoteElements({
+					id,
+					range: deserializeRange(serializedRange),
+					color,
+				});
+			} catch (err) {
+				console.error("create note element", err);
 			}
-		}, 1000);
+		}
 	}, []);
 
 	return (

@@ -1,6 +1,4 @@
-import "rangy/lib/rangy-core";
-// @ts-ignore
-import rangy from "rangy/lib/rangy-serializer";
+import * as rs from "range-serializer";
 
 export const noteClass = (id: string) => `note-${id}`;
 export const highlightClass = (id: string) => `highlight-${id}`;
@@ -9,17 +7,16 @@ const extractHighlightId = (className: string) =>
 	className.substring("highlight-".length);
 
 export const serializeRange = (range: Range) => {
-	return rangy.serializeRange(
+	return rs.serializeRange(
 		range,
-		true, // omitCheckSum, see https://github.com/timdown/rangy/wiki/Serializer-Module#api
-		document.getElementById("chapter-content"),
+		document.getElementById("chapter-content") || undefined,
 	);
 };
 
 export const deserializeRange = (serializedRange: string) => {
-	return rangy.deserializeRange(
+	return rs.deserializeRange(
 		serializedRange,
-		document.getElementById("chapter-content"),
+		document.getElementById("chapter-content") || undefined,
 	);
 };
 

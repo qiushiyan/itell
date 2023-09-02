@@ -22,22 +22,20 @@ export const Highlight = ({ id, color, range }: Props) => {
 	);
 
 	useEffect(() => {
-		setTimeout(() => {
-			try {
-				createNoteElements({
-					id,
-					range: deserializeRange(range),
-					color,
-					isHighlight: true,
-				});
-				createHighlightListeners(id, (event) => {
-					deleteHighlightListener(event);
-					incrementHighlightCount(-1);
-				});
-			} catch (err) {
-				console.error("create highlight error", err);
-			}
-		}, 1000);
+		try {
+			createNoteElements({
+				id,
+				range: deserializeRange(range),
+				color,
+				isHighlight: true,
+			});
+			createHighlightListeners(id, (event) => {
+				deleteHighlightListener(event);
+				incrementHighlightCount(-1);
+			});
+		} catch (err) {
+			console.error("create highlight error", err);
+		}
 	}, []);
 
 	return null;

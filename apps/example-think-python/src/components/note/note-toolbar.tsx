@@ -66,6 +66,9 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 			label: "Note",
 			icon: <PencilIcon className="w-5 h-5" />,
 			action: async ({ clientRect, textContent }: SelectionData) => {
+				if (!window.getSelection) {
+					return toast.error("Your browser does not support taking notes");
+				}
 				const range = window.getSelection()?.getRangeAt(0);
 				if (range && clientRect && textContent) {
 					const id = crypto.randomUUID();
@@ -75,6 +78,7 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 						range,
 						color: noteColor,
 					});
+
 					createNote({
 						id,
 						y: clientRect.y + window.scrollY,
@@ -84,6 +88,8 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 					});
 
 					incrementNoteCount();
+				} else {
+					toast.error("Please select some text to take a note");
 				}
 			},
 		},
@@ -91,7 +97,11 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 			label: "Highlight",
 			icon: <HighlighterIcon className="w-5 h-5" />,
 			action: async ({ clientRect, textContent }: SelectionData) => {
-				const range = window.getSelection()?.getRangeAt(0);
+				if (!window.getSelection) {
+					return toast.error("Your browser does not support taking notes");
+				}
+				const selection = window.getSelection();
+				const range = selection?.getRangeAt(0);
 				if (range && clientRect && textContent) {
 					const id = crypto.randomUUID();
 					const serializedRange = serializeRange(range);
@@ -101,6 +111,14 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 						color: defaultHighlightColor,
 						isHighlight: true,
 					});
+
+					if (selection?.empty) {
+						// Chrome
+						selection?.empty();
+					} else if (selection?.removeAllRanges) {
+						// Firefox
+						selection?.removeAllRanges();
+					}
 
 					await createHighlight.mutateAsync({
 						id: id,
@@ -116,6 +134,8 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 						deleteHighlightListener(event);
 						incrementHighlightCount(-1);
 					});
+				} else {
+					toast.error("Please select some text to take a note");
 				}
 			},
 		},
@@ -152,27 +172,23 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 						)}
 						style={style}
 					>
-						{createHighlight.isLoading ? (
-							<Spinner />
-						) : (
-							commands.map((command) => (
-								<Button
-									variant="ghost"
-									color="blue-gray"
-									className="flex items-center gap-2 p-2"
-									onClick={() => {
-										if (!session?.user && command.label !== "Copy") {
-											return toast.error("You need to be logged in.");
-										}
-										command.action(data);
-									}}
-									key={command.label}
-								>
-									{command.icon}
-									{command.label}
-								</Button>
-							))
-						)}
+						{commands.map((command) => (
+							<Button
+								variant="ghost"
+								color="blue-gray"
+								className="flex items-center gap-2 p-2"
+								onClick={() => {
+									if (!session?.user && command.label !== "Copy") {
+										return toast.error("You need to be logged in.");
+									}
+									command.action(data);
+								}}
+								key={command.label}
+							>
+								{command.icon}
+								{command.label}
+							</Button>
+						))}
 					</div>
 				);
 			}}
