@@ -3,8 +3,8 @@ import { useEffect, useRef } from "react";
 import { FOCUS_TIME_COUNT_INTERVAL } from "../constants";
 
 const markTrackingElements = () => {
-	// select direct children of h2, p and div of #chapter-content
-	const chapterContent = document.getElementById("chapter-content");
+	// select direct children of h2, p and div of #page-content
+	const chapterContent = document.getElementById("page-content");
 	const subsectionElements: HTMLElement[] = [];
 	if (chapterContent) {
 		const els = chapterContent.querySelectorAll(

@@ -10,18 +10,12 @@ import {
 	defaultHighlightColor,
 	useNoteColor,
 } from "@/lib/hooks/use-note-color";
-import Spinner from "../spinner";
 import { Button } from "../client-components";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import {
-	createHighlightListeners,
-	createNoteElements,
-	deleteHighlightListener,
-	deserializeRange,
-	serializeRange,
-} from "@/lib/note";
+import { createHighlightListeners, deleteHighlightListener } from "@/lib/note";
 import { useNotesStore } from "@/lib/store";
+import { createNoteElements, serializeRange } from "@itell/core/note";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
@@ -50,7 +44,7 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 	};
 
 	useEffect(() => {
-		const el = document.getElementById("chapter-content") as HTMLElement;
+		const el = document.getElementById("page-content") as HTMLElement;
 		if (el) {
 			setTarget(el);
 			el.addEventListener("click", handleClick);

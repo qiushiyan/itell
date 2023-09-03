@@ -1,17 +1,16 @@
 import { MainMdx } from "../main-mdx";
-import { Mdx } from "../mdx";
-import { TrackLastVisitedChapter } from "./chapter-last-visited";
+import { TrackLastVisitedChapter } from "../chapter/chapter-last-visited";
 
-export default function ({ code }: { code: string }) {
+export const PageContent = ({ code }: { code: string }) => {
 	return (
 		<>
 			<TrackLastVisitedChapter />
 			<article
 				className="prose prose-quoteless prose-neutral dark:prose-invert max-w-none"
-				id="chapter-content"
+				id="page-content"
 			>
 				<MainMdx code={code} />
 			</article>
 		</>
 	);
-}
+};

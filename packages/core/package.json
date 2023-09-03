@@ -14,6 +14,10 @@
       "require": "./dist/hooks.cjs.js",
       "import": "./dist/hooks.es.js"
     },
+    "./note": {
+      "require": "./dist/note.cjs.js",
+      "import": "./dist/note.es.js"
+    },
     "./utils": {
       "require": "./dist/utils.cjs.js",
       "import": "./dist/utils.es.js"
@@ -48,6 +52,7 @@
     "date-fns": "2.29.3",
     "github-slugger": "^2.0.0",
     "js-yaml": "^4.1.0",
+    "range-serializer": "^0.0.2",
     "tailwind-merge": "^1.12.0",
     "zod": "^3.21.4"
   },

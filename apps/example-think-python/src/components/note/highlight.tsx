@@ -1,14 +1,9 @@
 "use client";
 
-import {
-	createHighlightListeners,
-	createNoteElements,
-	deleteHighlightListener,
-	deserializeRange,
-} from "@/lib/note";
+import { createHighlightListeners, deleteHighlightListener } from "@/lib/note";
 
 import { useNotesStore } from "@/lib/store";
-import { usePython } from "@webpy/react";
+import { createNoteElements, deserializeRange } from "@itell/core/note";
 import { useEffect } from "react";
 type Props = {
 	id: string;

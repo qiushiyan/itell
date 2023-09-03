@@ -7,7 +7,6 @@ import { NoteCard } from "@/types/note";
 import { useClickOutside } from "@itell/core/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import NoteDelete from "./node-delete";
-import { createNoteElements, deserializeRange, noteClass } from "@/lib/note";
 import { relativeDate, cn } from "@itell/core/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
@@ -16,6 +15,11 @@ import NoteColorPicker from "./note-color-picker";
 import { Button } from "../client-components";
 import { useNotesStore } from "@/lib/store";
 import { usePython } from "@/lib/hooks/ues-python";
+import {
+	createNoteElements,
+	deserializeRange,
+	noteClass,
+} from "@itell/core/note";
 
 interface Props extends NoteCard {
 	chapter: number;
@@ -214,11 +218,6 @@ export default function ({
 	};
 
 	useEffect(() => {
-		elementsRef.current =
-			(Array.from(
-				document.getElementsByClassName(noteClass(id)),
-			) as HTMLElement[]) || undefined;
-
 		// if the note is loaded from the database, create the .note span elements
 		// for new note, spans are created in note-toolbar.tsx
 		if (!newNote) {
@@ -232,6 +231,13 @@ export default function ({
 				console.error("create note element", err);
 			}
 		}
+
+		// elementsRef should be set after the note elements are created
+		// in the case of new note, they are already created by the toolbar
+		elementsRef.current =
+			(Array.from(
+				document.getElementsByClassName(noteClass(id)),
+			) as HTMLElement[]) || undefined;
 	}, []);
 
 	return (

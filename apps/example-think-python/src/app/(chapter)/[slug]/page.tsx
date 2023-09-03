@@ -12,9 +12,8 @@ import { allChaptersSorted } from "@/lib/chapters";
 import { Button } from "@/components/client-components";
 import { TocSidebar } from "@/components/toc-sidebar";
 import { ChapterSidebar } from "@/components/chapter-sidebar";
-import ChapterContent from "@/components/chapter/chapter-content";
+import { PageContent } from "@/components/code/page-content";
 import Spinner from "@/components/spinner";
-import ChapterModal from "@/components/chapter-modal";
 import ChapterAuthModal from "@/components/chapter-auth-modal";
 
 export const generateStaticParams = async () => {
@@ -101,14 +100,14 @@ export default async function ({ params }: { params: { slug: string } }) {
 					</div>
 				</aside>
 
-				<section className="chapter-content relative col-span-12 md:col-span-10 lg:col-span-8">
+				<section className="relative col-span-12 md:col-span-10 lg:col-span-8">
 					<div className="mb-4 text-center" id="chapter-title">
 						<Typography variant="h1">
 							<Balancer className="text-3xl">{chapter.title}</Balancer>
 						</Typography>
 					</div>
 
-					<ChapterContent code={chapter.body.code} />
+					<PageContent code={chapter.body.code} />
 					<NoteToolbar chapter={chapter.chapter} />
 					<ChapterPager pager={pager} />
 				</section>

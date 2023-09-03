@@ -1,6 +1,6 @@
 "use client";
 
-import { useLastVisitedChapterUrl } from "@/lib/hooks/use-last-visisted-chapter";
+import { useLastVisitedChapterUrl } from "@/lib/hooks/use-last-visited-chapter";
 import Link from "next/link";
 import { buttonVariants } from "@itell/ui/server";
 
