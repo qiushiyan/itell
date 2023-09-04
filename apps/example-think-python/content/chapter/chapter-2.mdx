@@ -170,8 +170,10 @@ I don't work very hard to remember the precedence of operators. If I can't tell 
 
 In general, you can't perform mathematical operations on strings, even if the strings look like numbers, so the following are illegal:
 
-```
-'chinese'-'food'    'eggs'/'easy'    'third'*'a charm'
+```python
+'chinese' - 'food'
+'eggs' / 'easy'
+'third' * 'a charm'
 ```
 
 But there are two exceptions, `+` and `*`.
@@ -211,13 +213,15 @@ As programs get bigger and more complicated, they get more difficult to read. Fo
 For this reason, it is a good idea to add notes to your programs to explain in natural language what the program is doing. These notes are called comments, and they start with the `#` symbol:
 
 ```python
-percentage = (minute * 100) / 60 # compute the percentage of the hour that has elapsed
+# compute the percentage of the hour that has elapsed
+percentage = (minute * 100) / 60
 ```
 
 In this case, the comment appears on a line by itself. You can also put comments at the end of a line:
 
 ```python
-percentage = (minute * 100) / 60     # percentage of an hour
+# percentage of an hour
+percentage = (minute * 100) / 60
 ```
 
 Everything from the # to the end of the line is ignored—it has no effect on the execution of the program.

@@ -16,7 +16,7 @@ import ConfettiExplosion from "react-confetti-explosion";
 import { useCurrentChapter } from "@/lib/hooks/utils";
 import { numOfWords } from "@itell/core/utils";
 
-export default function SummaryInput() {
+export const SummaryInput = () => {
 	const { state, setInput, score, create } = useSummary({
 		useLocalStorage: true,
 	});
@@ -93,4 +93,4 @@ export default function SummaryInput() {
 			</form>
 		</>
 	);
-}
+};

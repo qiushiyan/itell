@@ -7,6 +7,7 @@ import {
 	Typography,
 	Blockquote,
 	Definition,
+	Steps,
 } from "@itell/ui/server";
 import { Exercise } from "./exercise";
 import { Notebook } from "@/components/code/notebook";
@@ -25,6 +26,7 @@ export const MdxComponents = {
 	Caption,
 	Definition,
 	Typography,
+	Steps,
 	// exercise related
 	Exercise,
 	Notebook,

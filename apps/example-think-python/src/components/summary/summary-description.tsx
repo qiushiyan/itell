@@ -10,7 +10,7 @@ const description = allSites.find(
 // had to avoid using <Mdx /> for this
 // so that <Mdx /> don't have to import client components
 
-export default function SummaryDescription() {
+export const SummaryDescription = () => {
 	return (
 		<div className="summary-description prose dark:prose-invert">
 			<Mdx
@@ -23,4 +23,4 @@ export default function SummaryDescription() {
 			/>
 		</div>
 	);
-}
+};

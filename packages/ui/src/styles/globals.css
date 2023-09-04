@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer utils {
+    .steps {
+        @apply mt-2
+    }
+
     .steps>h4 {
         @apply step;
     }

@@ -13,7 +13,7 @@ module.exports = withContentlayer({
 		remotePatterns: [
 			{
 				protocol: "https",
-				hostname: "www.greenteapress.com",
+				hostname: "**.greenteapress.com",
 			},
 		],
 	},

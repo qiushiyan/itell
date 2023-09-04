@@ -1,6 +1,6 @@
 import { Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
-import Summary from "@/components/summary";
+import { PageSummary } from "@/components/summary/page-summary";
 import { notFound } from "next/navigation";
 import ChapterPager from "@/components/chapter-pager";
 import { getPagerForChapter } from "@/lib/pager";
@@ -83,25 +83,25 @@ export default async function ({ params }: { params: { slug: string } }) {
 							currentChapter={chapter.chapter}
 							chapters={allChaptersSorted}
 						/>
-						<div className="mt-12 flex flex-col">
+						<div className="mt-12 flex flex-col gap-2">
 							{hasSummary && (
 								<AnchorLink
 									icon={<PencilIcon className="w-4 h-4" />}
 									text="Write a Summary"
-									href="#chapter-summary"
+									href="#page-summary"
 								/>
 							)}
 							<AnchorLink
 								icon={<ArrowUpIcon className="w-4 h-4" />}
 								text="Back to Top"
-								href="#chapter-title"
+								href="#page-title"
 							/>
 						</div>
 					</div>
 				</aside>
 
 				<section className="relative col-span-12 md:col-span-10 lg:col-span-8">
-					<div className="mb-4 text-center" id="chapter-title">
+					<div className="mb-4 text-center" id="page-title">
 						<Typography variant="h1">
 							<Balancer className="text-3xl">{chapter.title}</Balancer>
 						</Typography>
@@ -129,7 +129,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 				</aside>
 			</div>
 
-			{hasSummary && <Summary chapter={chapter.chapter} />}
+			{hasSummary && <PageSummary chapter={chapter.chapter} />}
 		</Fragment>
 	);
 }
