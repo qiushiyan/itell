@@ -1,4 +1,3 @@
-import Balancer from "react-wrap-balancer";
 import { cn } from "@itell/core/utils";
 import { buttonVariants } from "./button";
 
@@ -50,23 +49,22 @@ export const YoutubeVideo = ({
 						className="text-xl font-semibold leading-snug"
 						data-testid="title"
 					>
-						<Balancer as="div">{title}</Balancer>
+						{title}
 					</h5>
 				)}
 				{children && <div className="text-sm font-light">{children}</div>}
 				{youtube && (
 					<a
 						href={getYoutubeLinkFromEmbed(src)}
-						className="no-underline"
+						className={cn(
+							buttonVariants({ variant: "secondary" }),
+							"no-underline",
+						)}
 						target="_blank"
 						rel="noreferrer"
+						data-testid="link"
 					>
-						<button
-							className={buttonVariants({ variant: "secondary" })}
-							data-testid="link"
-						>
-							View on youtube
-						</button>
+						View on youtube
 					</a>
 				)}
 			</div>

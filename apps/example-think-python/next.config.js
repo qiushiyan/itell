@@ -13,7 +13,11 @@ module.exports = withContentlayer({
 		remotePatterns: [
 			{
 				protocol: "https",
-				hostname: "**.greenteapress.com",
+				hostname: "greenteapress.com",
+			},
+			{
+				protocol: "https",
+				hostname: "www.greenteapress.com",
 			},
 		],
 	},
@@ -28,15 +32,6 @@ module.exports = withContentlayer({
 });
 
 const securityHeaders = [
-	// https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-	{
-		key: "Cross-Origin-Embedder-Policy",
-		value: "require-corp",
-	},
-	{
-		key: "Cross-Origin-Opener-Policy",
-		value: "same-origin",
-	},
 	// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
 	{
 		key: "Referrer-Policy",

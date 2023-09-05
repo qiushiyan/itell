@@ -6,14 +6,12 @@ import {
 	CollapsibleContent,
 	CollapsibleTrigger,
 	DialogFooter,
-} from "./client-components";
-import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-} from "@/components/ui/dialog";
+} from "./client-components";
 import { useState } from "react";
 import Link from "next/link";
 import { useChapterStatus } from "@/lib/hooks/use-chapter-status";

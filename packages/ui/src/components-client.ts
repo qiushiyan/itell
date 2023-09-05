@@ -17,5 +17,4 @@ export * from "./components/separator";
 export * from "./components/form";
 export * from "./components/progress";
 export * from "./components/hover-card";
-export * from "./components/youtube";
 export * from "./components/link";

@@ -92,8 +92,9 @@ export const Cell = memo(
 		};
 
 		const cancel = async () => {
-			await interruptExecution();
-			setIsCellRunning(false);
+			// do not use interrupt buffer as it requires strict domain policy
+			// await interruptExecution();
+			// setIsCellRunning(false);
 		};
 
 		return (
@@ -138,10 +139,9 @@ export const Cell = memo(
 						<Button
 							size="sm"
 							variant="ghost"
+							disabled={isRunning}
 							onClick={async () => {
-								if (isRunning) {
-									await cancel();
-								} else {
+								if (!isRunning) {
 									await run();
 								}
 							}}

@@ -1,7 +1,6 @@
 import { cn } from "@itell/core/utils";
 import NextImage from "next/image";
 import { useState } from "react";
-import Balancer from "react-wrap-balancer";
 import {
 	Dialog,
 	DialogContent,
@@ -73,7 +72,7 @@ export const Figure = ({
 						{ "md:w-72 lg:w-96": floatLeft || floatRight },
 					)}
 				>
-					<Balancer as="div">{children}</Balancer>
+					{children}
 				</figcaption>
 			)}
 		</figure>
