@@ -55,7 +55,12 @@ export const YoutubeVideo = ({
 				)}
 				{children && <div className="text-sm font-light">{children}</div>}
 				{youtube && (
-					<a href={getYoutubeLinkFromEmbed(src)} className="no-underline">
+					<a
+						href={getYoutubeLinkFromEmbed(src)}
+						className="no-underline"
+						target="_blank"
+						rel="noreferrer"
+					>
 						<button
 							className={buttonVariants({ variant: "secondary" })}
 							data-testid="link"
