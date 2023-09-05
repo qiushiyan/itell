@@ -1,6 +1,10 @@
 import { Chapter } from "contentlayer/generated";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "./client-components";
+import {
+	Button,
+	Dialog,
+	DialogContent,
+	DialogTrigger,
+} from "./client-components";
 import Link from "next/link";
 import { buttonVariants } from "@itell/ui/server";
 import { MainMdx } from "./main-mdx";

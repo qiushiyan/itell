@@ -4,14 +4,14 @@ import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
 import { cn } from "@itell/core/utils";
-import { Button } from "@/components/client-components";
 import {
+	Button,
 	Command,
 	CommandEmpty,
 	CommandGroup,
 	CommandInput,
 	CommandItem,
-} from "@/components/ui/command";
+} from "@/components/client-components";
 import { Popover, PopoverContent, PopoverTrigger } from "@itell/ui/client";
 import { allChaptersSorted } from "@/lib/chapters";
 
