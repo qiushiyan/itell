@@ -10,11 +10,13 @@ import { useSummary } from "@/lib/hooks/use-summary";
 import { useFocusTime } from "@/lib/hooks/use-focus-time";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { FormEvent } from "react";
+import { FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ConfettiExplosion from "react-confetti-explosion";
 import { useCurrentChapter } from "@/lib/hooks/utils";
 import { numOfWords } from "@itell/core/utils";
+import { FOCUS_TIME_SAVE_INTERVAL } from "@/lib/constants";
+import { env } from "@/env.mjs";
 
 export const SummaryInput = () => {
 	const { state, setInput, score, create } = useSummary({
@@ -50,15 +52,29 @@ export const SummaryInput = () => {
 					currentChapter,
 				);
 				if (savedSummary) {
-					await saveFocusTime({
-						summaryId: savedSummary.id,
-					});
+					await saveFocusTime(savedSummary.id);
 				}
 			}
 		} else {
 			router.push("/auth");
 		}
 	};
+
+	let autoSaveTimer: NodeJS.Timer | null = null;
+
+	useEffect(() => {
+		if (env.NODE_ENV === "production") {
+			autoSaveTimer = setInterval(() => {
+				saveFocusTime();
+			}, FOCUS_TIME_SAVE_INTERVAL);
+		}
+
+		return () => {
+			if (autoSaveTimer) {
+				clearInterval(autoSaveTimer);
+			}
+		};
+	}, []);
 
 	return (
 		<>

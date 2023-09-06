@@ -5,7 +5,7 @@ export const FocusTimeRouter = router({
 	create: protectedProcedure
 		.input(
 			z.object({
-				summaryId: z.string(),
+				summaryId: z.string().optional(),
 				totalViewTime: z.number(),
 				data: z.array(
 					z.object({

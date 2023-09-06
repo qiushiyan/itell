@@ -111,10 +111,10 @@ model FocusTime {
   id            String   @id @default(uuid())
   data          Json
   totalViewTime Float
-  summaryId     String   @map("summary_id")
+  summaryId     String?  @map("summary_id")
   userId        String   @map("user_id")
   created_at    DateTime @default(now())
-  summary       Summary  @relation(fields: [summaryId], references: [id])
+  summary       Summary? @relation(fields: [summaryId], references: [id])
   user          User     @relation(fields: [userId], references: [id])
 
   @@map("focus_time")

@@ -1,8 +1,8 @@
 import { trpc } from "@/trpc/trpc-provider";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FOCUS_TIME_COUNT_INTERVAL } from "../constants";
 
-const markTrackingElements = () => {
+const createTrackingElements = () => {
 	// select direct children of h2, p and div of #page-content
 	const chapterContent = document.getElementById("page-content");
 	const subsectionElements: HTMLElement[] = [];
@@ -40,6 +40,7 @@ export type FocusTimeEntry = {
 
 export const useFocusTime = () => {
 	const data = useRef<FocusTimeEntry[]>();
+	const isSaving = useRef(false);
 	const createFocusTime = trpc.focusTime.create.useMutation();
 	const visibleSections = new Set<string>();
 
@@ -74,8 +75,9 @@ export const useFocusTime = () => {
 		}, FOCUS_TIME_COUNT_INTERVAL);
 	};
 
-	const saveFocusTime = async ({ summaryId }: { summaryId: string }) => {
-		if (data.current) {
+	const saveFocusTime = async (summaryId?: string) => {
+		if (data.current && !isSaving.current) {
+			isSaving.current = true;
 			await createFocusTime.mutateAsync({
 				summaryId,
 				data: data.current,
@@ -83,6 +85,9 @@ export const useFocusTime = () => {
 					.map((entry) => entry.totalViewTime)
 					.reduce((a, b) => a + b, 0),
 			});
+
+			isSaving.current = false;
+
 			// clear past data
 			data.current.forEach((entry) => {
 				entry.totalViewTime = 0;
@@ -121,7 +126,7 @@ export const useFocusTime = () => {
 				}
 			});
 		}, options);
-		const elements = markTrackingElements();
+		const elements = createTrackingElements();
 		data.current = elements
 			.filter((el) => el.dataset.sectionType === "section-start")
 			.map((el) => ({
