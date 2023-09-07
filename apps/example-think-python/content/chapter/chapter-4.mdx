@@ -127,6 +127,34 @@ else:
 
 If the remainder when x is divided by 2 is 0, then we know that x is even, and the program displays an appropriate message. If the condition is false, the second set of statements runs. Since the condition must be true or false, exactly one of the alternatives will run. The alternatives are called branches, because they are branches in the flow of execution.
 
+<CodingTime>
+
+When writing longer boolean expressions, you can use **De Morgan's theorem** to make them easier to read. The theorem can be expressed in English as
+
+- _Not_ (**A** and **B**) is the same as _Not_ **A** or _Not_ **B**.
+
+- _Not_ (**A** or **B**) is the same as _Not_ **A** and _Not_ **B**
+
+For example, consider the following boolean expression
+
+```python
+!x or !y
+```
+
+This expression can be stated as _Not_ **x** or _Not_ **y**. And by **De Morgan's theorem**, this is the same as _Not_ (**x** and **y**), which in code is
+
+```python
+!(x && y)
+```
+
+There is no rule of thumb for when one side of the transformation is more understandable than the other as it depends on the context and domain problem. But it is good to know that you can transform boolean expressions in this way.
+
+In the following exercise, imagine we are managing a website with some vip users, and we want to keep them engaged by sending them emails if they are not active for some period of time. The following code works, but the boolean check is a bit hard to read. Rewrite it using **De Morgan's theorem**.
+
+<Notebook script="chapter-4/demorgan.py" />
+
+</CodingTime>
+
 ## Chained conditionals
 
 Sometimes there are more than two possibilities and we need more than two branches. One way to express a computation like that is a **chained conditional**:

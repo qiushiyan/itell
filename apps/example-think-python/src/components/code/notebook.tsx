@@ -5,24 +5,30 @@ import { CellMode } from "./types";
 
 type Props =
 	| { code: string; mode?: CellMode }
-	| { script: string; mode?: CellMode };
+	| { script: string; mode?: CellMode }
+	| undefined;
 
 export const Notebook = async (props: Props) => {
-	let code = "";
-	if ("code" in props) {
-		code = props.code;
-	} else if ("script" in props) {
-		const result = await readScript(props.script);
-		if (!result) {
-			return <Errorbox>failed to read script {props.script}</Errorbox>;
+	let codes = [""];
+	let mode: CellMode = "Script";
+	if (props) {
+		mode = props.mode || "Script";
+		let code = "";
+		if ("code" in props) {
+			code = props.code;
+		} else if ("script" in props) {
+			const result = await readScript(props.script);
+			if (!result) {
+				return <Errorbox>failed to read script {props.script}</Errorbox>;
+			}
+			code = result.trimEnd();
 		}
-		code = result.trimEnd();
+		codes = getCellCodes(code);
 	}
-	const codes = getCellCodes(code);
 
 	return (
 		<div className="notebook">
-			<CellGroup codes={codes} mode={props.mode} />
+			<CellGroup codes={codes} mode={mode} />
 		</div>
 	);
 };

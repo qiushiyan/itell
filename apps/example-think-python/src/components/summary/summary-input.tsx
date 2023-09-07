@@ -63,7 +63,7 @@ export const SummaryInput = () => {
 	let autoSaveTimer: NodeJS.Timer | null = null;
 
 	useEffect(() => {
-		if (env.NODE_ENV === "production") {
+		if (process.env.NODE_ENV === "production") {
 			autoSaveTimer = setInterval(() => {
 				saveFocusTime();
 			}, FOCUS_TIME_SAVE_INTERVAL);
