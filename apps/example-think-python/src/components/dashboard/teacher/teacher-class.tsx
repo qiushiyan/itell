@@ -34,7 +34,7 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 	const classIndex = allChapters.findIndex(
 		(chapter) => chapter.chapter === classChapter,
 	);
-	const classProgress = (classIndex / allChapters.length) * 100;
+	const classProgress = ((classIndex + 1) / (allChapters.length - 1)) * 100;
 
 	return (
 		<Card>
@@ -59,8 +59,8 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 				<div className="flex items-center gap-4">
 					<Progress value={classProgress} className="w-1/3" />
 					<p className="text-muted-foreground">
-						{classProgress.toFixed(2)}% completed, {classIndex}/
-						{allChapters.length} chapters
+						{classProgress.toFixed(2)}% completed, {classIndex + 1}/
+						{allChapters.length - 1} chapters
 					</p>
 				</div>
 

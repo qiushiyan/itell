@@ -29,5 +29,10 @@ export const CommandMenuConfig = {
 			href: "/dashboard/class",
 			description: "Monitor student progress",
 		},
+		{
+			title: "Guide",
+			href: "/guide",
+			description: "Learn how to use the textbook",
+		},
 	],
 };

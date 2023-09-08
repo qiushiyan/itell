@@ -7,7 +7,7 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 const title = "Settings";
-const description = "Manage account and website settings.";
+const description = "Manage account and website settings";
 
 export const metadata: Metadata = {
 	title,

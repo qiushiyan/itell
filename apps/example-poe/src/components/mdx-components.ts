@@ -9,9 +9,9 @@ import {
 	Steps,
 	Columns,
 	Column,
+	YoutubeVideo,
 } from "@itell/ui/server";
 import {
-	YoutubeVideo,
 	Accordion,
 	AccordionItem,
 	Image,

@@ -8,7 +8,11 @@ import { cn } from "@itell/core/utils";
 import { CommandMenu } from "../command-menu";
 import { UserAccountNav } from "../user-account-nav";
 
-export default async function TextbookNavbar() {
+type Props = {
+	dashboardLink?: boolean;
+};
+
+export default async function TextbookNavbar({ dashboardLink = true }: Props) {
 	const { title } = await getSiteConfig();
 
 	return (
@@ -19,13 +23,15 @@ export default async function TextbookNavbar() {
 						<span className="hidden font-bold sm:inline-block">{title}</span>
 					</Link>
 					<Link
-						href="/chapter-0"
+						href={dashboardLink ? "/dashboard" : "/chapter-0"}
 						className={cn(
 							buttonVariants({ variant: "outline" }),
 							"flex items-center space-x-2 text-base",
 						)}
 					>
-						<span className="font-bold sm:inline-block">Read</span>
+						<span className="font-bold sm:inline-block">
+							{dashboardLink ? "Dashboard" : "Read"}
+						</span>
 					</Link>
 				</div>
 

@@ -22,7 +22,7 @@ export const useLastVisitedChapterUrl = () => {
 		"think-python-last-visited-chapter",
 		undefined,
 	);
-	const [url, setUrl] = useState<string | null>(null);
+	const [url, setUrl] = useState<string>("/chapter-0");
 
 	useEffect(() => {
 		if (lastVisitedChapter) {

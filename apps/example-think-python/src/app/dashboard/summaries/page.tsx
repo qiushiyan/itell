@@ -32,7 +32,7 @@ export default async function ({ searchParams }: PageProps) {
 	if (userSummaries.length === 0) {
 		return (
 			<DashboardShell>
-				<DashboardHeader heading="Summary" text="Create and manage summaries.">
+				<DashboardHeader heading="Summary" text="Create and edit summaries">
 					<SummaryCreateButton />
 				</DashboardHeader>
 				<p className="p-2">
