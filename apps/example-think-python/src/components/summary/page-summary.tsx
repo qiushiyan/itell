@@ -16,7 +16,7 @@ export const PageSummary = ({ chapter }: { chapter: number }) => {
 				<Suspense fallback={<SummaryCount.Skeleton />}>
 					<SummaryCount chapter={chapter} />
 				</Suspense>
-				<SummaryInput />
+				<SummaryInput chapter={chapter} />
 			</section>
 		</section>
 	);

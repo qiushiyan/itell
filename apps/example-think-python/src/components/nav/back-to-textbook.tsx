@@ -10,7 +10,7 @@ export const BackToTextbook = () => {
 
 	return (
 		<Link
-			href={url || "/chapter-0"}
+			href={url}
 			className={cn(
 				buttonVariants({ variant: "outline" }),
 				"flex items-center space-x-2 text-base",

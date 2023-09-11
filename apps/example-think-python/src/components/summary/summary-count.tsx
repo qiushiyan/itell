@@ -1,12 +1,12 @@
 import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
-import { delay } from "@/lib/utils";
 import { cn } from "@itell/core/utils";
 import { Skeleton, buttonVariants } from "@itell/ui/server";
 import Link from "next/link";
 
 export const SummaryCount = async ({ chapter }: { chapter: number }) => {
 	let summaryCount: number | undefined = undefined;
+
 	const user = await getCurrentUser();
 	if (user) {
 		summaryCount = await db.summary.count({

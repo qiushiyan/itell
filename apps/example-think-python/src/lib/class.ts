@@ -6,6 +6,9 @@ export const getTeacherWithClassId = async (
 	if (!classId) {
 		return null;
 	}
+
+	// there could be multiple teachers for a class?
+	// but for now, we'll just assume there's one
 	const teacher = await db.teacher.findFirst({
 		where: {
 			classId,

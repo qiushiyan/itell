@@ -27,6 +27,12 @@ const Chapter = defineDocumentType(() => ({
 			description: "The title of the Section",
 			required: true,
 		},
+		summary: {
+			type: "boolean",
+			description: "Should require a summary",
+			required: false,
+			default: true,
+		},
 	},
 	computedFields: {
 		url: {

@@ -12,6 +12,22 @@ const SummaryRouter = router({
 		});
 	}),
 
+	countWithChapter: protectedProcedure
+		.input(
+			z.object({
+				chapter: z.number(),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			const { id } = ctx.user;
+			return await ctx.prisma.summary.count({
+				where: {
+					chapter: input.chapter,
+					userId: id,
+				},
+			});
+		}),
+
 	create: protectedProcedure
 		.input(
 			z.object({

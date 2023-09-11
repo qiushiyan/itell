@@ -13,7 +13,7 @@ export default function UserAvatar({ user, className }: Props) {
 		<Avatar className={className}>
 			{user.image ? (
 				<AvatarImage
-					alt="Picture"
+					alt="User Profile Picture"
 					src={`${user.image}?not-from-cache-please`}
 				/>
 			) : (

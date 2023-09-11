@@ -70,7 +70,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 		index: chapterIndex,
 	});
 
-	const hasSummary = chapter.chapter !== 0;
+	const requireSummary = chapter.summary;
 
 	return (
 		<Fragment>
@@ -84,7 +84,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 							chapters={allChaptersSorted}
 						/>
 						<div className="mt-12 flex flex-col gap-2">
-							{hasSummary && (
+							{requireSummary && (
 								<AnchorLink
 									icon={<PencilIcon className="w-4 h-4" />}
 									text="Write a Summary"
@@ -129,7 +129,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 				</aside>
 			</div>
 
-			{hasSummary && <PageSummary chapter={chapter.chapter} />}
+			{requireSummary && <PageSummary chapter={chapter.chapter} />}
 		</Fragment>
 	);
 }

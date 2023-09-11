@@ -15,3 +15,4 @@ export const ScoreThreshold: Record<ScoreType, number> = {
 export const FOCUS_TIME_COUNT_INTERVAL = 1000;
 export const FOCUS_TIME_SAVE_INTERVAL = 60000;
 export const TEXTBOOK_NAME = "think-python-2e";
+export const PAGE_SUMMARY_THRESHOLD = 2;
