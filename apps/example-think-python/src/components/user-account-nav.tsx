@@ -41,9 +41,9 @@ export const UserAccountNav = () => {
 	}
 
 	return (
-		<div className="ml-auto flex items-center gap-1">
+		<div className="ml-auto">
 			<DropdownMenu open={menuOpen} onOpenChange={(val) => setMenuOpen(val)}>
-				<DropdownMenuTrigger>
+				<DropdownMenuTrigger className="flex items-center gap-1">
 					<UserAvatar
 						className="h-8 w-8"
 						user={{
@@ -52,6 +52,11 @@ export const UserAccountNav = () => {
 							image: user.image || null,
 						}}
 					/>
+					{menuOpen ? (
+						<ChevronUpIcon className="h-4 w-4" />
+					) : (
+						<ChevronDownIcon className="h-4 w-4" />
+					)}
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">
 					{/* user name and email */}
@@ -102,11 +107,6 @@ export const UserAccountNav = () => {
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
-			{menuOpen ? (
-				<ChevronUpIcon className="h-4 w-4" />
-			) : (
-				<ChevronDownIcon className="h-4 w-4" />
-			)}
 		</div>
 	);
 };

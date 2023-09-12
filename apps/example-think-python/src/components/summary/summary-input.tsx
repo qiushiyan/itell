@@ -104,8 +104,6 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 		}
 	}, [state.feedback]);
 
-	// useEffect(() => {}, [currentSummaryCount]);
-
 	const handleGoToNextChapter = async () => {
 		setIsGoingToNextChapter(true);
 		const { data: userChapter } = await fetchUserChapter();
