@@ -32,7 +32,6 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 		if (event.target instanceof HTMLElement) {
 			if (
 				event.target.tagName === "SPAN" ||
-				event.target.tagName === "PRE" ||
 				event.target.classList.contains("cm-line") ||
 				event.target.classList.contains("cm-editor")
 			) {

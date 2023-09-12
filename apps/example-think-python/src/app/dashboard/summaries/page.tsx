@@ -26,6 +26,9 @@ export default async function ({ searchParams }: PageProps) {
 			userId: user.id,
 			chapter: queryChapter,
 		},
+		orderBy: {
+			created_at: "desc",
+		},
 	});
 
 	return (
