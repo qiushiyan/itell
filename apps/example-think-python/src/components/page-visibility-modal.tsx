@@ -5,20 +5,22 @@ import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
+} from "./client-components";
+import {
 	DialogFooter,
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-} from "./client-components";
+} from "@/components/ui/dialog";
 import { useState } from "react";
 import Link from "next/link";
 import { useChapterStatus } from "@/lib/hooks/use-chapter-status";
 import { makeChapterHref } from "@/lib/utils";
 import { GoogleLoginButton } from "./auth/login-button";
 
-export default function ChapterAuthModal() {
+export const PageVisibilityModal = () => {
 	const { status, userChapter } = useChapterStatus();
 	const [open, setOpen] = useState(true);
 
@@ -93,4 +95,4 @@ export default function ChapterAuthModal() {
 	}
 
 	return null;
-}
+};

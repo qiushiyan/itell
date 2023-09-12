@@ -14,7 +14,7 @@ import { TocSidebar } from "@/components/toc-sidebar";
 import { ChapterSidebar } from "@/components/chapter-sidebar";
 import { PageContent } from "@/components/code/page-content";
 import Spinner from "@/components/spinner";
-import ChapterAuthModal from "@/components/chapter-auth-modal";
+import { PageVisibilityModal } from "@/components/page-visibility-modal";
 
 export const generateStaticParams = async () => {
 	return allChaptersSorted.map((chapter) => {
@@ -75,7 +75,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 	return (
 		<Fragment>
 			<div className="max-w-[1440px] mx-auto grid grid-cols-12 gap-6 px-2">
-				<ChapterAuthModal />
+				<PageVisibilityModal />
 
 				<aside className="module-sidebar  md:col-span-2">
 					<div className="sticky top-20">

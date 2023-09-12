@@ -1,13 +1,13 @@
 "use client";
 
+import { Button } from "@/components/client-components";
 import {
-	Button,
 	Dialog,
 	DialogTitle,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
-} from "@/components/client-components";
+} from "@/components/ui/dialog";
 import { Typography, Warning } from "@itell/ui/server";
 import Spinner from "../spinner";
 import Feedback from "./summary-feedback";
@@ -27,23 +27,33 @@ import {
 } from "@/lib/constants";
 import { trpc } from "@/trpc/trpc-provider";
 import { allChaptersSorted } from "@/lib/chapters";
+import { useChapterStatus } from "@/lib/hooks/use-chapter-status";
 
 export const SummaryInput = ({ chapter }: { chapter: number }) => {
 	const [showProceedModal, setShowProceedModal] = useState(false);
 	const { state, setInput, score, create } = useSummary({
 		useLocalStorage: true,
 	});
-	const { status: sessionStatus } = useSession();
 	const router = useRouter();
-	const { refetch: countSummary, data: currentSummaryCount } =
+	const { status: sessionStatus } = useSession();
+
+	const [isGoingToNextChapter, setIsGoingToNextChapter] = useState(false);
+
+	const { refetch: fetchSummaryCount, data: currentSummaryCount } =
 		trpc.summary.countWithChapter.useQuery(
 			{ chapter },
 			{
 				enabled: false, // manually fetch when user submitting a summary
 			},
 		);
-	const incrementUserChapter = trpc.user.incrementChapter.useMutation();
+	const { refetch: fetchUserChapter } = trpc.user.getChapter.useQuery(
+		undefined,
+		{
+			enabled: false,
+		},
+	);
 
+	const incrementUserChapter = trpc.user.incrementChapter.useMutation();
 	const {
 		saveFocusTime,
 		start: startFocusTimeCounting,
@@ -83,20 +93,34 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 		// if the summary did not pass
 		// update the summary count state (unless this is the last chapter)
 		if (state.feedback && !state.feedback.isPassed) {
-			if (allChaptersSorted[allChaptersSorted.length - 1].chapter !== chapter) {
-				countSummary();
+			if (allChaptersSorted[allChaptersSorted.length - 1].chapter > chapter) {
+				fetchSummaryCount().then(({ data: count }) => {
+					console.log(count);
+					if (count && count > PAGE_SUMMARY_THRESHOLD) {
+						setShowProceedModal(true);
+					}
+				});
 			}
 		}
 	}, [state.feedback]);
 
-	useEffect(() => {
-		// the fetch is trigger when a new summary did not pass
-		if (currentSummaryCount && currentSummaryCount > PAGE_SUMMARY_THRESHOLD) {
-			incrementUserChapter.mutateAsync({ chapter }).then(() => {
-				setShowProceedModal(true);
-			});
+	// useEffect(() => {}, [currentSummaryCount]);
+
+	const handleGoToNextChapter = async () => {
+		setIsGoingToNextChapter(true);
+		const { data: userChapter } = await fetchUserChapter();
+		// in practice userChapter should always
+		// 1. equals to the current chapter: we should let them proceed
+		// 2. greater than current chapter: do nothing
+		// it should never be less than current chapter (since they should not be able to submit a summary for a chapter they have not read)
+		// but I'll keep the less than for dev purpose
+		if (userChapter && userChapter <= chapter) {
+			await incrementUserChapter.mutateAsync({ chapter });
 		}
-	}, [currentSummaryCount]);
+
+		setIsGoingToNextChapter(false);
+		router.push(makeChapterHref(chapter + 1));
+	};
 
 	let autoSaveTimer: NodeJS.Timer | null = null;
 
@@ -156,8 +180,12 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 						this chapter to write more summaries.
 					</div>
 					<DialogFooter>
-						<Button>
-							<Link href={makeChapterHref(chapter + 1)}>Next Chapter</Link>
+						<Button
+							onClick={handleGoToNextChapter}
+							disabled={isGoingToNextChapter}
+						>
+							{isGoingToNextChapter && <Spinner className="mr-2 inline" />} Next
+							Chapter
 						</Button>
 					</DialogFooter>
 				</DialogContent>

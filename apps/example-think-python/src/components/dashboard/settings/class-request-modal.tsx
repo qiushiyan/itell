@@ -1,15 +1,14 @@
 "use client";
 
+import { Button, Label } from "@/components/client-components";
 import {
-	Button,
-	Label,
 	Dialog,
 	DialogTrigger,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-} from "@/components/client-components";
+} from "@/components/ui/dialog";
 import Spinner from "@/components/spinner";
 import { Input } from "@itell/ui/server";
 import { User } from "@prisma/client";
