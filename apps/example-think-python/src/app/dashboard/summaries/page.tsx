@@ -4,8 +4,7 @@ import { SummaryList } from "@/components/dashboard/summary-list";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
-import { notFound, redirect } from "next/navigation";
-import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ChapterSelect } from "@/components/dashboard/summaries/chapter-select";
 
 type PageProps = {
@@ -29,30 +28,19 @@ export default async function ({ searchParams }: PageProps) {
 		},
 	});
 
-	if (userSummaries.length === 0) {
-		return (
-			<DashboardShell>
-				<DashboardHeader heading="Summary" text="Create and edit summaries">
-					<SummaryCreateButton />
-				</DashboardHeader>
-				<p className="p-2">
-					You have not made any summary yet. Start with{" "}
-					<Link href="/chapter-1" className="underline font-medium">
-						Chapter 1
-					</Link>
-					!
-				</p>
-			</DashboardShell>
-		);
-	}
-
 	return (
 		<DashboardShell>
 			<DashboardHeader heading="Summary" text="Create and manage summaries.">
 				<SummaryCreateButton />
 			</DashboardHeader>
 			<ChapterSelect defaultChapter={queryChapter} />
-			<SummaryList summaries={userSummaries} />
+			{userSummaries.length === 0 ? (
+				<p className="p-2 text-muted-foreground text-sm">
+					There is no summary for Chapter {searchParams.chapter}.
+				</p>
+			) : (
+				<SummaryList summaries={userSummaries} />
+			)}
 		</DashboardShell>
 	);
 }
