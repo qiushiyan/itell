@@ -7,6 +7,7 @@ import ThemeToggle from "../theme/theme-toggle";
 import { cn } from "@itell/core/utils";
 import { CommandMenu } from "../command-menu";
 import { UserAccountNav } from "../user-account-nav";
+import { TextbookSearch } from "../search/textbook-search";
 
 type Props = {
 	dashboardLink?: boolean;
@@ -37,6 +38,7 @@ export default async function TextbookNavbar({ dashboardLink = true }: Props) {
 
 				<div className="ml-auto flex items-center gap-2">
 					<CommandMenu />
+					<TextbookSearch />
 					<ThemeToggle />
 					<UserAccountNav />
 				</div>
