@@ -10,10 +10,10 @@
             "vitest/globals",
             "@testing-library/jest-dom",
         ],
-        "module": "ESNext",
+        "module": "esnext",
         "lib": [
             "dom",
-            "ESNext"
+            "esnext"
         ],
         "baseUrl": ".",
         "paths": {
@@ -23,7 +23,6 @@
         },
         // output .d.ts declaration files for consumers
         "declaration": true,
-        "declarationMap": true,
         // output .js.map sourcemap files for consumers
         "sourceMap": true,
         // match output dir to input dir. e.g. dist/index instead of dist/src/index
@@ -37,7 +36,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         // use Node's module resolution algorithm, instead of the legacy TS one
-        "moduleResolution": "NodeNext",
+        "moduleResolution": "node",
         // transpile JSX to React.createElement
         "jsx": "react-jsx",
         // interop between ESM and CJS modules. Recommended by TS

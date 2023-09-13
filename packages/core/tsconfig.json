@@ -5,7 +5,7 @@
         "types"
     ],
     "compilerOptions": {
-        "module": "NodeNext",
+        "module": "esnext",
         "lib": [
             "dom",
             "esnext"
@@ -25,7 +25,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         // use Node's module resolution algorithm, instead of the legacy TS one
-        "moduleResolution": "NodeNext",
+        "moduleResolution": "node",
         // transpile JSX to React.createElement
         "jsx": "react",
         // interop between ESM and CJS modules. Recommended by TS
