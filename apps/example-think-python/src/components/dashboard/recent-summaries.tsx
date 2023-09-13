@@ -5,12 +5,11 @@ import {
 	CardHeader,
 	CardTitle,
 	Skeleton,
-	buttonVariants,
 } from "@itell/ui/server";
 import { getRecentSummaries } from "@/lib/dashboard";
 import { CheckCircle, XCircle } from "lucide-react";
-import { format } from "date-fns";
 import Link from "next/link";
+import { formatDate } from "@/lib/date";
 
 type Props = {
 	uid: string;
@@ -40,7 +39,7 @@ export const RecentSummaries = async ({ uid }: Props) => {
 											{s.text}
 										</p>
 										<p className="text-sm text-muted-foreground">
-											{format(s.created_at, "LLL dd, y")}
+											{formatDate(s.created_at, "LLL dd, y")}
 										</p>
 									</div>
 									<div className="ml-auto font-medium">

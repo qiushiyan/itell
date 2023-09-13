@@ -7,7 +7,7 @@ import { NoteCard } from "@/types/note";
 import { useClickOutside } from "@itell/core/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import NoteDelete from "./node-delete";
-import { relativeDate, cn } from "@itell/core/utils";
+import { cn } from "@itell/core/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
@@ -20,6 +20,7 @@ import {
 	deserializeRange,
 	noteClass,
 } from "@itell/core/note";
+import { relativeDate } from "@/lib/date";
 
 interface Props extends NoteCard {
 	chapter: number;

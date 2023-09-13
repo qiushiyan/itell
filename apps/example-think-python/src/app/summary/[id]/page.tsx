@@ -7,7 +7,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { allChaptersSorted } from "@/lib/chapters";
 import { ScoreType } from "@/lib/constants";
 import db from "@/lib/db";
-import { relativeDate } from "@itell/core/utils";
+import { relativeDate } from "@/lib/date";
 import { Badge } from "@itell/ui/server";
 import { Summary, User } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
