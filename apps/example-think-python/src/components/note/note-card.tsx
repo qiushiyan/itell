@@ -7,7 +7,7 @@ import { NoteCard } from "@/types/note";
 import { useClickOutside } from "@itell/core/hooks";
 import { trpc } from "@/trpc/trpc-provider";
 import NoteDelete from "./node-delete";
-import { cn } from "@itell/core/utils";
+import { cn, relativeDate } from "@itell/core/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
@@ -18,9 +18,8 @@ import { usePython } from "@/lib/hooks/ues-python";
 import {
 	createNoteElements,
 	deserializeRange,
-	noteClass,
+	getElementsByNoteId,
 } from "@itell/core/note";
-import { relativeDate } from "@/lib/date";
 
 interface Props extends NoteCard {
 	chapter: number;
@@ -235,10 +234,9 @@ export default function ({
 
 		// elementsRef should be set after the note elements are created
 		// in the case of new note, they are already created by the toolbar
-		elementsRef.current =
-			(Array.from(
-				document.getElementsByClassName(noteClass(id)),
-			) as HTMLElement[]) || undefined;
+		elementsRef.current = Array.from(
+			getElementsByNoteId(id) || [],
+		) as HTMLElement[];
 	}, []);
 
 	return (
@@ -355,12 +353,12 @@ export default function ({
 										)}
 									</div>
 								</footer>
-								{(updated_at || created_at) && (
+								{/* {(updated_at || created_at) && (
 									<p className="text-xs text-right mt-2 mb-0">
 										updated at{" "}
 										{relativeDate((updated_at || created_at) as Date)}
 									</p>
-								)}
+								)} */}
 							</div>
 						)}
 					</div>

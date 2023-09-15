@@ -9,7 +9,7 @@ import {
 import { getRecentSummaries } from "@/lib/dashboard";
 import { CheckCircle, XCircle } from "lucide-react";
 import Link from "next/link";
-import { formatDate } from "@/lib/date";
+import { formatDate } from "@itell/core/utils";
 
 type Props = {
 	uid: string;

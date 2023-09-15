@@ -1,5 +1,6 @@
 import { protectedProcedure, router } from "../utils";
 import { z } from "zod";
+import { Prisma } from "@prisma/client";
 
 export const userRouter = router({
 	getChapter: protectedProcedure.query(async ({ ctx }) => {
@@ -13,6 +14,22 @@ export const userRouter = router({
 		});
 		return user?.chapter;
 	}),
+
+	update: protectedProcedure
+		.input(
+			z.object({
+				timeZone: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.user.update({
+				where: {
+					id: ctx.user.id,
+				},
+				data: input,
+			});
+		}),
+
 	incrementChapter: protectedProcedure
 		.input(
 			z.object({

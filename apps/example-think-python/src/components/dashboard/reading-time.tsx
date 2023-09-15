@@ -13,7 +13,7 @@ import {
 	TooltipTrigger,
 } from "../client-components";
 import { ReadingTimeChart } from "./reading-time-chart";
-import { getReadingTime } from "@/lib/dashboard";
+import { getReadingTime } from "@/lib/getReadingTime";
 import { InfoIcon } from "lucide-react";
 
 type Props = {

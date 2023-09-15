@@ -1,13 +1,13 @@
 import { Inter as FontSans } from "next/font/google";
 import { IBM_Plex_Mono as FontMono } from "next/font/google";
 import "@/styles/globals.css";
-import AppProvider from "@/components/providers";
 import ShowToast from "@/components/toast";
 import { Suspense } from "react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { cn } from "@itell/core/utils";
 import { Metadata } from "next";
 import { getSiteConfig } from "@/lib/config";
+import { RootProvider } from "@/components/provider/root-provider";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const siteConfig = await getSiteConfig();
@@ -48,13 +48,13 @@ export default async function RootLayout({
 					fontMono.variable,
 				)}
 			>
-				<AppProvider>
+				<RootProvider>
 					<Suspense fallback={null}>
 						<ShowToast />
 					</Suspense>
 					<TailwindIndicator />
 					<main>{children}</main>
-				</AppProvider>
+				</RootProvider>
 			</body>
 		</html>
 	);

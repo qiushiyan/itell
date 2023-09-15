@@ -1,11 +1,9 @@
-import { highlightClass, noteClass } from "./dom";
 import { getSafeRanges } from "./range";
 export { serializeRange, deserializeRange } from "./range";
 export {
-	extractHighlightId,
+	getElementsByNoteId,
+	getHighlightId,
 	removeHighlights,
-	highlightClass,
-	noteClass,
 } from "./dom";
 
 export const createNoteElements = ({
@@ -18,7 +16,8 @@ export const createNoteElements = ({
 	safeRanges.forEach((r) => {
 		if (r.startOffset !== r.endOffset) {
 			const newNode = document.createElement("span");
-			newNode.classList.add(isHighlight ? highlightClass(id) : noteClass(id));
+			newNode.classList.add(isHighlight ? "highlight" : "note");
+			newNode.dataset.noteId = id;
 			newNode.style.backgroundColor = color;
 			r.surroundContents(newNode);
 		}

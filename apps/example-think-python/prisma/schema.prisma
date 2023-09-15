@@ -46,6 +46,7 @@ model User {
   updated_at    DateTime    @updatedAt
   chapter       Int         @default(1)
   classId       String?     @map("class_id")
+  timeZone      String?     @map("time_zone")
   accounts      Account[]
   FocusTime     FocusTime[]
   notes         Note[]

@@ -5,7 +5,6 @@ import { UserProgress } from "@/components/dashboard/user/user-progress";
 import { DashboardShell } from "@/components/shell";
 import Spinner from "@/components/spinner";
 import { getCurrentUser } from "@/lib/auth";
-import db from "@/lib/db";
 import { getUser } from "@/lib/user";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -32,8 +31,6 @@ export default async function () {
 	if (!user) {
 		return redirect("/auth");
 	}
-
-	const visitors = Math.random();
 
 	return (
 		<DashboardShell>

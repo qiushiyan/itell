@@ -6,6 +6,8 @@ import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
 import { ChapterSelect } from "@/components/dashboard/summaries/chapter-select";
+import { getUser } from "@/lib/user";
+import { User } from "@prisma/client";
 
 type PageProps = {
 	searchParams: {
@@ -15,21 +17,24 @@ type PageProps = {
 
 export default async function ({ searchParams }: PageProps) {
 	const { chapter } = searchParams;
-	const user = await getCurrentUser();
-	if (!user) {
+	const currentUser = await getCurrentUser();
+	if (!currentUser) {
 		return redirect("/auth");
 	}
 
 	const queryChapter = chapter ? parseInt(chapter) : undefined;
-	const userSummaries = await db.summary.findMany({
-		where: {
-			userId: user.id,
-			chapter: queryChapter,
-		},
-		orderBy: {
-			created_at: "desc",
-		},
-	});
+	const [user, userSummaries] = await Promise.all([
+		getUser(currentUser.id),
+		db.summary.findMany({
+			where: {
+				userId: currentUser.id,
+				chapter: queryChapter,
+			},
+			orderBy: {
+				created_at: "desc",
+			},
+		}),
+	]);
 
 	return (
 		<DashboardShell>
@@ -42,7 +47,7 @@ export default async function ({ searchParams }: PageProps) {
 					There is no summary for Chapter {searchParams.chapter}.
 				</p>
 			) : (
-				<SummaryList summaries={userSummaries} />
+				<SummaryList summaries={userSummaries} user={user as User} />
 			)}
 		</DashboardShell>
 	);

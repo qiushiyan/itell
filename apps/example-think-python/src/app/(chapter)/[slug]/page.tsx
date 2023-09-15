@@ -40,20 +40,18 @@ const AnchorLink = ({
 	text,
 	href,
 	icon,
-}: { text: string; href: string; icon: React.ReactNode }) => {
-	return (
-		<a href={href}>
-			<Button
-				size="sm"
-				variant="ghost"
-				className="flex items-center gap-1 mb-0 py-1"
-			>
-				{icon}
-				{text}
-			</Button>
-		</a>
-	);
-};
+}: { text: string; href: string; icon: React.ReactNode }) => (
+	<a href={href}>
+		<Button
+			size="sm"
+			variant="ghost"
+			className="flex items-center gap-1 mb-0 py-1"
+		>
+			{icon}
+			<span>{text}</span>
+		</Button>
+	</a>
+);
 
 export default async function ({ params }: { params: { slug: string } }) {
 	const url = params.slug;

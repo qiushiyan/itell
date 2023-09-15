@@ -27,7 +27,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-export const JoinClassForm = () => {
+export const JoinClass = () => {
 	const classId = useSearchParams()?.get("class_id");
 	const router = useRouter();
 	const [joinClassModalOpen, setJoinClassModalOpen] = useState(false);
@@ -48,6 +48,7 @@ export const JoinClassForm = () => {
 
 	const [code, setCode] = useState("");
 	const form = useForm<z.infer<typeof formSchema>>({
+		// @ts-ignore https://github.com/colinhacks/zod/issues/2663
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			code: "",

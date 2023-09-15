@@ -1,7 +1,7 @@
 import {
 	removeHighlights,
-	highlightClass,
-	extractHighlightId,
+	getHighlightId,
+	getElementsByNoteId,
 } from "@itell/core/note";
 
 export const deleteNote = async (id: string) => {
@@ -18,11 +18,14 @@ export const deleteNote = async (id: string) => {
 
 export const deleteHighlightListener = (event: Event) => {
 	event.preventDefault();
-	const el = event.currentTarget as HTMLElement;
+	const el = event.currentTarget as HTMLSpanElement;
 	if (confirm("Delete this highlight?")) {
-		const id = extractHighlightId(el.className);
-		removeHighlights(id);
-		deleteNote(id);
+		const id = getHighlightId(el);
+		console.log(id);
+		if (id) {
+			removeHighlights(id);
+			deleteNote(id);
+		}
 	}
 };
 
@@ -30,7 +33,10 @@ export const createHighlightListeners = (
 	id: string,
 	cb: (e: Event) => void,
 ) => {
-	const highlightElements = document.getElementsByClassName(highlightClass(id));
+	const highlightElements = getElementsByNoteId(id);
+	if (!highlightElements) {
+		return;
+	}
 	Array.from(highlightElements).forEach((el) => {
 		if (el) {
 			el.addEventListener("click", cb);

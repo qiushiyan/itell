@@ -3,13 +3,14 @@ import { Summary } from "@prisma/client";
 
 import { Skeleton } from "@itell/ui/server";
 import { CheckCircle, XCircle } from "lucide-react";
-import { relativeDate } from "@/lib/date";
+import { relativeDate } from "@itell/core/utils";
 
 interface PostItemProps {
 	summary: Summary;
+	timeZone: string;
 }
 
-export function SummaryItem({ summary }: PostItemProps) {
+export function SummaryItem({ summary, timeZone }: PostItemProps) {
 	return (
 		<div className="p-4">
 			<div className="space-y-1">
@@ -29,7 +30,7 @@ export function SummaryItem({ summary }: PostItemProps) {
 
 				<footer className="flex justify-between text-sm text-muted-foreground">
 					<p>{`Chapter ${summary.chapter}`}</p>
-					<p>{relativeDate(summary.created_at)}</p>
+					<p>{relativeDate(summary.created_at, timeZone)}</p>
 				</footer>
 			</div>
 		</div>

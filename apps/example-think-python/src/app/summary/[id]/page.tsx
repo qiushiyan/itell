@@ -5,9 +5,10 @@ import { ScoreBadge } from "@/components/score/badge";
 import { SummaryBackButton } from "@/components/summary/summary-back-button";
 import { getCurrentUser } from "@/lib/auth";
 import { allChaptersSorted } from "@/lib/chapters";
-import { ScoreType } from "@/lib/constants";
+import { DEFAULT_TIME_ZONE, ScoreType } from "@/lib/constants";
 import db from "@/lib/db";
-import { relativeDate } from "@/lib/date";
+import { getUser } from "@/lib/user";
+import { relativeDate } from "@itell/core/utils";
 import { Badge } from "@itell/ui/server";
 import { Summary, User } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
@@ -28,11 +29,11 @@ interface PageProps {
 }
 
 export default async function ({ params }: PageProps) {
-	const user = await getCurrentUser();
-	if (!user) {
+	const currentUser = await getCurrentUser();
+	if (!currentUser) {
 		return redirect("/auth");
 	}
-	const summary = await getSummaryForUser(params.id, user.id);
+	const summary = await getSummaryForUser(params.id, currentUser.id);
 
 	if (!summary) {
 		return notFound();
@@ -43,13 +44,18 @@ export default async function ({ params }: PageProps) {
 		return notFound();
 	}
 
+	const user = (await getUser(currentUser.id)) as User;
+
 	return (
 		<div className="px-32 py-4">
 			<div className="flex w-full items-center justify-between">
 				<div className="flex items-center space-x-10">
 					<SummaryBackButton />
 					<p className="text-sm text-muted-foreground">
-						{`Created at ${relativeDate(summary.created_at)}`}
+						{`Created at ${relativeDate(
+							summary.created_at,
+							user.timeZone || DEFAULT_TIME_ZONE,
+						)}`}
 					</p>
 				</div>
 				<SummaryOperations summary={summary} />

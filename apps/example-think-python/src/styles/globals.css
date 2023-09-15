@@ -19,7 +19,7 @@ span.unhighlighted {
   @apply text-foreground font-normal !important;
 }
 
-span[class^='highlight'] {
+span.highlight {
   cursor: pointer !important;
   color: black;
 }

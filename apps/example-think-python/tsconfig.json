@@ -25,6 +25,9 @@
       ],
       "contentlayer/generated": [
         ".contentlayer/generated"
+      ],
+      "react": [
+        "node_modules/@types/react"
       ]
     },
     "plugins": [

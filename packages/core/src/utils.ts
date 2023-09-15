@@ -1,5 +1,6 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
 import { addDays, formatRelative } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
@@ -51,6 +52,14 @@ export const numOfWords = (str: string): number => {
 	return strWithoutSpace.split(" ").length;
 };
 
-export const relativeDate = (date: Date, relativeTo: Date = new Date()) => {
-	return formatRelative(new Date(date), relativeTo);
+export const relativeDate = (date: Date, tz = "America/Chicago") => {
+	return formatRelative(utcToZonedTime(date, tz), new Date());
+};
+
+export const formatDate = (
+	date: Date,
+	format: string,
+	tz = "America/Chicago",
+) => {
+	return formatInTimeZone(date, tz, format);
 };
