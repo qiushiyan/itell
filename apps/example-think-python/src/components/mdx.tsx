@@ -11,6 +11,5 @@ interface MdxProps {
 export const Mdx = ({ code, components }: MdxProps) => {
 	const Component = useMDXComponent(code);
 
-	// @ts-ignore
 	return <Component components={components} />;
 };

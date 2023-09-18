@@ -18,6 +18,9 @@
             "@/*": [
                 "./src/*"
             ],
+            "react": [
+                "node_modules/@types/react"
+            ]
         },
         // output .d.ts declaration files for consumers
         "declaration": true,

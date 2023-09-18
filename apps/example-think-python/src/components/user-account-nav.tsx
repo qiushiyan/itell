@@ -24,6 +24,7 @@ import Link from "next/link";
 import UserAvatar from "./user-avatar";
 
 export const UserAccountNav = () => {
+	const [isSignOutLoading, setIsSignOutLoading] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const { data: session, status } = useSession();
 	const user = session?.user;
@@ -95,14 +96,21 @@ export const UserAccountNav = () => {
 					<DropdownMenuSeparator />
 					<DropdownMenuItem
 						className="cursor-pointer"
-						onSelect={(event) => {
+						disabled={isSignOutLoading}
+						onSelect={async (event) => {
 							event.preventDefault();
-							signOut({
+							setIsSignOutLoading(true);
+							await signOut({
 								callbackUrl: `${window.location.origin}/auth`,
 							});
+							setIsSignOutLoading(false);
 						}}
 					>
-						<LogOutIcon className="h-4 w-4 mr-2" />
+						{isSignOutLoading ? (
+							<Spinner className="w-4 h-4 mr-2" />
+						) : (
+							<LogOutIcon className="w-4 h-4 mr-2" />
+						)}
 						Sign out
 					</DropdownMenuItem>
 				</DropdownMenuContent>

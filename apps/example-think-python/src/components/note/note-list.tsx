@@ -19,7 +19,7 @@ export default async function NoteList({ chapter }: { chapter: number }) {
 			chapter,
 		},
 	});
-	const notes = notesAndHighlights.filter((note) => note.noteText !== null);
+	const notes = notesAndHighlights.filter((note) => Boolean(note.noteText));
 	const highlights = notesAndHighlights.filter(
 		(note) => note.noteText === null,
 	);
@@ -27,7 +27,7 @@ export default async function NoteList({ chapter }: { chapter: number }) {
 	return (
 		<div>
 			{notes.map((note) => (
-				// @ts-ignore
+				// @ts-ignore noteTdext will not be null
 				<NoteCard
 					key={note.id}
 					{...note}
