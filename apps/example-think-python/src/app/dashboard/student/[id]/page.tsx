@@ -10,7 +10,7 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 const title = "Student Details";
-const description = "Check on individual student";
+const description = "View student details";
 
 export const metadata: Metadata = {
 	title,
@@ -48,7 +48,7 @@ export default async function ({ params }: PageProps) {
 	if (!student) {
 		return (
 			<DashboardShell>
-				<DashboardHeader heading={title} />
+				<DashboardHeader heading={title} text={description} />
 				<Errorbox>The student does not exist in your class</Errorbox>
 			</DashboardShell>
 		);
@@ -56,7 +56,7 @@ export default async function ({ params }: PageProps) {
 
 	return (
 		<DashboardShell>
-			<DashboardHeader heading={title} />
+			<DashboardHeader heading={title} text={description} />
 			<StudentProfile student={student} />
 		</DashboardShell>
 	);

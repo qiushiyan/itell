@@ -32,6 +32,11 @@ svg {
   transition: all 0.3s;
 }
 
+#page-content h2,
+#page-content h3 {
+  scroll-margin-top: 80px;
+}
+
 @media (max-width: 768px) {
   .module-sidebar {
     display: none;

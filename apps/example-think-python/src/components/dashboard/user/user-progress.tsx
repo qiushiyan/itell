@@ -6,14 +6,14 @@ export const UserProgress = ({ user }: { user: User }) => {
 	const usersIndex = allChapters.findIndex(
 		(chapter) => chapter.chapter === user.chapter,
 	);
-	const progress = (usersIndex / allChapters.length) * 100;
+	const progress = ((usersIndex + 1) / allChapters.length) * 100;
 
 	return (
 		<div className="flex items-center gap-4">
 			<Progress value={progress} className="w-1/3" />
 			<p className="text-muted-foreground">
-				{progress.toFixed(2)}% completed, {usersIndex + 1}/
-				{allChapters.length + 1} chapters
+				{progress.toFixed(2)}% completed, {usersIndex + 1}/{allChapters.length}{" "}
+				chapters
 			</p>
 		</div>
 	);

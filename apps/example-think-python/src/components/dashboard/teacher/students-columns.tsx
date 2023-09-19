@@ -2,7 +2,7 @@
 
 import { User } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, LinkIcon, MoreHorizontal } from "lucide-react";
 import {
 	Button,
 	DropdownMenu,
@@ -13,6 +13,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/client-components";
 import Link from "next/link";
+import { buttonVariants } from "@itell/ui/server";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type StudentData = Pick<User, "id" | "email" | "name" | "created_at"> & {
@@ -32,6 +33,17 @@ export const columns: ColumnDef<StudentData>[] = [
 					Name
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
+			);
+		},
+		cell: (props) => {
+			return (
+				<Link
+					href={`/dashboard/student/${props.row.original.id}`}
+					className="flex gap-1 items-center hover:underline"
+				>
+					<LinkIcon className="w-2 h-2" />
+					{props.cell.getValue() as string}
+				</Link>
 			);
 		},
 	},
@@ -95,7 +107,6 @@ export const columns: ColumnDef<StudentData>[] = [
 								View student details
 							</Link>
 						</DropdownMenuItem>
-						<DropdownMenuItem>Send notifications</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			);

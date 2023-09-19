@@ -10,9 +10,9 @@ type Props =
 
 export const Notebook = async (props: Props) => {
 	let codes = [""];
-	let mode: CellMode = "Script";
+	let mode: CellMode = "script";
 	if (props) {
-		mode = props.mode || "Script";
+		mode = props.mode || "script";
 		let code = "";
 		if ("code" in props) {
 			code = props.code;

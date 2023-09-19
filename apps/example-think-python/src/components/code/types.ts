@@ -8,4 +8,4 @@ export type CellData = {
 };
 
 export type CellStatus = "success" | "error" | undefined;
-export type CellMode = "Script" | "REPL";
+export type CellMode = "script" | "repl";

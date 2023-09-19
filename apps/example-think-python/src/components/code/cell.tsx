@@ -15,6 +15,11 @@ import { useTheme } from "next-themes";
 import { PythonResult, baseExtensions, createShortcuts } from "./editor-config";
 import {
 	Button,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
 	Tabs,
 	TabsContent,
 	TabsList,
@@ -43,7 +48,7 @@ s
 };
 
 export const Cell = memo(
-	({ id, deleteCell, deletable, code, addCell, mode = "Script" }: CellData) => {
+	({ id, deleteCell, deletable, code, addCell, mode = "script" }: CellData) => {
 		const extensions = [
 			...baseExtensions,
 			createShortcuts([
@@ -64,14 +69,14 @@ export const Cell = memo(
 		const [status, setStatus] = useState<CellStatus>(undefined);
 		const { theme } = useTheme();
 		const [isCellRunning, setIsCellRunning] = useState(false);
-		const { runPython, isRunning, interruptExecution } = usePython();
+		const { runPython, isRunning } = usePython();
 		const editorRef = useRef<ReactCodeMirrorRef>(null);
 
 		const run = async () => {
 			setIsCellRunning(true);
 			setResult(null);
 			const result = await runPython(
-				cellMode === "Script" ? codeWithStd(input) : input,
+				cellMode === "script" ? codeWithStd(input) : input,
 			);
 			if (result.error) {
 				setStatus("error");
@@ -106,33 +111,18 @@ export const Cell = memo(
 				})}
 			>
 				<div className="absolute top-2 right-2 z-10">
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<Tabs
-									className="hover:shadow-md"
-									value={cellMode}
-									onValueChange={(val) => setCellMode(val as CellMode)}
-								>
-									<TabsList>
-										<TabsTrigger value="Script">Script</TabsTrigger>
-										<TabsTrigger value="REPL">REPL</TabsTrigger>
-									</TabsList>
-								</Tabs>
-							</TooltipTrigger>
-							<TooltipContent className="w-80 lg:w-96">
-								<p>
-									In script mode, you can view code output by{" "}
-									<code>print()</code> them.
-								</p>
-								<p>
-									In REPL mode, the result of the last line is automatically
-									returned. But <code>print()</code> does not work due to a
-									technical limitation.
-								</p>
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
+					<Select
+						value={cellMode}
+						onValueChange={(val) => setCellMode(val as CellMode)}
+					>
+						<SelectTrigger className="w-[90px]">
+							<SelectValue placeholder="Mode" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="script">Script</SelectItem>
+							<SelectItem value="repl">REPL</SelectItem>
+						</SelectContent>
+					</Select>
 				</div>
 				<div className="grid grid-cols-[40px_1fr] gap-4">
 					<div className="border-r flex flex-col gap-1">

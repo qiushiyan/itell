@@ -31,12 +31,15 @@ export const StudentProfile = ({ student }: Props) => (
 				</div>
 				<UserProgress user={student} />
 
-				<div>
+				<div className="flex justify-between">
+					<p className="text-muted-foreground text-sm">
+						You are viewing a student in your class
+					</p>
 					<Link
 						className={buttonVariants({ variant: "secondary" })}
 						href="/dashboard/class"
 					>
-						Back to class
+						Back to all students
 					</Link>
 				</div>
 			</CardDescription>
