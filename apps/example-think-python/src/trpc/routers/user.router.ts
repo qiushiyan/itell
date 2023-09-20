@@ -1,6 +1,5 @@
 import { protectedProcedure, router } from "../utils";
 import { z } from "zod";
-import { Prisma } from "@prisma/client";
 
 export const userRouter = router({
 	getChapter: protectedProcedure.query(async ({ ctx }) => {

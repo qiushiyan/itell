@@ -1,5 +1,4 @@
 import { cn } from "@itell/core/utils";
-import { Typography } from "@itell/ui/server";
 import { Chapter } from "contentlayer/generated";
 import Balancer from "react-wrap-balancer";
 
@@ -26,9 +25,9 @@ export function ChapterSidebar({
 						key={chapter.url}
 					>
 						<a href={`/${chapter.url}`}>
-							<Typography variant="small" className="m-0 p-0">
+							<p className="text-sm font-light">
 								<Balancer>{`${chapter.chapter}. ${chapter.title}`}</Balancer>
-							</Typography>
+							</p>
 						</a>
 					</li>
 				))}

@@ -1,48 +1,48 @@
-import { Pager } from "@/lib/pager";
+import type { PagerData } from "@/lib/pager";
 import { cn } from "@itell/core/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
-import { Typography, buttonVariants } from "@itell/ui/server";
+import { buttonVariants } from "@itell/ui/server";
 
 type Props = {
-	pager: Pager;
+	data: PagerData;
 };
 
 const PagerTitle = ({
 	pagerItem,
-}: { pagerItem: NonNullable<Pager["prev"]> }) => {
+}: { pagerItem: NonNullable<PagerData["prev"]> }) => {
 	return (
-		<Typography className="mb-0">
+		<p className="font-light leading-relaxed">
 			<Balancer>{`${pagerItem.chapter}. ${pagerItem.title}`}</Balancer>
-		</Typography>
+		</p>
 	);
 };
 
-export default function ({ pager }: Props) {
+export const Pager = ({ data }: Props) => {
 	return (
 		<div className="flex flex-row items-center justify-between mt-5">
-			{pager?.prev && (
+			{data?.prev && (
 				<Link
-					href={pager.prev.href}
+					href={data.prev.href}
 					className={cn(buttonVariants({ variant: "ghost" }), "h-fit max-w-sm")}
 				>
 					<ChevronLeft className="mr-2 h-4 w-4" />
-					<PagerTitle pagerItem={pager.prev} />
+					<PagerTitle pagerItem={data.prev} />
 				</Link>
 			)}
-			{pager?.next && (
+			{data?.next && (
 				<Link
-					href={pager.next.href}
+					href={data.next.href}
 					className={cn(
 						buttonVariants({ variant: "ghost" }),
 						"h-fit max-w-sm ml-auto",
 					)}
 				>
-					<PagerTitle pagerItem={pager.next} />
+					<PagerTitle pagerItem={data.next} />
 					<ChevronRight className="ml-2 h-4 w-4" />
 				</Link>
 			)}
 		</div>
 	);
-}
+};

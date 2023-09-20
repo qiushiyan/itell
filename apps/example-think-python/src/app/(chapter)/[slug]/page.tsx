@@ -1,11 +1,10 @@
-import { Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
 import { PageSummary } from "@/components/summary/page-summary";
 import { notFound } from "next/navigation";
-import ChapterPager from "@/components/chapter-pager";
-import { getPagerForChapter } from "@/lib/pager";
-import NoteList from "@/components/note/note-list";
-import NoteToolbar from "@/components/note/note-toolbar";
+import { Pager } from "@/components/pager";
+import { getPagerDataForChapter } from "@/lib/pager";
+import { NoteList } from "@/components/note/note-list";
+import { NoteToolbar } from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import { allChaptersSorted } from "@/lib/chapters";
@@ -15,6 +14,8 @@ import { ChapterSidebar } from "@/components/chapter-sidebar";
 import { PageContent } from "@/components/code/page-content";
 import Spinner from "@/components/spinner";
 import { PageVisibilityModal } from "@/components/page-visibility-modal";
+
+export const dynamic = "force-dynamic";
 
 export const generateStaticParams = async () => {
 	return allChaptersSorted.map((chapter) => {
@@ -64,7 +65,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 	}
 
 	const chapter = allChaptersSorted[chapterIndex];
-	const pager = getPagerForChapter({
+	const pagerData = getPagerDataForChapter({
 		index: chapterIndex,
 	});
 
@@ -99,15 +100,16 @@ export default async function ({ params }: { params: { slug: string } }) {
 				</aside>
 
 				<section className="relative col-span-12 md:col-span-10 lg:col-span-8">
-					<div className="mb-4 text-center" id="page-title">
-						<Typography variant="h1">
-							<Balancer className="text-3xl">{chapter.title}</Balancer>
-						</Typography>
-					</div>
+					<h1
+						className="text-3xl font-semibold mb-4 text-center"
+						id="page-title"
+					>
+						<Balancer>{chapter.title}</Balancer>
+					</h1>
 
 					<PageContent code={chapter.body.code} />
 					<NoteToolbar chapter={chapter.chapter} />
-					<ChapterPager pager={pager} />
+					<Pager data={pagerData} />
 				</section>
 
 				<aside className="toc-sidebar col-span-2 relative">

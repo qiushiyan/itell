@@ -5,9 +5,7 @@ import { Highlight } from "./highlight";
 import { NewNoteList } from "./new-note-list";
 import { NoteCount, SetNoteCount } from "./note-count";
 
-export const dynamic = "force-dynamic";
-
-export default async function NoteList({ chapter }: { chapter: number }) {
+export const NoteList = async ({ chapter }: { chapter: number }) => {
 	const user = await getCurrentUser();
 	if (!user) {
 		return null;
@@ -48,4 +46,4 @@ export default async function NoteList({ chapter }: { chapter: number }) {
 			<NewNoteList chapter={chapter} />
 		</div>
 	);
-}
+};

@@ -19,7 +19,7 @@ import { createNoteElements, serializeRange } from "@itell/core/note";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
-export default function NoteToolbar({ chapter }: { chapter: number }) {
+export const NoteToolbar = ({ chapter }: { chapter: number }) => {
 	const [show, setShow] = useState(true);
 	const [target, setTarget] = useState<HTMLElement | null>(null);
 	const noteColor = useNoteColor();
@@ -172,7 +172,7 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 								className="flex items-center gap-2 p-2"
 								onClick={() => {
 									if (!session?.user && command.label !== "Copy") {
-										return toast.error("You need to be logged in.");
+										return toast.error("You need to be logged in first.");
 									}
 									command.action(data);
 								}}
@@ -187,4 +187,4 @@ export default function NoteToolbar({ chapter }: { chapter: number }) {
 			}}
 		/>
 	);
-}
+};

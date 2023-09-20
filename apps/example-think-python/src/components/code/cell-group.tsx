@@ -5,6 +5,7 @@ import { Cell } from "./cell";
 import Spinner from "../spinner";
 import { usePython } from "@/lib/hooks/ues-python";
 import { CellMode } from "./types";
+import { Errorbox } from "@itell/ui/server";
 
 export const CellGroup = ({
 	codes,
@@ -28,11 +29,16 @@ export const CellGroup = ({
 		setCells((cells) => cells.filter((cell) => cell.id !== id));
 	}, []);
 
-	const { isLoading } = usePython();
+	const { isLoading, isError } = usePython();
 
 	return (
 		<div className="cells-group space-y-6 mb-8 bg-background">
-			{isLoading ? (
+			{isError ? (
+				<Errorbox>
+					Failed to setup Python environment. Please maintain network connection
+					and refresh the page.
+				</Errorbox>
+			) : isLoading ? (
 				<div className="rounded-md border p-2 lg:p-4 flex gap-2 items-center justify-center">
 					<Spinner className="w-4 h-4" />
 					setting up python environment

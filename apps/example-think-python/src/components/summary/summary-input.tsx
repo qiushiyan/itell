@@ -8,7 +8,7 @@ import {
 	DialogFooter,
 	DialogHeader,
 } from "@/components/ui/dialog";
-import { Typography, Warning } from "@itell/ui/server";
+import { Warning } from "@itell/ui/server";
 import Spinner from "../spinner";
 import Feedback from "./summary-feedback";
 import TextArea from "../ui/textarea";
@@ -27,7 +27,6 @@ import {
 } from "@/lib/constants";
 import { trpc } from "@/trpc/trpc-provider";
 import { allChaptersSorted } from "@/lib/chapters";
-import { useChapterStatus } from "@/lib/hooks/use-chapter-status";
 
 export const SummaryInput = ({ chapter }: { chapter: number }) => {
 	const [showProceedModal, setShowProceedModal] = useState(false);
@@ -142,9 +141,9 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 			{state.feedback?.isPassed && (
 				<ConfettiExplosion width={window.innerWidth} />
 			)}
-			<Typography variant="small" className="my-2">
+			<p className="text-sm font-light">
 				Number of words: {numOfWords(state.input)}
-			</Typography>
+			</p>
 			<form className="mt-2 space-y-4">
 				<TextArea
 					placeholder="Write your summary here."

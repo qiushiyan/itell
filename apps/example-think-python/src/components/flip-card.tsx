@@ -1,4 +1,3 @@
-import { Typography } from "@itell/ui/server";
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
 
@@ -26,16 +25,16 @@ export default function FlipCard() {
 							alt=""
 						/>
 						<div className="inset-center inset-x-0  text-gray-100  text-center leading-4 group-hover:hidden">
-							<Typography variant="lead">
+							<p className="text-xl font-normal leading-relaxed">
 								<Balancer>{card.front}</Balancer>
-							</Typography>
+							</p>
 						</div>
 					</div>
 					<div className="absolute inset-0 h-full w-full rounded-xl bg-black/70 px-12 text-center text-gray-100 [transform:rotateY(180deg)] [backface-visibility:hidden]">
 						<div className="flex min-h-full flex-col items-center justify-center text-white">
-							<Typography>
+							<p className="font-light leading-relaxed">
 								<Balancer>{card.back}</Balancer>
-							</Typography>
+							</p>
 							{card.url && (
 								<Link
 									href={card.url}
@@ -49,7 +48,7 @@ export default function FlipCard() {
 				</div>
 			</div>
 			<div className="fixed bottom-6">
-				<Typography variant="small">Hover to Reveal</Typography>
+				<p className="text-sm font-light">Hover to Reveal</p>
 			</div>
 		</div>
 	);

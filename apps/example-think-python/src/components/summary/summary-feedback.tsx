@@ -1,7 +1,7 @@
 import { ScoreType } from "@/lib/constants";
 import { SummaryFeedback } from "@/lib/summary";
 import { keyof } from "@itell/core/utils";
-import { Info, Typography, Warning } from "@itell/ui/server";
+import { Info, Warning } from "@itell/ui/server";
 
 type Props = {
 	feedback: SummaryFeedback;
@@ -9,7 +9,7 @@ type Props = {
 
 export default function Feedback({ feedback }: Props) {
 	const FeedbackBody = (
-		<Typography as="div">
+		<p className="font-light leading-relaxed">
 			{feedback.prompt}
 			<details className="mt-2">
 				<summary>Details</summary>
@@ -35,7 +35,7 @@ export default function Feedback({ feedback }: Props) {
 					);
 				})}
 			</details>
-		</Typography>
+		</p>
 	);
 
 	return feedback.isPassed ? (

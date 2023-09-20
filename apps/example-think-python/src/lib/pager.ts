@@ -1,17 +1,17 @@
 import { Chapter } from "contentlayer/generated";
 import { allChaptersSorted } from "./chapters";
 
-export type Pager = {
+export type PagerData = {
 	prev: { title: string; href: string; chapter: number } | null;
 	next: { title: string; href: string; chapter: number } | null;
 };
 
-export const getPagerForChapter = ({ index }: { index: number }) => {
-	const pager: Pager = { prev: null, next: null };
+export const getPagerDataForChapter = ({ index }: { index: number }) => {
+	const pagerData: PagerData = { prev: null, next: null };
 
 	if (index !== 0) {
 		const chapter = allChaptersSorted[index - 1];
-		pager.prev = {
+		pagerData.prev = {
 			title: chapter.title,
 			href: `/${chapter.url}`,
 			chapter: chapter.chapter,
@@ -20,12 +20,12 @@ export const getPagerForChapter = ({ index }: { index: number }) => {
 
 	if (index !== allChaptersSorted.length - 1) {
 		const chapter = allChaptersSorted[index + 1];
-		pager.next = {
+		pagerData.next = {
 			title: chapter.title,
 			href: `/${chapter.url}`,
 			chapter: chapter.chapter,
 		};
 	}
 
-	return pager;
+	return pagerData;
 };

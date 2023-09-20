@@ -1,7 +1,6 @@
 "use client";
 import { Site, allSites } from "contentlayer/generated";
 import { Accordion, AccordionItem } from "@/components/client-components";
-import { Typography } from "@itell/ui/server";
 import { Mdx } from "../mdx";
 const description = allSites.find(
 	(doc) => doc.slug === "summary-description",
@@ -18,7 +17,6 @@ export const SummaryDescription = () => {
 				components={{
 					Accordion,
 					AccordionItem,
-					Typography,
 				}}
 			/>
 		</div>
