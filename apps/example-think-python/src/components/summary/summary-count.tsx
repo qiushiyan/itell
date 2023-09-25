@@ -3,6 +3,7 @@ import db from "@/lib/db";
 import { cn } from "@itell/core/utils";
 import { Skeleton, buttonVariants } from "@itell/ui/server";
 import Link from "next/link";
+import pluralize from "pluralize";
 
 export const SummaryCount = async ({ chapter }: { chapter: number }) => {
 	let summaryCount: number | undefined = undefined;
@@ -27,9 +28,8 @@ export const SummaryCount = async ({ chapter }: { chapter: number }) => {
 				href="/dashboard/summaries"
 				className={cn(buttonVariants({ variant: "link" }), "pl-0")}
 			>
-				You have written{" "}
-				{`${summaryCount} ${summaryCount > 1 ? "summaries" : "summary"}`} for
-				this chapter.
+				You have written {pluralize("summary", summaryCount, true)} for this
+				chapter.
 			</Link>
 		</p>
 	);

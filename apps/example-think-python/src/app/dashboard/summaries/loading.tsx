@@ -8,7 +8,7 @@ import { Skeleton } from "@itell/ui/server";
 export default function DashboardLoading() {
 	return (
 		<DashboardShell>
-			<DashboardHeader heading="Summary" text="Create and edit summaries">
+			<DashboardHeader heading="Summary" text="Create and manage summaries">
 				<SummaryCreateButton />
 			</DashboardHeader>
 			<div className="flex items-center flex-col sm:flex-row gap-4 p-2">

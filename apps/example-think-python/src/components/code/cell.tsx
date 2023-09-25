@@ -150,7 +150,7 @@ export const Cell = memo(
 					<div>
 						<CodeMirror
 							value={input}
-							onChange={(val) => setInput(val)}
+							onChange={setInput}
 							extensions={extensions}
 							theme={theme === "light" ? githubLight : githubDark}
 							basicSetup={{

@@ -14,6 +14,7 @@ import { TeacherBadges } from "./teacher-badges";
 import { UserProgress } from "../user/user-progress";
 import { Progress } from "@/components/client-components";
 import { allChapters } from "contentlayer/generated";
+import pluralize from "pluralize";
 
 export const TeacherClass = async ({ classId }: { classId: string }) => {
 	const students = await getClassStudentStats(classId);
@@ -42,9 +43,11 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 				<CardTitle>Your Class</CardTitle>
 				<CardDescription>
 					<p>
-						{`You have ${students.length} ${
-							students.length > 1 ? "students" : "student"
-						} under class code `}
+						{`You have ${pluralize(
+							"student",
+							students.length,
+							true,
+						)} under class code `}
 						<span className="font-medium">{classId}</span>
 					</p>
 				</CardDescription>

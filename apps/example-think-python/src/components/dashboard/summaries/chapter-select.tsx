@@ -7,6 +7,7 @@ export const ChapterSelect = ({
 	defaultChapter,
 }: { defaultChapter: number | undefined }) => {
 	const router = useRouter();
+
 	const onSelectChapter = (value: number | null) => {
 		if (value) {
 			router.push(`/dashboard/summaries?chapter=${value}`);

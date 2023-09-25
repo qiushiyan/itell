@@ -24,6 +24,7 @@ import { DEFAULT_TIME_ZONE } from "@/lib/constants";
 import { trpc } from "@/trpc/trpc-provider";
 import { useState } from "react";
 import Spinner from "@/components/spinner";
+import { Skeleton } from "@itell/ui/server";
 
 const timeZoneData = [
 	"America/Los_Angeles", // Pacific Time Zone
@@ -67,7 +68,9 @@ export const WebsiteSettings = ({ user }: { user: User }) => {
 
 	return (
 		<div className="space-y-4">
-			<h3 className="mb-4 text-lg font-medium">Website Settings</h3>
+			<h3 className="mb-4 text-lg font-semibold leading-relaxed">
+				Website Settings
+			</h3>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}

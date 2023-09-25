@@ -7,16 +7,14 @@ export const SummaryList = ({
 	user,
 }: { summaries: Summary[]; user: User }) => {
 	return (
-		<div className="p-2">
-			<div className="divide-y divide-border rounded-md border">
-				{summaries.map((summary) => (
-					<SummaryItem
-						summary={summary}
-						key={summary.id}
-						timeZone={user.timeZone || DEFAULT_TIME_ZONE}
-					/>
-				))}
-			</div>
+		<div className="divide-y divide-border rounded-md border">
+			{summaries.map((summary) => (
+				<SummaryItem
+					summary={summary}
+					key={summary.id}
+					timeZone={user.timeZone || DEFAULT_TIME_ZONE}
+				/>
+			))}
 		</div>
 	);
 };

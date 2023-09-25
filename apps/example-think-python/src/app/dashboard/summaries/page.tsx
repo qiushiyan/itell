@@ -8,6 +8,9 @@ import { redirect } from "next/navigation";
 import { ChapterSelect } from "@/components/dashboard/summaries/chapter-select";
 import { getUser } from "@/lib/user";
 import { User } from "@prisma/client";
+import { Suspense } from "react";
+import { SummaryCount } from "@/components/summary/summary-count";
+import pluralize from "pluralize";
 
 type PageProps = {
 	searchParams: {
@@ -42,13 +45,24 @@ export default async function ({ searchParams }: PageProps) {
 				<SummaryCreateButton />
 			</DashboardHeader>
 			<ChapterSelect defaultChapter={queryChapter} />
-			{userSummaries.length === 0 ? (
-				<p className="p-2 text-muted-foreground text-sm">
-					There is no summary for Chapter {searchParams.chapter}.
-				</p>
-			) : (
-				<SummaryList summaries={userSummaries} user={user as User} />
-			)}
+			<div className="p-2 space-y-4">
+				{userSummaries.length === 0 ? (
+					<p className=" text-muted-foreground text-sm">
+						There is no summary for Chapter {searchParams.chapter}.
+					</p>
+				) : (
+					<Suspense key={chapter} fallback={<p>hello world</p>}>
+						<p className="text-sm leading-relaxed">
+							{`You have written ${pluralize(
+								"summary",
+								userSummaries.length,
+								true,
+							)} ${queryChapter ? `for chapter ${queryChapter}` : ""}`}
+						</p>
+						<SummaryList summaries={userSummaries} user={user as User} />
+					</Suspense>
+				)}
+			</div>
 		</DashboardShell>
 	);
 }

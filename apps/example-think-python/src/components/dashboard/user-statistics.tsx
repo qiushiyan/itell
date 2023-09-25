@@ -4,9 +4,25 @@ import { StudentBadges } from "./student/student-badges";
 import { UserBadges } from "./user/user-badges";
 import { Badge } from "./badge";
 import { ReadingTime } from "./reading-time";
-import { RecentSummaries } from "./recent-summaries";
+import {
+	ReadingTimeChartLevel,
+	ReadingTimeChartParams,
+} from "@/types/reading-time";
+import { UserStatisticsControl } from "./user-statistics-control";
 
-export const UserStatistics = ({ user }: { user: User }) => {
+type Props = {
+	user: User;
+	searchParams: Record<string, string>;
+};
+
+export const UserStatistics = ({ user, searchParams }: Props) => {
+	const readingTimeParams = {
+		level:
+			searchParams.reading_time_level in ReadingTimeChartLevel
+				? searchParams.reading_time_level
+				: ReadingTimeChartLevel.week_1,
+	} as ReadingTimeChartParams;
+
 	return (
 		<>
 			<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -18,14 +34,13 @@ export const UserStatistics = ({ user }: { user: User }) => {
 					)}
 				</Suspense>
 			</div>
-			<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-				<Suspense fallback={<ReadingTime.Skeleton />}>
-					<ReadingTime uid={user.id} />
-				</Suspense>
-				<Suspense fallback={<RecentSummaries.Skeleton />}>
-					<RecentSummaries uid={user.id} />
-				</Suspense>
-			</div>
+			<UserStatisticsControl />
+			<Suspense
+				key={readingTimeParams.level}
+				fallback={<ReadingTime.Skeleton />}
+			>
+				<ReadingTime uid={user.id} params={readingTimeParams} />
+			</Suspense>
 		</>
 	);
 };

@@ -1,7 +1,7 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
-import { addDays, formatRelative } from "date-fns";
+import { formatRelative } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -34,13 +34,39 @@ export const isObject = (obj: any) => {
 	return typeof obj === "object" && obj !== null;
 };
 
-export const getDatesBetween = (startDate: Date, endDate: Date) => {
-	const dates = [];
-	let currentDate = startDate;
+const oneDayInMillis = 24 * 60 * 60 * 1000;
+const getDifferenceInDays = (date1: Date, date2: Date): number => {
+	return Math.round(
+		Math.abs((date1.getTime() - date2.getTime()) / oneDayInMillis),
+	);
+};
+
+export const getDatesBetween = (startDate: Date, endDate: Date): Date[] => {
+	const dates: Date[] = [];
+	const diff = getDifferenceInDays(startDate, endDate);
+
+	let intervalDays: number;
+
+	if (diff <= 7) intervalDays = 1;
+	else if (diff <= 14) intervalDays = 2;
+	else if (diff <= 30) intervalDays = 5;
+	else if (diff <= 60) intervalDays = 10;
+	else if (diff <= 90) intervalDays = 15;
+	else intervalDays = 30; // One month (approximate)
+
+	const currentDate = new Date(startDate);
 	while (currentDate <= endDate) {
-		dates.push(currentDate);
-		currentDate = addDays(currentDate, 1);
+		dates.push(new Date(currentDate));
+		currentDate.setDate(currentDate.getDate() + intervalDays);
 	}
+
+	// Ensure last date in the array is not greater than endDate
+	// practically, this means that when intervalDays = 1, the last element is endDate,
+	// and when intervalDays > 1, the last element is less than endDate
+	if (dates[dates.length - 1] > endDate) {
+		dates.pop();
+	}
+
 	return dates;
 };
 

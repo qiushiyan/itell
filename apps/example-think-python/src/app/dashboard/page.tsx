@@ -19,7 +19,13 @@ export const metadata: Metadata = {
 	description,
 };
 
-export default async function () {
+type Props = {
+	searchParams: {
+		[key: string]: string;
+	};
+};
+
+export default async function ({ searchParams }: Props) {
 	const currentUser = await getCurrentUser();
 
 	if (!currentUser) {
@@ -41,11 +47,10 @@ export default async function () {
 				</div>
 				{user.classId ? (
 					<p className="p-2 text-muted-foreground">
-						You are enrolled in a class with{" "}
+						You are enrolled in a class with
 						<Suspense fallback={<Spinner className="inline" />}>
 							<StudentClassCount classId={user.classId} />
-						</Suspense>{" "}
-						other students
+						</Suspense>
 					</p>
 				) : (
 					<p className="p-2 text-muted-foreground">
@@ -57,7 +62,7 @@ export default async function () {
 					</p>
 				)}
 
-				<UserStatistics user={user} />
+				<UserStatistics user={user} searchParams={searchParams} />
 			</div>
 		</DashboardShell>
 	);

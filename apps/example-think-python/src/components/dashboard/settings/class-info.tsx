@@ -15,7 +15,9 @@ export const ClassInfo = async ({ teacher }: { teacher: User | null }) => {
 
 	return (
 		<div>
-			<h3 className="mb-4 text-lg font-medium">Class Information</h3>
+			<h3 className="mb-4 text-lg font-semibold leading-relaxed">
+				Class Information
+			</h3>
 			<p className="text-muted-foreground text-sm max-w-lg">
 				You are enrolled in a class taught by {teacher.name}.
 			</p>
