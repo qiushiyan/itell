@@ -12,13 +12,13 @@ import { UserStatisticsControl } from "./user-statistics-control";
 
 type Props = {
 	user: User;
-	searchParams: Record<string, string>;
+	searchParams?: Record<string, string>;
 };
 
 export const UserStatistics = ({ user, searchParams }: Props) => {
 	const readingTimeParams = {
 		level:
-			searchParams.reading_time_level in ReadingTimeChartLevel
+			searchParams && searchParams.reading_time_level in ReadingTimeChartLevel
 				? searchParams.reading_time_level
 				: ReadingTimeChartLevel.week_1,
 	} as ReadingTimeChartParams;

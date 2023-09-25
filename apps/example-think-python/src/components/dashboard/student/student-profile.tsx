@@ -32,13 +32,10 @@ export const StudentProfile = ({ student }: Props) => (
 				<UserProgress user={student} />
 
 				<div className="flex justify-between">
-					<p className="text-muted-foreground text-sm">
+					<p className="text-muted-foreground text-sm font-semibold">
 						You are viewing a student in your class
 					</p>
-					<Link
-						className={buttonVariants({ variant: "secondary" })}
-						href="/dashboard/class"
-					>
+					<Link className={buttonVariants()} href="/dashboard/class">
 						Back to all students
 					</Link>
 				</div>
