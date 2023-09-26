@@ -24,7 +24,7 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 		name: s.name,
 		email: s.email,
 		created_at: s.created_at,
-		progress: `Chapter ${s.chapter}`,
+		progress: s.chapter,
 		summaryCounts: s._count.summaries,
 	}));
 
@@ -67,7 +67,7 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 
 				<h3 className="mb-4 text-lg font-medium mt-4">All Students</h3>
 
-				<StudentsTable columns={columns} data={studentData} />{" "}
+				<StudentsTable columns={columns} data={studentData} />
 			</CardContent>
 		</Card>
 	);
