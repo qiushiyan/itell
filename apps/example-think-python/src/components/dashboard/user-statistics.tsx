@@ -16,6 +16,9 @@ type Props = {
 };
 
 export const UserStatistics = ({ user, searchParams }: Props) => {
+	// if searchParams is not passed as prop here, readingTimeParams will always be week 1
+	// and switching levels in UserStatisticsControl won't work (although query params are set)
+	// future work is to restructure the component hierarchy
 	const readingTimeParams = {
 		level:
 			searchParams && searchParams.reading_time_level in ReadingTimeChartLevel
@@ -24,7 +27,7 @@ export const UserStatistics = ({ user, searchParams }: Props) => {
 	} as ReadingTimeChartParams;
 
 	return (
-		<>
+		<div className="space-y-4">
 			<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 				<Suspense fallback={<Badge.Skeletons />}>
 					{user.classId ? (
@@ -41,6 +44,6 @@ export const UserStatistics = ({ user, searchParams }: Props) => {
 			>
 				<ReadingTime uid={user.id} params={readingTimeParams} />
 			</Suspense>
-		</>
+		</div>
 	);
 };

@@ -42,14 +42,12 @@ export const TeacherClass = async ({ classId }: { classId: string }) => {
 			<CardHeader>
 				<CardTitle>Your Class</CardTitle>
 				<CardDescription>
-					<p>
-						{`You have ${pluralize(
-							"student",
-							students.length,
-							true,
-						)} under class code `}
-						<span className="font-medium">{classId}</span>
-					</p>
+					{`You have ${pluralize(
+						"student",
+						students.length,
+						true,
+					)} under class code `}
+					<span className="font-medium">{classId}</span>
 				</CardDescription>
 			</CardHeader>
 			<CardContent>

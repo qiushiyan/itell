@@ -91,7 +91,6 @@ export const ChapterCombobox = ({ defaultChapter, onValueChange }: Props) => {
 								key={chapter.chapter}
 								onSelect={(currentValue) => {
 									const nextVal = currentValue === value ? "" : currentValue;
-									console.log(nextVal);
 									setValue(nextVal);
 									const selectedChapter = findChapterByValue(nextVal);
 									setSelectedChapter(selectedChapter);

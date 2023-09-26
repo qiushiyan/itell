@@ -21,7 +21,6 @@ export const deleteHighlightListener = (event: Event) => {
 	const el = event.currentTarget as HTMLSpanElement;
 	if (confirm("Delete this highlight?")) {
 		const id = getHighlightId(el);
-		console.log(id);
 		if (id) {
 			removeHighlights(id);
 			deleteNote(id);

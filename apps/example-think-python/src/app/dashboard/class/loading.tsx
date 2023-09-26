@@ -16,10 +16,8 @@ export default function DashboardSettingsLoading() {
 			<DashboardHeader heading="Class" text="Manage class registration" />
 			<Card>
 				<CardHeader>
-					<CardTitle>Your Class</CardTitle>
-					<CardDescription>
-						where you monitor students' progress and send notifications
-					</CardDescription>
+					<CardTitle>Manage Your Class</CardTitle>
+					<CardDescription>View students' progress</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-6">
 					<h3 className="mb-4 text-lg font-medium">Average Class Statistics</h3>

@@ -24,9 +24,10 @@ import Link from "next/link";
 type Props = {
 	uid: string;
 	params: ReadingTimeChartParams;
+	name?: string;
 };
 
-export const ReadingTime = async ({ uid, params }: Props) => {
+export const ReadingTime = async ({ uid, params, name }: Props) => {
 	const startDate = subDays(new Date(), PrevDaysLookup[params.level]);
 	const [summaryCounts, { chartData, totalViewTime }] = await Promise.all([
 		db.summary.count({
@@ -41,7 +42,7 @@ export const ReadingTime = async ({ uid, params }: Props) => {
 	]);
 
 	return (
-		<Card className="col-span-7">
+		<Card>
 			<CardHeader>
 				<CardTitle>
 					<HoverCard>
@@ -57,7 +58,7 @@ export const ReadingTime = async ({ uid, params }: Props) => {
 						</HoverCardTrigger>
 						<HoverCardContent>
 							<p className="text-sm font-semibold">
-								Measures how long you have stayed in all textbook pages, in
+								Measures how long a user has stayed in all textbook pages, in
 								minutes
 							</p>
 						</HoverCardContent>
@@ -65,8 +66,8 @@ export const ReadingTime = async ({ uid, params }: Props) => {
 				</CardTitle>
 				<CardDescription>
 					<p>
-						You spent {(totalViewTime / 60).toFixed(2)} minutes reading the
-						textbook, wrote {""}
+						{name ? name : "You"} spent {(totalViewTime / 60).toFixed(2)}{" "}
+						minutes reading the textbook, wrote {""}
 						<Link
 							className="font-semibold underline"
 							href="/dashboard/summaries"
