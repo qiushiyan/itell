@@ -56,9 +56,11 @@ export const EventTracker = () => {
 						data: e,
 					}));
 				const allEvents = allScrollEvents.concat(allClickEvents);
-				scrollEvents.current = [];
-				clickEvents.current = [];
-				createEvents.mutateAsync(allEvents);
+				if (allEvents.length > 0) {
+					scrollEvents.current = [];
+					clickEvents.current = [];
+					createEvents.mutateAsync(allEvents);
+				}
 			}
 		}, TELEMETRY_SAVE_INTERVAL);
 
