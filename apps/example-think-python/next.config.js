@@ -5,6 +5,7 @@ module.exports = withContentlayer({
 		outputFileTracingIncludes: {
 			"/": ["./config/**/*"],
 		},
+		serverActions: true,
 	},
 	eslint: {
 		ignoreDuringBuilds: true,

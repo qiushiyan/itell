@@ -37,20 +37,21 @@ model Session {
 }
 
 model User {
-  id            String      @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?     @unique
-  emailVerified DateTime?   @map("email_verified")
+  email         String?       @unique
+  emailVerified DateTime?     @map("email_verified")
   image         String?
-  created_at    DateTime    @default(now())
-  updated_at    DateTime    @updatedAt
-  chapter       Int         @default(1)
-  classId       String?     @map("class_id")
-  timeZone      String?     @map("time_zone")
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  chapter       Int           @default(1)
+  classId       String?       @map("class_id")
+  timeZone      String?       @map("time_zone")
   accounts      Account[]
   FocusTime     FocusTime[]
   notes         Note[]
   sessions      Session[]
+  short_answers ShortAnswer[]
   summaries     Summary[]
 
   @@index([classId])
@@ -99,10 +100,10 @@ model Note {
   highlightedText String   @map("highlighted_text")
   chapter         Int
   color           String   @default("#3730a3")
-  range           String
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
   userId          String   @map("user_id")
+  range           String
   user            User     @relation(fields: [userId], references: [id])
 
   @@map("notes")
@@ -121,15 +122,28 @@ model FocusTime {
   @@map("focus_time")
 }
 
-model sections {
+model Event {
+  id         String   @id @default(uuid())
+  eventType  String   @map("event_type")
+  userId     String   @map("user_id")
+  page       String
+  data       Json?
+  created_at DateTime @default(now())
+
+  @@map("events")
+}
+
+model Section {
   section_id String   @id @db.VarChar
   created_at DateTime @default(now()) @db.Timestamptz(6)
   clean_text String?  @db.VarChar
   raw_text   String?  @db.VarChar
+
+  @@map("sections")
 }
 
-model subsections {
-  subsection_id String   @id
+model Subsection {
+  subsection_id String                 @id @unique
   section_id    String?
   subsection    Int?
   heading       String?
@@ -140,4 +154,23 @@ model subsections {
   keyphrases    String[]
   question      String?
   answer        String?
+  embedding     Unsupported("vector")?
+
+  @@map("subsections")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model ShortAnswer {
+  id           String   @id
+  user_id      String
+  chapter      Int
+  subsection   Int
+  slug         String
+  isPassed     Boolean
+  text         String
+  submitted_at DateTime @db.Timestamp(6)
+  users        User     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("short_answers")
 }

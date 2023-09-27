@@ -23,6 +23,7 @@ import { GoogleLoginButton } from "./auth/login-button";
 export const PageVisibilityModal = () => {
 	const { status, userChapter } = useChapterStatus();
 	const [open, setOpen] = useState(true);
+	const isDev = process.env.NODE_ENV === "development";
 
 	if (status === undefined || status === "unlocked" || !userChapter)
 		return null;
@@ -32,12 +33,12 @@ export const PageVisibilityModal = () => {
 			<Dialog
 				open={open}
 				onOpenChange={() => {
-					if (process.env.NODE_ENV === "development") {
+					if (isDev) {
 						setOpen(false);
 					}
 				}}
 			>
-				<DialogContent canClose={false}>
+				<DialogContent canClose={isDev}>
 					<DialogHeader>
 						<DialogTitle>Login in to view the textbook</DialogTitle>
 						<DialogDescription>
@@ -66,12 +67,12 @@ export const PageVisibilityModal = () => {
 			<Dialog
 				open={open}
 				onOpenChange={() => {
-					if (process.env.NODE_ENV === "development") {
+					if (isDev) {
 						setOpen(false);
 					}
 				}}
 			>
-				<DialogContent canClose={false}>
+				<DialogContent canClose={isDev}>
 					<DialogHeader>
 						<DialogTitle>You haven't unlocked this chapter yet</DialogTitle>
 					</DialogHeader>
