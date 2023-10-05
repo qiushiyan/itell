@@ -15,10 +15,37 @@ import { allSectionsSorted } from "@/lib/sections";
 import { Button } from "@/components/client-components";
 import { ModuleSidebar } from "@/components/module-sidebar";
 import { TocSidebar } from "@/components/toc-sidebar";
-import SectionContent from "@/components/section/section-content";
+
 import { Section } from "contentlayer/generated";
 import Spinner from "@/components/spinner";
+
+// imports added
 import db from "@/lib/db";
+// This replaces SectionContent; needed the section and subsection information
+// as well as the corresponding QA pair from db to be passed down to Mdx. UseContext seemed better than prop-drilling.
+import ContextHandler from "@/components/contexthandler";
+// import SectionContent from "@/components/section/section-content";
+
+
+// Context to be added into Mdx pages via ContextHandler
+async function getSubsections(sectionIdinp: string) {
+	return await db.subSection.findMany({
+	  where: {
+	    sectionId: sectionIdinp,
+	    NOT: {
+	      question: {
+	        equals: null
+	      },
+	    },
+	  },
+	  select: {
+	    sectionId: true, 
+	    subsection: true, 
+	    question: true, 
+	  },
+	})
+};
+
 
 export const generateStaticParams = async () => {
 	return allSectionsSorted.map((section) => {
@@ -61,6 +88,7 @@ const AnchorLink = ({
 	);
 };
 
+
 export default async function ({ params }: { params: { slug: string[] } }) {
 	const path = params.slug.join("/");
 	const sectionIndex = allSectionsSorted.findIndex((section) => {
@@ -83,6 +111,13 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	});
 
 	const hasSummary = section.summary;
+
+	// Would be easier if we change chapter and section in Supabase to strings that match the
+	// formatting of subsection indices (i.e., strings with leading zeroes)
+	const subsectionIndex = `${currentLocation.chapter < 10 ? '0' : ''}${currentLocation.chapter}-${currentLocation.section < 10 ? '0' : ''}${currentLocation.section}`
+
+	// get subsections
+	const qObj = await getSubsections(subsectionIndex);
 
 	return (
 		<Fragment>
@@ -116,7 +151,8 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 						</Typography>
 					</div>
 
-					<SectionContent code={section.body.code} />
+					<ContextHandler code={section.body.code} qObj={qObj}/>
+
 					<Highlighter location={currentLocation} />
 					<SectionPager pager={pager} />
 				</section>

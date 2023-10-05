@@ -156,12 +156,12 @@ model SubSection {
   sectionId  String   @map("section_id")
   subsection Int
   heading    String
-  raw_text   String
-  clean_text String
+  raw_text   String?
+  clean_text String?
   slug       String
   qa_output  String
-  question   String
-  answer     String
+  question   String?
+  answer     String?
   keyphrases String[]
 
   @@map("subsections")
