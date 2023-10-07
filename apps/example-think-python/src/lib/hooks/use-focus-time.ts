@@ -10,6 +10,7 @@ const createTrackingElements = () => {
 		const els = chapterContent.querySelectorAll(
 			":scope > h2, :scope > p, :scope > div",
 		);
+		console.log(els);
 		// h2: start of a section
 		// p or div: end of a section
 		for (let i = 0; i < els.length; i++) {

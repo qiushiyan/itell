@@ -4,6 +4,7 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import rehypePrism from "rehype-prism-plus";
 import { getHeadingsFromRawBody } from "./src/lib/contentlayer";
+
 const Site = defineDocumentType(() => ({
 	name: "Site",
 	filePathPattern: "site/**/*.{md,mdx}",
@@ -27,9 +28,15 @@ const Chapter = defineDocumentType(() => ({
 			description: "The title of the Section",
 			required: true,
 		},
+		qa: {
+			type: "boolean",
+			description: "If the page should include question & answers",
+			required: false,
+			default: true,
+		},
 		summary: {
 			type: "boolean",
-			description: "Should require a summary",
+			description: "If the page require a summary",
 			required: false,
 			default: true,
 		},
