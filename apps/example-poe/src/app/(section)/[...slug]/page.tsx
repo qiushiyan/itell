@@ -9,7 +9,7 @@ import { getPagerForSection } from "@/lib/pager";
 import NoteList from "@/components/note/note-list";
 import Highlighter from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 import { allSectionsSorted } from "@/lib/sections";
 import { Button } from "@/components/client-components";
 import { ModuleSidebar } from "@/components/module-sidebar";
@@ -22,10 +22,9 @@ import Spinner from "@/components/spinner";
 import db from "@/lib/db";
 // This replaces SectionContent; needed the section and subsection information
 // as well as the corresponding QA pair from db to be passed down to Mdx. UseContext seemed better than prop-drilling.
-import ContextHandler from "@/components/contexthandler";
-import { PageProvider } from "@/components/provider/page-provider";
 import { EventTracker } from "@/components/telemetry/event-tracker";
 import { PageContent } from "@/components/section/page-content";
+import { RandomQuestionControl } from "@/components/question/random-question-control";
 // import SectionContent from "@/components/section/section-content";
 
 // Context to be added into Mdx pages via ContextHandler
@@ -119,10 +118,14 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	}-${currentLocation.section < 10 ? "0" : ""}${currentLocation.section}`;
 
 	// get subsections
-	const qObj = await getSubsections(subsectionIndex);
+	const questions = await getSubsections(subsectionIndex);
+	const randomQuestionIndex = Math.floor(
+		Math.random() * (questions.length - 1),
+	);
+	const randomQuestion = questions[randomQuestionIndex];
 
 	return (
-		<PageProvider>
+		<Fragment>
 			<div className="grid grid-cols-12 gap-6 px-2 relative">
 				<PageVisibilityModal />
 				{!isDev && <EventTracker />}
@@ -155,8 +158,12 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					>
 						<Balancer>{section.title}</Balancer>
 					</h1>
-					<ContextHandler code={section.body.code} qObj={qObj} />
-
+					<RandomQuestionControl
+						subsectionIndex={randomQuestionIndex}
+						subsectionQuestion={randomQuestion.question}
+						location={currentLocation}
+					/>
+					<PageContent code={section.body.code} />
 					<Highlighter location={currentLocation} />
 					<SectionPager pager={pager} />
 				</section>
@@ -179,6 +186,6 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 			</div>
 
 			{hasSummary && <PageSummary location={currentLocation} />}
-		</PageProvider>
+		</Fragment>
 	);
 }

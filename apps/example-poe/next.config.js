@@ -33,6 +33,14 @@ module.exports = withContentlayer({
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
+	async headers() {
+		return [
+			{
+				source: "/(.*)",
+				headers: securityHeaders,
+			},
+		];
+	},
 	experimental: {
 		outputFileTracingIncludes: {
 			"/": ["./config/**/*"],
@@ -40,22 +48,7 @@ module.exports = withContentlayer({
 	},
 });
 
-const ContentSecurityPolicy = `
-    default-src 'self' vercel.live;
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' cdn.vercel-insights.com vercel.live;
-    style-src 'self' 'unsafe-inline';
-    img-src * blob: data:;
-    media-src 'none';
-    connect-src *;
-    font-src 'self';
-`;
-
 const securityHeaders = [
-	// https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-	{
-		key: "Content-Security-Policy",
-		value: ContentSecurityPolicy.replace(/\n/g, ""),
-	},
 	// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
 	{
 		key: "Referrer-Policy",
