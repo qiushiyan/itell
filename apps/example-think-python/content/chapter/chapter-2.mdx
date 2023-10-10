@@ -2,7 +2,13 @@
 title: Variables, expressions and statements
 ---
 
+<div className = "chunk" data-subsection-id = "intro">
+
 One of the most powerful features of a programming language is the ability to manipulate variables. A variable is a name that refers to a value.
+
+</div>
+
+<div className = "chunk" data-subsection-id = "assignment-statements">
 
 ## Assignment statements
 
@@ -26,6 +32,10 @@ A common way to represent variables on paper is to write the name with an arrow 
 >
   Figure 2.1: State diagram.
 </Image>
+
+</div>
+
+<div className = "chunk" data-subsection-id = "variable-names">
 
 ## Variable names
 
@@ -70,6 +80,10 @@ Python 3 has these keywords:
 
 You don't have to memorize this list. In most development environments, keywords are displayed in a different color; if you try to use one as a variable name, you'll know.
 
+</div>
+
+<div className = "chunk" data-subsection-id = "expressions-and-statements">
+
 ## Expressions and statements
 
 An expression is a combination of values, variables, and operators. A value all by itself is considered an expression, and so is a variable, so the following are all legal expressions:
@@ -95,6 +109,10 @@ A statement is a unit of code that has an effect, like creating a variable or di
 The first line is an assignment statement that gives a value to n. The second line is a print statement that displays the value of n.
 
 When you type a statement, the interpreter executes it, which means that it does whatever the statement says. In general, statements don't have values.
+
+</div>
+
+<div className = "chunk" data-subsection-id = "script-mode">
 
 ## Script mode
 
@@ -153,6 +171,10 @@ The editor below is set to run in REPL mode (you can toggle this by clicking on 
 
 </CodingTime>
 
+</div>
+
+<div className = "chunk" data-subsection-id = "order-of-operations">
+
 ## Order of operations
 
 When an expression contains more than one operator, the order of evaluation depends on the **order of operations**. For mathematical operators, Python follows mathematical convention. The acronym **PEMDAS** is a useful way to remember the rules:
@@ -166,6 +188,10 @@ When an expression contains more than one operator, the order of evaluation depe
 - Operators with the same precedence are evaluated from left to right (except exponentiation). So in the expression `degrees / 2 * pi`, the division happens first and the result is multiplied by `pi`. To divide by 2 π, you can use parentheses or write `degrees / 2 / pi`.
 
 I don't work very hard to remember the precedence of operators. If I can't tell by looking at the expression, I use parentheses to make it obvious.
+
+</div>
+
+<div className = "string-operations" data-subsection-id = "string-operations">
 
 ## String operations
 
@@ -207,6 +233,10 @@ For more complex programs, you don't know the type of `a` beforehand (e.g., it's
 
 </CodingTime>
 
+</div>
+
+<div className = "chunk" data-subsection-id = "comments">
+
 ## Comments
 
 As programs get bigger and more complicated, they get more difficult to read. Formal languages are dense, and it is often difficult to look at a piece of code and figure out what it is doing, or why.
@@ -243,6 +273,10 @@ v = 5     # velocity in meters/second.
 
 Good variable names can reduce the need for comments, but long names can make complex expressions hard to read, so there is a tradeoff.
 
+</div>
+
+<div className = "chunk" data-subsection-id = "debugging">
+
 ## Debugging
 
 Three kinds of errors can occur in a program: syntax errors, runtime errors, and semantic errors. It is useful to distinguish between them in order to track them down more quickly.
@@ -269,6 +303,10 @@ The third type of error is “semantic”, which means related to meaning. If th
 Identifying semantic errors can be tricky because it requires you to work backward by looking at the output of the program and trying to figure out what it is doing.
 
 </Definition>
+
+</div>
+
+<div className = "chunk" data-subsection-id = "glossary">
 
 ## Glossary
 
@@ -346,6 +384,10 @@ Identifying semantic errors can be tricky because it requires you to work backwa
   programmer intended.
 </Definition>
 
+</div>
+
+<div className = "chunk" data-subsection-id = "exercises">
+
 ## Exercises
 
 <Exercise>
@@ -379,3 +421,5 @@ Practice using the Python interpreter as a calculator:
 <Notebook code="# try the exercise above" />
 
 </Exercise>
+
+</div>

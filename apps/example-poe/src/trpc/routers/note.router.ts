@@ -30,10 +30,12 @@ const NoteRouter = router({
 	create: protectedProcedure
 		.input(
 			z.object({
+				id: z.string(),
 				y: z.number(),
 				noteText: z.string().optional(),
 				highlightedText: z.string(),
 				color: z.string(),
+				range: z.string(),
 				location: SectionLocationSchema,
 			}),
 		)
@@ -41,6 +43,7 @@ const NoteRouter = router({
 			const { id } = ctx.user;
 			return await ctx.prisma.note.create({
 				data: {
+					id: input.id,
 					noteText: input.noteText,
 					highlightedText: input.highlightedText,
 					y: input.y,
@@ -49,10 +52,10 @@ const NoteRouter = router({
 					section: input.location.section,
 					color: input.color,
 					userId: id,
+					range: input.range,
 				},
 			});
 		}),
-
 	update: protectedProcedure
 		.input(
 			z.object({

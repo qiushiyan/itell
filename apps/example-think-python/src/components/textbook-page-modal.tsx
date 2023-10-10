@@ -9,10 +9,10 @@ import Link from "next/link";
 import { buttonVariants } from "@itell/ui/server";
 import { MainMdx } from "./main-mdx";
 
-export default function ({
+export const TextbookPageModal = ({
 	chapter,
 	title,
-}: { chapter: Chapter; title?: string }) {
+}: { chapter: Chapter; title?: string }) => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -31,4 +31,4 @@ export default function ({
 			</DialogContent>
 		</Dialog>
 	);
-}
+};

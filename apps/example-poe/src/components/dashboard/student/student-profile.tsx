@@ -13,37 +13,39 @@ import { UserProgress } from "../user/user-progress";
 
 type Props = {
 	student: User;
+	searchParams: Record<string, string>;
 };
 
-export const StudentProfile = ({ student }: Props) => (
-	<Card>
-		<CardHeader>
-			<CardTitle>
-				<div className="flex items-center justify-between">
-					<p>{student.name}</p>
-					<p className="text-muted-foreground text-sm font-medium">{`at Chapter ${student.chapter}.${student.section}`}</p>
-				</div>
-			</CardTitle>
-			<CardDescription className="space-y-4">
-				<div className="flex items-center justify-between">
-					<p>{student.email}</p>
-					<p>joined at {student.created_at.toLocaleString("en-us")}</p>
-				</div>
-				<UserProgress user={student} />
-				<div>
-					<Link
-						className={buttonVariants({ variant: "secondary" })}
-						href="/dashboard/class"
-					>
-						Back to class
-					</Link>
-				</div>
-			</CardDescription>
-		</CardHeader>
-		<CardContent>
-			<div className="space-y-4">
-				<UserStatistics user={student} />
-			</div>
-		</CardContent>
-	</Card>
-);
+export const StudentProfile = ({ student, searchParams }: Props) => {
+	return (
+		<Card>
+			<CardHeader>
+				<CardTitle>
+					<div className="flex items-center justify-between">
+						<p>{student.name}</p>
+						<p className="text-muted-foreground text-sm font-medium">{`at Chapter ${student.chapter}`}</p>
+					</div>
+				</CardTitle>
+				<CardDescription className="space-y-4">
+					<div className="flex items-center justify-between">
+						<p>{student.email}</p>
+						<p>joined at {student.created_at.toLocaleString("en-us")}</p>
+					</div>
+					<UserProgress user={student} />
+
+					<div className="flex justify-between">
+						<p className="text-muted-foreground text-sm font-semibold">
+							You are viewing a student in your class
+						</p>
+						<Link className={buttonVariants()} href="/dashboard/class">
+							Back to all students
+						</Link>
+					</div>
+				</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<UserStatistics user={student} searchParams={searchParams} />
+			</CardContent>
+		</Card>
+	);
+};

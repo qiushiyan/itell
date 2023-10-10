@@ -1,5 +1,5 @@
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { Settings } from "@/components/dashboard/settings";
+import { SettingsForm } from "@/components/dashboard/settings-form";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import { getUser } from "@/lib/user";
@@ -7,7 +7,7 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 const title = "Settings";
-const description = "Manage account and website settings.";
+const description = "Manage account and website settings";
 
 export const metadata: Metadata = {
 	title,
@@ -29,7 +29,7 @@ export default async function () {
 	return (
 		<DashboardShell>
 			<DashboardHeader heading={title} text={description} />
-			<Settings user={user} />
+			<SettingsForm user={user} />
 		</DashboardShell>
 	);
 }

@@ -1,5 +1,5 @@
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { Settings } from "@/components/dashboard/settings-form";
+import { SettingsForm } from "@/components/dashboard/settings-form";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import { getUser } from "@/lib/user";
@@ -29,7 +29,7 @@ export default async function () {
 	return (
 		<DashboardShell>
 			<DashboardHeader heading={title} text={description} />
-			<Settings user={user} />
+			<SettingsForm user={user} />
 		</DashboardShell>
 	);
 }

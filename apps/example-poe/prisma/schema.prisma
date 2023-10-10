@@ -52,6 +52,8 @@ model User {
   chapter       Int       @default(1)
   section       Int       @default(1)
 
+  timeZone String? @map("time_zone")
+
   classId String? @map("class_id")
 
   accounts  Account[]
@@ -62,6 +64,17 @@ model User {
 
   @@index([classId])
   @@map("users")
+}
+
+model Event {
+  id         String   @id @default(uuid())
+  eventType  String   @map("event_type")
+  userId     String   @map("user_id")
+  page       String
+  data       Json?
+  created_at DateTime @default(now())
+
+  @@map("events")
 }
 
 model VerificationToken {
@@ -114,6 +127,7 @@ model Note {
   color           String   @default("#3730a3")
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+  range           String
 
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id])
@@ -128,8 +142,8 @@ model FocusTime {
 
   totalViewTime Float?
 
-  summaryId String  @map("summary_id")
-  summary   Summary @relation(fields: [summaryId], references: [id])
+  summaryId String?  @map("summary_id")
+  summary   Summary? @relation(fields: [summaryId], references: [id])
 
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id])
@@ -140,13 +154,13 @@ model FocusTime {
 }
 
 model Section {
-  sectionId  String @id @map("section_id")
-  module     Int
-  chapter    Int
-  section    Int
-  rawText    String @map("raw_text")
-  cleanText  String @map("clean_text")
-  keyphrases String
+  sectionId  String  @id @map("section_id")
+  module     Int?
+  chapter    Int?
+  section    Int?
+  rawText    String  @map("raw_text")
+  cleanText  String  @map("clean_text")
+  keyphrases String?
 
   @@map("sections")
 }

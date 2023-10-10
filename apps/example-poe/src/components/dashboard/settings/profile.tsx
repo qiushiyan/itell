@@ -1,4 +1,5 @@
 import UserAvatar from "@/components/user-avatar";
+import { Skeleton } from "@itell/ui/server";
 import { User } from "@prisma/client";
 
 export const Profile = ({ user }: { user: User }) => {
@@ -15,3 +16,11 @@ export const Profile = ({ user }: { user: User }) => {
 		</div>
 	);
 };
+
+Profile.Skeleton = () => (
+	<>
+		<h3 className="mb-4 font-semibold text-lg leading-relaxed">Profile</h3>
+		<Skeleton className="h-8 w-[120px]" />
+		<Skeleton className="h-16 w-[400px]" />
+	</>
+);

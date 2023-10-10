@@ -81,7 +81,7 @@ export function CommandMenu() {
 						))}
 					</CommandGroup>
 					<CommandGroup heading="Textbook">
-						{CommandMenuConfig.sections.map((navItem) => (
+						{CommandMenuConfig.textbookPages.map((navItem) => (
 							<CommandItem
 								key={navItem.href}
 								value={navItem.title}

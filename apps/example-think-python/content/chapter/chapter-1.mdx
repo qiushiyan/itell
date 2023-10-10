@@ -2,11 +2,22 @@
 title: The way of the program
 ---
 
-The goal of this book is to teach you to think like a computer scientist. This way of thinking combines some of the best features of mathematics, engineering, and natural science. Like mathematicians, computer scientists use formal languages to denote ideas (specifically computations). Like engineers, they design things, assembling components into systems and evaluating tradeoffs among alternatives. Like scientists, they observe the behavior of complex systems, form hypotheses, and test predictions.
+<div className="chunk" data-subsection-id = "intro">
+
+The goal of this book is to teach you to think like a computer scientist. This way
+of thinking combines some of the best features of mathematics, engineering, and natural
+science. Like mathematicians, computer scientists use formal languages to denote
+ideas (specifically computations). Like engineers, they design things, assembling
+components into systems and evaluating tradeoffs among alternatives. Like scientists,
+they observe the behavior of complex systems, form hypotheses, and test predictions.
 
 The single most important skill for a computer scientist is problem solving. Problem solving means the ability to formulate problems, think creatively about solutions, and express a solution clearly and accurately. As it turns out, the process of learning to program is an excellent opportunity to practice problem-solving skills. That's why this chapter is called, “The way of the program”.
 
 On one level, you will be learning to program, a useful skill by itself. On another level, you will use programming as a means to an end. As we go along, that end will become clearer.
+
+</div>
+
+<div className = "chunk" data-subsection-id = "what-is-a-program">
 
 ## What is a program?
 
@@ -37,6 +48,10 @@ Get data from the keyboard, a file, the network, or some other device.
 
 Believe it or not, that's pretty much all there is to it. Every program you've ever used, no matter how complicated, is made up of instructions that look pretty much like these. So you can think of programming as the process of breaking a large, complex task into smaller and smaller subtasks until the subtasks are simple enough to be performed with one of these basic instructions.
 
+</div>
+
+<div className = "chunk" data-subsection-id="running-python">
+
 ## Running Python
 
 There are two versions of Python, called Python 2 and Python 3. They are very similar, so if you learn one, it is easy to switch to the other. In fact, there are only a few differences you will encounter as a beginner. This book is written for Python 3, but I include some notes about Python 2.
@@ -60,6 +75,10 @@ The last line is a prompt that indicates that the interpreter is ready for you t
 ```
 
 Now you're ready to get started. From here on, I assume that you know how to start the Python interpreter and run code.
+
+</div>
+
+<div className = "chunk" data-subsection-id = "the-first-program">
 
 ## The first program
 
@@ -93,6 +112,10 @@ Now let's start by practicing `print`! Replace `<my-name>` with your name and ru
 <Notebook script="chapter-1/print.py" />
 
 </CodingTime>
+
+</div>
+
+<div className = "chunk" data-subsection-id="arithmetic-operators">
 
 ## Arithmetic operators
 
@@ -142,6 +165,10 @@ What's the result of the following arithmetic expression? Find out what the "%" 
 
 </CodingTime>
 
+</div>
+
+<div className = "chunk" data-subsection-id = "values-and-types">
+
 ## Values and types
 
 A value is one of the basic things a program works with, like a letter or a number. Some values we have seen so far are 2, 42.0, and 'Hello, World!'.
@@ -189,6 +216,10 @@ Find out what is the type of the `print` function. What about `type` itself?
 <Notebook script="chapter-1/type.py" />
 
 </CodingTime>
+
+</div>
+
+<div className = "chunk" data-subsection-id = "formal-and-natural-languages">
 
 ## Formal and natural languages
 
@@ -248,6 +279,10 @@ The meaning of a computer program is unambiguous and literal, and can be underst
 
 Formal languages are more dense than natural languages, so it takes longer to read them. Also, the structure is important, so it is not always best to read from top to bottom, left to right. Instead, learn to parse the program in your head, identifying the tokens and interpreting the structure. Finally, the details matter. Small errors in spelling and punctuation, which you can get away with in natural languages, can make a big difference in a formal language.
 
+</div>
+
+<div className = "chunk" data-subsection-id = "debugging">
+
 ## Debugging
 
 Programmers make mistakes. For whimsical reasons, programming errors are called **bugs** and the process of tracking them down is called **debugging**.
@@ -261,6 +296,10 @@ Preparing for these reactions might help you deal with them. One approach is to 
 Your job is to be a good manager: find ways to take advantage of the strengths and mitigate the weaknesses. And find ways to use your emotions to engage with the problem, without letting your reactions interfere with your ability to work effectively.
 
 Learning to debug can be frustrating, but it is a valuable skill that is useful for many activities beyond programming. At the end of each chapter there is a section, like this one, with my suggestions for debugging. I hope they help!
+
+</div>
+
+<div className = "chunk" data-subsection-id = "glossary">
 
 ## Glossary
 
@@ -354,6 +393,10 @@ Learning to debug can be frustrating, but it is a valuable skill that is useful 
   The process of finding and correcting bugs.
 </Definition>
 
+</div>
+
+<div className = "chunk" data-subsection-id = "exercises">
+
 ## Exercises
 
 ### Exercise 1
@@ -391,3 +434,5 @@ Start the Python interpreter and use it as a calculator.
 <Notebook code="# try the exercise above" />
 
 </Exercise>
+
+</div>

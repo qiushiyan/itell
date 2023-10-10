@@ -1,16 +1,15 @@
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { Settings } from "@/components/dashboard/settings";
 import { StudentProfile } from "@/components/dashboard/student/student-profile";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
-import { getUserWithClass, getUserTeacherStatus } from "@/lib/dashboard";
-import db from "@/lib/db";
+import { getUserTeacherStatus } from "@/lib/dashboard";
+import { getUser } from "@/lib/user";
 import { Errorbox } from "@itell/ui/server";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 const title = "Student Details";
-const description = "Check on individual student";
+const description = "View student details";
 
 export const metadata: Metadata = {
 	title,
@@ -21,9 +20,12 @@ interface PageProps {
 	params: {
 		id: string;
 	};
+	searchParams: {
+		[key: string]: string;
+	};
 }
 
-export default async function ({ params }: PageProps) {
+export default async function ({ params, searchParams }: PageProps) {
 	const user = await getCurrentUser();
 
 	if (!user) {
@@ -41,14 +43,11 @@ export default async function ({ params }: PageProps) {
 		);
 	}
 
-	const student = await getUserWithClass({
-		userId: params.id,
-		classId: teacher.classId,
-	});
+	const student = await getUser(params.id);
 	if (!student) {
 		return (
 			<DashboardShell>
-				<DashboardHeader heading={title} />
+				<DashboardHeader heading={title} text={description} />
 				<Errorbox>The student does not exist in your class</Errorbox>
 			</DashboardShell>
 		);
@@ -56,8 +55,8 @@ export default async function ({ params }: PageProps) {
 
 	return (
 		<DashboardShell>
-			<DashboardHeader heading={title} />
-			<StudentProfile student={student} />
+			<DashboardHeader heading={title} text={description} />
+			<StudentProfile student={student} searchParams={searchParams} />
 		</DashboardShell>
 	);
 }

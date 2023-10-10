@@ -2,6 +2,8 @@
 title: Functions
 ---
 
+<div className = "chunk" data-subsection-id = "intro">
+
 <YoutubeVideo
   title="Functions"
   src="https://www.youtube.com/embed/seLcRCulwl4?start=643"
@@ -11,6 +13,10 @@ title: Functions
   specify the name and the sequence of statements. Later, you can "call" the
   function by name.
 </YoutubeVideo>
+
+</div>
+
+<div className = "chunk" data-subsection-id = "function-calls">
 
 ## Function calls
 
@@ -115,6 +121,10 @@ If you know your trigonometry, you can check the previous result by comparing it
 0.707106781187
 ```
 
+</div>
+
+<div className = "chunk" data-subsection-id = "composition">
+
 ## Composition
 
 <YoutubeVideo
@@ -143,6 +153,10 @@ Almost anywhere you can put a value, you can put an arbitrary expression, with o
 >>> hours * 60 = minutes                 # wrong!
 SyntaxError: can't assign to operator
 ```
+
+</div>
+
+<div className = "chunk" data-subsection-id = "adding-new-functions">
 
 ## Adding new functions
 
@@ -219,6 +233,10 @@ I sleep all night and I work all day.
 
 But that's not really how the song goes.
 
+</div>
+
+<div className = "chunk" data-subsection-id = "definitions-and-uses">
+
 ## Definitions and uses
 
 <YoutubeVideo src="https://www.youtube.com/embed/seLcRCulwl4?start=841"></YoutubeVideo>
@@ -273,6 +291,10 @@ That sounds simple enough, until you remember that one function can call another
 Fortunately, Python is good at keeping track of where it is, so each time a function completes, the program picks up where it left off in the function that called it. When it gets to the end of the program, it terminates.
 
 In summary, when you read a program, you don't always want to read from top to bottom. Sometimes it makes more sense if you follow the flow of execution.
+
+</div>
+
+<div className = "chunk" data-subsection-id = "parameters-and-arguments">
 
 ## Parameters and arguments
 
@@ -330,6 +352,10 @@ Eric, the half a bee.
 
 The name of the variable we pass as an argument (michael) has nothing to do with the name of the parameter (bruce). It doesn't matter what the value was called back home (in the caller); here in print_twice, we call everybody bruce.
 
+</div>
+
+<div className = "chunk" data-subsection-id = "variables-and-parameters-are-local">
+
 ## Variables and parameters are local
 
 <YoutubeVideo
@@ -364,6 +390,10 @@ NameError: name 'cat' is not defined
 ```
 
 Parameters are also local. For example, outside `print_twice`, there is no such thing as bruce.
+
+</div>
+
+<div className = "chunk" data-subsection-id = "stack-diagrams">
 
 ## Stack diagrams
 
@@ -412,6 +442,10 @@ NameError: name 'cat' is not defined
 This list of functions is called a **traceback**. It tells you what program file the error occurred in, and what line, and what functions were executing at the time. It also shows the line of code that caused the error.
 
 The order of the functions in the traceback is the same as the order of the frames in the stack diagram. The function that is currently running is at the bottom.
+
+</div>
+
+<div className = "chunk" data-subsection-id = "fruitful-functions-and-void-functions">
 
 ## Fruitful functions and void functions
 
@@ -466,6 +500,10 @@ The value None is not the same as the string `'None'`. It is a special value tha
 
 The functions we have written so far are all void. We will start writing fruitful functions in a few chapters.
 
+</div>
+
+<div className = "chunk" data-subsection-id = "why-functions">
+
 ## Why functions?
 
 <YoutubeVideo src="https://www.youtube.com/embed/Ol3Dwucax9U?start=735"></YoutubeVideo>
@@ -481,6 +519,10 @@ functions. There are several reasons:
 
 - Well-designed functions are often useful for many programs. Once you write and debug one, you can reuse it.
 
+</div>
+
+<div className = "chunk" data-subsection-id = "debugging">
+
 ## Debugging
 
 One of the most important skills you will acquire is debugging. Although it can be frustrating, debugging is one of the most intellectually rich, challenging, and interesting parts of programming.
@@ -492,6 +534,10 @@ Debugging is also like an experimental science. Once you have an idea about what
 For some people, programming and debugging are the same thing. That is, programming is the process of gradually debugging a program until it does what you want. The idea is that you should start with a working program and make small modifications, debugging them as you go.
 
 For example, Linux is an operating system that contains millions of lines of code, but it started out as a simple program Linus Torvalds used to explore the Intel 80386 chip. According to Larry Greenfield, “One of Linus's earlier projects was a program that would switch between printing AAAA and BBBB. This later evolved to Linux.” (_The Linux Users' Guide_ Beta Version 1).
+
+</div>
+
+<div className = "chunk" data-subsection-id = "glossary">
 
 ## Glossary
 
@@ -587,6 +633,10 @@ A name used inside a function to refer to the value passed as an argument.
 <Definition text="traceback">
   A list of the functions that are executing, printed when an exception occurs.
 </Definition>
+
+</div>
+
+<div className = "chunk" data-subsection-id = "exercises">
 
 ## Exercises
 
@@ -689,3 +739,5 @@ _Note_: This exercise should be done using only the statements and other feature
 Solution: https://github.com/AllenDowney/ThinkPython2/blob/master/code/grid.py. Credit: This exercise is based on an exercise in Oualline, Practical C Programming, Third Edition, O'Reilly Media, 1997.
 
 </Exercise>
+
+</div>

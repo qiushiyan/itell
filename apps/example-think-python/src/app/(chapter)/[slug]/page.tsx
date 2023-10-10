@@ -11,7 +11,7 @@ import { allChaptersSorted } from "@/lib/chapters";
 import { Button } from "@/components/client-components";
 import { TocSidebar } from "@/components/toc-sidebar";
 import { ChapterSidebar } from "@/components/chapter-sidebar";
-import { PageContent } from "@/components/code/page-content";
+import { PageContent } from "@/components/page-content";
 import Spinner from "@/components/spinner";
 import { PageVisibilityModal } from "@/components/page-visibility-modal";
 import { EventTracker } from "@/components/telemetry/event-tracker";

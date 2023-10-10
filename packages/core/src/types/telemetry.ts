@@ -1,11 +1,11 @@
-type ClickEventData = {
+export type ClickEventData = {
 	x: number;
 	y: number;
 	timestamp: string;
 	element: string;
 };
 
-type ScrollEventData = {
+export type ScrollEventData = {
 	offset: number;
 	timestamp: string;
 	percentage: number;

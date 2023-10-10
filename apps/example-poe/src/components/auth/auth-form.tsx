@@ -45,7 +45,7 @@ export const AuthForm = () => {
 
 	return (
 		<div className="grid gap-6">
-			<form onSubmit={handleSubmit(onSubmit)}>
+			{/* <form onSubmit={handleSubmit(onSubmit)}>
 				<div className="grid gap-2">
 					<div className="grid gap-1">
 						<Label className="sr-only" htmlFor="email">
@@ -72,14 +72,11 @@ export const AuthForm = () => {
 						Sign In with Email
 					</button>
 				</div>
-			</form>
+			</form> */}
 			<div className="relative">
-				<div className="absolute inset-0 flex items-center">
-					<span className="w-full border-t" />
-				</div>
 				<div className="relative flex justify-center text-xs uppercase">
 					<span className="bg-background px-2 text-muted-foreground">
-						Or continue with
+						Sign in with Google
 					</span>
 				</div>
 			</div>

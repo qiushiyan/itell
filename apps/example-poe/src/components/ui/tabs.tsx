@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@itell/core/utils";
-import { Typography } from "@itell/ui/server";
 import {
 	Tabs as BaseTabs,
 	TabsContent as BaseTabsContent,
@@ -46,22 +45,18 @@ export const TabsHeader = ({
 export const TabPanel = ({
 	value,
 	children,
-	typography = true,
 	...rest
 }: {
 	value: string;
 	children: React.ReactNode;
-	typography?: boolean;
 } & React.ComponentProps<typeof BaseTabsContent>) => {
 	return (
-		<BaseTabsContent value={value} {...rest}>
-			{typography ? (
-				<Typography as="div" className="my-0">
-					{children}
-				</Typography>
-			) : (
-				<>{children}</>
-			)}
+		<BaseTabsContent
+			value={value}
+			{...rest}
+			className="font-light leading-relaxed"
+		>
+			{children}
 		</BaseTabsContent>
 	);
 };

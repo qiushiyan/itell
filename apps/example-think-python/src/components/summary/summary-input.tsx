@@ -8,13 +8,13 @@ import {
 	DialogFooter,
 	DialogHeader,
 } from "@/components/ui/dialog";
+import { useFocusTime } from "@itell/core/hooks";
 import { Warning } from "@itell/ui/server";
 import Spinner from "../spinner";
 import Feedback from "./summary-feedback";
 import TextArea from "../ui/textarea";
 import { makeChapterHref, makeInputKey } from "@/lib/utils";
 import { useSummary } from "@/lib/hooks/use-summary";
-import { useFocusTime } from "@/lib/hooks/use-focus-time";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
@@ -22,21 +22,25 @@ import { useRouter } from "next/navigation";
 import ConfettiExplosion from "react-confetti-explosion";
 import { numOfWords } from "@itell/core/utils";
 import {
+	FOCUS_TIME_COUNT_INTERVAL,
 	FOCUS_TIME_SAVE_INTERVAL,
 	PAGE_SUMMARY_THRESHOLD,
 } from "@/lib/constants";
 import { trpc } from "@/trpc/trpc-provider";
 import { allChaptersSorted } from "@/lib/chapters";
+import pluralize from "pluralize";
 
 export const SummaryInput = ({ chapter }: { chapter: number }) => {
 	const [showProceedModal, setShowProceedModal] = useState(false);
 	const { state, setInput, score, create } = useSummary({
 		useLocalStorage: true,
 	});
+	const createFocusTime = trpc.focusTime.create.useMutation();
+
 	const router = useRouter();
 	const { status: sessionStatus } = useSession();
 
-	const [isGoingToNextChapter, setIsGoingToNextChapter] = useState(false);
+	const [isGoingToNextPage, setIsGoingToNextPage] = useState(false);
 
 	const { refetch: fetchSummaryCount, data: currentSummaryCount } =
 		trpc.summary.countWithChapter.useQuery(
@@ -57,7 +61,19 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 		saveFocusTime,
 		start: startFocusTimeCounting,
 		pause: pauseFocusTimeCounting,
-	} = useFocusTime();
+	} = useFocusTime({
+		async mutationFn({ summaryId, focusTimeData, totalViewTime }) {
+			await createFocusTime.mutateAsync({
+				summaryId,
+				data: focusTimeData,
+				totalViewTime,
+			});
+		},
+		chunksFn: () => {
+			return Array.from(document.querySelectorAll("#page-content .chunk"));
+		},
+		countInterval: FOCUS_TIME_COUNT_INTERVAL,
+	});
 
 	const handleSubmit = async (e: FormEvent) => {
 		if (sessionStatus === "authenticated" && chapter) {
@@ -102,8 +118,8 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 		}
 	}, [state.feedback]);
 
-	const handleGoToNextChapter = async () => {
-		setIsGoingToNextChapter(true);
+	const handleGoToNextPage = async () => {
+		setIsGoingToNextPage(true);
 		const { data: userChapter } = await fetchUserChapter();
 		// in practice userChapter should always
 		// 1. equals to the current chapter: we should let them proceed
@@ -114,14 +130,14 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 			await incrementUserChapter.mutateAsync({ chapter });
 		}
 
-		setIsGoingToNextChapter(false);
+		setIsGoingToNextPage(false);
 		router.push(makeChapterHref(chapter + 1));
 	};
 
 	let autoSaveTimer: NodeJS.Timer | null = null;
 
 	useEffect(() => {
-		if (process.env.NODE_ENV === "production") {
+		if (process.env.NODE_ENV !== "production") {
 			autoSaveTimer = setInterval(() => {
 				saveFocusTime();
 			}, FOCUS_TIME_SAVE_INTERVAL);
@@ -171,16 +187,14 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 						<DialogTitle>You can now proceed to the next chapter</DialogTitle>
 					</DialogHeader>
 					<div>
-						You have written {currentSummaryCount} summaries for this chapter.
-						You can now proceed to the next chapter. You can always come back to
-						this chapter to write more summaries.
+						You have written{" "}
+						{`${pluralize("summary", currentSummaryCount, true)}`} for this
+						chapter. You can now proceed to the next chapter. You can always
+						come back to this chapter to write more summaries.
 					</div>
 					<DialogFooter>
-						<Button
-							onClick={handleGoToNextChapter}
-							disabled={isGoingToNextChapter}
-						>
-							{isGoingToNextChapter && <Spinner className="mr-2 inline" />} Next
+						<Button onClick={handleGoToNextPage} disabled={isGoingToNextPage}>
+							{isGoingToNextPage && <Spinner className="mr-2 inline" />} Next
 							Chapter
 						</Button>
 					</DialogFooter>

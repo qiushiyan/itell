@@ -2,7 +2,7 @@ import { allSectionsSorted } from "@/lib/sections";
 import { makeLocationHref } from "@/lib/utils";
 
 export const CommandMenuConfig = {
-	sections: allSectionsSorted.map((s) => {
+	textbookPages: allSectionsSorted.map((s) => {
 		return {
 			title: `${s.location.chapter}.${s.location.section} ${s.title}`,
 			href: makeLocationHref(s.location),
@@ -25,9 +25,14 @@ export const CommandMenuConfig = {
 			description: "Configure personal settings",
 		},
 		{
-			title: "User Guide",
+			title: "Class",
+			href: "/dashboard/class",
+			description: "Monitor student progress",
+		},
+		{
+			title: "Guide",
 			href: "/guide",
-			description: "Learn how to use the website",
+			description: "Learn how to use the textbook",
 		},
 	],
 };

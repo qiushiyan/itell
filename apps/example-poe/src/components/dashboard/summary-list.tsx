@@ -12,6 +12,7 @@ import { keyof } from "@itell/core/utils";
 import { Summary } from "@prisma/client";
 import { useState } from "react";
 import { SummaryItem } from "./summary-item";
+import pluralize from "pluralize";
 
 const SelectModule = ({
 	modules,
@@ -52,9 +53,7 @@ export const SummaryList = ({
 					onValueChange={(val) => setSelectedModule(val)}
 				/>
 				<p className="text-muted-foreground text-sm">
-					{`${moduleSummaries.length} ${
-						moduleSummaries.length > 1 ? "summaries" : "summary"
-					}.`}
+					{`${pluralize("summary", moduleSummaries.length, true)}`}
 				</p>
 			</div>
 

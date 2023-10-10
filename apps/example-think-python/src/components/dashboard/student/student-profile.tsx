@@ -10,10 +10,6 @@ import { User } from "@prisma/client";
 import { UserStatistics } from "../user-statistics";
 import Link from "next/link";
 import { UserProgress } from "../user/user-progress";
-import {
-	ReadingTimeChartLevel,
-	ReadingTimeChartParams,
-} from "@/types/reading-time";
 
 type Props = {
 	student: User;

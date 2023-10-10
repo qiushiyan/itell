@@ -6,29 +6,29 @@ import Link from "next/link";
 import { buttonVariants } from "@itell/ui/server";
 import { makeLocationHref } from "@/lib/utils";
 
-export default function ({
-	section,
+export const TextbookPageModal = ({
+	page,
 	title,
-}: { section: Section; title?: string }) {
+}: { page: Section; title?: string }) => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button variant="ghost" className="text-lg font-bold underline">
-					{title ? title : section.title}
+					{title ? title : page.title}
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-3xl h-[800px] top-4 bottom-4 overflow-y-auto  ">
 				<div className="flex justify-end mt-8">
 					<Link
-						href={makeLocationHref(section.location)}
+						href={makeLocationHref(page.location)}
 						className={buttonVariants()}
 					>
 						Go to section
 					</Link>
 				</div>
 
-				<MainMdx code={section.body.code} />
+				<MainMdx code={page.body.code} />
 			</DialogContent>
 		</Dialog>
 	);
-}
+};

@@ -7,7 +7,7 @@ import { ReadingTime } from "./reading-time";
 import {
 	ReadingTimeChartLevel,
 	ReadingTimeChartParams,
-} from "@/types/reading-time";
+} from "@itell/core/types";
 import { UserStatisticsControl } from "./user-statistics-control";
 
 type Props = {

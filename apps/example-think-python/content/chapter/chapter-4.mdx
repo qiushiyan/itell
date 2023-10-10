@@ -2,7 +2,13 @@
 title: "Conditionals and recursion"
 ---
 
+<div className = "chunk" data-subsection-id = "intro">
+
 The main topic of this chapter is the `if` statement, which executes different code depending on the state of the program. But first I want to introduce two new operators: floor division and modulus.
+
+</div>
+
+<div className = "chunk" data-subsection-id = "floor-division-and-modules">
 
 ## Floor division and modulus
 
@@ -45,6 +51,10 @@ Also, you can extract the right-most digit or digits from a number. For example,
 
 If you are using Python 2, division works differently. The division operator, `/`, performs floor division if both operands are integers, and floating-point division if either operand is a float.
 
+</div>
+
+<div className = "chunk" data-subsection-id = "boolean-expressions">
+
 ## Boolean expressions
 
 A boolean expression is an expression that is either true or false. The following examples use the operator ==, which compares two operands and produces True if they are equal and False otherwise:
@@ -77,9 +87,13 @@ x <= y               # x is less than or equal to y
 
 Although these operations are probably familiar to you, the Python symbols are different from the mathematical symbols. A common error is to use a single equal sign (`=`) instead of a double equal sign (`==`). Remember that `=` is an assignment operator and `==` is a relational operator. There is no such thing as `=<` or `=>`.
 
+</div>
+
+<div className = "chunk" data-subsection-id = "logical-operators">
+
 ## Logical operators
 
-There are three logical operators: `and`, `or`, and `not`. The semantics (meaning) of these operators is similar to their meaning in English. For example, `x > 0` and `x < 10` is true only if x is greater than 0 and less than 10.
+There are three logical operators: `and`, `or`, and `not`. The semantics (meaning) of these operators is similar to their meaning in English. For example, `x > 0` and `x <div 10` is true only if x is greater than 0 and less than 10.
 
 `n % 2 == 0` or `n % 3 == 0` is true if _either_ or _both_ of the conditions is true, that is, if the number is divisible by 2 or 3.
 
@@ -93,6 +107,10 @@ True
 ```
 
 This flexibility can be useful, but there are some subtleties to it that might be confusing. You might want to avoid it (unless you know what you are doing).
+
+</div>
+
+<div className = "chunk" data-subsection-id = "conditional-execution">
 
 ## Conditional execution
 
@@ -110,9 +128,13 @@ if statements have the same structure as function definitions: a header followed
 There is no limit on the number of statements that can appear in the body, but there has to be at least one. Occasionally, it is useful to have a body with no statements (usually as a place keeper for code you haven't written yet). In that case, you can use the pass statement, which does nothing.
 
 ```python
-if x < 0:
+if x <div 0:
     pass          # TODO: need to handle negative values!
 ```
+
+</div>
+
+<div className = "chunk" data-subsection-id = "alternative-execution">
 
 ## Alternative execution
 
@@ -155,12 +177,16 @@ In the following exercise, imagine we are managing a website with some vip users
 
 </CodingTime>
 
+</div>
+
+<div className = "chained-conditionals" data-subsection-id = "chained-conditionals">
+
 ## Chained conditionals
 
 Sometimes there are more than two possibilities and we need more than two branches. One way to express a computation like that is a **chained conditional**:
 
 ```python
-if x < y:
+if x <div y:
     print('x is less than y')
 elif x > y:
     print('x is greater than y')
@@ -180,6 +206,10 @@ elif choice == 'c':
 ```
 
 Each condition is checked in order. If the first is false, the next is checked, and so on. If one of them is true, the corresponding branch runs and the statement ends. Even if more than one condition is true, only the first true branch runs.
+
+</div>
+
+<div className = "chunk" data-subsection-id = "nested-conditionals">
 
 ## Nested conditionals
 
@@ -220,6 +250,10 @@ For this kind of condition, Python provides a more concise option:
 if 0 < x < 10:
     print('x is a positive single-digit number.')
 ```
+
+</div>
+
+<div className = "chunk" data-subsection-id = "recursion">
 
 ## Recursion
 
@@ -298,6 +332,10 @@ The rest of the function is similar to countdown: it displays `s` and then calls
 
 For simple examples like this, it is probably easier to use a for loop. But we will see examples later that are hard to write with a for loop and easy to write with recursion, so it is good to start early.
 
+</div>
+
+<div className = "chunk" data-subsection-id = "stack-diagrams-for-recursive-functions">
+
 ## Stack diagrams for recursive functions
 
 In Section 3.9, we used a stack diagram to represent the state of a program during a function call. The same kind of diagram can help interpret a recursive function.
@@ -320,6 +358,10 @@ As usual, the top of the stack is the frame for `__main__`. It is empty because 
 The four countdown frames have different values for the parameter `n`. The bottom of the stack, where `n=0`, is called the **base case**. It does not make a recursive call, so there are no more frames.
 
 As an exercise, draw a stack diagram for `print_n` called with `s = 'Hello'` and `n=2`. Then write a function called `do_n` that takes a function object and a number, `n`, as arguments, and that calls the given function `n` times.
+
+</div>
+
+<div className = "chunk" data-subsection-id = "infinite-recursion">
 
 ## Infinite recursion
 
@@ -346,6 +388,10 @@ RuntimeError: Maximum recursion depth exceeded
 This traceback is a little bigger than the one we saw in the previous chapter. When the error occurs, there are 1000 `recurse` frames on the stack!
 
 If you encounter an infinite recursion by accident, review your function to confirm that there is a base case that does not make a recursive call. And if there is a base case, check whether you are guaranteed to reach it.
+
+</div>
+
+<div className = "chunk" data-subsection-id = "keyboard-input">
 
 ## Keyboard input
 
@@ -395,6 +441,10 @@ ValueError: invalid literal for int() with base 10
 
 We will see how to handle this kind of error later.
 
+</div>
+
+<div className = "chunk" data-subsection-id = "debugging">
+
 ## Debugging
 
 When a syntax or runtime error occurs, the error message contains a lot of information, but it can be overwhelming. The most useful parts are usually:
@@ -439,6 +489,10 @@ ValueError: math domain error
 The error message indicates line 5, but there is nothing wrong with that line. To find the real error, it might be useful to print the value of ratio, which turns out to be 0. The problem is in line 4, which uses floor division instead of floating-point division.
 
 You should take the time to read error messages carefully, but don't assume that everything they say is correct.
+
+</div>
+
+<div className = "glossary" data-subsection-id = "glossary">
 
 ## Glossary
 
@@ -510,6 +564,10 @@ One of the operators that compares its operands: `==`, `!=`, `>`, `<`, `>=`, and
   infinite recursion causes a runtime error.
 </Definition>
 
+</div>
+
+<div className = "chunk" data-subsection-id = "exercises">
+
 ## Exercises
 
 ### Exercise 1
@@ -525,3 +583,5 @@ The `time` module provides a function, also named `time`, that returns the curre
 Write a script that reads the current time and converts it to a time of day in hours, minutes, and seconds, plus the number of days since the epoch.
 
 <Notebook code="# try the exercise above" />
+
+</div>

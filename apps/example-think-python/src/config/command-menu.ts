@@ -2,7 +2,7 @@ import { allChaptersSorted } from "@/lib/chapters";
 import { makeChapterHref } from "@/lib/utils";
 
 export const CommandMenuConfig = {
-	sections: allChaptersSorted.map((c) => {
+	textbookPages: allChaptersSorted.map((c) => {
 		return {
 			title: `${c.chapter}. ${c.title}`,
 			href: makeChapterHref(c.chapter),

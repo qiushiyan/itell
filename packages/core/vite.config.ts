@@ -18,6 +18,7 @@ const app = async (): Promise<UserConfigExport> => {
 					utils: path.resolve(__dirname, "src/utils.ts"),
 					config: path.resolve(__dirname, "src/config/index.ts"),
 					contentlayer: path.resolve(__dirname, "src/contentlayer.ts"),
+					types: path.resolve(__dirname, "src/types/index.ts"),
 					note: path.resolve(__dirname, "src/note/index.ts"),
 				},
 				name: "core",

@@ -1,10 +1,9 @@
-import { SectionLocation } from "./location";
-
 export type CreateNoteInput = {
 	id: string;
 	y: number;
 	highlightedText: string;
 	color: string;
+	serializedRange: string;
 };
 
 export type UpdateNoteInput = {
@@ -18,6 +17,7 @@ export type NoteCard = {
 	noteText: string;
 	highlightedText: string;
 	color: string;
+	serializedRange: string;
 	updated_at?: Date;
 	created_at?: Date;
 };

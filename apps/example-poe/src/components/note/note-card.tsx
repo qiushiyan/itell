@@ -6,17 +6,20 @@ import { EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
 import { useClickOutside } from "@itell/core/hooks";
 import { trpc } from "@/trpc/trpc-provider";
-import { SectionLocation } from "@/types/location";
 import NoteDelete from "./node-delete";
-import { generateNoteElement } from "@/lib/note";
-import { relativeDate, cn } from "@itell/core/utils";
+import { cn, relativeDate } from "@itell/core/utils";
 import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
 import { Button } from "../client-components";
-import { useSectionContent } from "@/lib/hooks/use-section-content";
 import { useNotesStore } from "@/lib/store";
+import {
+	createNoteElements,
+	deserializeRange,
+	getElementsByNoteId,
+} from "@itell/core/note";
+import { SectionLocation } from "@/types/location";
 
 interface Props extends NoteCard {
 	location: SectionLocation;
@@ -57,11 +60,12 @@ export default function ({
 	location,
 	updated_at,
 	created_at,
+	serializedRange,
 	color,
 	newNote = false,
 }: Props) {
-	const elementRef = useRef<HTMLElement>();
-	const element = elementRef.current;
+	const elementsRef = useRef<HTMLElement[]>();
+	const elements = elementsRef.current;
 	const [shouldCreate, setShouldCreate] = useState(newNote);
 	const [recordId, setRecordId] = useState<string>(newNote ? "" : id);
 	const [editState, dispatch] = useImmerReducer<EditState, EditDispatch>(
@@ -114,7 +118,6 @@ export default function ({
 			showEdit: false, // show edit overlay
 		},
 	);
-	const sectionContentRef = useSectionContent();
 	const [isHidden, setIsHidden] = useState(false);
 	const {
 		deleteNote: deleteContextNote,
@@ -144,12 +147,14 @@ export default function ({
 		e.preventDefault();
 		if (shouldCreate) {
 			// create new note
-			const { id } = await createNote.mutateAsync({
+			await createNote.mutateAsync({
+				id,
 				y,
 				noteText: editState.input,
 				highlightedText,
 				location,
 				color: editState.color,
+				range: serializedRange,
 			});
 			setRecordId(id);
 			setShouldCreate(false);
@@ -165,28 +170,23 @@ export default function ({
 
 	const emphasizeNote = (element: HTMLElement) => {
 		element.classList.add("emphasized");
-		element.style.color = editState.color;
-		element.style.border = `2px solid ${editState.color}`;
-		element.style.borderRadius = "5px";
+		element.style.fontStyle = "bold";
 	};
 
 	const deemphasizeNote = (element: HTMLElement) => {
 		element.classList.remove("emphasized");
-		element.style.border = "none";
-		element.style.borderRadius = "0px";
+		element.style.fontStyle = "normal";
 	};
 
 	const unHighlightNote = (element: HTMLElement) => {
 		element.classList.remove("emphasized");
-		element.style.border = "none";
-		element.style.borderRadius = "0px";
-		element.style.color = "unset";
+		element.style.backgroundColor = "unset";
 		element.classList.add("unhighlighted");
 	};
 
 	const handleDelete = async () => {
-		if (element) {
-			unHighlightNote(element);
+		if (elements) {
+			elements.forEach(unHighlightNote);
 		}
 		setIsHidden(true);
 		incrementNoteCount(-1);
@@ -203,28 +203,39 @@ export default function ({
 			if (editState.collapsed) {
 				dispatch({ type: "set_show_edit", payload: true });
 			}
-			if (element) {
-				emphasizeNote(element);
+			if (elements) {
+				elements.forEach(emphasizeNote);
 			}
 		},
 		onMouseLeave: () => {
 			dispatch({ type: "set_show_edit", payload: false });
 
-			if (element) {
-				deemphasizeNote(element);
+			if (elements) {
+				elements.forEach(deemphasizeNote);
 			}
 		},
 	};
 
 	useEffect(() => {
-		generateNoteElement({
-			textContent: highlightedText,
-			color,
-			target: sectionContentRef.current,
-			id,
-		}).then(() => {
-			elementRef.current = document.getElementById(id) || undefined;
-		});
+		// if the note is loaded from the database, create the .note span elements
+		// for new note, spans are created in note-toolbar.tsx
+		if (!newNote) {
+			try {
+				createNoteElements({
+					id,
+					range: deserializeRange(serializedRange),
+					color,
+				});
+			} catch (err) {
+				console.error("create note element", err);
+			}
+		}
+
+		// elementsRef should be set after the note elements are created
+		// in the case of new note, they are already created by the toolbar
+		elementsRef.current = Array.from(
+			getElementsByNoteId(id) || [],
+		) as HTMLElement[];
 	}, []);
 
 	return (
@@ -274,8 +285,10 @@ export default function ({
 									color={editState.color}
 									onChange={(color) => {
 										dispatch({ type: "set_color", payload: color });
-										if (element) {
-											element.style.color = color;
+										if (elements) {
+											elements.forEach((element) => {
+												element.style.backgroundColor = color;
+											});
 										}
 										if (id) {
 											updateNote.mutate({ id, color });
@@ -339,12 +352,12 @@ export default function ({
 										)}
 									</div>
 								</footer>
-								{(updated_at || created_at) && (
+								{/* {(updated_at || created_at) && (
 									<p className="text-xs text-right mt-2 mb-0">
 										updated at{" "}
 										{relativeDate((updated_at || created_at) as Date)}
 									</p>
-								)}
+								)} */}
 							</div>
 						)}
 					</div>

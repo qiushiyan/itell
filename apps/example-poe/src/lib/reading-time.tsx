@@ -4,7 +4,7 @@ import { formatDate, getDatesBetween } from "@itell/core/utils";
 import {
 	ReadingTimeChartLevel,
 	ReadingTimeChartParams,
-} from "@/types/reading-time";
+} from "@itell/core/types";
 
 export const PrevDaysLookup = {
 	[ReadingTimeChartLevel.week_1]: 6,

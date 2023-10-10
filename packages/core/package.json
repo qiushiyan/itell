@@ -29,6 +29,10 @@
     "./contentlayer": {
       "require": "./dist/contentlayer.cjs.js",
       "import": "./dist/contentlayer.es.js"
+    },
+    "./types": {
+      "require": "./dist/types.cjs.js",
+      "import": "./dist/types.es.js"
     }
   },
   "typings": "./index.d.ts",

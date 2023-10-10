@@ -20,7 +20,7 @@ import { makeLocationHref } from "@/lib/utils";
 import { useSectionStatus } from "@/lib/hooks/use-section-status";
 import { GoogleLoginButton } from "./auth/login-button";
 
-export default function SectionAuthModal() {
+export const PageVisibilityModal = () => {
 	const { status, userLocation } = useSectionStatus();
 	const [open, setOpen] = useState(true);
 
@@ -94,4 +94,4 @@ export default function SectionAuthModal() {
 	}
 
 	return null;
-}
+};

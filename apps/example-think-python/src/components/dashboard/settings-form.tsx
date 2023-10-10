@@ -13,7 +13,7 @@ import { Profile } from "./settings/profile";
 import { ClassRequestModal } from "./settings/class-request-modal";
 import { WebsiteSettings } from "./settings/website-settings";
 
-export const Settings = async ({ user }: { user: User }) => {
+export const SettingsForm = async ({ user }: { user: User }) => {
 	const teacher = await getTeacherWithClassId(user.classId);
 
 	return (

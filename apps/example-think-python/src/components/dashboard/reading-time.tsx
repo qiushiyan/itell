@@ -13,9 +13,9 @@ import {
 	HoverCardTrigger,
 } from "../client-components";
 import { ReadingTimeChart } from "./reading-time-chart";
-import { PrevDaysLookup, getReadingTime } from "@/lib/getReadingTime";
+import { PrevDaysLookup, getReadingTime } from "@/lib/reading-time";
 import { InfoIcon } from "lucide-react";
-import { ReadingTimeChartParams } from "@/types/reading-time";
+import { ReadingTimeChartParams } from "@itell/core/types";
 import db from "@/lib/db";
 import { format, subDays } from "date-fns";
 import pluralize from "pluralize";
