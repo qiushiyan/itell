@@ -1,18 +1,25 @@
 "use client";
 
-import { createContext, Fragment } from 'react';
-import SectionContent from "@/components/section/section-content";
-import db from "@/lib/db";
-import { SubSection } from '@prisma/client'
+import { createContext, Fragment } from "react";
+import { SubSection } from "@prisma/client";
+import { PageContent } from "./section/page-content";
 
 export const qContext = createContext<SubSection[]>([]);
 
-export default function ContextHandler ({code, qObj} : {code: any, qObj: any}) {
+type Question = {
+	sectionId: string;
+	subsection: number;
+	question: string;
+};
 
+export default function ContextHandler({
+	code,
+	qObj,
+}: { code: string; qObj: any }) {
 	return (
 		<Fragment>
 			<qContext.Provider value={qObj}>
-				<SectionContent code={code} />
+				<PageContent code={code} />
 			</qContext.Provider>
 		</Fragment>
 	);
