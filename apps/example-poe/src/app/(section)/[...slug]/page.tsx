@@ -1,24 +1,24 @@
-import { Info, Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
-import Summary from "@/components/summary";
+import { PageSummary } from "@/components/summary/page-summary";
 import { notFound } from "next/navigation";
 import { SectionLocation } from "@/types/location";
 import getChapters from "@/lib/sidebar";
-import SectionAuthModal from "@/components/section-auth-modal";
+import { PageVisibilityModal } from "@/components/page-visibility-modal";
 import SectionPager from "@/components/section-pager";
 import { getPagerForSection } from "@/lib/pager";
 import NoteList from "@/components/note/note-list";
 import Highlighter from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
-import { Fragment, Suspense } from "react";
+import { Suspense } from "react";
 import { allSectionsSorted } from "@/lib/sections";
 import { Button } from "@/components/client-components";
 import { ModuleSidebar } from "@/components/module-sidebar";
 import { TocSidebar } from "@/components/toc-sidebar";
-import SectionContent from "@/components/section/section-content";
 import { Section } from "contentlayer/generated";
 import Spinner from "@/components/spinner";
-import db from "@/lib/db";
+import { PageProvider } from "@/components/provider/page-provider";
+import { EventTracker } from "@/components/telemetry/event-tracker";
+import { PageContent } from "@/components/section/page-content";
 
 export const generateStaticParams = async () => {
 	return allSectionsSorted.map((section) => {
@@ -83,11 +83,14 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	});
 
 	const hasSummary = section.summary;
+	const isDev = process.env.NODE_ENV === "development";
 
 	return (
-		<Fragment>
+		<PageProvider>
 			<div className="grid grid-cols-12 gap-6 px-2 relative">
-				<SectionAuthModal />
+				<PageVisibilityModal />
+				{!isDev && <EventTracker />}
+
 				<aside className="module-sidebar col-span-2 sticky top-20 h-fit">
 					<ModuleSidebar
 						chapters={chapters}
@@ -98,25 +101,25 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 							<AnchorLink
 								icon={<PencilIcon className="w-4 h-4" />}
 								text="Write a Summary"
-								href="#section-summary"
+								href="#page-summary"
 							/>
 						)}
 						<AnchorLink
 							icon={<ArrowUpIcon className="w-4 h-4" />}
 							text="Back to Top"
-							href="#section-title"
+							href="#page-title"
 						/>
 					</div>
 				</aside>
 
-				<section className="section-content relative col-span-8">
-					<div className="mb-4 text-center" id="section-title">
-						<Typography variant="h1">
-							<Balancer className="text-3xl">{section.title}</Balancer>
-						</Typography>
-					</div>
-
-					<SectionContent code={section.body.code} />
+				<section className="page-content relative col-span-8">
+					<h1
+						className="text-3xl font-semibold mb-4 text-center"
+						id="page-title"
+					>
+						<Balancer>{section.title}</Balancer>
+					</h1>
+					<PageContent code={section.body.code} />
 					<Highlighter location={currentLocation} />
 					<SectionPager pager={pager} />
 				</section>
@@ -138,7 +141,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 				</aside>
 			</div>
 
-			{hasSummary && <Summary />}
-		</Fragment>
+			{hasSummary && <PageSummary location={currentLocation} />}
+		</PageProvider>
 	);
 }

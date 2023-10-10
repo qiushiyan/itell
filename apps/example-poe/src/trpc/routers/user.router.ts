@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { SectionLocationSchema } from "../schema";
 import { protectedProcedure, router } from "../utils";
 import { incrementLocation } from "@/lib/location";
@@ -15,6 +16,20 @@ export const userRouter = router({
 			},
 		});
 	}),
+	update: protectedProcedure
+		.input(
+			z.object({
+				timeZone: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.user.update({
+				where: {
+					id: ctx.user.id,
+				},
+				data: input,
+			});
+		}),
 	incrementLocation: protectedProcedure
 		.input(SectionLocationSchema)
 		.mutation(async ({ ctx, input }) => {

@@ -33,6 +33,12 @@ const Section = defineDocumentType(() => ({
 			description: "The title of the Section",
 			required: true,
 		},
+		qa: {
+			type: "boolean",
+			description: "If the page should include question & answers",
+			required: false,
+			default: true,
+		},
 		summary: {
 			type: "boolean",
 			default: true,

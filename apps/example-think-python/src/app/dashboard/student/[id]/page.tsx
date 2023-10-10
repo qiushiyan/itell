@@ -4,10 +4,6 @@ import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import { getUserTeacherStatus } from "@/lib/dashboard";
 import { getUser } from "@/lib/user";
-import {
-	ReadingTimeChartLevel,
-	ReadingTimeChartParams,
-} from "@/types/reading-time";
 import { Errorbox } from "@itell/ui/server";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";

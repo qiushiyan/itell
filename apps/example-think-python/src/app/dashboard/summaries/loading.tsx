@@ -1,4 +1,3 @@
-import { ChapterCombobox } from "@/components/dashboard/chapter-combobox";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import SummaryCreateButton from "@/components/dashboard/summary-create-button";
 import { SummaryItem } from "@/components/dashboard/summary-item";

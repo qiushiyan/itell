@@ -9,7 +9,7 @@ import {
 } from "@/components/client-components";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
-import { ReadingTimeChartLevel } from "@/types/reading-time";
+import { ReadingTimeChartLevel } from "@itell/core/types";
 import Spinner from "../spinner";
 
 export const UserStatisticsControl = () => {

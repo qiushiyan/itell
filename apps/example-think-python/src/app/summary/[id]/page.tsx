@@ -1,4 +1,4 @@
-import ChapterModal from "@/components/chapter-modal";
+import { TextbookPageModal } from "@/components/textbook-page-modal";
 import SummaryEditor from "@/components/dashboard/summary-editor";
 import SummaryOperations from "@/components/dashboard/summary-operations";
 import { ScoreBadge } from "@/components/score/badge";
@@ -86,7 +86,7 @@ export default async function ({ params }: PageProps) {
 					</div>
 				</aside>
 				<div className="space-y-2 text-center">
-					<ChapterModal chapter={chapter} />
+					<TextbookPageModal chapter={chapter} />
 
 					<p className="text-sm text-muted-foreground">
 						{`Last updated at ${relativeDate(summary.updated_at)}`}

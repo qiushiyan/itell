@@ -5,18 +5,19 @@ import { HighlighterIcon, CopyIcon, PencilIcon } from "lucide-react";
 import { Popover } from "react-text-selection-popover";
 import { toast } from "sonner";
 import { useTextSelection } from "use-text-selection";
-import { SectionLocation } from "@/types/location";
 import { trpc } from "@/trpc/trpc-provider";
 import {
 	defaultHighlightColor,
 	useNoteColor,
 } from "@/lib/hooks/use-note-color";
-import Spinner from "../spinner";
 import { Button } from "../client-components";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { createHighlightListeners, deleteHighlightListener } from "@/lib/note";
 import { useNotesStore } from "@/lib/store";
-import { deleteHighlightListener, generateNoteElement } from "@/lib/note";
+import { createNoteElements, serializeRange } from "@itell/core/note";
+import { SectionLocation } from "@/types/location";
+import Spinner from "../spinner";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
@@ -31,7 +32,7 @@ export default function HighlightToolbar({
 	const { data: session } = useSession();
 
 	useEffect(() => {
-		const el = document.getElementById("section-content") as HTMLElement;
+		const el = document.getElementById("page-content") as HTMLElement;
 		if (el) {
 			setTarget(el);
 		}
@@ -42,24 +43,30 @@ export default function HighlightToolbar({
 			label: "Note",
 			icon: <PencilIcon className="w-5 h-5" />,
 			action: async ({ clientRect, textContent }: SelectionData) => {
-				if (textContent && target) {
+				if (!window.getSelection) {
+					return toast.error("Your browser does not support taking notes");
+				}
+				const range = window.getSelection()?.getRangeAt(0);
+				if (range && clientRect && textContent) {
 					const id = crypto.randomUUID();
-					await generateNoteElement({
-						textContent,
-						color: noteColor,
-						target,
+					const serializedRange = serializeRange(range);
+					createNoteElements({
 						id,
+						range,
+						color: noteColor,
 					});
-					if (clientRect) {
-						createNote({
-							id,
-							y: clientRect.y + window.scrollY,
-							highlightedText: textContent,
-							color: noteColor,
-						});
 
-						incrementNoteCount();
-					}
+					createNote({
+						id,
+						y: clientRect.y + window.scrollY,
+						highlightedText: textContent,
+						color: noteColor,
+						serializedRange,
+					});
+
+					incrementNoteCount();
+				} else {
+					toast.error("Please select some text to take a note");
 				}
 			},
 		},
@@ -67,33 +74,45 @@ export default function HighlightToolbar({
 			label: "Highlight",
 			icon: <HighlighterIcon className="w-5 h-5" />,
 			action: async ({ clientRect, textContent }: SelectionData) => {
-				if (textContent) {
-					if (clientRect && target) {
-						const newHighlight = await createHighlight.mutateAsync({
-							y: clientRect.y + window.scrollY,
-							highlightedText: textContent,
-							location,
-							color: defaultHighlightColor,
-						});
+				if (!window.getSelection) {
+					return toast.error("Your browser does not support taking notes");
+				}
+				const selection = window.getSelection();
+				const range = selection?.getRangeAt(0);
+				if (range && clientRect && textContent) {
+					const id = crypto.randomUUID();
+					const serializedRange = serializeRange(range);
+					createNoteElements({
+						id,
+						range,
+						color: defaultHighlightColor,
+						isHighlight: true,
+					});
 
-						await generateNoteElement({
-							id: newHighlight.id,
-							textContent,
-							target,
-							color: defaultHighlightColor,
-							highlight: true,
-						});
-
-						incrementHighlightCount();
-
-						const highlightElement = document.getElementById(newHighlight.id);
-						if (highlightElement) {
-							highlightElement.addEventListener("click", (event) => {
-								deleteHighlightListener(event);
-								incrementHighlightCount(-1);
-							});
-						}
+					if (selection?.empty) {
+						// Chrome
+						selection?.empty();
+					} else if (selection?.removeAllRanges) {
+						// Firefox
+						selection?.removeAllRanges();
 					}
+
+					await createHighlight.mutateAsync({
+						id: id,
+						y: clientRect.y + window.scrollY,
+						highlightedText: textContent,
+						location,
+						color: defaultHighlightColor,
+						range: serializedRange,
+					});
+
+					incrementHighlightCount();
+					createHighlightListeners(id, (event) => {
+						deleteHighlightListener(event);
+						incrementHighlightCount(-1);
+					});
+				} else {
+					toast.error("Please select some text to take a note");
 				}
 			},
 		},

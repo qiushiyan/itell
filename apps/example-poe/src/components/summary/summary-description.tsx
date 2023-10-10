@@ -5,6 +5,6 @@ const description = allSites.find(
 	(doc) => doc.slug === "summary-description",
 ) as Site;
 
-export default function SummaryDescription() {
+export const SummaryDescription = () => {
 	return <MainMdx code={description.body.code} />;
-}
+};

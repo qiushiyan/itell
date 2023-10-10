@@ -1,5 +1,4 @@
 import { Chapter } from "@/types/section";
-import { Typography } from "@itell/ui/server";
 import Balancer from "react-wrap-balancer";
 import { cn } from "@itell/core/utils";
 import { SectionLocation } from "@/types/location";
@@ -35,9 +34,9 @@ export function ModuleSidebar({
 							})}
 						>
 							<a href={`/${chapter.url}`} className="block mb-1 p-1">
-								<Typography variant="h6" className="m-0">
+								<h5 className="font-semibold leading-relaxed">
 									<Balancer as="div">{chapter.title}</Balancer>
-								</Typography>
+								</h5>
 							</a>
 						</div>
 					</CollapsibleTrigger>
@@ -56,9 +55,9 @@ export function ModuleSidebar({
 								key={section.url}
 							>
 								<a href={`/${section.url}`}>
-									<Typography variant="small" className="m-0 p-0">
+									<p className="text-sm font-light">
 										<Balancer>{`${index + 1}. ${section.title}`}</Balancer>
-									</Typography>
+									</p>
 								</a>
 							</li>
 						))}

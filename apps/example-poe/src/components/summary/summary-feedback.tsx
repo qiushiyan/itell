@@ -9,7 +9,7 @@ type Props = {
 
 export default function Feedback({ feedback }: Props) {
 	const FeedbackBody = (
-		<Typography as="div">
+		<div className="text-light leading-relaxed">
 			{feedback.prompt}
 			<details className="mt-2">
 				<summary>Details</summary>
@@ -35,7 +35,7 @@ export default function Feedback({ feedback }: Props) {
 					);
 				})}
 			</details>
-		</Typography>
+		</div>
 	);
 
 	return feedback.isPassed ? (

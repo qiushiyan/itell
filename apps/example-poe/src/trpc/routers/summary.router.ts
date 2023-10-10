@@ -12,6 +12,24 @@ const SummaryRouter = router({
 		});
 	}),
 
+	countWithLocation: protectedProcedure
+		.input(
+			z.object({
+				location: SectionLocationSchema,
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			const { id } = ctx.user;
+			return await ctx.prisma.summary.count({
+				where: {
+					module: input.location.module,
+					chapter: input.location.chapter,
+					section: input.location.section,
+					userId: id,
+				},
+			});
+		}),
+
 	create: protectedProcedure
 		.input(
 			z.object({

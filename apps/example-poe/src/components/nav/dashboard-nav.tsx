@@ -4,6 +4,7 @@ import Link from "next/link";
 import { DashboardNavItem } from "@/types/nav";
 import { DashboardNavMenu } from "./dashboard-nav-menu";
 import { getSiteConfig } from "@/lib/config";
+import { BackToTextbook } from "./back-to-textbook";
 
 interface Props {
 	items?: DashboardNavItem[];
@@ -15,9 +16,12 @@ export async function DashboardNav(props: Props) {
 
 	return (
 		<div className="flex gap-6 md:gap-10 justify-between">
-			<Link href="/" className="hidden items-center space-x-2 md:flex">
-				<span className="hidden font-bold sm:inline-block">{title}</span>
-			</Link>
+			<div className="flex gap-4 items-center">
+				<Link href="/" className="hidden items-center space-x-2 md:flex">
+					<span className="hidden font-bold sm:inline-block">{title}</span>
+				</Link>
+				<BackToTextbook />
+			</div>
 			<DashboardNavMenu {...props} />
 		</div>
 	);

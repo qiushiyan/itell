@@ -20,13 +20,17 @@
   transform: translate(-50%, -50%);
 }
 
-.note .unhighlighted {
+span.unhighlighted {
   @apply text-foreground font-normal !important;
 }
 
 span.highlight {
   cursor: pointer !important;
-  @apply text-background;
+  color: black;
+}
+
+span.emphasized {
+  @apply text-foreground font-bold !important;
 }
 
 svg {
@@ -42,7 +46,7 @@ svg {
     display: none;
   }
 
-  .section-content {
+  .page-content {
     grid-column: span 12;
   }
 }

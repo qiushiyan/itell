@@ -9,8 +9,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getUser } from "@/lib/user";
-import { Progress } from "@/components/client-components";
-import { allSectionsSorted } from "@/lib/sections";
 import { UserProgress } from "@/components/dashboard/user/user-progress";
 
 const title = "Learning Statistics";
@@ -21,7 +19,13 @@ export const metadata: Metadata = {
 	description,
 };
 
-export default async function () {
+type Props = {
+	searchParams: {
+		[key: string]: string;
+	};
+};
+
+export default async function ({ searchParams }: Props) {
 	const currentUser = await getCurrentUser();
 
 	if (!currentUser) {
@@ -60,7 +64,7 @@ export default async function () {
 					</p>
 				)}
 
-				<UserStatistics user={user} />
+				<UserStatistics user={user} searchParams={searchParams} />
 			</div>
 		</DashboardShell>
 	);

@@ -4,11 +4,11 @@ import { allSectionsSorted } from "@/lib/sections";
 import SectionCombobox from "./section-combobox";
 import { useState } from "react";
 import { SectionLocation } from "@/types/location";
-import SectionModal from "../section-modal";
 import { ScoreResponse } from "@/lib/hooks/use-summary";
 import { Badge } from "@itell/ui/server";
 import { ScoreBadge } from "../score/badge";
 import { ScoreType } from "@/lib/constants";
+import { TextbookPageModal } from "../textbook-page-modal";
 
 export default function () {
 	const [selectedLocation, setSelectedLocation] =
@@ -77,7 +77,7 @@ export default function () {
 					</aside>
 				)}
 				<div className="space-y-2 text-center">
-					{section && <SectionModal section={section} />}
+					{section && <TextbookPageModal page={section} />}
 					<div className="max-w-2xl mx-auto">
 						{selectedLocation && (
 							<SummaryEditor

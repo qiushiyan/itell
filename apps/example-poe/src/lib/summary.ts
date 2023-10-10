@@ -106,10 +106,10 @@ export const getFeedback = (response: SummaryResponse): SummaryFeedback => {
 	if (isPassed) {
 		if (passedNum > 3) {
 			prompt =
-				"Excellent job on summarizing this section. We will now show you a professional summary of the section. After reading that summary, please move forward to the next section.";
+				"Excellent job on summarizing this section. Please move forward to the next section.";
 		} else {
 			prompt =
-				"Good job on summarizing this section. We will now show you a professional summary of the section. After reading that summary, please move forward to the next section.";
+				"Good job on summarizing this section. Please move forward to the next section.";
 		}
 	} else {
 		prompt = `Before moving onto the next section, you will need to revise the summary you wrote using the feedback provided. After submitting a second summary, you will be given feedback again and shown a professional summary.

@@ -23,7 +23,7 @@ export const useLastVisitedSectionUrl = () => {
 		"last-visited-section",
 		undefined,
 	);
-	const [url, setUrl] = useState<string | null>(null);
+	const [url, setUrl] = useState<string>("/module-1/chapter-1");
 
 	useEffect(() => {
 		if (lastVisitedSection) {

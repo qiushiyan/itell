@@ -1,5 +1,5 @@
-import { MainMdx } from "../main-mdx";
-import { TrackLastVisitedChapter } from "../chapter/chapter-last-visited";
+import { MainMdx } from "./main-mdx";
+import { TrackLastVisitedChapter } from "./chapter/chapter-last-visited";
 
 export const PageContent = ({ code }: { code: string }) => {
 	return (

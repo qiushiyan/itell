@@ -1,7 +1,7 @@
 import { Inter as FontSans, Roboto_Slab as FontSerif } from "next/font/google";
 import "@/styles/globals.css";
 
-import AppProvider from "@/components/providers";
+import { RootProvider } from "@/components/provider/root-provider";
 import ShowToast from "@/components/toast";
 import { Suspense } from "react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
@@ -61,13 +61,13 @@ export default async function RootLayout({
 					fontSerif.variable,
 				)}
 			>
-				<AppProvider>
+				<RootProvider>
 					<Suspense fallback={null}>
 						<ShowToast />
 					</Suspense>
 					<TailwindIndicator />
 					<main> {children}</main>
-				</AppProvider>
+				</RootProvider>
 			</body>
 		</html>
 	);

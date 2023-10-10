@@ -6,50 +6,84 @@ import {
 	CardTitle,
 	Skeleton,
 } from "@itell/ui/server";
-import { ReadingTimeChart } from "./reading-time-chart";
-import { getReadingTime } from "@/lib/dashboard";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
+	Button,
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
 } from "../client-components";
+import { ReadingTimeChart } from "./reading-time-chart";
+import { PrevDaysLookup, getReadingTime } from "@/lib/reading-time";
 import { InfoIcon } from "lucide-react";
+import { ReadingTimeChartParams } from "@itell/core/types";
+import db from "@/lib/db";
+import { format, subDays } from "date-fns";
+import pluralize from "pluralize";
+import Link from "next/link";
 
 type Props = {
 	uid: string;
+	params: ReadingTimeChartParams;
+	name?: string;
 };
 
-export const ReadingTime = async ({ uid }: Props) => {
-	const { chartData, totalViewTime } = await getReadingTime(uid);
+export const ReadingTime = async ({ uid, params, name }: Props) => {
+	const startDate = subDays(new Date(), PrevDaysLookup[params.level]);
+	const [summaryCounts, { chartData, totalViewTime }] = await Promise.all([
+		db.summary.count({
+			where: {
+				userId: uid,
+				created_at: {
+					gte: startDate,
+				},
+			},
+		}),
+		getReadingTime(uid, params),
+	]);
 
 	return (
-		<Card className="col-span-4">
+		<Card>
 			<CardHeader>
 				<CardTitle>
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<p className="flex items-center gap-2">
-									Total Reading Time During Last Week
-									<InfoIcon className="w-4 h-4" />
-								</p>
-							</TooltipTrigger>
-							<TooltipContent>
-								<p>updated when you made a new summary</p>
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
+					<HoverCard>
+						<HoverCardTrigger asChild>
+							<Button
+								variant="link"
+								size="lg"
+								className="pl-0 text-lg flex items-center gap-1"
+							>
+								Total Reading Time
+								<InfoIcon className="w-4 h-4" />
+							</Button>
+						</HoverCardTrigger>
+						<HoverCardContent>
+							<p className="text-sm font-semibold">
+								Measures how long a user has stayed in all textbook pages, in
+								minutes
+							</p>
+						</HoverCardContent>
+					</HoverCard>
 				</CardTitle>
 				<CardDescription>
-					<p>You spent {(totalViewTime / 60).toFixed(2)} minutes</p>
+					<p>
+						{name ? name : "You"} spent {(totalViewTime / 60).toFixed(2)}{" "}
+						minutes reading the textbook, wrote {""}
+						<Link
+							className="font-semibold underline"
+							href="/dashboard/summaries"
+						>
+							{pluralize("summary", summaryCounts, true)}
+						</Link>{" "}
+						during{" "}
+						{`${format(startDate, "LLL, dd")}-${format(new Date(), "LLL, dd")}`}
+					</p>
 				</CardDescription>
 			</CardHeader>
-			<CardContent className="pl-2">
+			<CardContent className="pl-2 space-y-2">
 				<ReadingTimeChart data={chartData} />
 			</CardContent>
 		</Card>
 	);
 };
 
-ReadingTime.Skeleton = () => <Skeleton className="col-span-4 h-[350px]" />;
+ReadingTime.Skeleton = () => <Skeleton className="w-full h-[350px]" />;
