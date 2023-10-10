@@ -236,7 +236,7 @@ export const QuestionBox = ({
 						className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
 						onClick={handleSubmit}
 					>
-						{isLoading && <Spinner className="inline" />}
+						{isLoading && <Spinner className="inline mr-2" />}
 						{isPerfect !== 1 ? "Submit" : "Resubmit"}
 					</button>
 					{isPerfect < 2 && (
