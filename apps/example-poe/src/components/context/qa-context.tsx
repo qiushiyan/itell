@@ -1,11 +1,4 @@
-import React, {
-	createRef,
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
-import { FeedbackModal } from "../question/feedback-modal";
+import React, { useCallback, useEffect, useState } from "react";
 
 type QAContextType = {
 	chunks: HTMLDivElement[] | undefined;

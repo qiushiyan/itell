@@ -22,7 +22,7 @@ export const QuestionControl = ({
 	// Ref for current chunk
 	const [nodes, setNodes] = useState<JSX.Element[]>([]);
 	const currentChunkRef = useRef<HTMLDivElement | null>(null);
-	const { currentChunk, goToNextChunk, chunks } = useQA();
+	const { currentChunk, chunks } = useQA();
 
 	const addNode = (node: JSX.Element) => {
 		setNodes((nodes) => [...nodes, node]);
@@ -122,5 +122,5 @@ export const QuestionControl = ({
 		}
 	}, [chunks, currentChunk]);
 
-	return nodes.map((node) => node);
+	return nodes;
 };

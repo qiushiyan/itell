@@ -8,6 +8,7 @@ import {
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/components/client-components";
+import pluralize from "pluralize";
 
 type Props = {
 	count: Count;
@@ -31,10 +32,11 @@ export const NoteCount = () => {
 		<HoverCard>
 			<HoverCardTrigger asChild>
 				<Button variant="link" className="pl-0">
-					{`${count.note} ${count.note > 1 ? "notes" : "note"}`},{" "}
-					{`${count.highlight} ${
-						count.highlight > 1 ? "highlights" : "highlight"
-					}`}
+					{`${pluralize("note", count.note, true)}, ${pluralize(
+						"highlight",
+						count.highlight,
+						true,
+					)}`}
 				</Button>
 			</HoverCardTrigger>
 			<HoverCardContent className="w-40 text-sm">

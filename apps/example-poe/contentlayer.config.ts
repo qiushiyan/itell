@@ -37,7 +37,7 @@ const Section = defineDocumentType(() => ({
 			type: "boolean",
 			description: "If the page should include question & answers",
 			required: false,
-			default: true,
+			default: false,
 		},
 		summary: {
 			type: "boolean",

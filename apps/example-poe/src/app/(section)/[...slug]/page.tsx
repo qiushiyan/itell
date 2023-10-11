@@ -98,6 +98,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	}
 
 	const section = allSectionsSorted[sectionIndex] as Section;
+	const enableQA = section.qa;
 	const currentLocation = section.location as SectionLocation;
 	const pager = getPagerForSection({
 		allSections: allSectionsSorted,
@@ -118,11 +119,14 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	}-${currentLocation.section < 10 ? "0" : ""}${currentLocation.section}`;
 
 	// get subsections
-	const questions = await getSubsections(subsectionIndex);
-	const randomQuestionIndex = Math.floor(
-		Math.random() * (questions.length - 1),
-	);
-	const randomQuestion = questions[randomQuestionIndex];
+	let questions;
+	let randomQuestionIndex;
+	let randomQuestion;
+	if (enableQA) {
+		questions = await getSubsections(subsectionIndex);
+		randomQuestionIndex = Math.floor(Math.random() * (questions.length - 1));
+		randomQuestion = questions[randomQuestionIndex];
+	}
 
 	return (
 		<Fragment>
@@ -158,11 +162,13 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					>
 						<Balancer>{section.title}</Balancer>
 					</h1>
-					<QuestionControl
-						subsectionWithQuestionIndex={randomQuestionIndex}
-						subsectionQuestion={randomQuestion.question}
-						location={currentLocation}
-					/>
+					{enableQA && (
+						<QuestionControl
+							subsectionWithQuestionIndex={randomQuestionIndex as number}
+							subsectionQuestion={randomQuestion?.question as string}
+							location={currentLocation as SectionLocation}
+						/>
+					)}
 					<PageContent code={section.body.code} />
 					<Highlighter location={currentLocation} />
 					<SectionPager pager={pager} />
