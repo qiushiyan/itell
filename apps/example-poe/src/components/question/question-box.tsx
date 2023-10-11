@@ -9,6 +9,7 @@ import Spinner from "../spinner";
 import { getQAScore } from "@/lib/question-answer";
 import { useQA } from "../context/qa-context";
 import { FeedbackModal } from "./feedback-modal";
+import { Button } from "../client-components";
 
 type Props = {
 	question: string | null;
@@ -23,7 +24,7 @@ export const QuestionBox = ({
 	section,
 	subsection,
 }: Props) => {
-	const { currentChunk, setCurrentChunk } = useQA();
+	const { currentChunk, goToNextChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
 	const [isFlashingYellow, setIsFlashingYellow] = useState(false);
@@ -53,10 +54,6 @@ export const QuestionBox = ({
 	const negativeModal = () => {
 		setIsFeedbackModalOpen(true);
 		setIsPositiveFeedback(false);
-	};
-
-	const handleNextChunk = () => {
-		setCurrentChunk(currentChunk + 1);
 	};
 
 	const passed = () => {
@@ -152,7 +149,7 @@ export const QuestionBox = ({
 				/>
 			</div>
 
-			<div className="flex justify-center items-center text-xs my-2 font-light text-zinc-400">
+			<div className="flex justify-center items-center text-sm my-2 font-light text-zinc-400">
 				<p className="inline-flex">
 					{" "}
 					<AlertTriangle className="stroke-yellow-400 mr-2" /> iTELL AI is in
@@ -225,32 +222,33 @@ export const QuestionBox = ({
 				<div className="flex justify-center items-center flex-row">
 					<button
 						className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
-						onClick={handleNextChunk}
+						onClick={goToNextChunk}
 					>
 						Click Here to Continue Reading
 					</button>
 				</div>
 			) : (
-				<div className="flex justify-center items-center flex-row">
-					<button
-						className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
+				<div className="flex justify-center items-center flex-row gap-2">
+					<Button
+						variant={"secondary"}
 						onClick={handleSubmit}
+						disabled={isLoading}
 					>
 						{isLoading && <Spinner className="inline mr-2" />}
 						{isPerfect !== 1 ? "Submit" : "Resubmit"}
-					</button>
+					</Button>
 					{isPerfect < 2 && (
-						<button
-							className={cn(
-								buttonVariants({ variant: "secondary" }),
-								"bg-red-400 hover:bg-red-200 text-white mb-4 ml-6",
-							)}
-							onClick={handleNextChunk}
+						<Button
+							variant={"ghost"}
+							onClick={() => {
+								console.log("here");
+								goToNextChunk();
+							}}
 						>
 							{isPerfect === 1
 								? "Click Here to Continue Reading"
 								: "Skip this question"}
-						</button>
+						</Button>
 					)}
 				</div>
 			)}

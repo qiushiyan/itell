@@ -99,7 +99,9 @@ export const Chunkify = ({ children }: ChunkifyProps) => {
 
 	// Show the next chunk
 	const handleNextChunk = () => {
-		setCurrentChunk(currentChunk + 1);
+		if (currentChunk < chunks.length - 1) {
+			setCurrentChunk(currentChunk + 1);
+		}
 	};
 
 	// When positive review is clicked

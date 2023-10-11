@@ -24,7 +24,7 @@ import db from "@/lib/db";
 // as well as the corresponding QA pair from db to be passed down to Mdx. UseContext seemed better than prop-drilling.
 import { EventTracker } from "@/components/telemetry/event-tracker";
 import { PageContent } from "@/components/section/page-content";
-import { RandomQuestionControl } from "@/components/question/random-question-control";
+import { QuestionControl } from "@/components/question/question-control";
 // import SectionContent from "@/components/section/section-content";
 
 // Context to be added into Mdx pages via ContextHandler
@@ -158,8 +158,8 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					>
 						<Balancer>{section.title}</Balancer>
 					</h1>
-					<RandomQuestionControl
-						subsectionIndex={randomQuestionIndex}
+					<QuestionControl
+						subsectionWithQuestionIndex={randomQuestionIndex}
 						subsectionQuestion={randomQuestion.question}
 						location={currentLocation}
 					/>
