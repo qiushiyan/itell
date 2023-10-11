@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { createRoot } from "react-dom/client";
+import { useEffect, useRef, useState } from "react";
 import { QuestionBox } from "./question-box";
 import { SectionLocation } from "@/types/location";
 import { useQA } from "../context/qa-context";
 import { createPortal } from "react-dom";
-import { buttonVariants } from "@itell/ui/server";
+import { NextChunkButton } from "./next-chunk-button";
+import { ScrollBackButton } from "./scroll-back-button";
 
 type Props = {
 	subsectionWithQuestionIndex: number;
@@ -20,10 +20,13 @@ export const QuestionControl = ({
 	location,
 }: Props) => {
 	// Ref for current chunk
-	const chunksRef = useRef<HTMLDivElement[] | null>(null);
-	const [questionBoxNode, setQuestionBoxNode] = useState<JSX.Element | null>();
+	const [nodes, setNodes] = useState<JSX.Element[]>([]);
 	const currentChunkRef = useRef<HTMLDivElement | null>(null);
-	const { currentChunk, goToNextChunk } = useQA();
+	const { currentChunk, goToNextChunk, chunks } = useQA();
+
+	const addNode = (node: JSX.Element) => {
+		setNodes((nodes) => [...nodes, node]);
+	};
 
 	const hideNextChunkButton = (el: HTMLDivElement) => {
 		const button = el.querySelector(
@@ -42,30 +45,11 @@ export const QuestionControl = ({
 				"scroll-back-button-container flex justify-center items-center p-4 gap-2";
 			buttonContainer.style.filter = "none";
 
+			// note this the scroll back button is inserted as a sibling to the content chunk
+			// so it won't be blurred as a children
 			el.parentElement.insertBefore(buttonContainer, el.nextSibling);
 
-			// create button
-			const button = document.createElement("button");
-			button.textContent =
-				"Click Here to Scroll Back Up to Your Current Subsection";
-			button.className = buttonVariants();
-			button.addEventListener("click", () => {
-				if (currentChunkRef.current) {
-					currentChunkRef.current.scrollIntoView({ behavior: "smooth" });
-				}
-			});
-
-			// create divider
-			const leftDivider = document.createElement("span");
-			leftDivider.className =
-				"absolute left-0 w-1/4 h-px bg-emerald-800 opacity-50";
-			const rightDivider = document.createElement("span");
-			rightDivider.className =
-				"absolute right-0 w-1/4 h-px bg-emerald-800 opacity-50";
-
-			buttonContainer.appendChild(leftDivider);
-			buttonContainer.appendChild(button);
-			buttonContainer.appendChild(rightDivider);
+			addNode(createPortal(<ScrollBackButton />, buttonContainer));
 		}
 	};
 
@@ -77,22 +61,7 @@ export const QuestionControl = ({
 		el.style.filter = "none";
 		el.appendChild(buttonContainer);
 
-		// create button
-		const button = document.createElement("button");
-		button.textContent = "Click Here to Continue Reading";
-		button.className = buttonVariants({ variant: "outline" });
-		button.addEventListener("click", goToNextChunk);
-
-		// create divider
-		const leftDivider = document.createElement("span");
-		leftDivider.className = "absolute left-0 w-1/4 h-px bg-red-800 opacity-50";
-		const rightDivider = document.createElement("span");
-		rightDivider.className =
-			"absolute right-0 w-1/4 h-px bg-red-800 opacity-50";
-
-		buttonContainer.appendChild(leftDivider);
-		buttonContainer.appendChild(button);
-		buttonContainer.appendChild(rightDivider);
+		addNode(createPortal(<NextChunkButton />, buttonContainer));
 	};
 
 	const insertQuestion = (el: HTMLDivElement) => {
@@ -100,7 +69,7 @@ export const QuestionControl = ({
 		questionContainer.className = "question-container";
 		el.appendChild(questionContainer);
 
-		setQuestionBoxNode(
+		addNode(
 			createPortal(
 				<QuestionBox
 					question={subsectionQuestion}
@@ -115,34 +84,32 @@ export const QuestionControl = ({
 
 	useEffect(() => {
 		// set up chunks
-		const els = document.querySelectorAll(".content-chunk");
-		if (els.length > 0 && subsectionQuestion) {
-			chunksRef.current = Array.from(els) as HTMLDivElement[];
-			chunksRef.current.forEach((el, index) => {
+		if (chunks) {
+			chunks.forEach((el, index) => {
 				if (index !== 0) {
 					el.style.filter = "blur(4px)";
 				}
 				if (index === subsectionWithQuestionIndex) {
 					insertQuestion(el);
-				} else if (index === els.length - 1) {
+				} else if (index === chunks.length - 1) {
 					insertScrollBackButton(el);
 				}
 			});
 		}
-	}, []);
+	}, [chunks]);
 
 	useEffect(() => {
-		if (chunksRef.current) {
+		if (chunks) {
 			// set up currentChunk
-			const currentChunkElement = chunksRef.current.at(currentChunk);
-			const prevChunkElement = chunksRef.current.at(currentChunk - 1);
+			const currentChunkElement = chunks.at(currentChunk);
+			const prevChunkElement = chunks.at(currentChunk - 1);
 
 			if (currentChunkElement) {
 				currentChunkElement.style.filter = "none";
 				currentChunkRef.current = currentChunkElement;
 				if (
 					currentChunk !== subsectionWithQuestionIndex &&
-					currentChunk !== chunksRef.current.length - 1
+					currentChunk !== chunks.length - 1
 				) {
 					insertNextChunkButton(currentChunkElement);
 				}
@@ -153,7 +120,7 @@ export const QuestionControl = ({
 				hideNextChunkButton(prevChunkElement);
 			}
 		}
-	}, [currentChunk]);
+	}, [chunks, currentChunk]);
 
-	return questionBoxNode;
+	return nodes.map((node) => node);
 };
