@@ -25,6 +25,9 @@ import db from "@/lib/db";
 import { EventTracker } from "@/components/telemetry/event-tracker";
 import { PageContent } from "@/components/section/page-content";
 import { QuestionControl } from "@/components/question/question-control";
+import { getServerSession } from "next-auth";
+import { getCurrentUser } from "@/lib/auth";
+import { env } from "@/env.mjs";
 // import SectionContent from "@/components/section/section-content";
 
 // Context to be added into Mdx pages via ContextHandler
@@ -88,6 +91,9 @@ const AnchorLink = ({
 };
 
 export default async function ({ params }: { params: { slug: string[] } }) {
+	const user = await getCurrentUser();
+	const whitelist = JSON.parse(env.SUMMARY_WHITELIST || "[]") as string[];
+	const showVisibilityModal = !whitelist.includes(user?.email || "");
 	const path = params.slug.join("/");
 	const sectionIndex = allSectionsSorted.findIndex((section) => {
 		return section.url === path;
@@ -131,7 +137,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	return (
 		<Fragment>
 			<div className="grid grid-cols-12 gap-6 px-2 relative">
-				<PageVisibilityModal />
+				{showVisibilityModal && <PageVisibilityModal />}
 				{!isDev && <EventTracker />}
 
 				<aside className="module-sidebar col-span-2 sticky top-20 h-fit">
