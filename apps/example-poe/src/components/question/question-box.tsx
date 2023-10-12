@@ -26,6 +26,7 @@ type Props = {
 	subsection: number;
 };
 
+// state for answer correctness
 enum AnswerStatus {
 	UNANSWERED = 0,
 	BOTH_CORRECT = 1,
@@ -43,13 +44,6 @@ export const QuestionBox = ({
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
 	const [isFlashingYellow, setIsFlashingYellow] = useState(false);
-	/*
-  QA score state
-  3: default
-  2: both models responded correct
-  1: one model responded correct
-  0: both models responded incorrect
-  */
 	const [answer, setAnswer] = useState(AnswerStatus.UNANSWERED);
 	// If QA passed
 	const [isCelebrating, setIsCelebrating] = useState(false);
@@ -149,24 +143,24 @@ export const QuestionBox = ({
 	return (
 		<>
 			<Card
-				className={`flex justify-center items-center flex-col py-5 px-6  space-y-2
-                 ${
-										isShaking
-											? "shake border-red-400"
-											: isFlashingYellow
-											? "border-yellow-400"
-											: "border-blue-400"
-									}`}
+				className={cn(
+					"flex justify-center items-center flex-col py-4 px-6 space-y-2",
+					{
+						"shake border-red-400": isShaking,
+						"border-yellow-400": isFlashingYellow,
+						"border-blue-400": !isFlashingYellow,
+					},
+				)}
 			>
 				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
 
-				<CardHeader className="flex flex-row justify-end items-center w-full p-2">
+				<CardHeader className="flex flex-row justify-end items-baseline w-full p-2 gap-1">
 					<ThumbsUp
-						className="hover:stroke-emerald-400 hover:cursor-pointer h-4"
+						className="hover:stroke-emerald-400 hover:cursor-pointer w-4 h-4"
 						onClick={positiveModal}
 					/>
 					<ThumbsDown
-						className="hover:stroke-rose-700 hover:cursor-pointer h-4"
+						className="hover:stroke-rose-700 hover:cursor-pointer w-4 h-4"
 						onClick={negativeModal}
 					/>
 				</CardHeader>
