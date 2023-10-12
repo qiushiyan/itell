@@ -1,7 +1,13 @@
 "use client";
 
 import { cn } from "@itell/core/utils";
-import { buttonVariants } from "@itell/ui/server";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	buttonVariants,
+} from "@itell/ui/server";
 import { AlertTriangle, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
@@ -10,6 +16,8 @@ import { getQAScore } from "@/lib/question-answer";
 import { useQA } from "../context/qa-context";
 import { FeedbackModal } from "./feedback-modal";
 import { Button } from "../client-components";
+import { toast } from "sonner";
+import TextArea from "../ui/textarea";
 
 type Props = {
 	question: string | null;
@@ -18,13 +26,20 @@ type Props = {
 	subsection: number;
 };
 
+enum AnswerStatus {
+	UNANSWERED = 0,
+	BOTH_CORRECT = 1,
+	SEMI_CORRECT = 2,
+	BOTH_INCORRECT = 3,
+}
+
 export const QuestionBox = ({
 	question,
 	chapter,
 	section,
 	subsection,
 }: Props) => {
-	const { currentChunk, goToNextChunk } = useQA();
+	const { goToNextChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
 	const [isFlashingYellow, setIsFlashingYellow] = useState(false);
@@ -35,10 +50,10 @@ export const QuestionBox = ({
   1: one model responded correct
   0: both models responded incorrect
   */
-	const [isPerfect, setIsPerfect] = useState(3);
+	const [answer, setAnswer] = useState(AnswerStatus.UNANSWERED);
 	// If QA passed
 	const [isCelebrating, setIsCelebrating] = useState(false);
-	// Handle spinner animatino when loading
+	// Handle spinner animation when loading
 	const [isLoading, setIsLoading] = useState(false);
 	// Check if feedback is positive or negative
 	const [isPositiveFeedback, setIsPositiveFeedback] = useState(false);
@@ -57,7 +72,7 @@ export const QuestionBox = ({
 	};
 
 	const passed = () => {
-		setIsPerfect(2);
+		setAnswer(AnswerStatus.BOTH_CORRECT);
 		setIsCelebrating(true);
 
 		// Stop the confettis after a short delay
@@ -88,82 +103,88 @@ export const QuestionBox = ({
 	// Semi-celebrate when response is 1
 	const semiPassed = () => {
 		flashYellow();
-		setIsPerfect(1);
+		setAnswer(AnswerStatus.SEMI_CORRECT);
 	};
 
 	// Failed = response is 0
 	const failed = () => {
 		shakeModal();
-		setIsPerfect(0);
+		setAnswer(AnswerStatus.BOTH_INCORRECT);
 	};
 
 	const handleSubmit = async () => {
 		// Spinner animation when loading
 		setIsLoading(true);
-		const response = await getQAScore({
-			input: inputValue,
-			chapter: String(chapter),
-			section: String(section),
-			subsection: String(subsection),
-		});
+		try {
+			const response = await getQAScore({
+				input: inputValue,
+				chapter: String(chapter),
+				section: String(section),
+				subsection: String(subsection),
+			});
 
-		if (!response.success) {
-			// API response is not in correct shape
-			console.error("API Response error", response);
-			return;
-		}
+			if (!response.success) {
+				// API response is not in correct shape
+				console.error("API Response error", response);
+				return;
+			}
 
-		const result = response.data;
-		setIsLoading(false);
+			const result = response.data;
 
-		if (result.score === 2) {
-			passed();
-		} else if (result.score === 1) {
-			semiPassed();
-		} else {
-			failed();
+			if (result.score === 2) {
+				passed();
+			} else if (result.score === 1) {
+				semiPassed();
+			} else {
+				failed();
+			}
+		} catch (err) {
+			console.log("failed to score answer", err);
+			toast.error("Connection failed. Please try submit your answer again.");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
 	return (
-		<div
-			className={`flex justify-center items-center flex-col py-5 px-6 gap-2
-                border-4 my-6 rounded-md max-w-4xl mx-auto ${
-									isShaking
-										? "shake border-red-400"
-										: isFlashingYellow
-										? "border-yellow-400"
-										: "border-blue-400"
-								}`}
-		>
-			{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
+		<>
+			<Card
+				className={`flex justify-center items-center flex-col py-5 px-6  space-y-2
+                 ${
+										isShaking
+											? "shake border-red-400"
+											: isFlashingYellow
+											? "border-yellow-400"
+											: "border-blue-400"
+									}`}
+			>
+				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
 
-			<div className="flex justify-end items-center flex-row mt-2 mb-1 w-full">
-				<ThumbsUp
-					className="hover:stroke-emerald-400 hover:cursor-pointer h-4"
-					onClick={positiveModal}
-				/>
-				<ThumbsDown
-					className="hover:stroke-rose-700 hover:cursor-pointer h-4"
-					onClick={negativeModal}
-				/>
-			</div>
+				<CardHeader className="flex flex-row justify-end items-center w-full p-2">
+					<ThumbsUp
+						className="hover:stroke-emerald-400 hover:cursor-pointer h-4"
+						onClick={positiveModal}
+					/>
+					<ThumbsDown
+						className="hover:stroke-rose-700 hover:cursor-pointer h-4"
+						onClick={negativeModal}
+					/>
+				</CardHeader>
 
-			<div className="flex justify-center items-center text-sm my-2 font-light text-zinc-400">
-				<p className="inline-flex">
-					{" "}
-					<AlertTriangle className="stroke-yellow-400 mr-2" /> iTELL AI is in
-					alpha testing. It will try its best to help you but it can still make
-					mistakes. Let us know how you feel about iTELL AI's performance using
-					the feedback icons on the top right side of this box (thumbs up or
-					thumbs down).{" "}
-				</p>
-			</div>
+				<CardDescription className="flex justify-center items-center text-sm font-light text-zinc-500">
+					<p className="inline-flex">
+						{" "}
+						<AlertTriangle className="stroke-yellow-400 mr-2" /> iTELL AI is in
+						alpha testing. It will try its best to help you but it can still
+						make mistakes. Let us know how you feel about iTELL AI's performance
+						using the feedback icons on the top right side of this box (thumbs
+						up or thumbs down).{" "}
+					</p>
+				</CardDescription>
 
-			{isPerfect < 2 && (
-				<div className="flex justify-center items-center flex-col text-xs m-2">
-					{isPerfect === 0 && (
-						<>
+				<CardContent className="p-2 pt-0 space-y-4">
+					{answer === AnswerStatus.BOTH_INCORRECT && (
+						<div className="flex justify-center items-center flex-col text-xs m-2">
 							<p className="text-red-400">
 								<b>iTELL AI says:</b> You likely got a part of the answer wrong.
 								Please try again.
@@ -177,86 +198,86 @@ export const QuestionBox = ({
 								feedback icons on the top right side of this box to give us
 								feedback on this question.
 							</p>
-						</>
+						</div>
 					)}
-					{isPerfect === 1 && (
-						<p className="text-yellow-600">
-							<b>iTELL AI says:</b> You may have missed something, but you were
-							generally close. You can click on the button below to continue
-							reading or try again with a different response.{" "}
-						</p>
+
+					{answer === AnswerStatus.SEMI_CORRECT && (
+						<div className="flex justify-center items-center flex-col text-xs">
+							<p className="text-yellow-600">
+								<b>iTELL AI says:</b> You may have missed something, but you
+								were generally close. You can click on the button below to
+								continue reading or try again with a different response.{" "}
+							</p>
+						</div>
 					)}
-				</div>
-			)}
 
-			{isPerfect === 2 ? (
-				<div className="flex items-center flex-col max-w-2xl">
-					<p className="text-xl2 text-emerald-600 text-center">
-						Your answer was CORRECT!
-					</p>
-					<p className="text-sm">
-						Click on the button below to continue reading. Please use the
-						thumbs-up or thumbs-down icons on the top right side of this box if
-						you have any feedback about this question that you would like to
-						provide before you continue reading.
-					</p>
-				</div>
-			) : (
-				question && (
-					<p>
-						<b>Question:</b> {question}
-					</p>
-				)
-			)}
-
-			{isPerfect !== 2 && (
-				<input
-					className="rounded-md shadow-md w-3/4 p-4 mb-4"
-					value={inputValue}
-					type="text"
-					onChange={(e) => setInputValue(e.currentTarget.value)}
-				/>
-			)}
-
-			{isPerfect === 2 ? (
-				<div className="flex justify-center items-center flex-row">
-					<button
-						className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
-						onClick={goToNextChunk}
-					>
-						Click Here to Continue Reading
-					</button>
-				</div>
-			) : (
-				<div className="flex justify-center items-center flex-row gap-2">
-					<Button
-						variant={"secondary"}
-						onClick={handleSubmit}
-						disabled={isLoading}
-					>
-						{isLoading && <Spinner className="inline mr-2" />}
-						{isPerfect !== 1 ? "Submit" : "Resubmit"}
-					</Button>
-					{isPerfect < 2 && (
-						<Button
-							variant={"ghost"}
-							onClick={() => {
-								console.log("here");
-								goToNextChunk();
-							}}
-						>
-							{isPerfect === 1
-								? "Click Here to Continue Reading"
-								: "Skip this question"}
-						</Button>
+					{answer === AnswerStatus.BOTH_CORRECT ? (
+						<div className="flex items-center flex-col">
+							<p className="text-xl2 text-emerald-600 text-center">
+								Your answer was CORRECT!
+							</p>
+							<p className="text-sm">
+								Click on the button below to continue reading. Please use the
+								thumbs-up or thumbs-down icons on the top right side of this box
+								if you have any feedback about this question that you would like
+								to provide before you continue reading.
+							</p>
+						</div>
+					) : (
+						question && (
+							<p>
+								<b>Question:</b> {question}
+							</p>
+						)
 					)}
-				</div>
-			)}
+
+					{answer !== AnswerStatus.BOTH_CORRECT && (
+						<TextArea
+							rows={2}
+							className="rounded-md shadow-md  p-4"
+							value={inputValue}
+							onValueChange={setInputValue}
+						/>
+					)}
+
+					{answer === AnswerStatus.BOTH_CORRECT ? (
+						<div className="flex justify-center items-center flex-row">
+							<button
+								className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
+								onClick={goToNextChunk}
+							>
+								Click Here to Continue Reading
+							</button>
+						</div>
+					) : (
+						<div className="flex justify-center items-center flex-row gap-2">
+							<Button
+								variant={"secondary"}
+								onClick={handleSubmit}
+								disabled={isLoading}
+							>
+								{isLoading && <Spinner className="inline mr-2" />}
+								{answer !== AnswerStatus.SEMI_CORRECT ? "Submit" : "Resubmit"}
+							</Button>
+							{answer === AnswerStatus.BOTH_INCORRECT && (
+								<Button
+									variant={"ghost"}
+									onClick={() => {
+										goToNextChunk();
+									}}
+								>
+									"Skip this question
+								</Button>
+							)}
+						</div>
+					)}
+				</CardContent>
+			</Card>
 			<FeedbackModal
 				open={isFeedbackModalOpen}
 				onOpenChange={setIsFeedbackModalOpen}
 				isPositive={isPositiveFeedback}
 			/>
-		</div>
+		</>
 	);
 };
