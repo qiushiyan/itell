@@ -1,6 +1,7 @@
 const { withContentlayer } = require("next-contentlayer");
 
 module.exports = withContentlayer({
+	output: "standalone",
 	redirects: async () => {
 		return [
 			{
@@ -40,11 +41,6 @@ module.exports = withContentlayer({
 				headers: securityHeaders,
 			},
 		];
-	},
-	experimental: {
-		outputFileTracingIncludes: {
-			"/": ["./config/**/*"],
-		},
 	},
 });
 
