@@ -39,17 +39,14 @@ export const UserStatisticsControl = () => {
 		defaultValue = ReadingTimeChartLevel.week_1;
 	}
 
+	const handleSelect = (val: string) => {
+		router.push(`${pathname}?${createQueryString("reading_time_level", val)}`);
+	};
+
 	return (
 		<div className="flex items-center gap-4">
 			<p className="text-sm font-semibold">Change time span</p>
-			<Select
-				defaultValue={defaultValue}
-				onValueChange={(val) => {
-					router.push(
-						`${pathname}?${createQueryString("reading_time_level", val)}`,
-					);
-				}}
-			>
+			<Select defaultValue={defaultValue} onValueChange={handleSelect}>
 				<SelectTrigger className="w-[200px]">
 					<SelectValue placeholder="Select a time span" />
 				</SelectTrigger>

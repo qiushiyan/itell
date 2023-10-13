@@ -199,8 +199,9 @@ export const QuestionBox = ({
 						<div className="flex justify-center items-center flex-col text-xs">
 							<p className="text-yellow-600">
 								<b>iTELL AI says:</b> You may have missed something, but you
-								were generally close. You can click on the button below to
-								continue reading or try again with a different response.{" "}
+								were generally close. You can click on the "Continue reading"
+								button below go to the next part or try again with a different
+								response.{" "}
 							</p>
 						</div>
 					)}
@@ -253,14 +254,16 @@ export const QuestionBox = ({
 								{isLoading && <Spinner className="inline mr-2" />}
 								{answer !== AnswerStatus.SEMI_CORRECT ? "Submit" : "Resubmit"}
 							</Button>
-							{answer === AnswerStatus.BOTH_INCORRECT && (
+							{answer !== AnswerStatus.UNANSWERED && (
 								<Button
 									variant={"ghost"}
 									onClick={() => {
 										goToNextChunk();
 									}}
 								>
-									"Skip this question
+									{answer === AnswerStatus.SEMI_CORRECT
+										? "Continue Reading"
+										: "Skip this question"}
 								</Button>
 							)}
 						</div>

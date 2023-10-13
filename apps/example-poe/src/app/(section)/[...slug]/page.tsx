@@ -126,12 +126,11 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 
 	// get subsections
 	let questions;
-	let randomQuestionIndex;
-	let randomQuestion;
+	let questionSelected;
 	if (enableQA) {
 		questions = await getSubsections(subsectionIndex);
-		randomQuestionIndex = Math.floor(Math.random() * (questions.length - 1));
-		randomQuestion = questions[randomQuestionIndex];
+		questionSelected =
+			questions[Math.floor(Math.random() * (questions.length - 1))];
 	}
 
 	return (
@@ -170,9 +169,11 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					</h1>
 					{enableQA && (
 						<QuestionControl
-							subsectionWithQuestionIndex={randomQuestionIndex as number}
-							subsectionQuestion={randomQuestion?.question as string}
-							location={currentLocation as SectionLocation}
+							subsectionWithQuestionIndex={
+								questionSelected?.subsection as number
+							}
+							subsectionQuestion={questionSelected?.question as string}
+							location={currentLocation}
 						/>
 					)}
 					<PageContent code={section.body.code} />
