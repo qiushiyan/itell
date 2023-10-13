@@ -3,7 +3,7 @@
 import { useDebounce } from "@itell/core/hooks";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { trpc } from "@/trpc/trpc-provider";
 import { TELEMETRY_SAVE_INTERVAL } from "@/lib/constants";
 import { ClickEventData, ScrollEventData } from "@itell/core/types";
@@ -11,9 +11,7 @@ import { ClickEventData, ScrollEventData } from "@itell/core/types";
 export const EventTracker = () => {
 	const { data: session } = useSession();
 	const createEvents = trpc.event.createMany.useMutation();
-	const pageHeight =
-		document.documentElement.scrollHeight -
-		document.documentElement.clientHeight;
+
 	const [currentClick, setCurrentClick] = useState<{
 		x: number;
 		y: number;
@@ -108,6 +106,12 @@ export const EventTracker = () => {
 			];
 		}
 	}, [clickPositionDebounced]);
+
+	if (typeof document === "undefined") return null;
+
+	const pageHeight =
+		document.documentElement.scrollHeight -
+		document.documentElement.clientHeight;
 
 	return null;
 };

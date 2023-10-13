@@ -19,6 +19,8 @@ import Link from "next/link";
 import { makeLocationHref } from "@/lib/utils";
 import { useSectionStatus } from "@/lib/hooks/use-section-status";
 import { GoogleLoginButton } from "./auth/login-button";
+import { env } from "@/env.mjs";
+import { useSession } from "next-auth/react";
 
 export const PageVisibilityModal = () => {
 	const { status, userLocation } = useSectionStatus();
