@@ -26,6 +26,10 @@
       "require": "./dist/config.cjs.js",
       "import": "./dist/config.es.js"
     },
+    "./dashboard": {
+      "require": "./dist/dashboard.cjs.js",
+      "import": "./dist/dashboard.es.js"
+    },
     "./contentlayer": {
       "require": "./dist/contentlayer.cjs.js",
       "import": "./dist/contentlayer.es.js"

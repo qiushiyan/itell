@@ -1,9 +1,10 @@
 import { Progress } from "@/components/client-components";
+import { allChaptersSorted } from "@/lib/chapters";
 import { User } from "@prisma/client";
 import { allChapters } from "contentlayer/generated";
 
 export const UserProgress = ({ user }: { user: User }) => {
-	const usersIndex = allChapters.findIndex(
+	const usersIndex = allChaptersSorted.findIndex(
 		(chapter) => chapter.chapter === user.chapter,
 	);
 	const progress = ((usersIndex + 1) / allChapters.length) * 100;

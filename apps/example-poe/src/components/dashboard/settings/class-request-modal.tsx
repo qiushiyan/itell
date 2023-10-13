@@ -53,7 +53,7 @@ export const ClassRequestModal = ({ className, user }: Props) => {
 		<Dialog open={open} onOpenChange={(val) => setOpen(val)}>
 			<DialogTrigger>
 				<p className="text-muted-foreground underline mt-8">
-					Wants to use this textbook for your own class? Contact us
+					Contact us for using intelligent textbooks for your class
 				</p>
 			</DialogTrigger>
 

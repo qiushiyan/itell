@@ -1,10 +1,9 @@
-import db from "./db";
-import { format, subDays } from "date-fns";
-import { formatDate, getDatesBetween } from "@itell/core/utils";
 import {
 	ReadingTimeChartLevel,
 	ReadingTimeChartParams,
-} from "@itell/core/types";
+} from "../types/reading-time";
+import { formatDate } from "../utils";
+import { format } from "date-fns";
 
 export const PrevDaysLookup = {
 	[ReadingTimeChartLevel.week_1]: 6,
@@ -14,25 +13,17 @@ export const PrevDaysLookup = {
 	[ReadingTimeChartLevel.month_3]: 89,
 } as const;
 
-export const getReadingTime = async (
-	uid: string,
-	params: ReadingTimeChartParams,
+export type ReadingTimeEntry = {
+	totalViewTime: number | null;
+	data: { totalViewTime: number }[];
+	created_at: Date;
+};
+
+export const getGroupedReadingTime = async (
+	data: ReadingTimeEntry[],
+	intervalDates: Date[],
 ) => {
 	// fetch reading time during last week
-	const today = new Date();
-	const prevDays = PrevDaysLookup[params.level];
-	const startDate = subDays(new Date(), prevDays);
-	const data = await db.focusTime.findMany({
-		where: {
-			userId: uid,
-			created_at: {
-				gte: startDate,
-			},
-		},
-	});
-
-	const intervalDates = getDatesBetween(startDate, today);
-
 	const readingTimeByGroup = data.reduce((acc, entry) => {
 		// for some legacy records, totalViewTime is null
 		const totalViewTime = entry.totalViewTime
@@ -48,19 +39,32 @@ export const getReadingTime = async (
 		if (thresholdDate) {
 			const formattedDate = formatDate(thresholdDate, "yyyy-MM-dd");
 			acc.set(formattedDate, (acc.get(formattedDate) || 0) + totalViewTime);
+		} else {
+			// when the entry date is greater than the last date in intervalDates, group it with the last date
+			const lastDate = intervalDates[intervalDates.length - 1];
+			const formattedDate = formatDate(lastDate, "yyyy-MM-dd");
+			acc.set(formattedDate, (acc.get(formattedDate) || 0) + totalViewTime);
 		}
 
 		return acc;
 	}, new Map<string, number>());
 
+	return readingTimeByGroup;
+};
+
+export const getReadingTimeChartData = (
+	groupedReadingTime: Map<string, number>,
+	intervalDates: Date[],
+	params: ReadingTimeChartParams,
+) => {
 	const chartData = [];
 	let totalViewTime = 0;
 
 	for (const [i, date] of intervalDates.entries()) {
 		const formattedDate = formatDate(date, "yyyy-MM-dd");
-		totalViewTime += readingTimeByGroup.get(formattedDate) || 0;
+		totalViewTime += groupedReadingTime.get(formattedDate) || 0;
 
-		const value = (readingTimeByGroup.get(formattedDate) || 0) / 60;
+		const value = (groupedReadingTime.get(formattedDate) || 0) / 60;
 		// depending on the time span, format the date differently
 		// when it's 1 week, format each individual date directly
 		// when it's other time spans, format the date as a range: "Jan 1-7", "Jan 8-14", etc.
@@ -88,5 +92,5 @@ export const getReadingTime = async (
 		});
 	}
 
-	return { chartData, totalViewTime };
+	return { totalViewTime, chartData };
 };

@@ -5,6 +5,7 @@
         "types"
     ],
     "compilerOptions": {
+        "target": "ESNext",
         "module": "esnext",
         "lib": [
             "dom",

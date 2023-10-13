@@ -12,14 +12,20 @@ import {
 	HoverCardContent,
 	HoverCardTrigger,
 } from "../client-components";
+import {
+	getGroupedReadingTime,
+	getReadingTimeChartData,
+	PrevDaysLookup,
+	ReadingTimeEntry,
+} from "@itell/core/dashboard";
 import { ReadingTimeChart } from "./reading-time-chart";
-import { PrevDaysLookup, getReadingTime } from "@/lib/reading-time";
 import { InfoIcon } from "lucide-react";
 import { ReadingTimeChartParams } from "@itell/core/types";
 import db from "@/lib/db";
 import { format, subDays } from "date-fns";
 import pluralize from "pluralize";
 import Link from "next/link";
+import { getDatesBetween } from "@itell/core/utils";
 
 type Props = {
 	uid: string;
@@ -27,19 +33,48 @@ type Props = {
 	name?: string;
 };
 
+const getSummaryCounts = async (uid: string, startDate: Date) => {
+	return db.summary.count({
+		where: {
+			userId: uid,
+			created_at: {
+				gte: startDate,
+			},
+		},
+	});
+};
+
+const getReadingTime = async (
+	uid: string,
+	startDate: Date,
+	intervalDates: Date[],
+) => {
+	const data = (await db.focusTime.findMany({
+		where: {
+			userId: uid,
+			created_at: {
+				gte: startDate,
+			},
+		},
+		// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+	})) as { data: any; totalViewTime: number; created_at: Date }[];
+	const readingTimeGrouped = await getGroupedReadingTime(data, intervalDates);
+	return readingTimeGrouped;
+};
+
 export const ReadingTime = async ({ uid, params, name }: Props) => {
 	const startDate = subDays(new Date(), PrevDaysLookup[params.level]);
-	const [summaryCounts, { chartData, totalViewTime }] = await Promise.all([
-		db.summary.count({
-			where: {
-				userId: uid,
-				created_at: {
-					gte: startDate,
-				},
-			},
-		}),
-		getReadingTime(uid, params),
+	const intervalDates = getDatesBetween(startDate, new Date());
+	const [summaryCounts, readingTimeGrouped] = await Promise.all([
+		getSummaryCounts(uid, startDate),
+		getReadingTime(uid, startDate, intervalDates),
 	]);
+
+	const { totalViewTime, chartData } = getReadingTimeChartData(
+		readingTimeGrouped,
+		intervalDates,
+		params,
+	);
 
 	return (
 		<Card>
