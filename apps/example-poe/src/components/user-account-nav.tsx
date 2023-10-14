@@ -14,6 +14,7 @@ import { useState } from "react";
 import {
 	ChevronDownIcon,
 	ChevronUpIcon,
+	CompassIcon,
 	FileBoxIcon,
 	LineChartIcon,
 	LogOutIcon,
@@ -86,6 +87,11 @@ export const UserAccountNav = () => {
 					<DropdownMenuItem asChild>
 						<Link href="/dashboard/settings">
 							<SettingsIcon className="h-4 w-4 mr-2" /> Settings
+						</Link>
+					</DropdownMenuItem>
+					<DropdownMenuItem asChild>
+						<Link href="/guide">
+							<CompassIcon className="h-4 w-4 mr-2" /> Guide
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
