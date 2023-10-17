@@ -1,14 +1,13 @@
 import Balancer from "react-wrap-balancer";
 import { PageSummary } from "@/components/summary/page-summary";
 import { notFound } from "next/navigation";
-import { Pager } from "@/components/pager";
-import { getPagerDataForChapter } from "@/lib/pager";
+import { getPagerLinksForChapter } from "@/lib/pager";
 import { NoteList } from "@/components/note/note-list";
 import { NoteToolbar } from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import { allChaptersSorted } from "@/lib/chapters";
-import { Button } from "@/components/client-components";
+import { Button, Pager } from "@/components/client-components";
 import { TocSidebar } from "@/components/toc-sidebar";
 import { ChapterSidebar } from "@/components/chapter-sidebar";
 import { PageContent } from "@/components/page-content";
@@ -66,9 +65,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 	}
 
 	const chapter = allChaptersSorted[chapterIndex];
-	const pagerData = getPagerDataForChapter({
-		index: chapterIndex,
-	});
+	const pagerLinks = getPagerLinksForChapter(chapterIndex);
 
 	const requireSummary = chapter.summary;
 	const isDev = process.env.NODE_ENV === "development";
@@ -112,7 +109,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 
 					<PageContent code={chapter.body.code} />
 					<NoteToolbar chapter={chapter.chapter} />
-					<Pager data={pagerData} />
+					<Pager prev={pagerLinks.prev} next={pagerLinks.next} />
 				</section>
 
 				<aside className="toc-sidebar col-span-2 relative">

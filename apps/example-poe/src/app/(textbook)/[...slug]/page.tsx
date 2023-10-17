@@ -4,33 +4,27 @@ import { notFound } from "next/navigation";
 import { SectionLocation } from "@/types/location";
 import getChapters from "@/lib/sidebar";
 import { PageVisibilityModal } from "@/components/page-visibility-modal";
-import SectionPager from "@/components/section-pager";
-import { getPagerForSection } from "@/lib/pager";
+import { getPagerLinksForSection } from "@/lib/pager";
 import NoteList from "@/components/note/note-list";
 import Highlighter from "@/components/note/note-toolbar";
 import { ArrowUpIcon, PencilIcon } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import { allSectionsSorted } from "@/lib/sections";
-import { Button } from "@/components/client-components";
+import { Button, Pager } from "@/components/client-components";
 import { ModuleSidebar } from "@/components/module-sidebar";
 import { TocSidebar } from "@/components/toc-sidebar";
 
 import { Section } from "contentlayer/generated";
 import Spinner from "@/components/spinner";
 
-// imports added
 import db from "@/lib/db";
-// This replaces SectionContent; needed the section and subsection information
-// as well as the corresponding QA pair from db to be passed down to Mdx. UseContext seemed better than prop-drilling.
 import { EventTracker } from "@/components/telemetry/event-tracker";
 import { PageContent } from "@/components/section/page-content";
 import { QuestionControl } from "@/components/question/question-control";
 import { getServerSession } from "next-auth";
 import { getCurrentUser } from "@/lib/auth";
 import { env } from "@/env.mjs";
-// import SectionContent from "@/components/section/section-content";
 
-// Context to be added into Mdx pages via ContextHandler
 async function getSubsections(sectionIdinp: string) {
 	return await db.subSection.findMany({
 		where: {
@@ -106,10 +100,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	const section = allSectionsSorted[sectionIndex] as Section;
 	const enableQA = section.qa;
 	const currentLocation = section.location as SectionLocation;
-	const pager = getPagerForSection({
-		allSections: allSectionsSorted,
-		index: sectionIndex,
-	});
+	const pagerLinks = getPagerLinksForSection(sectionIndex);
 	const chapters = await getChapters({
 		module: currentLocation.module,
 		allSections: allSectionsSorted,
@@ -178,7 +169,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					)}
 					<PageContent code={section.body.code} />
 					<Highlighter location={currentLocation} />
-					<SectionPager pager={pager} />
+					<Pager prev={pagerLinks.prev} next={pagerLinks.next} />
 				</section>
 
 				<aside className="toc-sidebar col-span-2 relative">

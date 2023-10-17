@@ -1,29 +1,26 @@
 import { Chapter } from "contentlayer/generated";
 import { allChaptersSorted } from "./chapters";
+import type { PageLinkData } from "@itell/ui/client";
 
-export type PagerData = {
-	prev: { title: string; href: string; chapter: number } | null;
-	next: { title: string; href: string; chapter: number } | null;
-};
-
-export const getPagerDataForChapter = ({ index }: { index: number }) => {
-	const pagerData: PagerData = { prev: null, next: null };
+export const getPagerLinksForChapter = (index: number) => {
+	const pagerData: { prev: PageLinkData | null; next: PageLinkData | null } = {
+		prev: null,
+		next: null,
+	};
 
 	if (index !== 0) {
 		const chapter = allChaptersSorted[index - 1];
 		pagerData.prev = {
-			title: chapter.title,
+			text: `${chapter.chapter}. ${chapter.title}`,
 			href: `/${chapter.url}`,
-			chapter: chapter.chapter,
 		};
 	}
 
 	if (index !== allChaptersSorted.length - 1) {
 		const chapter = allChaptersSorted[index + 1];
 		pagerData.next = {
-			title: chapter.title,
+			text: `${chapter.chapter}. ${chapter.title}`,
 			href: `/${chapter.url}`,
-			chapter: chapter.chapter,
 		};
 	}
 

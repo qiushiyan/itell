@@ -1,33 +1,28 @@
-import { Section } from "contentlayer/generated";
+import type { PageLinkData } from "@itell/ui/client";
+import { allSections } from "contentlayer/generated";
+import { allSectionsSorted } from "./sections";
 
-export type Pager = {
-	prev: { title: string; href: string; chapter: number } | null;
-	next: { title: string; href: string; chapter: number } | null;
-};
-
-export const getPagerForSection = ({
-	allSections,
-	index,
-}: { allSections: Section[]; index: number }) => {
-	const pager: Pager = { prev: null, next: null };
+export const getPagerLinksForSection = (index: number) => {
+	const links: { prev: PageLinkData | null; next: PageLinkData | null } = {
+		prev: null,
+		next: null,
+	};
 
 	if (index !== 0) {
-		const section = allSections[index - 1];
-		pager.prev = {
-			title: section.title,
+		const section = allSectionsSorted[index - 1];
+		links.prev = {
+			text: `${section.location.chapter}.${section.location.section} ${section.title}`,
 			href: `/${section.url}`,
-			chapter: section.location.chapter,
 		};
 	}
 
 	if (index !== allSections.length - 1) {
-		const section = allSections[index + 1];
-		pager.next = {
-			title: section.title,
+		const section = allSectionsSorted[index + 1];
+		links.next = {
+			text: `${section.location.chapter}.${section.location.section} ${section.title}`,
 			href: `/${section.url}`,
-			chapter: section.location.chapter,
 		};
 	}
 
-	return pager;
+	return links;
 };

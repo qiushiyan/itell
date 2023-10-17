@@ -3,14 +3,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./client-components";
 import { User } from "@prisma/client";
 
-type Props = {
+interface Props extends React.ComponentPropsWithoutRef<typeof Avatar> {
 	user: Pick<User, "name" | "image" | "email">;
-	className?: string;
-};
+}
 
-export default function UserAvatar({ user, className }: Props) {
+export default function UserAvatar({ user, ...rest }: Props) {
 	return (
-		<Avatar className={className}>
+		<Avatar {...rest}>
 			{user.image ? (
 				<AvatarImage alt="Picture" src={user.image} />
 			) : (
