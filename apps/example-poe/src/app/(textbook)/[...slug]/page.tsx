@@ -17,31 +17,12 @@ import { TocSidebar } from "@/components/toc-sidebar";
 import { Section } from "contentlayer/generated";
 import Spinner from "@/components/spinner";
 
-import db from "@/lib/db";
 import { EventTracker } from "@/components/telemetry/event-tracker";
 import { PageContent } from "@/components/section/page-content";
 import { QuestionControl } from "@/components/question/question-control";
-import { getServerSession } from "next-auth";
 import { getCurrentUser } from "@/lib/auth";
 import { env } from "@/env.mjs";
-
-async function getSubsections(sectionIdinp: string) {
-	return await db.subSection.findMany({
-		where: {
-			sectionId: sectionIdinp,
-			NOT: {
-				question: {
-					equals: null,
-				},
-			},
-		},
-		select: {
-			sectionId: true,
-			subsection: true,
-			question: true,
-		},
-	});
-}
+import { getPageQuestions } from "@/lib/question";
 
 export const generateStaticParams = async () => {
 	return allSectionsSorted.map((section) => {
@@ -111,7 +92,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 
 	// Would be easier if we change chapter and section in Supabase to strings that match the
 	// formatting of subsection indices (i.e., strings with leading zeroes)
-	const subsectionIndex = `${currentLocation.chapter < 10 ? "0" : ""}${
+	const pageId = `${currentLocation.chapter < 10 ? "0" : ""}${
 		currentLocation.chapter
 	}-${currentLocation.section < 10 ? "0" : ""}${currentLocation.section}`;
 
@@ -119,7 +100,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	let questions;
 	let questionSelected;
 	if (enableQA) {
-		questions = await getSubsections(subsectionIndex);
+		questions = await getPageQuestions(pageId);
 		questionSelected =
 			questions[Math.floor(Math.random() * (questions.length - 1))];
 	}

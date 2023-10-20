@@ -14,6 +14,7 @@ import { PageContent } from "@/components/page-content";
 import Spinner from "@/components/spinner";
 import { PageVisibilityModal } from "@/components/page-visibility-modal";
 import { EventTracker } from "@/components/telemetry/event-tracker";
+import { getPageQuestions } from "@/lib/question";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +70,8 @@ export default async function ({ params }: { params: { slug: string } }) {
 
 	const requireSummary = chapter.summary;
 	const isDev = process.env.NODE_ENV === "development";
+
+	const pageId = `${String(chapter.chapter).padStart(2, "0")}`;
 
 	return (
 		<Fragment>

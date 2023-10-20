@@ -21,7 +21,6 @@ export const QuestionControl = ({
 }: Props) => {
 	// Ref for current chunk
 	const [nodes, setNodes] = useState<JSX.Element[]>([]);
-	const currentChunkRef = useRef<HTMLDivElement | null>(null);
 	const { currentChunk, chunks } = useQA();
 
 	const addNode = (node: JSX.Element) => {
@@ -106,7 +105,6 @@ export const QuestionControl = ({
 
 			if (currentChunkElement) {
 				currentChunkElement.style.filter = "none";
-				currentChunkRef.current = currentChunkElement;
 				if (
 					currentChunk !== subsectionWithQuestionIndex &&
 					currentChunk !== chunks.length - 1

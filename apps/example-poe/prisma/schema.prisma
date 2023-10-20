@@ -178,5 +178,6 @@ model SubSection {
   answer     String?
   keyphrases String[]
 
+  @@index([sectionId])
   @@map("subsections")
 }

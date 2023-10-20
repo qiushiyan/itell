@@ -142,20 +142,21 @@ model Section {
   @@map("sections")
 }
 
-model Subsection {
-  subsection_id String                 @id @unique
-  section_id    String?
-  subsection    Int?
-  heading       String?
-  raw_text      String?
-  clean_text    String?
-  slug          String?
-  qa_output     String?
-  keyphrases    String[]
-  question      String?
-  answer        String?
-  embedding     Unsupported("vector")?
+model SubSection {
+  id         String                 @id @unique @map("subsection_id")
+  sectionId  String                 @map("section_id")
+  subsection Int?
+  heading    String?
+  raw_text   String?
+  clean_text String?
+  slug       String?
+  qa_output  String?
+  keyphrases String[]
+  question   String?
+  answer     String?
+  embedding  Unsupported("vector")?
 
+  @@index([sectionId])
   @@map("subsections")
 }
 
