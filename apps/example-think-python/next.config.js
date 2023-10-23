@@ -3,9 +3,6 @@ const { withContentlayer } = require("next-contentlayer");
 module.exports = withContentlayer({
 	output: "standalone",
 	experimental: {
-		outputFileTracingIncludes: {
-			"/": ["./config/**/*"],
-		},
 		serverActions: true,
 	},
 	eslint: {
