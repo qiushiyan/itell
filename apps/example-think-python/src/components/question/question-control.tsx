@@ -83,7 +83,6 @@ export const QuestionControl = ({
 		// set up chunks
 		if (chunks) {
 			chunks.forEach((el, index) => {
-				console.log(index, el.textContent);
 				if (index !== 0) {
 					el.style.filter = "blur(4px)";
 				}

@@ -56,6 +56,10 @@ const Section = defineDocumentType(() => ({
 			type: "json",
 			resolve: (doc) => getLocationFromFlattenedPath(doc._raw.flattenedPath),
 		},
+		slug: {
+			type: "json",
+			resolve: (doc) => doc.title.toLowerCase().replace(/\s/g, "-"),
+		},
 		headings: {
 			type: "json",
 			resolve: (doc) => getHeadingsFromRawBody(doc.body.raw),

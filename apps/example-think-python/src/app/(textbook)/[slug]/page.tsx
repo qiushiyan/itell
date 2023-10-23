@@ -83,8 +83,6 @@ export default async function ({ params }: { params: { slug: string } }) {
 			questions[Math.floor(Math.random() * (questions.length - 1))];
 	}
 
-	console.log("selected question", questionSelected);
-
 	return (
 		<Fragment>
 			<div className="max-w-[1440px] mx-auto grid grid-cols-12 gap-6 px-2">

@@ -21,38 +21,19 @@ export const incrementLocation = (location: SectionLocation) => {
 	// Get the next section
 	const nextSection = allSectionsSorted[currentSectionIndex + 1];
 
-	// Check if next section is "Key Terms"
 	if (nextSection) {
-		// If the next section is "Key Terms"
-		// Find the nearest non-"Key Terms" section with non-zero section number
-		if (nextSection.title === "Key Terms") {
-			const nonKeyTermsSection = allSectionsSorted
-				.slice(currentSectionIndex + 2)
-				.find((s) => s.location.section !== 0 && s.title !== "Key Terms");
-
-			// If a non-"Key Terms" section is found, return its location
-			if (nonKeyTermsSection) {
-				return nonKeyTermsSection.location;
-			}
-
-			// If no non-"Key Terms" section is found, return the last section's location
-			return allSectionsSorted[allSectionsSorted.length - 1].location;
-		}
-
-		// if the next section has section number 0 (which means the current section is "Key Terms", which should not happen in practice)
-
-		if (nextSection.location.section === 0) {
-			const nonFirstSection = allSectionsSorted[currentSectionIndex + 2];
-			if (nonFirstSection) {
-				return nonFirstSection.location;
-			}
-
+		if (nextSection.summary) {
 			return nextSection.location;
-		}
-
-		// If next section is not "Key Terms" and has a non-zero section number, return its location
-		if (nextSection.location.section !== 0) {
-			return nextSection.location;
+		} else {
+			// find the next section that requires a summary
+			const nextSectionWithSummary = allSectionsSorted
+				.slice(currentSectionIndex + 1)
+				.find((s) => s.summary);
+			if (nextSectionWithSummary) {
+				return nextSectionWithSummary.location;
+			} else {
+				return location;
+			}
 		}
 	}
 

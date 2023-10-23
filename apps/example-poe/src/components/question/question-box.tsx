@@ -12,7 +12,7 @@ import { AlertTriangle, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 import Spinner from "../spinner";
-import { getQAScore } from "@/lib/question-answer";
+import { getQAScore } from "@/lib/question";
 import { useQA } from "../context/qa-context";
 import { FeedbackModal } from "./feedback-modal";
 import { Button } from "../client-components";
