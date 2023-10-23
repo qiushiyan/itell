@@ -70,7 +70,9 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 			});
 		},
 		chunksFn: () => {
-			return Array.from(document.querySelectorAll("#page-content .chunk"));
+			return Array.from(
+				document.querySelectorAll("#page-content .content-chunk"),
+			);
 		},
 		countInterval: FOCUS_TIME_COUNT_INTERVAL,
 	});

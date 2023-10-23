@@ -12,17 +12,16 @@ import { AlertTriangle, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 import Spinner from "../spinner";
-import { getQAScore } from "@/lib/question-answer";
 import { useQA } from "../context/qa-context";
 import { FeedbackModal } from "./feedback-modal";
 import { Button } from "../client-components";
 import { toast } from "sonner";
 import TextArea from "../ui/textarea";
+import { getQAScore } from "@/lib/question-answer";
 
 type Props = {
 	question: string | null;
 	chapter: number;
-	section: number;
 	subsection: number;
 };
 
@@ -34,12 +33,7 @@ enum AnswerStatus {
 	BOTH_INCORRECT = 3,
 }
 
-export const QuestionBox = ({
-	question,
-	chapter,
-	section,
-	subsection,
-}: Props) => {
+export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 	const { goToNextChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
@@ -113,7 +107,6 @@ export const QuestionBox = ({
 			const response = await getQAScore({
 				input: inputValue,
 				chapter: String(chapter),
-				section: String(section),
 				subsection: String(subsection),
 			});
 

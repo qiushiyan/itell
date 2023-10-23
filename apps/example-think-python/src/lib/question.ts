@@ -1,14 +1,17 @@
 import db from "./db";
 
-export const getPageQuestions = async (pageId: string)  => {
+export const getPageQuestions = async (pageId: string) => {
 	return await db.subSection.findMany({
 		where: {
 			sectionId: pageId,
-			NOT: {
-				question: {
-					equals: null,
+			NOT: [
+				{
+					question: null,
 				},
-			},
+				{
+					question: "",
+				},
+			],
 		},
 		select: {
 			sectionId: true,
@@ -16,4 +19,4 @@ export const getPageQuestions = async (pageId: string)  => {
 			question: true,
 		},
 	});
-}
+};
