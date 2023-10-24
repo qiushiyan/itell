@@ -53,6 +53,13 @@ export const QuestionBox = ({
 	const [isPositiveFeedback, setIsPositiveFeedback] = useState(false);
 	// QA input
 	const [inputValue, setInputValue] = useState("");
+	// Next chunk button display
+	const [nextButtonDisplay, setNextButtonDisplayValue] = useState(true);
+
+	const thenGoToNextChunk = () => {
+	    goToNextChunk();
+	    setNextButtonDisplayValue(false);
+	};
 
 	const positiveModal = () => {
 		setIsFeedbackModalOpen(true);
@@ -109,6 +116,7 @@ export const QuestionBox = ({
 	const handleSubmit = async () => {
 		// Spinner animation when loading
 		setIsLoading(true);
+		setNextButtonDisplayValue(true);
 		try {
 			const response = await getQAScore({
 				input: inputValue,
@@ -236,17 +244,19 @@ export const QuestionBox = ({
 					)}
 
 					{answer === AnswerStatus.BOTH_CORRECT ? (
-						<div className="flex justify-center items-center flex-row">
+						(nextButtonDisplay && (<div className="flex justify-center items-center flex-row">
 							<button
 								className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
-								onClick={goToNextChunk}
+								onClick={() => {
+									thenGoToNextChunk();
+								}}
 								type="submit"
 							>
 								Click Here to Continue Reading
 							</button>
-						</div>
+						</div>)
 					) : (
-						<div className="flex justify-center items-center flex-row gap-2">
+						(nextButtonDisplay && (<div className="flex justify-center items-center flex-row gap-2">
 							<Button
 								variant={"secondary"}
 								onClick={handleSubmit}
@@ -259,7 +269,7 @@ export const QuestionBox = ({
 								<Button
 									variant={"ghost"}
 									onClick={() => {
-										goToNextChunk();
+										thenGoToNextChunk();
 									}}
 								>
 									{answer === AnswerStatus.SEMI_CORRECT
@@ -267,7 +277,7 @@ export const QuestionBox = ({
 										: "Skip this question"}
 								</Button>
 							)}
-						</div>
+						</div>))
 					)}
 				</CardContent>
 			</Card>
