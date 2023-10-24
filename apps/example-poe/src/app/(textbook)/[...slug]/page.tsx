@@ -100,7 +100,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	// Subsections to be passed onto page
 	let selectedQuestions: QASubsections = {};
 	if (enableQA) {
-		questions = await getSubsections(subsectionIndex);
+		questions = await getPageQuestions(pageId);
 
 		for (let index = 0; index < questions.length - 1; index++) {
           // Generate a random number between 0 and 1
