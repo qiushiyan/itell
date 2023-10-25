@@ -2,7 +2,6 @@ import Balancer from "react-wrap-balancer";
 import { PageSummary } from "@/components/summary/page-summary";
 import { notFound } from "next/navigation";
 import { SectionLocation } from "@/types/location";
-import { QASubsections } from "@/types/qasubsections";
 import getChapters from "@/lib/sidebar";
 import { PageVisibilityModal } from "@/components/page-visibility-modal";
 import { getPagerLinksForSection } from "@/lib/pager";
@@ -98,7 +97,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	// get subsections
 	let questions;
 	// Subsections to be passed onto page
-	let selectedQuestions: QASubsections = {};
+	let selectedQuestions = new Map<number, string | null | undefined>();
 	if (enableQA) {
 		questions = await getPageQuestions(pageId);
 
@@ -108,15 +107,15 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 
           // Each subsection has a 1/3 chance of spawning a question
           if (randomValue < 1/3) {
-            selectedQuestions[questions[index].subsection] = questions[index].question;
+          	selectedQuestions.set(questions[index].subsection, questions[index].question)
           }
 
         }
 
         // Each page will have at least one question
-	    if (Object.keys(selectedQuestions).length === 0) {
+	    if (selectedQuestions.size === 0) {
 	      const randChunk = Math.floor(Math.random() * (questions.length - 1));
-	      selectedQuestions[questions[randChunk].subsection] = questions[randChunk].question;
+	      selectedQuestions.set(questions[randChunk].subsection, questions[randChunk].question)
  		 }
 	};
 

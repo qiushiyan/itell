@@ -3,14 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { QuestionBox } from "./question-box";
 import { SectionLocation } from "@/types/location";
-import { QASubsections } from "@/types/qasubsections";
 import { useQA } from "../context/qa-context";
 import { createPortal } from "react-dom";
 import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
 
 type Props = {
-	selectedquestions: QASubsections;
+	selectedquestions: Map<number, string | null | undefined>;
 	location: SectionLocation;
 };
 
@@ -81,7 +80,7 @@ export const QuestionControl = ({
 		addNode(
 			createPortal(
 				<QuestionBox
-					question={selectedquestions[index]}
+					question={selectedquestions.get(index)}
 					chapter={location.chapter}
 					section={location.section}
 					subsection={index}
@@ -98,7 +97,7 @@ export const QuestionControl = ({
 				if (index !== 0) {
 					el.style.filter = "blur(4px)";
 				}
-				if (index in selectedquestions) {
+				if (selectedquestions.has(index)) {
 					insertQuestion(el, index);
 				} 
 				if (index === chunks.length - 1) {
@@ -118,7 +117,7 @@ export const QuestionControl = ({
 				currentChunkElement.style.filter = "none";
 				currentChunkRef.current = currentChunkElement;
 				if (
-					!(currentChunk in selectedquestions) &&
+					!(selectedquestions.has(currentChunk)) &&
 					currentChunk !== chunks.length - 1
 				) {
 					insertNextChunkButton(currentChunkElement);

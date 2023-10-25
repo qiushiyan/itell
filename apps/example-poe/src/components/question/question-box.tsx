@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import TextArea from "../ui/textarea";
 
 type Props = {
-	question: string | null;
+	question: string | null | undefined;
 	chapter: number;
 	section: number;
 	subsection: number;
