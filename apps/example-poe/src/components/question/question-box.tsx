@@ -18,6 +18,8 @@ import { FeedbackModal } from "./feedback-modal";
 import { Button } from "../client-components";
 import { toast } from "sonner";
 import TextArea from "../ui/textarea";
+// import shake effect
+import "@/styles/shakescreen.css";
 
 type Props = {
 	question: string | null | undefined;
@@ -34,6 +36,14 @@ enum AnswerStatus {
 	BOTH_INCORRECT = 3,
 }
 
+// state for border color
+enum BorderColor {
+	BLUE = "border-blue-400",
+	RED = "border-red-400",
+	GREEN = "border-green-400",
+	YELLOW = "border-yellow-400",
+}
+
 export const QuestionBox = ({
 	question,
 	chapter,
@@ -43,8 +53,8 @@ export const QuestionBox = ({
 	const { goToNextChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
-	const [isFlashingYellow, setIsFlashingYellow] = useState(false);
 	const [answer, setAnswer] = useState(AnswerStatus.UNANSWERED);
+	const [borderColor, setBorderColor] = useState(BorderColor.BLUE);
 	// If QA passed
 	const [isCelebrating, setIsCelebrating] = useState(false);
 	// Handle spinner animation when loading
@@ -59,7 +69,7 @@ export const QuestionBox = ({
 	const thenGoToNextChunk = () => {
 	    goToNextChunk();
 	    setNextButtonDisplayValue(false);
-	};
+  	};
 
 	const positiveModal = () => {
 		setIsFeedbackModalOpen(true);
@@ -74,12 +84,13 @@ export const QuestionBox = ({
 
 	const passed = () => {
 		setAnswer(AnswerStatus.BOTH_CORRECT);
+		setBorderColor(BorderColor.GREEN);
 		setIsCelebrating(true);
 
 		// Stop the confettis after a short delay
 		setTimeout(() => {
 			setIsCelebrating(false);
-		}, 750); // Adjust the delay as needed
+		}, 750);
 	};
 
 	// Function to trigger the shake animation
@@ -92,24 +103,16 @@ export const QuestionBox = ({
 		}, 400);
 	};
 
-	// Function to trigger the border color change animation
-	const flashYellow = () => {
-		setIsFlashingYellow(true);
-
-		setTimeout(() => {
-			setIsFlashingYellow(false);
-		}, 600);
-	};
-
 	// Semi-celebrate when response is 1
 	const semiPassed = () => {
-		flashYellow();
+		setBorderColor(BorderColor.YELLOW);
 		setAnswer(AnswerStatus.SEMI_CORRECT);
 	};
 
 	// Failed = response is 0
 	const failed = () => {
 		shakeModal();
+		setBorderColor(BorderColor.RED);
 		setAnswer(AnswerStatus.BOTH_INCORRECT);
 	};
 
@@ -151,13 +154,9 @@ export const QuestionBox = ({
 	return (
 		<>
 			<Card
-				className={cn(
-					"flex justify-center items-center flex-col py-4 px-6 space-y-2",
-					{
-						"shake border-red-400": isShaking,
-						"border-yellow-400": isFlashingYellow,
-						"border-blue-400": !isFlashingYellow,
-					},
+				className={cn("flex justify-center items-center flex-col py-4 px-6 space-y-2", 
+						  `${borderColor}`,
+						  `${isShaking ? 'shake' : ''}`
 				)}
 			>
 				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
