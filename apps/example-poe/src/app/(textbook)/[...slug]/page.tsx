@@ -107,15 +107,25 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 
           // Each subsection has a 1/3 chance of spawning a question
           if (randomValue < 1/3) {
-          	selectedQuestions.set(questions[index].subsection, questions[index].question)
+          	let targetQuestion = questions[index].question;
+          	// band-aid solution for YouTube videos until we implement content-types via Strapi
+          	if (questions[index].slug.includes("learn-with-videos")) {
+          		targetQuestion = "(Watch the YouTube video above to answer this question) " + targetQuestion
+          	}
+          	selectedQuestions.set(questions[index].subsection, targetQuestion)
           }
 
         }
 
-        // Each page will have at least one question
+      // Each page will have at least one question
 	    if (selectedQuestions.size === 0) {
 	      const randChunk = Math.floor(Math.random() * (questions.length - 1));
-	      selectedQuestions.set(questions[randChunk].subsection, questions[randChunk].question)
+	      let targetQuestion = questions[randChunk].question;
+	      // band-aid solution for YouTube videos until we implement content-types via Strapi
+      	if (questions[randChunk].slug.includes("learn-with-videos")) {
+      		targetQuestion = "(Watch the YouTube video above to answer this question) " + targetQuestion
+    	};
+	      selectedQuestions.set(questions[randChunk].subsection, targetQuestion)
  		 }
 	};
 
