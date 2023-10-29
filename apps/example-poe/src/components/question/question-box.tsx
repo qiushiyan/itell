@@ -18,6 +18,7 @@ import { FeedbackModal } from "./feedback-modal";
 import { Button } from "../client-components";
 import { toast } from "sonner";
 import TextArea from "../ui/textarea";
+import { trpc } from "@/trpc/trpc-provider";
 // import shake effect
 import "@/styles/shakescreen.css";
 
@@ -135,6 +136,7 @@ export const QuestionBox = ({
 			}
 
 			const result = response.data;
+			updateQuestionResponse(result.score);
 
 			if (result.score === 2) {
 				passed();
@@ -149,6 +151,21 @@ export const QuestionBox = ({
 		} finally {
 			setIsLoading(false);
 		}
+	};
+
+	const updateQuestionResponse = async (score : number) => {
+		try {
+			const questionSubmit = await addQuestionResponse.mutateAsync({
+				response: inputValue,
+				chapter: chapter,
+				section: section,
+				subsection: subsection,
+				score: score,
+			});
+			} catch (err) {
+				console.log("failed to update constructed response", err);
+				toast.error("Something went wrong, please try again later.");
+			}
 	};
 
 	return (

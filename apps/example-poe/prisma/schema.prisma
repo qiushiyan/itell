@@ -181,3 +181,17 @@ model SubSection {
   @@index([sectionId])
   @@map("subsections")
 }
+
+model ConstructedResponses {
+  id               String @id @default(uuid())
+
+  userId           String      @map("user_id")
+  chapter          Int
+  section          Int
+  subsection       Int
+  score            Int
+  response         String
+  created_at       DateTime    @default(now())
+  
+  @@map("constructed_responses")
+}
