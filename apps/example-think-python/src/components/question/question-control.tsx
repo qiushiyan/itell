@@ -55,7 +55,7 @@ export const QuestionControl = ({
 		// insert button container
 		const buttonContainer = document.createElement("div");
 		buttonContainer.className =
-			"next-chunk-button-container flex justify-center items-center p-4 gap-2";
+			"next-chunk-button-container";
 		el.style.filter = "none";
 		el.appendChild(buttonContainer);
 

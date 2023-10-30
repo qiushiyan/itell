@@ -6,6 +6,9 @@
             },
             "correctness": {
                 "useExhaustiveDependencies": "warn"
+            },
+            "a11y": {
+                "useButtonType": "warn"
             }
         }
     }

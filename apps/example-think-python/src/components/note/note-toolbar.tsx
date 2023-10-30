@@ -33,7 +33,8 @@ export const NoteToolbar = ({ chapter }: { chapter: number }) => {
 			if (
 				event.target.tagName === "SPAN" ||
 				event.target.classList.contains("cm-line") ||
-				event.target.classList.contains("cm-editor")
+				event.target.classList.contains("cm-editor") ||
+				event.target.classList.contains("question-box-text")
 			) {
 				setShow(false);
 			} else {

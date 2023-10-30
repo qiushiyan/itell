@@ -194,7 +194,7 @@ export const QuestionBox = ({
 				</CardHeader>
 
 				<CardDescription className="flex justify-center items-center text-sm font-light text-zinc-500">
-					<p className="inline-flex">
+					<p className="inline-flex question-box-text">
 						{" "}
 						<AlertTriangle className="stroke-yellow-400 mr-2" /> iTELL AI is in
 						alpha testing. It will try its best to help you but it can still
@@ -207,11 +207,11 @@ export const QuestionBox = ({
 				<CardContent className="p-2 pt-0 space-y-4">
 					{answer === AnswerStatus.BOTH_INCORRECT && (
 						<div className="flex justify-center items-center flex-col text-xs m-2">
-							<p className="text-red-400">
+							<p className="text-red-400 question-box-text">
 								<b>iTELL AI says:</b> You likely got a part of the answer wrong.
 								Please try again.
 							</p>
-							<p>
+							<p className="question-box-text">
 								<u>
 									If you believe iTELL AI has made an error, you can click on
 									the "Skip this question" button to skip this question.
@@ -225,7 +225,7 @@ export const QuestionBox = ({
 
 					{answer === AnswerStatus.SEMI_CORRECT && (
 						<div className="flex justify-center items-center flex-col text-xs">
-							<p className="text-yellow-600">
+							<p className="text-yellow-600 question-box-text">
 								<b>iTELL AI says:</b> You may have missed something, but you
 								were generally close. You can click on the "Continue reading"
 								button below go to the next part or try again with a different
@@ -236,10 +236,10 @@ export const QuestionBox = ({
 
 					{answer === AnswerStatus.BOTH_CORRECT ? (
 						<div className="flex items-center flex-col">
-							<p className="text-xl2 text-emerald-600 text-center">
+							<p className="text-xl2 text-emerald-600 text-center question-box-text">
 								Your answer was CORRECT!
 							</p>
-							<p className="text-sm">
+							<p className="text-sm question-box-text">
 								Click on the button below to continue reading. Please use the
 								thumbs-up or thumbs-down icons on the top right side of this box
 								if you have any feedback about this question that you would like
@@ -248,7 +248,7 @@ export const QuestionBox = ({
 						</div>
 					) : (
 						question && (
-							<p>
+							<p className="question-box-text">
 								<b>Question:</b> {question}
 							</p>
 						)

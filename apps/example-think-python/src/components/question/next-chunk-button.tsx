@@ -7,7 +7,7 @@ import { buttonVariants } from "@itell/ui/server";
 export const NextChunkButton = () => {
 	const { goToNextChunk } = useQA();
 	return (
-		<div className="next-chunk-button-container flex justify-center items-center p-4 gap-2">
+		<div className="flex justify-center items-center p-4 gap-2">
 			<button
 				className={cn(
 					buttonVariants({ variant: "secondary" }),

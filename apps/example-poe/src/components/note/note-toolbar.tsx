@@ -24,6 +24,7 @@ type SelectionData = ReturnType<typeof useTextSelection>;
 export default function HighlightToolbar({
 	location,
 }: { location: SectionLocation }) {
+	const [show, setShow] = useState(true);
 	const [target, setTarget] = useState<HTMLElement | undefined>(undefined);
 	const noteColor = useNoteColor();
 	const { createNote, incrementHighlightCount, incrementNoteCount } =
@@ -31,11 +32,24 @@ export default function HighlightToolbar({
 	const createHighlight = trpc.note.create.useMutation();
 	const { data: session } = useSession();
 
+	const handleClick = (event: Event) => {
+		if (event.target instanceof HTMLElement) {
+			if (event.target.classList.contains("question-box-text")) {
+				setShow(false);
+			} else {
+				setShow(true);
+			}
+		}
+	};
+
 	useEffect(() => {
 		const el = document.getElementById("page-content") as HTMLElement;
 		if (el) {
 			setTarget(el);
+			el.addEventListener("click", handleClick);
 		}
+
+		return () => el.removeEventListener("click", handleClick);
 	}, []);
 
 	const commands = [
@@ -128,7 +142,7 @@ export default function HighlightToolbar({
 		},
 	];
 
-	if (!target) return null;
+	if (!target || !show) return null;
 
 	return (
 		<Popover
