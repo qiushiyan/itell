@@ -95,39 +95,38 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	}-${currentLocation.section < 10 ? "0" : ""}${currentLocation.section}`;
 
 	// get subsections
-	let questions;
+	let questions: Awaited<ReturnType<typeof getPageQuestions>> = [];
 	// Subsections to be passed onto page
-	let selectedQuestions = new Map<number, string | null | undefined>();
+	const selectedQuestions = new Map<number, string>();
 	if (enableQA) {
+		const chooseQuestion = (question: typeof questions[0]) => {
+			let targetQuestion = question.question;
+			// band-aid solution for YouTube videos until we implement content-types via Strapi
+			if (question.slug.includes("learn-with-videos")) {
+				console.log(question);
+				targetQuestion = `(Watch the YouTube video above to answer this question) ${targetQuestion}`;
+			}
+
+			if (targetQuestion) {
+				selectedQuestions.set(question.subsection, targetQuestion);
+			}
+		};
+
 		questions = await getPageQuestions(pageId);
 
 		for (let index = 0; index < questions.length - 1; index++) {
-          // Generate a random number between 0 and 1
-          const randomValue = Math.random();
+			// Each subsection has a 1/3 chance of spawning a question
+			if (Math.random() < 1 / 3) {
+				chooseQuestion(questions[index]);
+			}
+		}
 
-          // Each subsection has a 1/3 chance of spawning a question
-          if (randomValue < 1/3) {
-          	let targetQuestion = questions[index].question;
-          	// band-aid solution for YouTube videos until we implement content-types via Strapi
-          	if (questions[index].slug.includes("learn-with-videos")) {
-          		targetQuestion = "(Watch the YouTube video above to answer this question) " + targetQuestion
-          	}
-          	selectedQuestions.set(questions[index].subsection, targetQuestion)
-          }
-
-        }
-
-      // Each page will have at least one question
-	    if (selectedQuestions.size === 0) {
-	      const randChunk = Math.floor(Math.random() * (questions.length - 1));
-	      let targetQuestion = questions[randChunk].question;
-	      // band-aid solution for YouTube videos until we implement content-types via Strapi
-      	if (questions[randChunk].slug.includes("learn-with-videos")) {
-      		targetQuestion = "(Watch the YouTube video above to answer this question) " + targetQuestion
-    	};
-	      selectedQuestions.set(questions[randChunk].subsection, targetQuestion)
- 		 }
-	};
+		// Each page will have at least one question
+		if (selectedQuestions.size === 0) {
+			const randChunk = Math.floor(Math.random() * (questions.length - 1));
+			chooseQuestion(questions[randChunk]);
+		}
+	}
 
 	return (
 		<Fragment>
@@ -165,7 +164,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					</h1>
 					{enableQA && (
 						<QuestionControl
-							selectedquestions={selectedQuestions}
+							selectedQuestions={selectedQuestions}
 							location={currentLocation}
 						/>
 					)}

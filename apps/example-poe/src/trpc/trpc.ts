@@ -6,7 +6,6 @@ import { FocusTimeRouter } from "./routers/focus-time.router";
 import { userRouter } from "./routers/user.router";
 import { ClassRouter } from "./routers/class.router";
 import { EventRouter } from "./routers/event.router";
-import QuestionRouter from "./routers/question.router";
 export const appRouter = router({
 	user: userRouter,
 	summary: SummaryRouter,
@@ -14,7 +13,6 @@ export const appRouter = router({
 	focusTime: FocusTimeRouter,
 	class: ClassRouter,
 	event: EventRouter,
-	question: QuestionRouter,
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;

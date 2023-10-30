@@ -15,6 +15,7 @@ export const getPageQuestions = async (pageId: string) => {
 		},
 		select: {
 			sectionId: true,
+			slug: true,
 			subsection: true,
 			question: true,
 		},

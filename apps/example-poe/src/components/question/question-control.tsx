@@ -9,14 +9,11 @@ import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
 
 type Props = {
-	selectedquestions: Map<number, string | null | undefined>;
+	selectedQuestions: Map<number, string | null | undefined>;
 	location: SectionLocation;
 };
 
-export const QuestionControl = ({
-	selectedquestions,
-	location,
-}: Props) => {
+export const QuestionControl = ({ selectedQuestions, location }: Props) => {
 	// Ref for current chunk
 	const [nodes, setNodes] = useState<JSX.Element[]>([]);
 	const currentChunkRef = useRef<HTMLDivElement | null>(null);
@@ -53,7 +50,7 @@ export const QuestionControl = ({
 
 	const hideScrollBackButton = () => {
 		const button = document.querySelector(
-			".scroll-back-button-container"
+			".scroll-back-button-container",
 		) as HTMLDivElement;
 
 		if (button) {
@@ -80,7 +77,7 @@ export const QuestionControl = ({
 		addNode(
 			createPortal(
 				<QuestionBox
-					question={selectedquestions.get(index)}
+					question={selectedQuestions.get(index)}
 					chapter={location.chapter}
 					section={location.section}
 					subsection={index}
@@ -97,9 +94,9 @@ export const QuestionControl = ({
 				if (index !== 0) {
 					el.style.filter = "blur(4px)";
 				}
-				if (selectedquestions.has(index)) {
+				if (selectedQuestions.has(index)) {
 					insertQuestion(el, index);
-				} 
+				}
 				if (index === chunks.length - 1) {
 					insertScrollBackButton(el);
 				}
@@ -117,7 +114,7 @@ export const QuestionControl = ({
 				currentChunkElement.style.filter = "none";
 				currentChunkRef.current = currentChunkElement;
 				if (
-					!(selectedquestions.has(currentChunk)) &&
+					!selectedQuestions.has(currentChunk) &&
 					currentChunk !== chunks.length - 1
 				) {
 					insertNextChunkButton(currentChunkElement);
@@ -131,7 +128,7 @@ export const QuestionControl = ({
 
 			// hide scroll back button when last chunk is revealed
 			if (currentChunk === chunks.length - 1) {
-				hideScrollBackButton()
+				hideScrollBackButton();
 			}
 		}
 	}, [chunks, currentChunk]);

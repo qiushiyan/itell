@@ -18,9 +18,10 @@ import { FeedbackModal } from "./feedback-modal";
 import { Button } from "../client-components";
 import { toast } from "sonner";
 import TextArea from "../ui/textarea";
-import { trpc } from "@/trpc/trpc-provider";
 // import shake effect
 import "@/styles/shakescreen.css";
+import { useSession } from "next-auth/react";
+import { createQuestionAnswer } from "@/lib/actions/question";
 
 type Props = {
 	question: string | null | undefined;
@@ -51,6 +52,7 @@ export const QuestionBox = ({
 	section,
 	subsection,
 }: Props) => {
+	const { data: session } = useSession();
 	const { goToNextChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
@@ -65,12 +67,12 @@ export const QuestionBox = ({
 	// QA input
 	const [inputValue, setInputValue] = useState("");
 	// Next chunk button display
-	const [nextButtonDisplay, setNextButtonDisplayValue] = useState(true);
+	const [isDisplayNextButton, setIsDisplayNextButton] = useState(true);
 
 	const thenGoToNextChunk = () => {
-	    goToNextChunk();
-	    setNextButtonDisplayValue(false);
-  	};
+		goToNextChunk();
+		setIsDisplayNextButton(false);
+	};
 
 	const positiveModal = () => {
 		setIsFeedbackModalOpen(true);
@@ -120,7 +122,6 @@ export const QuestionBox = ({
 	const handleSubmit = async () => {
 		// Spinner animation when loading
 		setIsLoading(true);
-		setNextButtonDisplayValue(true);
 		try {
 			const response = await getQAScore({
 				input: inputValue,
@@ -132,11 +133,10 @@ export const QuestionBox = ({
 			if (!response.success) {
 				// API response is not in correct shape
 				console.error("API Response error", response);
-				return;
+				return toast.error("Answer evaluation failed, please try again later");
 			}
 
 			const result = response.data;
-			updateQuestionResponse(result.score);
 
 			if (result.score === 2) {
 				passed();
@@ -145,35 +145,39 @@ export const QuestionBox = ({
 			} else {
 				failed();
 			}
+			if (session?.user) {
+				await createQuestionAnswer({
+					userId: session.user.id,
+					response: inputValue,
+					chapter: chapter,
+					section: section,
+					subsection: subsection,
+					score: result.score,
+				});
+			}
 		} catch (err) {
 			console.log("failed to score answer", err);
-			toast.error("Connection failed. Please try submit your answer again.");
+			return toast.error("Question evaluation failed, please try again later");
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
-	const updateQuestionResponse = async (score : number) => {
-		try {
-			const questionSubmit = await addQuestionResponse.mutateAsync({
-				response: inputValue,
-				chapter: chapter,
-				section: section,
-				subsection: subsection,
-				score: score,
-			});
-			} catch (err) {
-				console.log("failed to update constructed response", err);
-				toast.error("Something went wrong, please try again later.");
-			}
-	};
+	if (!session?.user) {
+		return (
+			<Card>
+				<CardHeader>You need to be logged in to view this question.</CardHeader>
+			</Card>
+		);
+	}
 
 	return (
 		<>
 			<Card
-				className={cn("flex justify-center items-center flex-col py-4 px-6 space-y-2", 
-						  `${borderColor}`,
-						  `${isShaking ? 'shake' : ''}`
+				className={cn(
+					"flex justify-center items-center flex-col py-4 px-6 space-y-2",
+					`${borderColor}`,
+					`${isShaking ? "shake" : ""}`,
 				)}
 			>
 				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
@@ -259,8 +263,8 @@ export const QuestionBox = ({
 						/>
 					)}
 
-					{answer === AnswerStatus.BOTH_CORRECT ? (
-						(nextButtonDisplay && (<div className="flex justify-center items-center flex-row">
+					{answer === AnswerStatus.BOTH_INCORRECT && isDisplayNextButton ? (
+						<div className="flex justify-center items-center flex-row">
 							<button
 								className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
 								onClick={() => {
@@ -270,9 +274,9 @@ export const QuestionBox = ({
 							>
 								Click Here to Continue Reading
 							</button>
-						</div>)
+						</div>
 					) : (
-						(nextButtonDisplay && (<div className="flex justify-center items-center flex-row gap-2">
+						<div className="flex justify-center items-center flex-row gap-2">
 							<Button
 								variant={"secondary"}
 								onClick={handleSubmit}
@@ -281,7 +285,8 @@ export const QuestionBox = ({
 								{isLoading && <Spinner className="inline mr-2" />}
 								{answer !== AnswerStatus.SEMI_CORRECT ? "Submit" : "Resubmit"}
 							</Button>
-							{answer !== AnswerStatus.UNANSWERED && (
+
+							{answer !== AnswerStatus.UNANSWERED && isDisplayNextButton && (
 								<Button
 									variant={"ghost"}
 									onClick={() => {
@@ -293,7 +298,7 @@ export const QuestionBox = ({
 										: "Skip this question"}
 								</Button>
 							)}
-						</div>))
+						</div>
 					)}
 				</CardContent>
 			</Card>
