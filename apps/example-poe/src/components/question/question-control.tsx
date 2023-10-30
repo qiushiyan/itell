@@ -9,18 +9,14 @@ import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
 
 type Props = {
-	subsectionWithQuestionIndex: number;
-	subsectionQuestion: string | null;
+	selectedQuestions: Map<number, string | null | undefined>;
 	location: SectionLocation;
 };
 
-export const QuestionControl = ({
-	subsectionWithQuestionIndex,
-	subsectionQuestion,
-	location,
-}: Props) => {
+export const QuestionControl = ({ selectedQuestions, location }: Props) => {
 	// Ref for current chunk
 	const [nodes, setNodes] = useState<JSX.Element[]>([]);
+	const currentChunkRef = useRef<HTMLDivElement | null>(null);
 	const { currentChunk, chunks } = useQA();
 
 	const addNode = (node: JSX.Element) => {
@@ -52,6 +48,16 @@ export const QuestionControl = ({
 		}
 	};
 
+	const hideScrollBackButton = () => {
+		const button = document.querySelector(
+			".scroll-back-button-container",
+		) as HTMLDivElement;
+
+		if (button) {
+			button.remove();
+		}
+	};
+
 	const insertNextChunkButton = (el: HTMLDivElement) => {
 		// insert button container
 		const buttonContainer = document.createElement("div");
@@ -63,7 +69,7 @@ export const QuestionControl = ({
 		addNode(createPortal(<NextChunkButton />, buttonContainer));
 	};
 
-	const insertQuestion = (el: HTMLDivElement) => {
+	const insertQuestion = (el: HTMLDivElement, index: number) => {
 		const questionContainer = document.createElement("div");
 		questionContainer.className = "question-container";
 		el.appendChild(questionContainer);
@@ -71,10 +77,10 @@ export const QuestionControl = ({
 		addNode(
 			createPortal(
 				<QuestionBox
-					question={subsectionQuestion}
+					question={selectedQuestions.get(index)}
 					chapter={location.chapter}
 					section={location.section}
-					subsection={subsectionWithQuestionIndex}
+					subsection={index}
 				/>,
 				questionContainer,
 			),
@@ -88,9 +94,10 @@ export const QuestionControl = ({
 				if (index !== 0) {
 					el.style.filter = "blur(4px)";
 				}
-				if (index === subsectionWithQuestionIndex) {
-					insertQuestion(el);
-				} else if (index === chunks.length - 1) {
+				if (selectedQuestions.has(index)) {
+					insertQuestion(el, index);
+				}
+				if (index === chunks.length - 1) {
 					insertScrollBackButton(el);
 				}
 			});
@@ -105,8 +112,9 @@ export const QuestionControl = ({
 
 			if (currentChunkElement) {
 				currentChunkElement.style.filter = "none";
+				currentChunkRef.current = currentChunkElement;
 				if (
-					currentChunk !== subsectionWithQuestionIndex &&
+					!selectedQuestions.has(currentChunk) &&
 					currentChunk !== chunks.length - 1
 				) {
 					insertNextChunkButton(currentChunkElement);
@@ -116,6 +124,11 @@ export const QuestionControl = ({
 			// when a fresh page is loaded,. set up ref data and prepare chunk styles
 			if (currentChunk !== 0 && prevChunkElement) {
 				hideNextChunkButton(prevChunkElement);
+			}
+
+			// hide scroll back button when last chunk is revealed
+			if (currentChunk === chunks.length - 1) {
+				hideScrollBackButton();
 			}
 		}
 	}, [chunks, currentChunk]);

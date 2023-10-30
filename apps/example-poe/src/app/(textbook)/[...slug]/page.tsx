@@ -13,10 +13,8 @@ import { allSectionsSorted } from "@/lib/sections";
 import { Button, Pager } from "@/components/client-components";
 import { ModuleSidebar } from "@/components/module-sidebar";
 import { TocSidebar } from "@/components/toc-sidebar";
-
 import { Section } from "contentlayer/generated";
 import Spinner from "@/components/spinner";
-
 import { EventTracker } from "@/components/telemetry/event-tracker";
 import { PageContent } from "@/components/section/page-content";
 import { QuestionControl } from "@/components/question/question-control";
@@ -97,12 +95,37 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 	}-${currentLocation.section < 10 ? "0" : ""}${currentLocation.section}`;
 
 	// get subsections
-	let questions;
-	let questionSelected;
+	let questions: Awaited<ReturnType<typeof getPageQuestions>> = [];
+	// Subsections to be passed onto page
+	const selectedQuestions = new Map<number, string>();
 	if (enableQA) {
+		const chooseQuestion = (question: typeof questions[0]) => {
+			let targetQuestion = question.question;
+			// band-aid solution for YouTube videos until we implement content-types via Strapi
+			if (question.slug.includes("learn-with-videos")) {
+				console.log(question);
+				targetQuestion = `(Watch the YouTube video above to answer this question) ${targetQuestion}`;
+			}
+
+			if (targetQuestion) {
+				selectedQuestions.set(question.subsection, targetQuestion);
+			}
+		};
+
 		questions = await getPageQuestions(pageId);
-		questionSelected =
-			questions[Math.floor(Math.random() * (questions.length - 1))];
+
+		for (let index = 0; index < questions.length - 1; index++) {
+			// Each subsection has a 1/3 chance of spawning a question
+			if (Math.random() < 1 / 3) {
+				chooseQuestion(questions[index]);
+			}
+		}
+
+		// Each page will have at least one question
+		if (selectedQuestions.size === 0) {
+			const randChunk = Math.floor(Math.random() * (questions.length - 1));
+			chooseQuestion(questions[randChunk]);
+		}
 	}
 
 	return (
@@ -141,10 +164,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					</h1>
 					{enableQA && (
 						<QuestionControl
-							subsectionWithQuestionIndex={
-								questionSelected?.subsection as number
-							}
-							subsectionQuestion={questionSelected?.question as string}
+							selectedQuestions={selectedQuestions}
 							location={currentLocation}
 						/>
 					)}

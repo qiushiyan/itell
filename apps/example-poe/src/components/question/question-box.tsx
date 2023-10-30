@@ -18,9 +18,13 @@ import { FeedbackModal } from "./feedback-modal";
 import { Button } from "../client-components";
 import { toast } from "sonner";
 import TextArea from "../ui/textarea";
+// import shake effect
+import "@/styles/shakescreen.css";
+import { useSession } from "next-auth/react";
+import { createQuestionAnswer } from "@/lib/actions/question";
 
 type Props = {
-	question: string | null;
+	question: string | null | undefined;
 	chapter: number;
 	section: number;
 	subsection: number;
@@ -34,17 +38,26 @@ enum AnswerStatus {
 	BOTH_INCORRECT = 3,
 }
 
+// state for border color
+enum BorderColor {
+	BLUE = "border-blue-400",
+	RED = "border-red-400",
+	GREEN = "border-green-400",
+	YELLOW = "border-yellow-400",
+}
+
 export const QuestionBox = ({
 	question,
 	chapter,
 	section,
 	subsection,
 }: Props) => {
+	const { data: session } = useSession();
 	const { goToNextChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
-	const [isFlashingYellow, setIsFlashingYellow] = useState(false);
 	const [answer, setAnswer] = useState(AnswerStatus.UNANSWERED);
+	const [borderColor, setBorderColor] = useState(BorderColor.BLUE);
 	// If QA passed
 	const [isCelebrating, setIsCelebrating] = useState(false);
 	// Handle spinner animation when loading
@@ -53,6 +66,13 @@ export const QuestionBox = ({
 	const [isPositiveFeedback, setIsPositiveFeedback] = useState(false);
 	// QA input
 	const [inputValue, setInputValue] = useState("");
+	// Next chunk button display
+	const [isDisplayNextButton, setIsDisplayNextButton] = useState(true);
+
+	const thenGoToNextChunk = () => {
+		goToNextChunk();
+		setIsDisplayNextButton(false);
+	};
 
 	const positiveModal = () => {
 		setIsFeedbackModalOpen(true);
@@ -67,12 +87,13 @@ export const QuestionBox = ({
 
 	const passed = () => {
 		setAnswer(AnswerStatus.BOTH_CORRECT);
+		setBorderColor(BorderColor.GREEN);
 		setIsCelebrating(true);
 
 		// Stop the confettis after a short delay
 		setTimeout(() => {
 			setIsCelebrating(false);
-		}, 750); // Adjust the delay as needed
+		}, 750);
 	};
 
 	// Function to trigger the shake animation
@@ -85,24 +106,16 @@ export const QuestionBox = ({
 		}, 400);
 	};
 
-	// Function to trigger the border color change animation
-	const flashYellow = () => {
-		setIsFlashingYellow(true);
-
-		setTimeout(() => {
-			setIsFlashingYellow(false);
-		}, 600);
-	};
-
 	// Semi-celebrate when response is 1
 	const semiPassed = () => {
-		flashYellow();
+		setBorderColor(BorderColor.YELLOW);
 		setAnswer(AnswerStatus.SEMI_CORRECT);
 	};
 
 	// Failed = response is 0
 	const failed = () => {
 		shakeModal();
+		setBorderColor(BorderColor.RED);
 		setAnswer(AnswerStatus.BOTH_INCORRECT);
 	};
 
@@ -120,7 +133,7 @@ export const QuestionBox = ({
 			if (!response.success) {
 				// API response is not in correct shape
 				console.error("API Response error", response);
-				return;
+				return toast.error("Answer evaluation failed, please try again later");
 			}
 
 			const result = response.data;
@@ -132,24 +145,39 @@ export const QuestionBox = ({
 			} else {
 				failed();
 			}
+			if (session?.user) {
+				await createQuestionAnswer({
+					userId: session.user.id,
+					response: inputValue,
+					chapter: chapter,
+					section: section,
+					subsection: subsection,
+					score: result.score,
+				});
+			}
 		} catch (err) {
 			console.log("failed to score answer", err);
-			toast.error("Connection failed. Please try submit your answer again.");
+			return toast.error("Question evaluation failed, please try again later");
 		} finally {
 			setIsLoading(false);
 		}
 	};
+
+	if (!session?.user) {
+		return (
+			<Card>
+				<CardHeader>You need to be logged in to view this question.</CardHeader>
+			</Card>
+		);
+	}
 
 	return (
 		<>
 			<Card
 				className={cn(
 					"flex justify-center items-center flex-col py-4 px-6 space-y-2",
-					{
-						"shake border-red-400": isShaking,
-						"border-yellow-400": isFlashingYellow,
-						"border-blue-400": !isFlashingYellow,
-					},
+					`${borderColor}`,
+					`${isShaking ? "shake" : ""}`,
 				)}
 			>
 				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
@@ -235,11 +263,13 @@ export const QuestionBox = ({
 						/>
 					)}
 
-					{answer === AnswerStatus.BOTH_CORRECT ? (
+					{answer === AnswerStatus.BOTH_INCORRECT && isDisplayNextButton ? (
 						<div className="flex justify-center items-center flex-row">
 							<button
 								className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
-								onClick={goToNextChunk}
+								onClick={() => {
+									thenGoToNextChunk();
+								}}
 								type="submit"
 							>
 								Click Here to Continue Reading
@@ -255,11 +285,12 @@ export const QuestionBox = ({
 								{isLoading && <Spinner className="inline mr-2" />}
 								{answer !== AnswerStatus.SEMI_CORRECT ? "Submit" : "Resubmit"}
 							</Button>
-							{answer !== AnswerStatus.UNANSWERED && (
+
+							{answer !== AnswerStatus.UNANSWERED && isDisplayNextButton && (
 								<Button
 									variant={"ghost"}
 									onClick={() => {
-										goToNextChunk();
+										thenGoToNextChunk();
 									}}
 								>
 									{answer === AnswerStatus.SEMI_CORRECT
