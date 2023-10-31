@@ -1,4 +1,5 @@
-import { Inter as FontSans, Roboto_Slab as FontSerif } from "next/font/google";
+import { Roboto_Slab as FontSerif } from "next/font/google";
+import { GeistSans as FontSans } from "geist/font";
 import "@/styles/globals.css";
 
 import { RootProvider } from "@/components/provider/root-provider";
@@ -26,11 +27,6 @@ export async function generateMetadata(): Promise<Metadata> {
 	};
 }
 
-const fontSans = FontSans({
-	subsets: ["latin"],
-	variable: "--font-sans",
-});
-
 const fontSerif = FontSerif({
 	subsets: ["latin"],
 	variable: "--font-serif",
@@ -57,7 +53,7 @@ export default async function RootLayout({
 			<body
 				className={cn(
 					"min-h-screen bg-background font-sans antialiased",
-					fontSans.variable,
+					FontSans.className,
 					fontSerif.variable,
 				)}
 			>
@@ -66,7 +62,7 @@ export default async function RootLayout({
 						<ShowToast />
 					</Suspense>
 					<TailwindIndicator />
-					<main> {children}</main>
+					<main> {children} </main>
 				</RootProvider>
 			</body>
 		</html>

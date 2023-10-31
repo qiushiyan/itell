@@ -37,6 +37,7 @@
     "contentlayer": "^0.3.4",
     "date-fns": "2.29.3",
     "framer-motion": "^10.16.4",
+    "geist": "^1.0.0",
     "github-slugger": "^2.0.0",
     "immer": "^9.0.21",
     "lucide-react": "^0.268.0",
