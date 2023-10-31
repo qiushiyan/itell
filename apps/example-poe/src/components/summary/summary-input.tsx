@@ -33,10 +33,10 @@ import { incrementLocation, isLocationAfter } from "@/lib/location";
 import pluralize from "pluralize";
 export const SummaryInput = ({ location }: { location: SectionLocation }) => {
 	const [showProceedModal, setShowProceedModal] = useState(false);
+	const createFocusTime = trpc.focusTime.create.useMutation();
 	const { state, setInput, score, create } = useSummary({
 		useLocalStorage: true,
 	});
-	const createFocusTime = trpc.focusTime.create.useMutation();
 
 	const router = useRouter();
 	const { status: sessionStatus } = useSession();

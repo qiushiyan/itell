@@ -21,7 +21,7 @@ import TextArea from "../ui/textarea";
 // import shake effect
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
-import { createQuestionAnswer } from "@/lib/actions/question";
+import { createQuestionAnswer } from "@/lib/server-actions";
 
 type Props = {
 	question: string | null | undefined;

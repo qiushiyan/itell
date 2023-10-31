@@ -81,16 +81,6 @@ const SummaryRouter = router({
 				},
 			});
 		}),
-
-	delete: protectedProcedure
-		.input(z.object({ id: z.string() }))
-		.mutation(async ({ ctx, input }) => {
-			return await ctx.prisma.summary.delete({
-				where: {
-					id: input.id,
-				},
-			});
-		}),
 });
 
 export default SummaryRouter;

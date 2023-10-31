@@ -13,19 +13,23 @@ import {
 	AlertDialogTrigger,
 } from "@/components/client-components";
 import { useState } from "react";
-import { trpc } from "@/trpc/trpc-provider";
 import Spinner from "@/components/spinner";
 import { useRouter } from "next/navigation";
 import { ClassRegister } from "./class-register";
-import { env } from "@/env.mjs";
+import { updateUserWithClassId } from "@/lib/server-actions";
+import { useSession } from "next-auth/react";
 
 export const ClassInfo = async ({ teacher }: { teacher: User | null }) => {
 	const [isLoading, setIsLoading] = useState(false);
-	const quitClass = trpc.class.quitClass.useMutation();
+	const { data: session } = useSession();
 	const router = useRouter();
 
 	if (!teacher) {
 		return <ClassRegister />;
+	}
+
+	if (!session?.user) {
+		return null;
 	}
 
 	return (
@@ -55,7 +59,11 @@ export const ClassInfo = async ({ teacher }: { teacher: User | null }) => {
 									disabled={isLoading}
 									onClick={async () => {
 										setIsLoading(true);
-										await quitClass.mutateAsync();
+
+										await updateUserWithClassId({
+											userId: session.user.id,
+											classId: null,
+										});
 
 										setIsLoading(false);
 										router.refresh();

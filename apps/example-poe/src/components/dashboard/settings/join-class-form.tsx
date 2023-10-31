@@ -26,22 +26,27 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import {
+	getTeacherWithClassId,
+	updateUserWithClassId,
+} from "@/lib/server-actions";
+import { useSession } from "next-auth/react";
 
 export const JoinClassForm = () => {
 	const router = useRouter();
+	const { data: session } = useSession();
 	const [joinClassModalOpen, setJoinClassModalOpen] = useState(false);
-	const getTeacher = trpc.class.getTeacherWithCode.useMutation();
 	const [teacherName, setTeacherName] = useState("");
 
 	const formSchema = z.object({
-		code: z.string().refine(async (val) => {
-			const teacher = await getTeacher.mutateAsync({ code: val });
+		code: z.string().refine(async (classId) => {
+			const teacher = await getTeacherWithClassId(classId);
 			if (!teacher) {
 				return false;
 			}
 			setTeacherName(teacher.name || "unknown");
 
-			return val;
+			return classId;
 		}, "Invalid class code"),
 	});
 
@@ -63,15 +68,6 @@ export const JoinClassForm = () => {
 	}
 
 	const [joinClassLoading, setJoinClassLoading] = useState(false);
-	const joinClass = trpc.class.joinClass.useMutation({
-		onSuccess: () => {
-			setJoinClassLoading(false);
-			setJoinClassModalOpen(false);
-			toast.success(
-				"You are now added to class. Go to the statistics page to compare your progress with your classmates.",
-			);
-		},
-	});
 
 	return (
 		<div className="space-y-4">
@@ -120,11 +116,20 @@ export const JoinClassForm = () => {
 								e.preventDefault();
 								setJoinClassLoading(true);
 
-								await joinClass.mutateAsync({
-									code,
-								});
+								if (session?.user) {
+									await updateUserWithClassId({
+										userId: session.user.id,
+										classId: code,
+									});
 
-								router.refresh();
+									setJoinClassLoading(false);
+									setJoinClassModalOpen(false);
+									toast.success(
+										"You are now added to class. Go to the statistics page to compare your progress with your classmates.",
+									);
+
+									router.refresh();
+								}
 							}}
 						>
 							{joinClassLoading ? <Spinner /> : " Continue"}

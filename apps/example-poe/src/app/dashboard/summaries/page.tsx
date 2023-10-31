@@ -14,13 +14,12 @@ export default async function () {
 		return redirect("/auth");
 	}
 
-	const id = user.id;
-	const userSummaries = await db.user.findUnique({
+	const userSummaries = await db.summary.findMany({
 		where: {
-			id,
+			userId: user.id,
 		},
-		include: {
-			summaries: true,
+		orderBy: {
+			created_at: "desc",
 		},
 	});
 
@@ -28,7 +27,7 @@ export default async function () {
 		return notFound();
 	}
 
-	if (userSummaries.summaries.length === 0) {
+	if (userSummaries.length === 0) {
 		return (
 			<DashboardShell>
 				<DashboardHeader heading="Summary" text="Create and manage summaries.">
@@ -49,10 +48,7 @@ export default async function () {
 	}
 
 	// // convert date here since they will be passed from server components to client components
-	const summariesByModule = groupby(
-		userSummaries.summaries,
-		(summary) => summary.module,
-	);
+	const summariesByModule = groupby(userSummaries, (summary) => summary.module);
 
 	return (
 		<DashboardShell>

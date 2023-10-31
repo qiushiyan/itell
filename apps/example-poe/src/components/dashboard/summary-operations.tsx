@@ -23,6 +23,7 @@ import { trpc } from "@/trpc/trpc-provider";
 import Spinner from "../spinner";
 import Link from "next/link";
 import { makeLocationHref } from "@/lib/utils";
+import { deleteSummary } from "@/lib/server-actions";
 
 export default function ({ summary }: { summary: Summary }) {
 	const router = useRouter();
@@ -31,7 +32,6 @@ export default function ({ summary }: { summary: Summary }) {
 		chapter: summary.chapter,
 		section: summary.section,
 	});
-	const deleteSummary = trpc.summary.delete.useMutation();
 	const [showDeleteAlert, setShowDeleteAlert] = React.useState<boolean>(false);
 	const [isDeleteLoading, setIsDeleteLoading] = React.useState<boolean>(false);
 
@@ -70,14 +70,12 @@ export default function ({ summary }: { summary: Summary }) {
 					<AlertDialogFooter>
 						<AlertDialogCancel>Cancel</AlertDialogCancel>
 						<AlertDialogAction
+							disabled={isDeleteLoading}
 							onClick={async (event) => {
 								event.preventDefault();
 								setIsDeleteLoading(true);
 
-								const deleted = await deleteSummary.mutateAsync({
-									id: summary.id,
-								});
-
+								const deleted = await deleteSummary(summary.id);
 								if (deleted) {
 									setIsDeleteLoading(false);
 									setShowDeleteAlert(false);

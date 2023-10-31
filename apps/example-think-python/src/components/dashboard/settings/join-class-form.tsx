@@ -27,7 +27,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-export const JoinClass = () => {
+export const JoinClassForm = () => {
 	const classId = useSearchParams()?.get("class_id");
 	const router = useRouter();
 	const [joinClassModalOpen, setJoinClassModalOpen] = useState(false);
