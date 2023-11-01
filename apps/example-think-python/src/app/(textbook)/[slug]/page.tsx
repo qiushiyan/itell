@@ -77,18 +77,23 @@ export default async function ({ params }: { params: { slug: string } }) {
 	// get subsections
 	let questions: Awaited<ReturnType<typeof getPageQuestions>> = [];
 	// Subsections to be passed onto page
-	const selectedQuestions = new Map<number, string>();
+	const selectedQuestions = new Map<
+		number,
+		{ question: string; answer: string }
+	>();
 	if (chapter.qa) {
 		const chooseQuestion = (question: typeof questions[0]) => {
 			let targetQuestion = question.question;
 			// band-aid solution for YouTube videos until we implement content-types via Strapi
 			if (question.slug.includes("learn-with-videos")) {
-				console.log(question);
 				targetQuestion = `(Watch the YouTube video above to answer this question) ${targetQuestion}`;
 			}
 
-			if (targetQuestion) {
-				selectedQuestions.set(question.subsection, targetQuestion);
+			if (targetQuestion && question.answer) {
+				selectedQuestions.set(question.subsection, {
+					question: targetQuestion,
+					answer: question.answer,
+				});
 			}
 		};
 

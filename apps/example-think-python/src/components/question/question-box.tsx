@@ -16,7 +16,12 @@ import Spinner from "../spinner";
 import { getQAScore } from "@/lib/question";
 import { useQA } from "../context/qa-context";
 import { FeedbackModal } from "./feedback-modal";
-import { Button } from "../client-components";
+import {
+	Button,
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+} from "../client-components";
 import { toast } from "sonner";
 import TextArea from "../ui/textarea";
 // import shake effect
@@ -26,6 +31,7 @@ import { createQuestionAnswer } from "@/lib/server-actions";
 
 type Props = {
 	question: string;
+	answer: string;
 	chapter: number;
 	subsection: number;
 };
@@ -46,12 +52,17 @@ enum BorderColor {
 	YELLOW = "border-yellow-400",
 }
 
-export const QuestionBox = ({ question, chapter, subsection }: Props) => {
+export const QuestionBox = ({
+	question,
+	chapter,
+	subsection,
+	answer,
+}: Props) => {
 	const { data: session } = useSession();
 	const { goToNextChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
-	const [answer, setAnswer] = useState(AnswerStatus.UNANSWERED);
+	const [answerStatus, setAnswerStatus] = useState(AnswerStatus.UNANSWERED);
 	const [borderColor, setBorderColor] = useState(BorderColor.BLUE);
 	// If QA passed
 	const [isCelebrating, setIsCelebrating] = useState(false);
@@ -81,7 +92,7 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 	};
 
 	const passed = () => {
-		setAnswer(AnswerStatus.BOTH_CORRECT);
+		setAnswerStatus(AnswerStatus.BOTH_CORRECT);
 		setBorderColor(BorderColor.GREEN);
 		setIsCelebrating(true);
 
@@ -104,14 +115,14 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 	// Semi-celebrate when response is 1
 	const semiPassed = () => {
 		setBorderColor(BorderColor.YELLOW);
-		setAnswer(AnswerStatus.SEMI_CORRECT);
+		setAnswerStatus(AnswerStatus.SEMI_CORRECT);
 	};
 
 	// Failed = response is 0
 	const failed = () => {
 		shakeModal();
 		setBorderColor(BorderColor.RED);
-		setAnswer(AnswerStatus.BOTH_INCORRECT);
+		setAnswerStatus(AnswerStatus.BOTH_INCORRECT);
 	};
 
 	const handleSubmit = async () => {
@@ -194,7 +205,7 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 				</CardDescription>
 
 				<CardContent className="p-2 pt-0 space-y-4">
-					{answer === AnswerStatus.BOTH_INCORRECT && (
+					{answerStatus === AnswerStatus.BOTH_INCORRECT && (
 						<div className="flex justify-center items-center flex-col text-xs m-2">
 							<p className="text-red-400 question-box-text">
 								<b>iTELL AI says:</b> You likely got a part of the answer wrong.
@@ -212,18 +223,18 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 						</div>
 					)}
 
-					{answer === AnswerStatus.SEMI_CORRECT && (
+					{answerStatus === AnswerStatus.SEMI_CORRECT && (
 						<div className="flex justify-center items-center flex-col text-xs">
 							<p className="text-yellow-600 question-box-text">
 								<b>iTELL AI says:</b> You may have missed something, but you
 								were generally close. You can click on the "Continue reading"
 								button below go to the next part or try again with a different
-								response.
+								response.{" "}
 							</p>
 						</div>
 					)}
 
-					{answer === AnswerStatus.BOTH_CORRECT ? (
+					{answerStatus === AnswerStatus.BOTH_CORRECT ? (
 						<div className="flex items-center flex-col">
 							<p className="text-xl2 text-emerald-600 text-center question-box-text">
 								Your answer was CORRECT!
@@ -243,7 +254,7 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 						)
 					)}
 
-					{answer !== AnswerStatus.BOTH_CORRECT && (
+					{answerStatus !== AnswerStatus.BOTH_CORRECT && (
 						<TextArea
 							rows={2}
 							className="rounded-md shadow-md  p-4"
@@ -251,38 +262,49 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 							onValueChange={setInputValue}
 						/>
 					)}
-					{answer === AnswerStatus.BOTH_CORRECT && isDisplayNextButton ? (
-						<div className="flex justify-center items-center flex-row">
-							<button
-								className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
-								onClick={thenGoToNextChunk}
-								type="button"
-							>
-								Click Here to Continue Reading
-							</button>
-						</div>
-					) : (
-						<div className="flex justify-center items-center flex-row gap-2">
-							{answer !== AnswerStatus.BOTH_CORRECT && (
-								<Button
-									variant={"secondary"}
-									onClick={handleSubmit}
-									disabled={isLoading}
-								>
-									{isLoading && <Spinner className="inline mr-2" />}
-									{answer !== AnswerStatus.SEMI_CORRECT ? "Submit" : "Resubmit"}
-								</Button>
-							)}
 
-							{answer !== AnswerStatus.UNANSWERED && isDisplayNextButton && (
-								<Button variant={"ghost"} onClick={thenGoToNextChunk}>
-									{answer === AnswerStatus.SEMI_CORRECT
-										? "Continue Reading"
-										: "Skip this question"}
-								</Button>
-							)}
-						</div>
-					)}
+					<div className="flex flex-col sm:flex-row justify-center items-center gap-2">
+						{answerStatus !== AnswerStatus.UNANSWERED && (
+							<HoverCard>
+								<HoverCardTrigger asChild>
+									<Button variant="secondary">Reveal Answer</Button>
+								</HoverCardTrigger>
+								<HoverCardContent className="w-80">
+									<p className="leading-relaxed">{answer}</p>
+								</HoverCardContent>
+							</HoverCard>
+						)}
+						{answerStatus === AnswerStatus.BOTH_CORRECT &&
+						isDisplayNextButton ? (
+							<Button variant={"secondary"} onClick={thenGoToNextChunk}>
+								Click Here to Continue Reading
+							</Button>
+						) : (
+							<>
+								{answerStatus !== AnswerStatus.BOTH_CORRECT && (
+									<Button
+										variant={"secondary"}
+										onClick={handleSubmit}
+										disabled={isLoading}
+									>
+										{isLoading && <Spinner className="inline mr-2" />}
+										{answerStatus === AnswerStatus.UNANSWERED
+											? "Submit"
+											: "Resubmit"}
+									</Button>
+								)}
+
+								{answerStatus !== AnswerStatus.UNANSWERED &&
+									isDisplayNextButton && (
+										<Button variant={"ghost"} onClick={thenGoToNextChunk}>
+											{answerStatus === AnswerStatus.SEMI_CORRECT
+												? "Continue Reading"
+												: "Skip this question"}
+										</Button>
+									)}
+							</>
+						)}
+					</div>
 				</CardContent>
 			</Card>
 			<FeedbackModal

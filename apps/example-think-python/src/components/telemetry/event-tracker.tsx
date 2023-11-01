@@ -7,10 +7,10 @@ import { Prisma } from "@prisma/client";
 import { trpc } from "@/trpc/trpc-provider";
 import { TELEMETRY_SAVE_INTERVAL } from "@/lib/constants";
 import { ClickEventData, ScrollEventData } from "@itell/core/types";
+import { createEvents } from "@/lib/server-actions";
 
 export const EventTracker = () => {
 	const { data: session } = useSession();
-	const createEvents = trpc.event.createMany.useMutation();
 	const pageHeight =
 		document.documentElement.scrollHeight -
 		document.documentElement.clientHeight;
@@ -60,7 +60,7 @@ export const EventTracker = () => {
 				if (allEvents.length > 0) {
 					scrollEvents.current = [];
 					clickEvents.current = [];
-					createEvents.mutateAsync(allEvents);
+					createEvents(allEvents);
 				}
 			}
 		}, TELEMETRY_SAVE_INTERVAL);

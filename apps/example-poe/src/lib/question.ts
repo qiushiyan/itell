@@ -18,6 +18,7 @@ export const getPageQuestions = async (pageId: string) => {
 			slug: true,
 			subsection: true,
 			question: true,
+			answer: true,
 		},
 	});
 };

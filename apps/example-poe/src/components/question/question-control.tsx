@@ -9,7 +9,7 @@ import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
 
 type Props = {
-	selectedQuestions: Map<number, string>;
+	selectedQuestions: Map<number, { question: string; answer: string }>;
 	location: SectionLocation;
 };
 
@@ -74,10 +74,16 @@ export const QuestionControl = ({ selectedQuestions, location }: Props) => {
 		questionContainer.className = "question-container";
 		el.appendChild(questionContainer);
 
+		const q = selectedQuestions.get(index) as {
+			question: string;
+			answer: string;
+		};
+
 		addNode(
 			createPortal(
 				<QuestionBox
-					question={selectedQuestions.get(index)}
+					question={q.question}
+					answer={q.answer}
 					chapter={location.chapter}
 					section={location.section}
 					subsection={index}
