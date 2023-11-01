@@ -8,16 +8,11 @@ import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
 
 type Props = {
-	subsectionWithQuestionIndex: number;
-	subsectionQuestion: string | null;
+	selectedQuestions: Map<number, string>;
 	chapter: number;
 };
 
-export const QuestionControl = ({
-	subsectionWithQuestionIndex,
-	subsectionQuestion,
-	chapter,
-}: Props) => {
+export const QuestionControl = ({ selectedQuestions, chapter }: Props) => {
 	// Ref for current chunk
 	const [nodes, setNodes] = useState<JSX.Element[]>([]);
 	const { currentChunk, chunks } = useQA();
@@ -54,15 +49,14 @@ export const QuestionControl = ({
 	const insertNextChunkButton = (el: HTMLDivElement) => {
 		// insert button container
 		const buttonContainer = document.createElement("div");
-		buttonContainer.className =
-			"next-chunk-button-container";
+		buttonContainer.className = "next-chunk-button-container";
 		el.style.filter = "none";
 		el.appendChild(buttonContainer);
 
 		addNode(createPortal(<NextChunkButton />, buttonContainer));
 	};
 
-	const insertQuestion = (el: HTMLDivElement) => {
+	const insertQuestion = (el: HTMLDivElement, index: number) => {
 		const questionContainer = document.createElement("div");
 		questionContainer.className = "question-container";
 		el.appendChild(questionContainer);
@@ -70,9 +64,9 @@ export const QuestionControl = ({
 		addNode(
 			createPortal(
 				<QuestionBox
-					question={subsectionQuestion}
+					question={selectedQuestions.get(index) as string}
 					chapter={chapter}
-					subsection={subsectionWithQuestionIndex}
+					subsection={index}
 				/>,
 				questionContainer,
 			),
@@ -86,8 +80,8 @@ export const QuestionControl = ({
 				if (index !== 0) {
 					el.style.filter = "blur(4px)";
 				}
-				if (index === subsectionWithQuestionIndex) {
-					insertQuestion(el);
+				if (selectedQuestions.has(index)) {
+					insertQuestion(el, index);
 				} else if (index === chunks.length - 1) {
 					insertScrollBackButton(el);
 				}
@@ -104,7 +98,7 @@ export const QuestionControl = ({
 			if (currentChunkElement) {
 				currentChunkElement.style.filter = "none";
 				if (
-					currentChunk !== subsectionWithQuestionIndex &&
+					!selectedQuestions.has(currentChunk) &&
 					currentChunk !== chunks.length - 1
 				) {
 					insertNextChunkButton(currentChunkElement);

@@ -58,3 +58,21 @@ export const getTeacherWithClassId = async (classId: string | null) => {
 
 	return user;
 };
+
+export const createEvents = async (input: Prisma.EventCreateInput[]) => {
+	return await db.event.createMany({
+		data: input,
+	});
+};
+
+export const updateUser = async (
+	userId: string,
+	data: Prisma.UserUpdateInput,
+) => {
+	return await db.user.update({
+		where: {
+			id: userId,
+		},
+		data,
+	});
+};

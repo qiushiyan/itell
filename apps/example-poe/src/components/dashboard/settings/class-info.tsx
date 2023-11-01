@@ -41,8 +41,8 @@ export const ClassInfo = async ({ teacher }: { teacher: User | null }) => {
 			{process.env.NODE_ENV === "development" && (
 				<div className="mt-4 flex">
 					<AlertDialog>
-						<AlertDialogTrigger>
-							<Button variant="destructive">Quit Class</Button>
+						<AlertDialogTrigger asChild>
+							<Button>Quit Class</Button>
 						</AlertDialogTrigger>
 						<AlertDialogContent className="z-50">
 							<AlertDialogHeader>

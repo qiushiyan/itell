@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { trpc } from "@/trpc/trpc-provider";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Spinner from "@/components/spinner";
 import {
@@ -14,86 +13,78 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	Button,
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
 } from "@/components/client-components";
-import { Input } from "@itell/ui/server";
+import { Errorbox, Input } from "@itell/ui/server";
 import { useRouter } from "next/navigation";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import {
 	getTeacherWithClassId,
 	updateUserWithClassId,
 } from "@/lib/server-actions";
 import { useSession } from "next-auth/react";
+import { useFormState } from "react-dom";
+
+type FormState =
+	| { data: null; error: null }
+	| { data: { teacherName: string }; error: null }
+	| { data: null; error: string };
+
+const onSubmit = async (
+	prevState: FormState,
+	formData: FormData,
+): Promise<FormState> => {
+	const classId = formData.get("code") as string;
+	const teacher = await getTeacherWithClassId(classId);
+	if (!teacher) {
+		return { data: null, error: "Invalid class code" };
+	}
+
+	return {
+		data: {
+			teacherName: teacher.name as string,
+		},
+		error: null,
+	};
+};
 
 export const JoinClassForm = () => {
 	const router = useRouter();
 	const { data: session } = useSession();
 	const [joinClassModalOpen, setJoinClassModalOpen] = useState(false);
-	const [teacherName, setTeacherName] = useState("");
 
-	const formSchema = z.object({
-		code: z.string().refine(async (classId) => {
-			const teacher = await getTeacherWithClassId(classId);
-			if (!teacher) {
-				return false;
-			}
-			setTeacherName(teacher.name || "unknown");
-
-			return classId;
-		}, "Invalid class code"),
+	// @ts-ignore
+	const [formState, formAction] = useFormState<FormState>(onSubmit, {
+		data: null,
+		error: null,
 	});
-
 	const [code, setCode] = useState("");
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			code: "",
-		},
-		reValidateMode: "onSubmit",
-	});
-
-	async function onSubmit(values: z.infer<typeof formSchema>) {
-		// Do something with the form values.
-		// ✅ This will be type-safe and validated.
-		setCode(values.code);
-
-		setJoinClassModalOpen(true);
-	}
 
 	const [joinClassLoading, setJoinClassLoading] = useState(false);
+
+	useEffect(() => {
+		if (formState.data?.teacherName) {
+			setJoinClassModalOpen(true);
+		}
+	}, [formState]);
 
 	return (
 		<div className="space-y-4">
 			<p className="text-muted-foreground text-sm">
-				Enter your class code here to join a class
+				If you are enrolled in a class that uses this textbook, you can ask your
+				teacher for a class code to enter it here. This will allow you to
+				receive class-based feedback.
 			</p>
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-					<FormField
-						control={form.control}
-						name="code"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Class Code</FormLabel>
-								<FormControl>
-									<Input {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<Button type="submit" disabled={form.formState.isSubmitting}>
-						{form.formState.isSubmitting ? <Spinner /> : "Join"}
-					</Button>
-				</form>
-			</Form>
+			<form action={formAction} className="space-y-2">
+				{formState.error && (
+					<Errorbox title="Error">{formState.error}</Errorbox>
+				)}
+				<Input
+					name="code"
+					placeholder="Enter your class code here"
+					type="text"
+					onChange={(e) => setCode(e.currentTarget.value)}
+				/>
+				<Button type="submit">Submit</Button>
+			</form>
 			{/* dialog to confirm joining a class */}
 			<AlertDialog
 				open={joinClassModalOpen}
@@ -103,8 +94,9 @@ export const JoinClassForm = () => {
 					<AlertDialogHeader>
 						<AlertDialogTitle>Join a Class</AlertDialogTitle>
 						<AlertDialogDescription>
-							You are about to join a class taught by {teacherName}. Your
-							learning data will be shared with your teacher.
+							You are about to join a class taught by{" "}
+							{formState.data?.teacherName}. Your learning data will be shared
+							with your teacher.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
@@ -125,7 +117,7 @@ export const JoinClassForm = () => {
 									setJoinClassLoading(false);
 									setJoinClassModalOpen(false);
 									toast.success(
-										"You are now added to class. Go to the statistics page to compare your progress with your classmates.",
+										"You are now added to class. Go to the statistics page on the sidebar to check your progress.",
 									);
 
 									router.refresh();

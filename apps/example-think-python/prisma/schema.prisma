@@ -145,11 +145,11 @@ model Section {
 model SubSection {
   id         String                 @id @unique @map("subsection_id")
   sectionId  String                 @map("section_id")
-  subsection Int?
-  heading    String?
-  raw_text   String?
+  subsection Int
+  heading    String
+  raw_text   String
   clean_text String?
-  slug       String?
+  slug       String
   qa_output  String?
   keyphrases String[]
   question   String?
@@ -174,4 +174,17 @@ model ShortAnswer {
   users        User     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("short_answers")
+}
+
+model ConstructedResponses {
+  id String @id @default(uuid())
+
+  userId     String   @map("user_id")
+  chapter    Int
+  subsection Int
+  score      Int
+  response   String
+  created_at DateTime @default(now())
+
+  @@map("constructed_responses")
 }

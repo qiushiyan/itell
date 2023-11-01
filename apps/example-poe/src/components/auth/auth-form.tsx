@@ -4,14 +4,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { GoogleLoginButton } from "./login-button";
-import { Label } from "../client-components";
-import { Input, buttonVariants } from "@itell/ui/server";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { cn } from "@itell/core/utils";
-import Spinner from "../spinner";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const userAuthSchema = z.object({
 	email: z.string().email(),
@@ -20,21 +14,8 @@ const userAuthSchema = z.object({
 type FormData = z.infer<typeof userAuthSchema>;
 
 export const AuthForm = () => {
-	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { data: session } = useSession();
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<FormData>({
-		resolver: zodResolver(userAuthSchema),
-	});
 	const router = useRouter();
-
-	const onSubmit = async (data: FormData) => {
-		// not implemented yet
-		toast.error("Not supported yet. Please use Google login instead.");
-	};
 
 	useEffect(() => {
 		if (session?.user) {

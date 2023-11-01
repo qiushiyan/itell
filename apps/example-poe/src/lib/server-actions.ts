@@ -2,7 +2,6 @@
 
 import { Prisma } from "@prisma/client";
 import db from "./db";
-import { getServerSession } from "next-auth";
 
 export const deleteSummary = async (id: string) => {
 	return await db.summary.delete({
@@ -63,5 +62,17 @@ export const getTeacherWithClassId = async (classId: string | null) => {
 export const createEvents = async (input: Prisma.EventCreateInput[]) => {
 	return await db.event.createMany({
 		data: input,
+	});
+};
+
+export const updateUser = async (
+	userId: string,
+	data: Prisma.UserUpdateInput,
+) => {
+	return await db.user.update({
+		where: {
+			id: userId,
+		},
+		data,
 	});
 };

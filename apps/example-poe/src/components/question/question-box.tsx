@@ -263,36 +263,31 @@ export const QuestionBox = ({
 						/>
 					)}
 
-					{answer === AnswerStatus.BOTH_INCORRECT && isDisplayNextButton ? (
+					{answer === AnswerStatus.BOTH_CORRECT && isDisplayNextButton ? (
 						<div className="flex justify-center items-center flex-row">
 							<button
 								className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
-								onClick={() => {
-									thenGoToNextChunk();
-								}}
-								type="submit"
+								onClick={thenGoToNextChunk}
+								type="button"
 							>
 								Click Here to Continue Reading
 							</button>
 						</div>
 					) : (
 						<div className="flex justify-center items-center flex-row gap-2">
-							<Button
-								variant={"secondary"}
-								onClick={handleSubmit}
-								disabled={isLoading}
-							>
-								{isLoading && <Spinner className="inline mr-2" />}
-								{answer !== AnswerStatus.SEMI_CORRECT ? "Submit" : "Resubmit"}
-							</Button>
+							{answer !== AnswerStatus.BOTH_CORRECT && (
+								<Button
+									variant={"secondary"}
+									onClick={handleSubmit}
+									disabled={isLoading}
+								>
+									{isLoading && <Spinner className="inline mr-2" />}
+									{answer !== AnswerStatus.SEMI_CORRECT ? "Submit" : "Resubmit"}
+								</Button>
+							)}
 
 							{answer !== AnswerStatus.UNANSWERED && isDisplayNextButton && (
-								<Button
-									variant={"ghost"}
-									onClick={() => {
-										thenGoToNextChunk();
-									}}
-								>
+								<Button variant={"ghost"} onClick={thenGoToNextChunk}>
 									{answer === AnswerStatus.SEMI_CORRECT
 										? "Continue Reading"
 										: "Skip this question"}

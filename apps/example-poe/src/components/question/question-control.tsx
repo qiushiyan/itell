@@ -9,7 +9,7 @@ import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
 
 type Props = {
-	selectedQuestions: Map<number, string | null | undefined>;
+	selectedQuestions: Map<number, string>;
 	location: SectionLocation;
 };
 
