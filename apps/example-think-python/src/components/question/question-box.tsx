@@ -204,9 +204,9 @@ export const QuestionBox = ({
 					</p>
 				</CardDescription>
 
-				<CardContent className="p-2 pt-0 space-y-4">
+				<CardContent className="flex flex-col justify-center items-center space-y-4">
 					{answerStatus === AnswerStatus.BOTH_INCORRECT && (
-						<div className="flex justify-center items-center flex-col text-xs m-2">
+						<div className="text-xs">
 							<p className="text-red-400 question-box-text">
 								<b>iTELL AI says:</b> You likely got a part of the answer wrong.
 								Please try again.
@@ -224,18 +224,15 @@ export const QuestionBox = ({
 					)}
 
 					{answerStatus === AnswerStatus.SEMI_CORRECT && (
-						<div className="flex justify-center items-center flex-col text-xs">
-							<p className="text-yellow-600 question-box-text">
-								<b>iTELL AI says:</b> You may have missed something, but you
-								were generally close. You can click on the "Continue reading"
-								button below go to the next part or try again with a different
-								response.{" "}
-							</p>
-						</div>
+						<p className="text-yellow-600 question-box-text text-xs">
+							<b>iTELL AI says:</b> You may have missed something, but you were
+							generally close. You can click on the "Continue reading" button
+							below go to the next part or try again with a different response.{" "}
+						</p>
 					)}
 
 					{answerStatus === AnswerStatus.BOTH_CORRECT ? (
-						<div className="flex items-center flex-col">
+						<>
 							<p className="text-xl2 text-emerald-600 text-center question-box-text">
 								Your answer was CORRECT!
 							</p>
@@ -245,7 +242,7 @@ export const QuestionBox = ({
 								if you have any feedback about this question that you would like
 								to provide before you continue reading.
 							</p>
-						</div>
+						</>
 					) : (
 						question && (
 							<p className="question-box-text">
@@ -276,7 +273,11 @@ export const QuestionBox = ({
 						)}
 						{answerStatus === AnswerStatus.BOTH_CORRECT &&
 						isDisplayNextButton ? (
-							<Button variant={"secondary"} onClick={thenGoToNextChunk}>
+							<Button
+								variant={"secondary"}
+								onClick={thenGoToNextChunk}
+								type="button"
+							>
 								Click Here to Continue Reading
 							</Button>
 						) : (

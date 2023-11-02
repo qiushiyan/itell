@@ -181,148 +181,147 @@ export const QuestionBox = ({
 	}
 
 	return (
-		<Card
-		className={cn(
-			"flex justify-center items-center flex-col py-4 px-6 space-y-2",
-			`${borderColor}`,
-			`${isShaking ? "shake" : ""}`,
-		)}
-	>
-		{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
-
-		<CardHeader className="flex flex-row justify-end items-baseline w-full p-2 gap-1">
-			<ThumbsUp
-				className="hover:stroke-emerald-400 hover:cursor-pointer w-4 h-4"
-				onClick={positiveModal}
-			/>
-			<ThumbsDown
-				className="hover:stroke-rose-700 hover:cursor-pointer w-4 h-4"
-				onClick={negativeModal}
-			/>
-		</CardHeader>
-
-		<CardDescription className="flex justify-center items-center text-sm font-light text-zinc-500">
-			<p className="inline-flex question-box-text">
-				{" "}
-				<AlertTriangle className="stroke-yellow-400 mr-2" /> iTELL AI is in
-				alpha testing. It will try its best to help you but it can still
-				make mistakes. Let us know how you feel about iTELL AI's performance
-				using the feedback icons on the top right side of this box (thumbs
-				up or thumbs down).{" "}
-			</p>
-		</CardDescription>
-
-		<CardContent className="p-2 pt-0 space-y-4">
-			{answerStatus === AnswerStatus.BOTH_INCORRECT && (
-				<div className="flex justify-center items-center flex-col text-xs m-2">
-					<p className="text-red-400 question-box-text">
-						<b>iTELL AI says:</b> You likely got a part of the answer wrong.
-						Please try again.
-					</p>
-					<p className="question-box-text">
-						<u>
-							If you believe iTELL AI has made an error, you can click on
-							the "Skip this question" button to skip this question.
-						</u>{" "}
-						If you would like to help improve iTELL, please click on the
-						feedback icons on the top right side of this box to give us
-						feedback on this question.
-					</p>
-				</div>
-			)}
-
-			{answerStatus === AnswerStatus.SEMI_CORRECT && (
-				<div className="flex justify-center items-center flex-col text-xs">
-					<p className="text-yellow-600 question-box-text">
-						<b>iTELL AI says:</b> You may have missed something, but you
-						were generally close. You can click on the "Continue reading"
-						button below go to the next part or try again with a different
-						response.{" "}
-					</p>
-				</div>
-			)}
-
-			{answerStatus === AnswerStatus.BOTH_CORRECT ? (
-				<div className="flex items-center flex-col">
-					<p className="text-xl2 text-emerald-600 text-center question-box-text">
-						Your answer was CORRECT!
-					</p>
-					<p className="text-sm question-box-text">
-						Click on the button below to continue reading. Please use the
-						thumbs-up or thumbs-down icons on the top right side of this box
-						if you have any feedback about this question that you would like
-						to provide before you continue reading.
-					</p>
-				</div>
-			) : (
-				question && (
-					<p className="question-box-text">
-						<b>Question:</b> {question}
-					</p>
-				)
-			)}
-
-			{answerStatus !== AnswerStatus.BOTH_CORRECT && (
-				<TextArea
-					rows={2}
-					className="rounded-md shadow-md  p-4"
-					value={inputValue}
-					onValueChange={setInputValue}
-				/>
-			)}
-
-			<div className="flex flex-col sm:flex-row justify-center items-center gap-2">
-				{answerStatus !== AnswerStatus.UNANSWERED && (
-					<HoverCard>
-						<HoverCardTrigger asChild>
-							<Button variant="secondary">Reveal Answer</Button>
-						</HoverCardTrigger>
-						<HoverCardContent className="w-80">
-							<p className="leading-relaxed">{answer}</p>
-						</HoverCardContent>
-					</HoverCard>
+		<>
+			<Card
+				className={cn(
+					"flex justify-center items-center flex-col py-4 px-6 space-y-2",
+					`${borderColor}`,
+					`${isShaking ? "shake" : ""}`,
 				)}
-				{answerStatus === AnswerStatus.BOTH_CORRECT &&
-				isDisplayNextButton ? (
-					<button
-						className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
-						onClick={thenGoToNextChunk}
-						type="button"
-					>
-						Click Here to Continue Reading
-					</button>
-				) : (
-					<>
-						{answerStatus !== AnswerStatus.BOTH_CORRECT && (
-							<Button
-								variant={"secondary"}
-								onClick={handleSubmit}
-								disabled={isLoading}
-							>
-								{isLoading && <Spinner className="inline mr-2" />}
-								{answerStatus === AnswerStatus.UNANSWERED
-									? "Submit"
-									: "Resubmit"}
-							</Button>
+			>
+				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
+
+				<CardHeader className="flex flex-row justify-end items-baseline w-full p-2 gap-1">
+					<ThumbsUp
+						className="hover:stroke-emerald-400 hover:cursor-pointer w-4 h-4"
+						onClick={positiveModal}
+					/>
+					<ThumbsDown
+						className="hover:stroke-rose-700 hover:cursor-pointer w-4 h-4"
+						onClick={negativeModal}
+					/>
+				</CardHeader>
+
+				<CardDescription className="flex justify-center items-center text-sm font-light text-zinc-500">
+					<p className="inline-flex question-box-text">
+						{" "}
+						<AlertTriangle className="stroke-yellow-400 mr-2" /> iTELL AI is in
+						alpha testing. It will try its best to help you but it can still
+						make mistakes. Let us know how you feel about iTELL AI's performance
+						using the feedback icons on the top right side of this box (thumbs
+						up or thumbs down).{" "}
+					</p>
+				</CardDescription>
+
+				<CardContent className="flex flex-col justify-center items-center space-y-4">
+					{answerStatus === AnswerStatus.BOTH_INCORRECT && (
+						<div className="text-xs">
+							<p className="text-red-400 question-box-text">
+								<b>iTELL AI says:</b> You likely got a part of the answer wrong.
+								Please try again.
+							</p>
+							<p className="question-box-text">
+								<u>
+									If you believe iTELL AI has made an error, you can click on
+									the "Skip this question" button to skip this question.
+								</u>{" "}
+								If you would like to help improve iTELL, please click on the
+								feedback icons on the top right side of this box to give us
+								feedback on this question.
+							</p>
+						</div>
+					)}
+
+					{answerStatus === AnswerStatus.SEMI_CORRECT && (
+						<p className="text-yellow-600 question-box-text text-xs">
+							<b>iTELL AI says:</b> You may have missed something, but you were
+							generally close. You can click on the "Continue reading" button
+							below go to the next part or try again with a different response.{" "}
+						</p>
+					)}
+
+					{answerStatus === AnswerStatus.BOTH_CORRECT ? (
+						<>
+							<p className="text-xl2 text-emerald-600 text-center question-box-text">
+								Your answer was CORRECT!
+							</p>
+							<p className="text-sm question-box-text">
+								Click on the button below to continue reading. Please use the
+								thumbs-up or thumbs-down icons on the top right side of this box
+								if you have any feedback about this question that you would like
+								to provide before you continue reading.
+							</p>
+						</>
+					) : (
+						question && (
+							<p className="question-box-text">
+								<b>Question:</b> {question}
+							</p>
+						)
+					)}
+
+					{answerStatus !== AnswerStatus.BOTH_CORRECT && (
+						<TextArea
+							rows={2}
+							className="rounded-md shadow-md  p-4"
+							value={inputValue}
+							onValueChange={setInputValue}
+						/>
+					)}
+
+					<div className="flex flex-col sm:flex-row justify-center items-center gap-2">
+						{answerStatus !== AnswerStatus.UNANSWERED && (
+							<HoverCard>
+								<HoverCardTrigger asChild>
+									<Button variant="secondary">Reveal Answer</Button>
+								</HoverCardTrigger>
+								<HoverCardContent className="w-80">
+									<p className="leading-relaxed">{answer}</p>
+								</HoverCardContent>
+							</HoverCard>
 						)}
+						{answerStatus === AnswerStatus.BOTH_CORRECT &&
+						isDisplayNextButton ? (
+							<button
+								className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
+								onClick={thenGoToNextChunk}
+								type="button"
+							>
+								Click Here to Continue Reading
+							</button>
+						) : (
+							<>
+								{answerStatus !== AnswerStatus.BOTH_CORRECT && (
+									<Button
+										variant={"secondary"}
+										onClick={handleSubmit}
+										disabled={isLoading}
+									>
+										{isLoading && <Spinner className="inline mr-2" />}
+										{answerStatus === AnswerStatus.UNANSWERED
+											? "Submit"
+											: "Resubmit"}
+									</Button>
+								)}
 
-						{answerStatus !== AnswerStatus.UNANSWERED &&
-							isDisplayNextButton && (
-								<Button variant={"ghost"} onClick={thenGoToNextChunk}>
-									{answerStatus === AnswerStatus.SEMI_CORRECT
-										? "Continue Reading"
-										: "Skip this question"}
-								</Button>
-							)}
-					</>
-				)}
-			</div>
-		</CardContent>
-	</Card>
-	<FeedbackModal
-		open={isFeedbackModalOpen}
-		onOpenChange={setIsFeedbackModalOpen}
-		isPositive={isPositiveFeedback}
-	/>
+								{answerStatus !== AnswerStatus.UNANSWERED &&
+									isDisplayNextButton && (
+										<Button variant={"ghost"} onClick={thenGoToNextChunk}>
+											{answerStatus === AnswerStatus.SEMI_CORRECT
+												? "Continue Reading"
+												: "Skip this question"}
+										</Button>
+									)}
+							</>
+						)}
+					</div>
+				</CardContent>
+			</Card>
+			<FeedbackModal
+				open={isFeedbackModalOpen}
+				onOpenChange={setIsFeedbackModalOpen}
+				isPositive={isPositiveFeedback}
+			/>
+		</>
 	);
 };

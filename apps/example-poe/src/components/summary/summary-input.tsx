@@ -31,6 +31,7 @@ import { SectionLocation } from "@/types/location";
 import { allSectionsSorted } from "@/lib/sections";
 import { incrementLocation, isLocationAfter } from "@/lib/location";
 import pluralize from "pluralize";
+
 export const SummaryInput = ({ location }: { location: SectionLocation }) => {
 	const [showProceedModal, setShowProceedModal] = useState(false);
 	const createFocusTime = trpc.focusTime.create.useMutation();
@@ -138,7 +139,7 @@ export const SummaryInput = ({ location }: { location: SectionLocation }) => {
 		}
 
 		setIsGoingToNextPage(false);
-		router.push(incrementLocation(location));
+		router.push(makeLocationHref(incrementLocation(location)));
 	};
 
 	let autoSaveTimer: NodeJS.Timer | null = null;
@@ -202,7 +203,7 @@ export const SummaryInput = ({ location }: { location: SectionLocation }) => {
 					<DialogFooter>
 						<Button onClick={handleGoToNextPage} disabled={isGoingToNextPage}>
 							{isGoingToNextPage && <Spinner className="mr-2 inline" />} Next
-							Chapter
+							Section
 						</Button>
 					</DialogFooter>
 				</DialogContent>
