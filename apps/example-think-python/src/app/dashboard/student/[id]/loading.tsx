@@ -1,4 +1,3 @@
-import { Badge } from "@/components/dashboard/badge";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { DashboardShell } from "@/components/shell";
 import {
@@ -7,6 +6,7 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
+	DashboardBadge,
 	Skeleton,
 } from "@itell/ui/server";
 
@@ -32,7 +32,7 @@ export default function () {
 				<CardContent>
 					<div className="space-y-4">
 						<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-							<Badge.Skeletons />
+							<DashboardBadge.Skeletons />
 						</div>
 						<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
 							<Skeleton className="col-span-4 h-[350px]" />
