@@ -7,9 +7,10 @@ import { CheckCircle, XCircle } from "lucide-react";
 
 interface PostItemProps {
 	summary: Summary;
+	timeZone: string;
 }
 
-export function SummaryItem({ summary }: PostItemProps) {
+export function SummaryItem({ summary, timeZone }: PostItemProps) {
 	return (
 		<Link
 			href={`/summary/${summary.id}`}
@@ -20,17 +21,15 @@ export function SummaryItem({ summary }: PostItemProps) {
 		>
 			<header className="flex justify-between text-sm text-muted-foreground">
 				<p className="font-semibold text-lg leading-relaxed">{`Chapter ${summary.chapter}.${summary.section}`}</p>
-				<p>{relativeDate(summary.created_at)}</p>
+				<p>{relativeDate(summary.created_at, timeZone)}</p>
 			</header>
-			<div className="space-y-1">
-				<div className="flex items-center justify-between">
-					<p className="line-clamp-2">{summary.text}</p>
-					{summary.isPassed ? (
-						<CheckCircle className="w-4 h-4 stroke-info" />
-					) : (
-						<XCircle className="w-4 h-4 stroke-warning" />
-					)}
-				</div>
+			<div className="flex items-center justify-between">
+				<p className="line-clamp-2">{summary.text}</p>
+				{summary.isPassed ? (
+					<CheckCircle className="w-4 h-4 stroke-info" />
+				) : (
+					<XCircle className="w-4 h-4 stroke-warning" />
+				)}
 			</div>
 		</Link>
 	);

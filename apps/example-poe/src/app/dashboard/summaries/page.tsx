@@ -4,24 +4,27 @@ import { SummaryList } from "@/components/dashboard/summary-list";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
+import { getUser } from "@/lib/user";
 import { groupby } from "@itell/core/utils";
+import { User } from "@prisma/client";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 export default async function () {
-	const user = await getCurrentUser();
-	if (!user) {
+	const currentUser = await getCurrentUser();
+	if (!currentUser) {
 		return redirect("/auth");
 	}
 
-	const userSummaries = await db.summary.findMany({
-		where: {
-			userId: user.id,
-		},
-		orderBy: {
-			created_at: "desc",
-		},
-	});
+	const [user, userSummaries] = await Promise.all([
+		getUser(currentUser.id),
+		db.summary.findMany({
+			where: {
+				userId: currentUser.id,
+			},
+			orderBy: [{ created_at: "desc" }, { chapter: "asc" }, { section: "asc" }],
+		}),
+	]);
 
 	if (!userSummaries) {
 		return notFound();
@@ -55,7 +58,7 @@ export default async function () {
 			<DashboardHeader heading="Summary" text="Create and manage summaries.">
 				<SummaryCreateButton />
 			</DashboardHeader>
-			<SummaryList summariesByModule={summariesByModule} />
+			<SummaryList summariesByModule={summariesByModule} user={user as User} />
 		</DashboardShell>
 	);
 }

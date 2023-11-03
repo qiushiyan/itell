@@ -33,9 +33,7 @@ export default async function ({ searchParams }: PageProps) {
 				userId: currentUser.id,
 				chapter: queryChapter,
 			},
-			orderBy: {
-				created_at: "desc",
-			},
+			orderBy: [{ created_at: "desc" }, { chapter: "asc" }],
 		}),
 	]);
 
