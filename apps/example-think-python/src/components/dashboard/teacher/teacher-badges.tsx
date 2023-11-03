@@ -4,8 +4,8 @@ import {
 	PencilIcon,
 	WholeWordIcon,
 } from "lucide-react";
-import { Badge } from "../badge";
 import { getSummaryStats } from "@/lib/dashboard";
+import { DashboardBadge } from "@itell/ui/server";
 
 type Props = {
 	studentIds: string[];
@@ -29,22 +29,22 @@ export const TeacherBadges = async ({ studentIds }: Props) => {
 
 	return (
 		<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-			<Badge
+			<DashboardBadge
 				title="Average Submitted Summaries"
 				value={classStats.avgTotalCount}
 				icon={<PencilIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
-			<Badge
+			<DashboardBadge
 				title="Average Passed Summaries"
 				value={classStats.avgPassedCount}
 				icon={<FlagIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
-			<Badge
+			<DashboardBadge
 				title="Average Content Score"
 				value={classStats.avgContentScore}
 				icon={<FileTextIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
-			<Badge
+			<DashboardBadge
 				title="Average Wording Score"
 				value={classStats.avgWordingScore}
 				icon={<WholeWordIcon className="w-4 h-4 text-muted-foreground" />}
@@ -55,9 +55,6 @@ export const TeacherBadges = async ({ studentIds }: Props) => {
 
 TeacherBadges.Skeleton = () => (
 	<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-		<Badge.Skeleton />
-		<Badge.Skeleton />
-		<Badge.Skeleton />
-		<Badge.Skeleton />
+		<DashboardBadge.Skeletons />
 	</div>
 );

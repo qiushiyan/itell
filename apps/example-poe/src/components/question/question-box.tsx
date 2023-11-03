@@ -282,13 +282,13 @@ export const QuestionBox = ({
 						)}
 						{answerStatus === AnswerStatus.BOTH_CORRECT &&
 						isDisplayNextButton ? (
-							<button
-								className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
+							<Button
+								variant={"secondary"}
 								onClick={thenGoToNextChunk}
 								type="button"
 							>
 								Click Here to Continue Reading
-							</button>
+							</Button>
 						) : (
 							<>
 								{answerStatus !== AnswerStatus.BOTH_CORRECT && (

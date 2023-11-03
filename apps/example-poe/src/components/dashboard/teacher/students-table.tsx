@@ -28,6 +28,7 @@ import {
 } from "@/components/client-components";
 import { useState } from "react";
 import { Input } from "@itell/ui/server";
+import pluralize from "pluralize";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -38,6 +39,10 @@ export function StudentsTable<TData, TValue>({
 	columns,
 	data,
 }: DataTableProps<TData, TValue>) {
+	const [pagination, setPagination] = useState({
+		pageIndex: 0,
+		pageSize: 10, //customize the default page size
+	});
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -51,6 +56,10 @@ export function StudentsTable<TData, TValue>({
 		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
+		onPaginationChange: setPagination,
+		initialState: {
+			pagination,
+		},
 
 		state: {
 			sorting,
@@ -59,14 +68,21 @@ export function StudentsTable<TData, TValue>({
 		},
 	});
 
+	const numRows = table.getFilteredRowModel().rows.length;
+	const pageStart = pagination.pageIndex * pagination.pageSize + 1;
+	const pageEnd = Math.min(
+		(pagination.pageIndex + 1) * pagination.pageSize,
+		numRows,
+	);
+
 	return (
 		<div>
 			<div className="flex items-center py-4">
 				<Input
 					placeholder="Filter by name"
-					value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+					value={(table.getColumn("Name")?.getFilterValue() as string) ?? ""}
 					onChange={(event) =>
-						table.getColumn("name")?.setFilterValue(event.target.value)
+						table.getColumn("Name")?.setFilterValue(event.target.value)
 					}
 					className="max-w-sm"
 				/>
@@ -147,23 +163,29 @@ export function StudentsTable<TData, TValue>({
 					</TableBody>
 				</Table>
 			</div>
-			<div className="flex items-center justify-end space-x-2 py-4">
-				<Button
-					variant="outline"
-					size="sm"
-					onClick={() => table.previousPage()}
-					disabled={!table.getCanPreviousPage()}
-				>
-					Previous
-				</Button>
-				<Button
-					variant="outline"
-					size="sm"
-					onClick={() => table.nextPage()}
-					disabled={!table.getCanNextPage()}
-				>
-					Next
-				</Button>
+			<div className="flex items-center justify-between pt-4">
+				<p className="text-sm text-muted-foreground">
+					showing {`${pageStart} to ${pageEnd}`} of{" "}
+					{pluralize("student", numRows, true)}
+				</p>
+				<div className="flex items-center gap-2">
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => table.previousPage()}
+						disabled={pagination.pageIndex === 0}
+					>
+						Previous
+					</Button>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => table.nextPage()}
+						disabled={pagination.pageIndex === table.getPageCount() - 1}
+					>
+						Next
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

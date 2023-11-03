@@ -1,12 +1,7 @@
 import { cn } from "@itell/core/utils";
-import {
-	Card,
-	CardHeader,
-	CardTitle,
-	CardContent,
-	Skeleton,
-} from "@itell/ui/server";
 import { TrendingDown, TrendingUp } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "./card";
+import { Skeleton } from "./skeleton";
 
 type Props = {
 	className?: string;
@@ -24,7 +19,7 @@ const roundNumber = (num: number | null) => {
 
 	return Number.isInteger(num) ? num : Number(num.toFixed(2));
 };
-export const Badge = ({
+export const DashboardBadge = ({
 	title,
 	value,
 	description,
@@ -45,9 +40,9 @@ export const Badge = ({
 						{typeof description === "number" ? (
 							<span className="inline-flex items-center gap-2">
 								{description > 0 ? (
-									<TrendingUp className="w-4 h-4" />
+									<TrendingUp className="w-4 h-4 fill-green-500" />
 								) : (
-									<TrendingDown className="w-4 h-4" />
+									<TrendingDown className="w-4 h-4 fill-destructive" />
 								)}
 								{`${description > 0 ? "+ " : ""}${roundNumber(description)}`}
 								{comparing && " compared to class"}
@@ -62,6 +57,6 @@ export const Badge = ({
 	);
 };
 
-Badge.Skeleton = () => <Skeleton className="h-40" />;
-Badge.Skeletons = ({ num = 4 }: { num?: number }) =>
-	Array.from(Array(num)).map(() => <Badge.Skeleton />);
+DashboardBadge.Skeleton = () => <Skeleton className="h-40" />;
+DashboardBadge.Skeletons = ({ num = 4 }: { num?: number }) =>
+	Array.from(Array(num)).map(() => <DashboardBadge.Skeleton />);

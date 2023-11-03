@@ -1,7 +1,6 @@
-import { Badge } from "@/components/dashboard/badge";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { DashboardShell } from "@/components/shell";
-import { Skeleton } from "@itell/ui/server";
+import { DashboardBadge, Skeleton } from "@itell/ui/server";
 
 export default function () {
 	return (
@@ -13,7 +12,7 @@ export default function () {
 			<div className="space-y-4">
 				<Skeleton className="w-96 h-8" />
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-					<Badge.Skeletons />
+					<DashboardBadge.Skeletons />
 				</div>
 				<div>
 					<Skeleton className="w-96 h-12" />
