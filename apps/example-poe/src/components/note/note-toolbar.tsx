@@ -80,7 +80,7 @@ export default function HighlightToolbar({
 
 					incrementNoteCount();
 				} else {
-					toast.error("Please select some text to take a note");
+					toast.warning("Please select some text to take a note");
 				}
 			},
 		},
@@ -126,7 +126,7 @@ export default function HighlightToolbar({
 						incrementHighlightCount(-1);
 					});
 				} else {
-					toast.error("Please select some text to take a note");
+					toast.warning("Please select some text to take a note");
 				}
 			},
 		},
@@ -136,7 +136,7 @@ export default function HighlightToolbar({
 			action: async ({ textContent }: SelectionData) => {
 				if (textContent) {
 					await navigator.clipboard.writeText(textContent);
-					toast.success("Copied to clipboard");
+					toast.info("Copied to clipboard");
 				}
 			},
 		},
@@ -173,7 +173,7 @@ export default function HighlightToolbar({
 									className="flex items-center gap-2 p-2"
 									onClick={() => {
 										if (!session?.user && command.label !== "Copy") {
-											return toast.error("You need to be logged in.");
+											return toast.warning("You need to be logged in.");
 										}
 										command.action(data);
 									}}

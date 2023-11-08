@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
-import TextArea from "../ui/textarea";
 import { EditIcon } from "lucide-react";
 import { NoteCard } from "@/types/note";
 import { useClickOutside } from "@itell/core/hooks";
@@ -12,7 +11,7 @@ import { ForwardIcon } from "lucide-react";
 import Spinner from "../spinner";
 import { useImmerReducer } from "use-immer";
 import NoteColorPicker from "./note-color-picker";
-import { Button } from "../client-components";
+import { Button, TextArea } from "../client-components";
 import { useNotesStore } from "@/lib/store";
 import {
 	createNoteElements,

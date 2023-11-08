@@ -1,5 +1,4 @@
 import { cn } from "@itell/core/utils";
-import { buttonVariants } from "./button";
 
 export const getYoutubeLinkFromEmbed = (url: string) => {
 	const regex = /embed\/([\w-]+)\?/;
@@ -53,20 +52,6 @@ export const YoutubeVideo = ({
 					</h5>
 				)}
 				{children && <div className="text-sm font-light">{children}</div>}
-				{youtube && (
-					<a
-						href={getYoutubeLinkFromEmbed(src)}
-						className={cn(
-							buttonVariants({ variant: "secondary" }),
-							"no-underline",
-						)}
-						target="_blank"
-						rel="noreferrer"
-						data-testid="link"
-					>
-						View on youtube
-					</a>
-				)}
 			</div>
 		</div>
 	);

@@ -13,14 +13,14 @@ interface TextAreaProps
 	autoHeight?: boolean;
 }
 
-export default function TextArea({
+export const TextArea = ({
 	className,
 	value,
 	onValueChange,
 	autoFocus = false,
 	autoHeight = false,
 	...props
-}: TextAreaProps) {
+}: TextAreaProps) => {
 	const ref = useRef<HTMLTextAreaElement>(null);
 
 	useAutosizeTextArea(ref.current, value, autoHeight);
@@ -43,4 +43,4 @@ export default function TextArea({
 			{...props}
 		/>
 	);
-}
+};

@@ -6,7 +6,6 @@ import {
 	CardContent,
 	CardDescription,
 	CardHeader,
-	buttonVariants,
 } from "@itell/ui/server";
 import { AlertTriangle, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
@@ -16,15 +15,13 @@ import { getQAScore } from "@/lib/question";
 import { useQA } from "../context/qa-context";
 import { FeedbackModal } from "./feedback-modal";
 import {
-	Accordion,
-	AccordionItem,
 	Button,
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
+	TextArea,
 } from "../client-components";
 import { toast } from "sonner";
-import TextArea from "../ui/textarea";
 // import shake effect
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
@@ -266,6 +263,10 @@ export const QuestionBox = ({
 							className="rounded-md shadow-md  p-4"
 							value={inputValue}
 							onValueChange={setInputValue}
+							onPaste={(e) => {
+								e.preventDefault();
+								toast.warning("Copy & Paste is not allowed for question");
+							}}
 						/>
 					)}
 

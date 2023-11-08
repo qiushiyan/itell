@@ -23,12 +23,11 @@ import {
 	HoverCardTrigger,
 } from "../client-components";
 import { toast } from "sonner";
-import TextArea from "../ui/textarea";
 // import shake effect
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
 import { createQuestionAnswer } from "@/lib/server-actions";
-
+import { TextArea } from "@/components/client-components";
 type Props = {
 	question: string;
 	answer: string;
@@ -257,6 +256,10 @@ export const QuestionBox = ({
 							className="rounded-md shadow-md  p-4"
 							value={inputValue}
 							onValueChange={setInputValue}
+							onPaste={(e) => {
+								e.preventDefault();
+								toast.warning("Copy & Paste is not allowed for question");
+							}}
 						/>
 					)}
 
