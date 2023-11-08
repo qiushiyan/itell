@@ -16,7 +16,7 @@ export const Notebook = async (props: Props) => {
 		let code = "";
 		if ("code" in props) {
 			// append a new line if not present
-			code = props.code.endsWith("\n") ? props.code : props.code + "\n";
+			code = props.code.endsWith("\n") ? props.code : `${props.code}\n`;
 		} else if ("script" in props) {
 			const result = await readScript(props.script);
 			if (!result) {
