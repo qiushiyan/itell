@@ -11,6 +11,14 @@ export const deleteSummary = async (id: string) => {
 	});
 };
 
+export const deleteNote = async (id: string) => {
+	return await db.note.delete({
+		where: {
+			id,
+		},
+	});
+};
+
 export const createQuestionAnswer = async (
 	input: Prisma.ConstructedResponsesCreateInput,
 ) => {

@@ -3,18 +3,7 @@ import {
 	getHighlightId,
 	getElementsByNoteId,
 } from "@itell/core/note";
-
-export const deleteNote = async (id: string) => {
-	return await fetch("/api/note", {
-		method: "POST",
-		body: JSON.stringify({
-			id,
-		}),
-		headers: {
-			"Content-Type": "application/json",
-		},
-	});
-};
+import { deleteNote } from "./server-actions";
 
 export const deleteHighlightListener = (event: Event) => {
 	event.preventDefault();

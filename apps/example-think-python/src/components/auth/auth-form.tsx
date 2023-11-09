@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { GoogleLoginButton } from "./login-button";
+import { GoogleLoginButton, OutlookLoginButton } from "./login-button";
 
 export const AuthForm = () => {
 	const { data: session } = useSession();
@@ -22,11 +22,14 @@ export const AuthForm = () => {
 				</div> */}
 				<div className="relative flex justify-center text-xs uppercase">
 					<span className="bg-background px-2 text-muted-foreground">
-						Log in via Google
+						Log in via one of the options below
 					</span>
 				</div>
 			</div>
-			<GoogleLoginButton />
+			<div className="flex flex-col gap-2">
+				<GoogleLoginButton />
+				<OutlookLoginButton />
+			</div>
 		</div>
 	);
 };

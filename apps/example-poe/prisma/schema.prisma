@@ -23,6 +23,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
+  ext_expires_in    Int?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -183,15 +184,15 @@ model SubSection {
 }
 
 model ConstructedResponses {
-  id               String @id @default(uuid())
+  id String @id @default(uuid())
 
-  userId           String      @map("user_id")
-  chapter          Int
-  section          Int
-  subsection       Int
-  score            Int
-  response         String
-  created_at       DateTime    @default(now())
-  
+  userId     String   @map("user_id")
+  chapter    Int
+  section    Int
+  subsection Int
+  score      Int
+  response   String
+  created_at DateTime @default(now())
+
   @@map("constructed_responses")
 }
