@@ -16,23 +16,17 @@ type Props = {
 export const CreateLoginButton = ({ provider, icon, title }: Props) => {
 	return () => {
 		const [isPending, setIsPending] = useState(false);
-		const [isError, setIsError] = useState(false);
 		return (
 			<Button
 				variant={"outline"}
 				onClick={() => {
 					setIsPending(true);
-					try {
-						signIn(provider);
-					} catch (err) {
-						setIsError(true);
-					}
+					signIn(provider);
 				}}
 				disabled={isPending}
 			>
 				{isPending ? <Spinner className="mr-2" /> : icon}
 				{title}
-				{isError && <Warning>No!</Warning>}
 			</Button>
 		);
 	};
