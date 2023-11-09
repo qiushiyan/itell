@@ -12,7 +12,7 @@ export default function ShowToast() {
 		if (searchParams) {
 			const isAuthRedirect = searchParams.get("auth-redirect");
 			if (session && isAuthRedirect) {
-				toast.success("Successfully signed in!");
+				// toast.success("Successfully signed in!");
 			}
 		}
 	}, [searchParams, session]);
