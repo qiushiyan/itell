@@ -18,7 +18,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useChapterStatus } from "@/lib/hooks/use-chapter-status";
 import { makeChapterHref } from "@/lib/utils";
-import { GoogleLoginButton } from "./auth/login-button";
+import { GoogleLoginButton } from "./auth/login-buttons";
 
 export const PageVisibilityModal = () => {
 	const { status, userChapter } = useChapterStatus();

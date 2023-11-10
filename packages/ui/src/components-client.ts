@@ -20,3 +20,4 @@ export * from "./components/hover-card";
 export * from "./components/link";
 export * from "./components/pager";
 export * from "./components/textarea";
+export * from "./components/login-button";
