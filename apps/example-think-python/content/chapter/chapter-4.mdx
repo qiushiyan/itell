@@ -1,6 +1,6 @@
 ---
 title: "Conditionals and recursion"
-qa: false
+qa: true
 ---
 
 
@@ -126,7 +126,7 @@ if statements have the same structure as function definitions: a header followed
 There is no limit on the number of statements that can appear in the body, but there has to be at least one. Occasionally, it is useful to have a body with no statements (usually as a place keeper for code you haven't written yet). In that case, you can use the pass statement, which does nothing.
 
 ```python
-if x <div 0:
+if x < 0:
     pass          # TODO: need to handle negative values!
 ```
 
@@ -184,7 +184,7 @@ In the following exercise, imagine we are managing a website with some vip users
 Sometimes there are more than two possibilities and we need more than two branches. One way to express a computation like that is a **chained conditional**:
 
 ```python
-if x <div y:
+if x < y:
     print('x is less than y')
 elif x > y:
     print('x is greater than y')
