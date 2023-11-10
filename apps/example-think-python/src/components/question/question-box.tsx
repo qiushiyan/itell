@@ -151,11 +151,11 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 					<CardDescription className="flex justify-center items-center font-light text-zinc-500 w-10/12 mr-4">
 						<p className="inline-flex text-xs">
 							{" "}
-							<AlertTriangle className="stroke-yellow-400 mr-2" /> iTELL AI is in
+							<AlertTriangle className="stroke-yellow-400 mr-4" /> iTELL AI is in
 							alpha testing. It will try its best to help you but it can still
 							make mistakes. Let us know how you feel about iTELL AI's performance
-							using the feedback icons on the top right side of this box (thumbs
-							up or thumbs down).{" "}
+							using the feedback icons to the right (thumbs up or thumbs down).
+							{" "}
 						</p>
 					</CardDescription>
 					<ThumbsUp
