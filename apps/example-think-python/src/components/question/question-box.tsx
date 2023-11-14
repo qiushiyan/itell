@@ -6,21 +6,31 @@ import {
 	CardContent,
 	CardDescription,
 	CardHeader,
+	Warning,
 	buttonVariants,
 } from "@itell/ui/server";
 import { AlertTriangle, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 import Spinner from "../spinner";
+import { getQAScore } from "@/lib/question";
 import { useQA } from "../context/qa-context";
 import { FeedbackModal } from "./feedback-modal";
-import { Button } from "../client-components";
+import {
+	Button,
+	HoverCard,
+	HoverCardContent,
+	HoverCardTrigger,
+} from "../client-components";
 import { toast } from "sonner";
-import TextArea from "../ui/textarea";
-import { getQAScore } from "@/lib/question";
-
+// import shake effect
+import "@/styles/shakescreen.css";
+import { useSession } from "next-auth/react";
+import { createQuestionAnswer } from "@/lib/server-actions";
+import { TextArea } from "@/components/client-components";
 type Props = {
-	question: string | null;
+	question: string;
+	answer: string;
 	chapter: number;
 	subsection: number;
 };
@@ -33,12 +43,26 @@ enum AnswerStatus {
 	BOTH_INCORRECT = 3,
 }
 
-export const QuestionBox = ({ question, chapter, subsection }: Props) => {
+// state for border color
+enum BorderColor {
+	BLUE = "border-blue-400",
+	RED = "border-red-400",
+	GREEN = "border-green-400",
+	YELLOW = "border-yellow-400",
+}
+
+export const QuestionBox = ({
+	question,
+	chapter,
+	subsection,
+	answer,
+}: Props) => {
+	const { data: session } = useSession();
 	const { goToNextChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
-	const [isFlashingYellow, setIsFlashingYellow] = useState(false);
-	const [answer, setAnswer] = useState(AnswerStatus.UNANSWERED);
+	const [answerStatus, setAnswerStatus] = useState(AnswerStatus.UNANSWERED);
+	const [borderColor, setBorderColor] = useState(BorderColor.BLUE);
 	// If QA passed
 	const [isCelebrating, setIsCelebrating] = useState(false);
 	// Handle spinner animation when loading
@@ -47,6 +71,13 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 	const [isPositiveFeedback, setIsPositiveFeedback] = useState(false);
 	// QA input
 	const [inputValue, setInputValue] = useState("");
+	// Next chunk button display
+	const [isDisplayNextButton, setIsDisplayNextButton] = useState(true);
+
+	const thenGoToNextChunk = () => {
+		goToNextChunk();
+		setIsDisplayNextButton(false);
+	};
 
 	const positiveModal = () => {
 		setIsFeedbackModalOpen(true);
@@ -60,13 +91,14 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 	};
 
 	const passed = () => {
-		setAnswer(AnswerStatus.BOTH_CORRECT);
+		setAnswerStatus(AnswerStatus.BOTH_CORRECT);
+		setBorderColor(BorderColor.GREEN);
 		setIsCelebrating(true);
 
 		// Stop the confettis after a short delay
 		setTimeout(() => {
 			setIsCelebrating(false);
-		}, 750); // Adjust the delay as needed
+		}, 750);
 	};
 
 	// Function to trigger the shake animation
@@ -79,25 +111,17 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 		}, 400);
 	};
 
-	// Function to trigger the border color change animation
-	const flashYellow = () => {
-		setIsFlashingYellow(true);
-
-		setTimeout(() => {
-			setIsFlashingYellow(false);
-		}, 600);
-	};
-
 	// Semi-celebrate when response is 1
 	const semiPassed = () => {
-		flashYellow();
-		setAnswer(AnswerStatus.SEMI_CORRECT);
+		setBorderColor(BorderColor.YELLOW);
+		setAnswerStatus(AnswerStatus.SEMI_CORRECT);
 	};
 
 	// Failed = response is 0
 	const failed = () => {
 		shakeModal();
-		setAnswer(AnswerStatus.BOTH_INCORRECT);
+		setBorderColor(BorderColor.RED);
+		setAnswerStatus(AnswerStatus.BOTH_INCORRECT);
 	};
 
 	const handleSubmit = async () => {
@@ -113,7 +137,7 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 			if (!response.success) {
 				// API response is not in correct shape
 				console.error("API Response error", response);
-				return;
+				return toast.error("Answer evaluation failed, please try again later");
 			}
 
 			const result = response.data;
@@ -125,24 +149,34 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 			} else {
 				failed();
 			}
+			if (session?.user) {
+				await createQuestionAnswer({
+					userId: session.user.id,
+					response: inputValue,
+					chapter: chapter,
+					subsection: subsection,
+					score: result.score,
+				});
+			}
 		} catch (err) {
 			console.log("failed to score answer", err);
-			toast.error("Connection failed. Please try submit your answer again.");
+			return toast.error("Question evaluation failed, please try again later");
 		} finally {
 			setIsLoading(false);
 		}
 	};
+
+	if (!session?.user) {
+		return <Warning>You need to be logged in to view this question</Warning>;
+	}
 
 	return (
 		<>
 			<Card
 				className={cn(
 					"flex justify-center items-center flex-col py-4 px-6 space-y-2",
-					{
-						"shake border-red-400": isShaking,
-						"border-yellow-400": isFlashingYellow,
-						"border-blue-400": !isFlashingYellow,
-					},
+					`${borderColor}`,
+					`${isShaking ? "shake" : ""}`,
 				)}
 			>
 				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
@@ -168,9 +202,20 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 					/>
 				</CardHeader>
 
-				<CardContent className="p-2 pt-0 space-y-4">
-					{answer === AnswerStatus.BOTH_INCORRECT && (
-						<div className="flex justify-center items-center flex-col text-xs m-2">
+				<CardDescription className="flex justify-center items-center text-sm font-light text-zinc-500">
+					<p className="inline-flex question-box-text">
+						{" "}
+						<AlertTriangle className="stroke-yellow-400 mr-2" /> iTELL AI is in
+						alpha testing. It will try its best to help you but it can still
+						make mistakes. Let us know how you feel about iTELL AI's performance
+						using the feedback icons on the top right side of this box (thumbs
+						up or thumbs down).{" "}
+					</p>
+				</CardDescription>
+
+				<CardContent className="flex flex-col justify-center items-center space-y-4">
+					{answerStatus === AnswerStatus.BOTH_INCORRECT && (
+						<div className="text-xs">
 							<p className="text-red-400 question-box-text">
 								<b>iTELL AI says:</b> You likely got a part of the answer wrong.
 								Please try again.
@@ -184,29 +229,26 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 						</div>
 					)}
 
-					{answer === AnswerStatus.SEMI_CORRECT && (
-						<div className="flex justify-center items-center flex-col text-xs">
-							<p className="text-yellow-600 question-box-text">
-								<b>iTELL AI says:</b> You may have missed something, but you
-								were generally close. You can click on the "Continue reading"
-								button below go to the next part or try again with a different
-								response.{" "}
-							</p>
-						</div>
+					{answerStatus === AnswerStatus.SEMI_CORRECT && (
+						<p className="text-yellow-600 question-box-text text-xs">
+							<b>iTELL AI says:</b> You may have missed something, but you were
+							generally close. You can click on the "Continue reading" button
+							below go to the next part or try again with a different response.{" "}
+						</p>
 					)}
 
-					{answer === AnswerStatus.BOTH_CORRECT ? (
-						<div className="flex items-center flex-col">
+					{answerStatus === AnswerStatus.BOTH_CORRECT ? (
+						<>
 							<p className="text-xl2 text-emerald-600 text-center question-box-text">
 								Your answer was CORRECT!
 							</p>
-							<p className="text-sm question-box-tet">
+							<p className="text-sm question-box-text">
 								Click on the button below to continue reading. Please use the
 								thumbs-up or thumbs-down icons on the top right side of this box
 								if you have any feedback about this question that you would like
 								to provide before you continue reading.
 							</p>
-						</div>
+						</>
 					) : (
 						question && (
 							<p className="question-box-text">
@@ -215,49 +257,65 @@ export const QuestionBox = ({ question, chapter, subsection }: Props) => {
 						)
 					)}
 
-					{answer !== AnswerStatus.BOTH_CORRECT && (
+					{answerStatus !== AnswerStatus.BOTH_CORRECT && (
 						<TextArea
 							rows={2}
 							className="rounded-md shadow-md  p-4"
 							value={inputValue}
 							onValueChange={setInputValue}
+							onPaste={(e) => {
+								e.preventDefault();
+								toast.warning("Copy & Paste is not allowed for question");
+							}}
 						/>
 					)}
 
-					{answer === AnswerStatus.BOTH_CORRECT ? (
-						<div className="flex justify-center items-center flex-row">
-							<button
-								className={cn(buttonVariants({ variant: "secondary" }), "mb-4")}
-								onClick={goToNextChunk}
-								type="submit"
-							>
-								Click Here to Continue Reading
-							</button>
-						</div>
-					) : (
-						<div className="flex justify-center items-center flex-row gap-2">
+					<div className="flex flex-col sm:flex-row justify-center items-center gap-2">
+						{answerStatus !== AnswerStatus.UNANSWERED && (
+							<HoverCard>
+								<HoverCardTrigger asChild>
+									<Button variant="secondary">Reveal Answer</Button>
+								</HoverCardTrigger>
+								<HoverCardContent className="w-80">
+									<p className="leading-relaxed">{answer}</p>
+								</HoverCardContent>
+							</HoverCard>
+						)}
+						{answerStatus === AnswerStatus.BOTH_CORRECT &&
+						isDisplayNextButton ? (
 							<Button
 								variant={"secondary"}
-								onClick={handleSubmit}
-								disabled={isLoading}
+								onClick={thenGoToNextChunk}
+								type="button"
 							>
-								{isLoading && <Spinner className="inline mr-2" />}
-								{answer !== AnswerStatus.SEMI_CORRECT ? "Submit" : "Resubmit"}
+								Click Here to Continue Reading
 							</Button>
-							{answer !== AnswerStatus.UNANSWERED && (
-								<Button
-									variant={"ghost"}
-									onClick={() => {
-										goToNextChunk();
-									}}
-								>
-									{answer === AnswerStatus.SEMI_CORRECT
-										? "Continue Reading"
-										: "Skip this question"}
-								</Button>
-							)}
-						</div>
-					)}
+						) : (
+							<>
+								{answerStatus !== AnswerStatus.BOTH_CORRECT && (
+									<Button
+										variant={"secondary"}
+										onClick={handleSubmit}
+										disabled={isLoading}
+									>
+										{isLoading && <Spinner className="inline mr-2" />}
+										{answerStatus === AnswerStatus.UNANSWERED
+											? "Submit"
+											: "Resubmit"}
+									</Button>
+								)}
+
+								{answerStatus !== AnswerStatus.UNANSWERED &&
+									isDisplayNextButton && (
+										<Button variant={"ghost"} onClick={thenGoToNextChunk}>
+											{answerStatus === AnswerStatus.SEMI_CORRECT
+												? "Continue Reading"
+												: "Skip this question"}
+										</Button>
+									)}
+							</>
+						)}
+					</div>
 				</CardContent>
 			</Card>
 			<FeedbackModal

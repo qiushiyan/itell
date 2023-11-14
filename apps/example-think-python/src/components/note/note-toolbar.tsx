@@ -83,7 +83,7 @@ export const NoteToolbar = ({ chapter }: { chapter: number }) => {
 
 					incrementNoteCount();
 				} else {
-					toast.error("Please select some text to take a note");
+					toast.warning("Please select some text to take a note");
 				}
 			},
 		},
@@ -129,7 +129,7 @@ export const NoteToolbar = ({ chapter }: { chapter: number }) => {
 						incrementHighlightCount(-1);
 					});
 				} else {
-					toast.error("Please select some text to take a note");
+					toast.warning("Please select some text to take a note");
 				}
 			},
 		},
@@ -173,7 +173,7 @@ export const NoteToolbar = ({ chapter }: { chapter: number }) => {
 								className="flex items-center gap-2 p-2"
 								onClick={() => {
 									if (!session?.user && command.label !== "Copy") {
-										return toast.error("You need to be logged in first.");
+										return toast.warning("You need to be logged in first.");
 									}
 									command.action(data);
 								}}

@@ -16,6 +16,11 @@ export const ScrollBackButton = () => {
 		}
 	};
 
+	// disappear is user unlocks all chunks
+	if (chunks && currentChunk >= chunks.length - 1) {
+		return null;
+	}
+
 	return (
 		<div className="flex justify-center items-center p-4 gap-2">
 			<button
@@ -24,6 +29,7 @@ export const ScrollBackButton = () => {
 					"bg-emerald-400  hover:bg-emerald-200 text-white m-2 p-2",
 				)}
 				onClick={scrollToCurrentChunk}
+				type="button"
 			>
 				Click Here to Scroll Back Up to Your Current Subsection
 			</button>

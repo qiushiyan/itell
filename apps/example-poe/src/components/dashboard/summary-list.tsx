@@ -9,10 +9,11 @@ import {
 	SelectValue,
 } from "@/components/client-components";
 import { keyof } from "@itell/core/utils";
-import { Summary } from "@prisma/client";
+import { Summary, User } from "@prisma/client";
 import { useState } from "react";
 import { SummaryItem } from "./summary-item";
 import pluralize from "pluralize";
+import { DEFAULT_TIME_ZONE } from "@/lib/constants";
 
 const SelectModule = ({
 	modules,
@@ -39,7 +40,8 @@ const SelectModule = ({
 
 export const SummaryList = ({
 	summariesByModule,
-}: { summariesByModule: Record<string, Summary[]> }) => {
+	user,
+}: { summariesByModule: Record<string, Summary[]>; user: User }) => {
 	const modules = keyof(summariesByModule);
 	const [selectedModule, setSelectedModule] = useState(modules[0]);
 	const moduleSummaries = summariesByModule[selectedModule];
@@ -59,7 +61,11 @@ export const SummaryList = ({
 
 			<div className="divide-y divide-border rounded-md border mt-4">
 				{moduleSummaries.map((summary) => (
-					<SummaryItem summary={summary} key={summary.id} />
+					<SummaryItem
+						summary={summary}
+						key={summary.id}
+						timeZone={user.timeZone || DEFAULT_TIME_ZONE}
+					/>
 				))}
 			</div>
 		</div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/client-components";
+import { Button, TextArea } from "@/components/client-components";
 import {
 	Dialog,
 	DialogTitle,
@@ -12,7 +12,6 @@ import { useFocusTime } from "@itell/core/hooks";
 import { Warning } from "@itell/ui/server";
 import Spinner from "../spinner";
 import Feedback from "./summary-feedback";
-import TextArea from "../ui/textarea";
 import { makeLocationHref, makeInputKey } from "@/lib/utils";
 import { useSummary } from "@/lib/hooks/use-summary";
 import { useSession } from "next-auth/react";
@@ -31,12 +30,14 @@ import { SectionLocation } from "@/types/location";
 import { allSectionsSorted } from "@/lib/sections";
 import { incrementLocation, isLocationAfter } from "@/lib/location";
 import pluralize from "pluralize";
+import { toast } from "sonner";
+
 export const SummaryInput = ({ location }: { location: SectionLocation }) => {
 	const [showProceedModal, setShowProceedModal] = useState(false);
+	const createFocusTime = trpc.focusTime.create.useMutation();
 	const { state, setInput, score, create } = useSummary({
 		useLocalStorage: true,
 	});
-	const createFocusTime = trpc.focusTime.create.useMutation();
 
 	const router = useRouter();
 	const { status: sessionStatus } = useSession();
@@ -138,7 +139,7 @@ export const SummaryInput = ({ location }: { location: SectionLocation }) => {
 		}
 
 		setIsGoingToNextPage(false);
-		router.push(incrementLocation(location));
+		router.push(makeLocationHref(incrementLocation(location)));
 	};
 
 	let autoSaveTimer: NodeJS.Timer | null = null;
@@ -175,6 +176,12 @@ export const SummaryInput = ({ location }: { location: SectionLocation }) => {
 					className="resize-none rounded-md shadow-md p-4 w-full"
 					onFocus={() => pauseFocusTimeCounting()}
 					onBlur={() => startFocusTimeCounting()}
+					onPaste={(e) => {
+						if (process.env.NODE_ENV === "production") {
+							e.preventDefault();
+							toast.warning("Copy & Paste is not allowed");
+						}
+					}}
 				/>
 				{state.error && <Warning>{state.error}</Warning>}
 				<div className="flex justify-end">
@@ -202,7 +209,7 @@ export const SummaryInput = ({ location }: { location: SectionLocation }) => {
 					<DialogFooter>
 						<Button onClick={handleGoToNextPage} disabled={isGoingToNextPage}>
 							{isGoingToNextPage && <Spinner className="mr-2 inline" />} Next
-							Chapter
+							Section
 						</Button>
 					</DialogFooter>
 				</DialogContent>

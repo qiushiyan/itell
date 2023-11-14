@@ -1,5 +1,6 @@
 "use client";
 
+import useDriver from "use-driver";
 import CodeMirror, { ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import { githubDark, githubLight } from "@uiw/codemirror-theme-github";
 import {
@@ -8,8 +9,9 @@ import {
 	RotateCcwIcon,
 	XIcon,
 	SquareIcon,
+	HelpCircleIcon,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@itell/core/utils";
 import { useTheme } from "next-themes";
 import { PythonResult, baseExtensions, createShortcuts } from "./editor-config";
@@ -20,18 +22,12 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
 } from "../client-components";
 import { usePython } from "@/lib/hooks/ues-python";
 import { memo } from "react";
 import { CellData, CellMode, CellStatus } from "./types";
+import "use-driver/dist/driver.css";
+import { toast } from "sonner";
 
 // io and contextlib is imported as setup code in providers
 const codeWithStd = (code: string) => {
@@ -62,6 +58,8 @@ export const Cell = memo(
 				},
 			]),
 		];
+
+		const { drive, register } = useDriver();
 
 		const [input, setInput] = useState(code);
 		const [cellMode, setCellMode] = useState<CellMode>(mode);
@@ -94,6 +92,16 @@ export const Cell = memo(
 			if (editorRef.current) {
 				editorRef.current.view?.focus();
 			}
+		};
+
+		const help = () => {
+			if (!drive) {
+				return toast.warning(
+					"Usage help is initializing, Please try again later.",
+				);
+			}
+
+			drive();
 		};
 
 		const cancel = async () => {
@@ -135,6 +143,14 @@ export const Cell = memo(
 									await run();
 								}
 							}}
+							{...register({
+								order: 2,
+								popover: {
+									title: "Run Code",
+									description:
+										"Click on this button to run your code in the editor",
+								},
+							})}
 						>
 							{isRunning ? (
 								<SquareIcon className="w-4 h-4" />
@@ -142,22 +158,48 @@ export const Cell = memo(
 								<PlayIcon className="w-4 h-4" />
 							)}
 						</Button>
-						<Button size={"sm"} variant={"ghost"} onClick={reset}>
+						<Button
+							size={"sm"}
+							variant={"ghost"}
+							onClick={reset}
+							{...register({
+								order: 3,
+								popover: {
+									title: "Reset Code",
+									description:
+										"Click on this button to reset your code in the editor",
+								},
+							})}
+						>
 							<RotateCcwIcon className="w-4 h-4" />
+						</Button>
+						<Button size={"sm"} variant={"ghost"} onClick={help}>
+							<HelpCircleIcon className="w-4 h-4" />
 						</Button>
 					</div>
 
 					<div>
-						<CodeMirror
-							value={input}
-							onChange={setInput}
-							extensions={extensions}
-							theme={theme === "light" ? githubLight : githubDark}
-							basicSetup={{
-								lineNumbers: false,
-							}}
-							ref={editorRef}
-						/>
+						<div
+							{...register({
+								order: 1,
+								popover: {
+									title: "Code Editor",
+									description: "This is where you write Python code",
+								},
+							})}
+						>
+							<CodeMirror
+								value={input}
+								onChange={setInput}
+								extensions={extensions}
+								theme={theme === "light" ? githubLight : githubDark}
+								basicSetup={{
+									lineNumbers: false,
+								}}
+								ref={editorRef}
+							/>
+						</div>
+
 						{result?.output && result.output !== "undefined" && (
 							<pre className="my-1 py-2">{result.output}</pre>
 						)}

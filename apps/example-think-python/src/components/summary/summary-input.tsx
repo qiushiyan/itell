@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/client-components";
+import { Button, TextArea } from "@/components/client-components";
 import {
 	Dialog,
 	DialogTitle,
@@ -12,7 +12,6 @@ import { useFocusTime } from "@itell/core/hooks";
 import { Warning } from "@itell/ui/server";
 import Spinner from "../spinner";
 import Feedback from "./summary-feedback";
-import TextArea from "../ui/textarea";
 import { makeChapterHref, makeInputKey } from "@/lib/utils";
 import { useSummary } from "@/lib/hooks/use-summary";
 import { useSession } from "next-auth/react";
@@ -29,6 +28,7 @@ import {
 import { trpc } from "@/trpc/trpc-provider";
 import { allChaptersSorted } from "@/lib/chapters";
 import pluralize from "pluralize";
+import { toast } from "sonner";
 
 export const SummaryInput = ({ chapter }: { chapter: number }) => {
 	const [showProceedModal, setShowProceedModal] = useState(false);
@@ -170,6 +170,12 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 					className="resize-none rounded-md shadow-md p-4 w-full"
 					onFocus={() => pauseFocusTimeCounting()}
 					onBlur={() => startFocusTimeCounting()}
+					onPaste={(e) => {
+						if (process.env.NODE_ENV === "production") {
+							e.preventDefault();
+							toast.warning("Copy & Paste is not allowed");
+						}
+					}}
 				/>
 				{state.error && <Warning>{state.error}</Warning>}
 				<div className="flex justify-end">

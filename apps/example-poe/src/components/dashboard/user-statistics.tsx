@@ -2,7 +2,6 @@ import { User } from "@prisma/client";
 import { Suspense } from "react";
 import { StudentBadges } from "./student/student-badges";
 import { UserBadges } from "./user/user-badges";
-import { Badge } from "./badge";
 import { ReadingTime } from "./reading-time";
 import {
 	ReadingTimeChartLevel,
@@ -10,6 +9,7 @@ import {
 } from "@itell/core/types";
 import { UserStatisticsControl } from "./user-statistics-control";
 import { z } from "zod";
+import { DashboardBadge } from "@itell/ui/server";
 
 type Props = {
 	user: User;
@@ -32,7 +32,7 @@ export const UserStatistics = ({ user, searchParams }: Props) => {
 	return (
 		<div className="space-y-4">
 			<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-				<Suspense fallback={<Badge.Skeletons />}>
+				<Suspense fallback={<DashboardBadge.Skeletons />}>
 					{user.classId ? (
 						<StudentBadges user={user} />
 					) : (

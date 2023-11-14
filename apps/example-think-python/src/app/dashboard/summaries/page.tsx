@@ -33,9 +33,7 @@ export default async function ({ searchParams }: PageProps) {
 				userId: currentUser.id,
 				chapter: queryChapter,
 			},
-			orderBy: {
-				created_at: "desc",
-			},
+			orderBy: [{ created_at: "desc" }, { chapter: "asc" }],
 		}),
 	]);
 
@@ -47,9 +45,7 @@ export default async function ({ searchParams }: PageProps) {
 			<ChapterSelect defaultChapter={queryChapter} />
 			<div className="p-2 space-y-4">
 				{userSummaries.length === 0 ? (
-					<p className=" text-muted-foreground text-sm">
-						There is no summary for Chapter {searchParams.chapter}.
-					</p>
+					<p className=" text-muted-foreground text-sm">No summary found</p>
 				) : (
 					<Suspense key={chapter} fallback={<p>hello world</p>}>
 						<p className="text-sm leading-relaxed">

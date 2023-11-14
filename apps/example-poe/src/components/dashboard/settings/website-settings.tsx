@@ -1,30 +1,22 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import {
 	Button,
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
+	Label,
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/client-components";
-import { toast } from "sonner";
 import { User } from "@prisma/client";
 import { DEFAULT_TIME_ZONE } from "@/lib/constants";
-import { trpc } from "@/trpc/trpc-provider";
-import { useState } from "react";
 import Spinner from "@/components/spinner";
-import { Skeleton } from "@itell/ui/server";
+import { useFormState, useFormStatus } from "react-dom";
+import { Errorbox } from "@itell/ui/server";
+import { useSession } from "next-auth/react";
+import { updateUser } from "@/lib/server-actions";
+import { toast } from "sonner";
 
 const timeZoneData = [
 	"America/Los_Angeles", // Pacific Time Zone
@@ -37,79 +29,70 @@ const timeZoneData = [
 	"Pacific/Saipan", // Chamorro Time Zone
 ];
 
+type FormState = { error: null | string };
+
+const SubmitButton = () => {
+	const { pending } = useFormStatus();
+	return (
+		<Button type="submit" disabled={pending}>
+			{pending && <Spinner className="mr-2 w-4 h-4" />} Save
+		</Button>
+	);
+};
+
 export const WebsiteSettings = ({ user }: { user: User }) => {
-	const [isSaving, setIsSaving] = useState(false);
-	const updateUser = trpc.user.update.useMutation();
-	const FormSchema = z.object({
-		timeZone: z.string({
-			required_error: "Please set a time zone to display.",
-		}),
-	});
+	const { data: session } = useSession();
 
-	const form = useForm<z.infer<typeof FormSchema>>({
-		// @ts-ignore https://github.com/colinhacks/zod/issues/2663
-		resolver: zodResolver(FormSchema),
-		defaultValues: {
-			timeZone: user.timeZone || DEFAULT_TIME_ZONE,
-		},
-	});
+	const onSubmit = async (
+		prevState: FormState,
+		formData: FormData,
+	): Promise<FormState> => {
+		if (!session?.user.id) {
+			return { error: "Failed to get user status. Please log in again" };
+		}
+		const data = {
+			timeZone: formData.get("time_zone") as string,
+		};
 
-	const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-		setIsSaving(true);
-		// for now, there is only time zone to configure
-		await updateUser.mutateAsync({
-			timeZone: data.timeZone,
-		});
-
-		setIsSaving(false);
-
-		toast.success("You settings have been saved.");
+		try {
+			await updateUser(session.user.id, data);
+			toast.success("Settings saved!");
+			return { error: null };
+		} catch (err) {
+			return { error: "Failed to save settings. Please try again later." };
+		}
 	};
+
+	// @ts-ignore
+	const [formState, formAction] = useFormState(onSubmit, { error: null });
 
 	return (
 		<div className="space-y-4">
 			<h3 className="mb-4 text-lg font-semibold leading-relaxed">
 				Website Settings
 			</h3>
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="w-2/3 space-y-6"
+			<form action={formAction} className="space-y-2 max-w-2xl">
+				{formState.error && (
+					<Errorbox title="Error">{formState.error}</Errorbox>
+				)}
+				<Label htmlFor="time_zone">Time Zone</Label>
+				<Select
+					name="time_zone"
+					defaultValue={user.timeZone || DEFAULT_TIME_ZONE}
 				>
-					<FormField
-						control={form.control}
-						name="timeZone"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Time Zone</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Select a verified email to display" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{timeZoneData.map((timeZone, i) => (
-											// rome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-											<SelectItem value={timeZone} key={i}>
-												{timeZone}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-								<FormDescription>Affects how time is displayed</FormDescription>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<Button type="submit" disabled={isSaving}>
-						{isSaving && <Spinner className="w-4 h-4 mr-2" />}Save
-					</Button>
-				</form>
-			</Form>
+					<SelectTrigger>
+						<SelectValue placeholder="Select a time zone" />
+					</SelectTrigger>
+					<SelectContent>
+						{timeZoneData.map((timeZone) => (
+							<SelectItem value={timeZone} key={timeZone}>
+								{timeZone}
+							</SelectItem>
+						))}
+					</SelectContent>
+					<SubmitButton />
+				</Select>
+			</form>
 		</div>
 	);
 };

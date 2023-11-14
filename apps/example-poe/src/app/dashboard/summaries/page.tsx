@@ -4,31 +4,33 @@ import { SummaryList } from "@/components/dashboard/summary-list";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
+import { getUser } from "@/lib/user";
 import { groupby } from "@itell/core/utils";
+import { User } from "@prisma/client";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 export default async function () {
-	const user = await getCurrentUser();
-	if (!user) {
+	const currentUser = await getCurrentUser();
+	if (!currentUser) {
 		return redirect("/auth");
 	}
 
-	const id = user.id;
-	const userSummaries = await db.user.findUnique({
-		where: {
-			id,
-		},
-		include: {
-			summaries: true,
-		},
-	});
+	const [user, userSummaries] = await Promise.all([
+		getUser(currentUser.id),
+		db.summary.findMany({
+			where: {
+				userId: currentUser.id,
+			},
+			orderBy: [{ created_at: "desc" }, { chapter: "asc" }, { section: "asc" }],
+		}),
+	]);
 
 	if (!userSummaries) {
 		return notFound();
 	}
 
-	if (userSummaries.summaries.length === 0) {
+	if (userSummaries.length === 0) {
 		return (
 			<DashboardShell>
 				<DashboardHeader heading="Summary" text="Create and manage summaries.">
@@ -49,17 +51,14 @@ export default async function () {
 	}
 
 	// // convert date here since they will be passed from server components to client components
-	const summariesByModule = groupby(
-		userSummaries.summaries,
-		(summary) => summary.module,
-	);
+	const summariesByModule = groupby(userSummaries, (summary) => summary.module);
 
 	return (
 		<DashboardShell>
 			<DashboardHeader heading="Summary" text="Create and manage summaries.">
 				<SummaryCreateButton />
 			</DashboardHeader>
-			<SummaryList summariesByModule={summariesByModule} />
+			<SummaryList summariesByModule={summariesByModule} user={user as User} />
 		</DashboardShell>
 	);
 }

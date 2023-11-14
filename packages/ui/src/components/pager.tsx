@@ -30,7 +30,13 @@ export const PageLink = ({ text, href, icon }: PageLinkData) => {
 
 export const Pager = ({ prev, next, ...rest }: Props) => {
 	return (
-		<div className="flex flex-row items-center justify-between mt-5" {...rest}>
+		<div
+			className={cn("flex flex-row items-center justify-between mt-5", {
+				"justify-end": next && !prev,
+				"justify-start": prev && !next,
+			})}
+			{...rest}
+		>
 			{prev && (
 				<PageLink
 					text={prev.text}

@@ -1,13 +1,10 @@
 ---
 title: "Conditionals and recursion"
-qa: false
+qa: true
 ---
 
-<div className = "content-chunk" data-subsection-id = "intro">
 
 The main topic of this chapter is the `if` statement, which executes different code depending on the state of the program. But first I want to introduce two new operators: floor division and modulus.
-
-</div>
 
 <div className = "content-chunk" data-subsection-id = "floor-division-and-modules">
 
@@ -129,7 +126,7 @@ if statements have the same structure as function definitions: a header followed
 There is no limit on the number of statements that can appear in the body, but there has to be at least one. Occasionally, it is useful to have a body with no statements (usually as a place keeper for code you haven't written yet). In that case, you can use the pass statement, which does nothing.
 
 ```python
-if x <div 0:
+if x < 0:
     pass          # TODO: need to handle negative values!
 ```
 
@@ -180,14 +177,14 @@ In the following exercise, imagine we are managing a website with some vip users
 
 </div>
 
-<div className = "chained-conditionals" data-subsection-id = "chained-conditionals">
+<div className = "content-chunk" data-subsection-id = "chained-conditionals">
 
 ## Chained conditionals
 
 Sometimes there are more than two possibilities and we need more than two branches. One way to express a computation like that is a **chained conditional**:
 
 ```python
-if x <div y:
+if x < y:
     print('x is less than y')
 elif x > y:
     print('x is greater than y')
@@ -255,6 +252,7 @@ if 0 < x < 10:
 </div>
 
 <div className = "content-chunk" data-subsection-id = "recursion">
+
 
 ## Recursion
 
@@ -335,7 +333,8 @@ For simple examples like this, it is probably easier to use a for loop. But we w
 
 </div>
 
-<div className = "content-chunk" data-subsection-id = "stack-diagrams-for-recursive-functions">
+
+<div className = "content-chunk" data-subsection-id ="stack-diagrams-for-recursive-functions">
 
 ## Stack diagrams for recursive functions
 
@@ -493,7 +492,7 @@ You should take the time to read error messages carefully, but don't assume that
 
 </div>
 
-<div className = "glossary" data-subsection-id = "glossary">
+<div className = "content-chunk" data-subsection-id = "glossary">
 
 ## Glossary
 
@@ -567,11 +566,9 @@ One of the operators that compares its operands: `==`, `!=`, `>`, `<`, `>=`, and
 
 </div>
 
-<div className = "content-chunk" data-subsection-id = "exercises">
+<div className = "content-chunk" data-subsection-id = "exercises-1">
 
-## Exercises
-
-### Exercise 1
+## Exercise 1
 
 The `time` module provides a function, also named `time`, that returns the current Greenwich Mean Time in “the epoch”, which is an arbitrary time used as a reference point. On UNIX systems, the epoch is 1 January 1970.
 

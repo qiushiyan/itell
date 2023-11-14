@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../utils";
 import { SectionLocationSchema } from "../schema";
 
-const NoteRouter = router({
+export const NoteRouter = router({
 	getByLocation: protectedProcedure
 		.input(z.object({ location: SectionLocationSchema }))
 		.query(async ({ ctx, input }) => {
@@ -86,5 +86,3 @@ const NoteRouter = router({
 			});
 		}),
 });
-
-export default NoteRouter;

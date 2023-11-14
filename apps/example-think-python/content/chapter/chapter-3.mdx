@@ -1,17 +1,7 @@
 ---
 title: Functions
-qa: false
+qa: true
 ---
-
-<YoutubeVideo
-  title="Functions"
-  src="https://www.youtube.com/embed/seLcRCulwl4?start=643"
->
-  In the context of programming, a **function** is a named sequence of
-  statements that performs a computation. When you define a function, you
-  specify the name and the sequence of statements. Later, you can "call" the
-  function by name.
-</YoutubeVideo>
 
 <div className = "content-chunk" data-subsection-id = "function-calls">
 
@@ -64,16 +54,10 @@ Finally, `str` converts its argument to a string:
 '3.14159'
 ```
 
-## Learn with Videos
+</div>
 
-<YoutubeVideo
-  title="Math functions"
-  src="https://www.youtube.com/embed/seLcRCulwl4?start=334"
->
-  Python has a math module that provides most of the familiar mathematical
-  functions. A **module** is a file that contains a collection of related
-  functions.
-</YoutubeVideo>
+<div className="content-chunk" data-subsection-id="math-functions">
+
 
 ## Math functions
 
@@ -124,12 +108,6 @@ If you know your trigonometry, you can check the previous result by comparing it
 
 <div className = "content-chunk" data-subsection-id = "composition">
 
-## Learn with Videos
-
-<YoutubeVideo
-  title="Composition"
-  src="https://www.youtube.com/embed/seLcRCulwl4?start=497"
-></YoutubeVideo>
 
 ## Composition
 
@@ -159,12 +137,6 @@ SyntaxError: can't assign to operator
 
 <div className = "content-chunk" data-subsection-id = "adding-new-functions">
 
-## Learn with Videos
-
-<YoutubeVideo src="https://www.youtube.com/embed/seLcRCulwl4?start=668">
-  A **function definition** specifies the name of a new function and the
-  sequence of statements that execute when the function is called.
-</YoutubeVideo>
 
 ## Adding new functions
 
@@ -240,9 +212,6 @@ But that's not really how the song goes.
 
 <div className = "content-chunk" data-subsection-id = "definitions-and-uses">
 
-## Learn with Videos
-
-<YoutubeVideo src="https://www.youtube.com/embed/seLcRCulwl4?start=841"></YoutubeVideo>
 
 ## Definitions and uses
 
@@ -274,16 +243,10 @@ As you might expect, you have to create a function before you can execute it. In
 
 </CodingTime>
 
-## Learn with Videos
+</div>
 
-<YoutubeVideo
-  title="Execution Flow"
-  src="https://www.youtube.com/embed/seLcRCulwl4?start=931"
->
-  In order to ensure that a function is defined before its first use, you have
-  to know the order in which statements are executed, which is called the **flow
-  of execution**.
-</YoutubeVideo>
+<div className = "content-chunk" data-subsection-id = "flow-of-execution">
+
 
 ## Flow of execution
 
@@ -303,13 +266,6 @@ In summary, when you read a program, you don't always want to read from top to b
 
 <div className = "content-chunk" data-subsection-id = "parameters-and-arguments">
 
-## Learn with Videos
-
-<YoutubeVideo src="https://www.youtube.com/embed/seLcRCulwl4?start=1018">
-  Some of the built-in functions we have seen require arguments. For example,
-  when you call `math.sin` you pass a number as an argument. Some functions take
-  more than one argument: `math.pow` takes two, the base and the exponent.
-</YoutubeVideo>
 
 ## Parameters and arguments
 
@@ -365,13 +321,6 @@ The name of the variable we pass as an argument (michael) has nothing to do with
 
 <div className = "content-chunk" data-subsection-id = "variables-and-parameters-are-local">
 
-## Learn with Videos
-
-<YoutubeVideo
-  title="Function Parameters"
-  src="https://www.youtube.com/embed/Ol3Dwucax9U?start=9"
-/>
-
 ## Variables and parameters are local
 
 When you create a variable inside a function, it is **local**, which means that
@@ -406,15 +355,6 @@ Parameters are also local. For example, outside `print_twice`, there is no such 
 
 <div className = "content-chunk" data-subsection-id = "stack-diagrams">
 
-## Learn with Videos
-
-<YoutubeVideo
-  title="stack diagram"
-  src="https://www.youtube.com/embed/Ol3Dwucax9U?start=298"
->
-  To keep track of which variables can be used where, it is sometimes useful to
-  draw a **stack diagram**.
-</YoutubeVideo>
 
 ## Stack diagrams
 
@@ -459,15 +399,6 @@ The order of the functions in the traceback is the same as the order of the fram
 </div>
 
 <div className = "content-chunk" data-subsection-id = "fruitful-functions-and-void-functions">
-
-## Learn with Videos
-
-<YoutubeVideo src="https://www.youtube.com/embed/Ol3Dwucax9U?start=416">
-  Some of the functions we are using, such as the math functions, yield results;
-  for lack of a better name, I call them **fruitful functions**. Other
-  functions, like print_twice, perform an action but don't return a value. They
-  are called **void functions**.
-</YoutubeVideo>
 
 ## Fruitful functions and void functions
 
@@ -519,9 +450,6 @@ The functions we have written so far are all void. We will start writing fruitfu
 
 <div className = "content-chunk" data-subsection-id = "why-functions">
 
-## Learn with Videos
-
-<YoutubeVideo src="https://www.youtube.com/embed/Ol3Dwucax9U?start=735"></YoutubeVideo>
 
 ## Why functions?
 
@@ -653,11 +581,9 @@ A name used inside a function to refer to the value passed as an argument.
 
 </div>
 
-<div className = "content-chunk" data-subsection-id = "exercises">
+<div className = "content-chunk" data-subsection-id = "exercises-1">
 
-## Exercises
-
-### Exercise 1
+## Exercise 1
 
 <Exercise>
 
@@ -674,7 +600,11 @@ Hint: Use string concatenation and repetition. Also, Python provides a built-in 
 
 </Exercise>
 
-### Exercise 2
+</div>
+
+<div className = "content-chunk" data-subsection-id = "exercises-2">
+
+## Exercise 2
 
 <Exercise>
 A function object is a value you can assign to a variable or pass as an argument. For example, `do_twice` is a function that takes a function object as an argument and calls it twice:
@@ -710,7 +640,11 @@ Solution: https://github.com/AllenDowney/ThinkPython2/blob/master/code/do_four.p
 
 </Exercise>
 
-### Exercise 3
+</div>
+
+<div className = "content-chunk" data-subsection-id = "exercises-3">
+
+## Exercise 3
 
 <Exercise>
 

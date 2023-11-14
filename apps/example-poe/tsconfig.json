@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES6",
+    "types": [
+      "react-dom/experimental"
+    ],
     "lib": [
       "dom",
       "dom.iterable",

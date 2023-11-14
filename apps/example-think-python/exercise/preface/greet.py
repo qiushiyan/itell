@@ -1,5 +1,1 @@
-def greet():
-    return "Welcome to the textbook!"
-
-
-print(greet())
+print("Welcome to the textbook!")

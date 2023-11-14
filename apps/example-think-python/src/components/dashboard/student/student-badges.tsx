@@ -1,4 +1,3 @@
-import { Badge } from "../badge";
 import {
 	FileTextIcon,
 	FlagIcon,
@@ -7,6 +6,7 @@ import {
 } from "lucide-react";
 import { User } from "@prisma/client";
 import { getClassStudents, getSummaryStats } from "@/lib/dashboard";
+import { DashboardBadge } from "@itell/ui/server";
 
 export const StudentBadges = async ({ user }: { user: User }) => {
 	const students = await getClassStudents(user.classId as string);
@@ -41,7 +41,7 @@ export const StudentBadges = async ({ user }: { user: User }) => {
 
 	return (
 		<>
-			<Badge
+			<DashboardBadge
 				className={
 					comparisons.totalCount > 0 ? "border-info" : "border-destructive"
 				}
@@ -51,7 +51,7 @@ export const StudentBadges = async ({ user }: { user: User }) => {
 				comparing
 				icon={<PencilIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
-			<Badge
+			<DashboardBadge
 				className={
 					comparisons.passedCount > 0 ? "border-info" : "border-destructive"
 				}
@@ -61,7 +61,7 @@ export const StudentBadges = async ({ user }: { user: User }) => {
 				comparing
 				icon={<FlagIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
-			<Badge
+			<DashboardBadge
 				className={
 					comparisons.avgContentScore && comparisons.avgContentScore > 0
 						? "border-info"
@@ -73,7 +73,7 @@ export const StudentBadges = async ({ user }: { user: User }) => {
 				comparing
 				icon={<FileTextIcon className="w-4 h-4 text-muted-foreground" />}
 			/>
-			<Badge
+			<DashboardBadge
 				className={
 					comparisons.avgWordingScore && comparisons.avgWordingScore > 0
 						? "border-info"

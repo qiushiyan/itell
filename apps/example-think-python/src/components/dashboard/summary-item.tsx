@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Summary } from "@prisma/client";
 
-import { Skeleton } from "@itell/ui/server";
+import { Skeleton, buttonVariants } from "@itell/ui/server";
 import { CheckCircle, XCircle } from "lucide-react";
-import { relativeDate } from "@itell/core/utils";
+import { cn, relativeDate } from "@itell/core/utils";
 
 interface PostItemProps {
 	summary: Summary;
@@ -12,28 +12,26 @@ interface PostItemProps {
 
 export function SummaryItem({ summary, timeZone }: PostItemProps) {
 	return (
-		<div className="p-4">
-			<div className="space-y-1">
-				<div className="flex items-center justify-between">
-					<Link
-						href={`/summary/${summary.id}`}
-						className="font-semibold hover:underline"
-					>
-						{summary.text.slice(0, 50)}
-					</Link>
-					{summary.isPassed ? (
-						<CheckCircle className="w-4 h-4 stroke-info" />
-					) : (
-						<XCircle className="w-4 h-4 stroke-warning" />
-					)}
-				</div>
-
-				<footer className="flex justify-between text-sm text-muted-foreground">
-					<p>{`Chapter ${summary.chapter}`}</p>
-					<p>{relativeDate(summary.created_at, timeZone)}</p>
-				</footer>
+		<Link
+			href={`/summary/${summary.id}`}
+			className={cn(
+				buttonVariants({ variant: "ghost", className: "h-fit" }),
+				"block p-4",
+			)}
+		>
+			<header className="flex justify-between text-sm text-muted-foreground">
+				<p className="font-semibold text-lg leading-relaxed">{`Chapter ${summary.chapter}`}</p>
+				<p>{relativeDate(summary.created_at, timeZone)}</p>
+			</header>
+			<div className="flex items-center justify-between">
+				<p className="line-clamp-2">{summary.text}</p>
+				{summary.isPassed ? (
+					<CheckCircle className="w-4 h-4 stroke-info" />
+				) : (
+					<XCircle className="w-4 h-4 stroke-warning" />
+				)}
 			</div>
-		</div>
+		</Link>
 	);
 }
 

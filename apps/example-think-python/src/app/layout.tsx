@@ -1,4 +1,4 @@
-import { Inter as FontSans } from "next/font/google";
+import { GeistSans as FontSans } from "geist/font";
 import { IBM_Plex_Mono as FontMono } from "next/font/google";
 import "@/styles/globals.css";
 import ShowToast from "@/components/toast";
@@ -20,11 +20,6 @@ export async function generateMetadata(): Promise<Metadata> {
 	};
 }
 
-const fontSans = FontSans({
-	subsets: ["latin"],
-	variable: "--font-sans",
-});
-
 const fontMono = FontMono({
 	subsets: ["latin"],
 	weight: ["400", "700"],
@@ -44,7 +39,7 @@ export default async function RootLayout({
 			<body
 				className={cn(
 					"min-h-screen bg-background font-sans antialiased",
-					fontSans.variable,
+					FontSans.className,
 					fontMono.variable,
 				)}
 			>

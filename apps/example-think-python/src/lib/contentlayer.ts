@@ -7,7 +7,11 @@ export const getHeadingsFromRawBody = (doc: string) => {
 
 	lines.forEach((line) => {
 		const l = line.trim();
-		if (l.startsWith("```") || l.startsWith("<Steps>")) {
+		if (
+			l.startsWith("```") ||
+			// regex match <Steps> or </Steps>
+			l.match(/<Steps>|<\/Steps>/)
+		) {
 			inCodeBlock = !inCodeBlock; // Toggle the flag whenever we encounter ```
 		}
 

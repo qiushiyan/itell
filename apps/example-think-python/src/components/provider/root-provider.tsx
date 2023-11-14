@@ -13,7 +13,7 @@ export const RootProvider = ({ children }: { children: React.ReactNode }) => {
 			<TRPCProvider>
 				<BalancerProvider>
 					<ThemeProvider attribute="class" defaultTheme="light">
-						<Toaster richColors visibleToasts={1} />
+						<Toaster richColors />
 						{children}
 					</ThemeProvider>
 				</BalancerProvider>
