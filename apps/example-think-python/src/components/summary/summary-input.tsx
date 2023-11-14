@@ -112,7 +112,7 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 		if (state.feedback && !state.feedback.isPassed) {
 			if (allChaptersSorted[allChaptersSorted.length - 1].chapter > chapter) {
 				fetchSummaryCount().then(({ data: count }) => {
-					if (count && count > PAGE_SUMMARY_THRESHOLD) {
+					if (count && count >= PAGE_SUMMARY_THRESHOLD) {
 						setShowProceedModal(true);
 					}
 				});
