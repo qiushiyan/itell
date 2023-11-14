@@ -167,7 +167,11 @@ export const QuestionBox = ({
 	};
 
 	if (!session?.user) {
-		return <Warning>You need to be logged in to view this question</Warning>;
+		return (
+			<Warning>
+				You need to be logged in to view this question and move forward
+			</Warning>
+		);
 	}
 
 	return (
@@ -182,7 +186,7 @@ export const QuestionBox = ({
 				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
 
 				<CardHeader className="flex flex-row justify-center items-baseline w-full p-2 gap-1">
-					<div className="flex justify-center items-center font-light text-zinc-500 w-10/12 mr-4">
+					<CardDescription className="flex justify-center items-center font-light text-zinc-500 w-10/12 mr-4">
 						<p className="inline-flex text-xs">
 							{" "}
 							<AlertTriangle className="stroke-yellow-400 mr-4" /> iTELL AI is
@@ -191,7 +195,7 @@ export const QuestionBox = ({
 							performance using the feedback icons to the right (thumbs up or
 							thumbs down).{" "}
 						</p>
-					</div>
+					</CardDescription>
 					<ThumbsUp
 						className="hover:stroke-emerald-400 hover:cursor-pointer w-4 h-4"
 						onClick={positiveModal}
@@ -201,17 +205,6 @@ export const QuestionBox = ({
 						onClick={negativeModal}
 					/>
 				</CardHeader>
-
-				<CardDescription className="flex justify-center items-center text-sm font-light text-zinc-500">
-					<p className="inline-flex question-box-text">
-						{" "}
-						<AlertTriangle className="stroke-yellow-400 mr-2" /> iTELL AI is in
-						alpha testing. It will try its best to help you but it can still
-						make mistakes. Let us know how you feel about iTELL AI's performance
-						using the feedback icons on the top right side of this box (thumbs
-						up or thumbs down).{" "}
-					</p>
-				</CardDescription>
 
 				<CardContent className="flex flex-col justify-center items-center space-y-4">
 					{answerStatus === AnswerStatus.BOTH_INCORRECT && (
@@ -238,20 +231,20 @@ export const QuestionBox = ({
 					)}
 
 					{answerStatus === AnswerStatus.BOTH_CORRECT ? (
-						<>
-							<p className="text-xl2 text-emerald-600 text-center question-box-text">
+						<div className="flex items-center flex-col">
+							<p className="text-xl2 text-emerald-600 text-center">
 								Your answer was CORRECT!
 							</p>
-							<p className="text-sm question-box-text">
+							<p className="text-sm">
 								Click on the button below to continue reading. Please use the
 								thumbs-up or thumbs-down icons on the top right side of this box
 								if you have any feedback about this question that you would like
 								to provide before you continue reading.
 							</p>
-						</>
+						</div>
 					) : (
 						question && (
-							<p className="question-box-text">
+							<p>
 								<b>Question:</b> {question}
 							</p>
 						)
