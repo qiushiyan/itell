@@ -26,6 +26,8 @@ import { toast } from "sonner";
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
 import { createQuestionAnswer } from "@/lib/server-actions";
+import type { Prisma } from "@prisma/client";
+import { createEvents } from "@/lib/server-actions";
 
 type Props = {
 	question: string;
@@ -125,6 +127,25 @@ export const QuestionBox = ({
 		setAnswerStatus(AnswerStatus.BOTH_INCORRECT);
 	};
 
+	// submit event
+	const submitEvent = async () => {
+		if (session) {const oneEvent: Prisma.EventCreateInput[] = [{
+			eventType: "chunk reveal",
+			userId: session?.user?.id,
+			page: location.href,
+			data: {
+				qaStatus: answerStatus,
+				chapter: chapter,
+				section: section,
+				subsection: subsection,
+			},
+		  }];
+		  createEvents(oneEvent);
+		} else {
+			console.error("Session is null or undefined. Event not created.");
+		};
+	};
+
 	const handleSubmit = async () => {
 		// Spinner animation when loading
 		setIsLoading(true);
@@ -160,6 +181,8 @@ export const QuestionBox = ({
 					subsection: subsection,
 					score: result.score,
 				});
+
+				await submitEvent();
 			}
 		} catch (err) {
 			console.log("failed to score answer", err);

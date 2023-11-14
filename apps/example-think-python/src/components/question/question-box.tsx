@@ -28,6 +28,9 @@ import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
 import { createQuestionAnswer } from "@/lib/server-actions";
 import { TextArea } from "@/components/client-components";
+import type { Prisma } from "@prisma/client";
+import { createEvents } from "@/lib/server-actions";
+
 type Props = {
 	question: string;
 	answer: string;
@@ -122,6 +125,25 @@ export const QuestionBox = ({
 		shakeModal();
 		setBorderColor(BorderColor.RED);
 		setAnswerStatus(AnswerStatus.BOTH_INCORRECT);
+	};
+
+	// submit event
+	const submitEvent = async () => {
+		if (session?.user) {const oneEvent: Prisma.EventCreateInput[] = [{
+			eventType: "chunk reveal",
+			userId: session?.user?.id,
+			page: location.href,
+			data: {
+				qaStatus: answerStatus,
+				chapter: chapter,
+				section: section,
+				subsection: subsection,
+			},
+		  }];
+		  createEvents(oneEvent);
+		} else {
+			console.error("Session is null or undefined. Event not created.");
+		};
 	};
 
 	const handleSubmit = async () => {
