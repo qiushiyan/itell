@@ -180,6 +180,7 @@ export const QuestionBox = ({
 					score: result.score,
 				});
 			}
+			await submitEvent();
 		} catch (err) {
 			console.log("failed to score answer", err);
 			return toast.error("Question evaluation failed, please try again later");
