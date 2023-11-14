@@ -189,6 +189,16 @@ export const QuestionBox = ({
 				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
 
 				<CardHeader className="flex flex-row justify-end items-baseline w-full p-2 gap-1">
+					<div className="flex justify-center items-center font-light text-zinc-500 w-10/12 mr-4">
+						<p className="inline-flex text-xs">
+							{" "}
+							<AlertTriangle className="stroke-yellow-400 mr-4" /> iTELL AI is
+							in alpha testing. It will try its best to help you but it can
+							still make mistakes. Let us know how you feel about iTELL AI's
+							performance using the feedback icons to the right (thumbs up or
+							thumbs down).{" "}
+						</p>
+					</div>
 					<ThumbsUp
 						className="hover:stroke-emerald-400 hover:cursor-pointer w-4 h-4"
 						onClick={positiveModal}
