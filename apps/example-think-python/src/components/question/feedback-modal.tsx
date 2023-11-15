@@ -47,11 +47,15 @@ export const FeedbackModal = ({
 		}
 		setIsPending(true);
 		await createConstructedResponseFeedback({
-			userId: session.user.id,
 			feedback: input,
 			pageSlug,
 			isPositive,
 			tags,
+			user: {
+				connect: {
+					id: session.user.id,
+				},
+			},
 		});
 		setIsPending(false);
 		onOpenChange(false);

@@ -1,5 +1,6 @@
 import { cn } from "@itell/core/utils";
 import { Chapter } from "contentlayer/generated";
+import Link from "next/link";
 import Balancer from "react-wrap-balancer";
 
 type ChapterSidebarProps = {
@@ -24,11 +25,11 @@ export function ChapterSidebar({
 						)}
 						key={chapter.url}
 					>
-						<a href={`/${chapter.url}`}>
+						<Link href={`/${chapter.url}`}>
 							<p className="text-sm font-light">
 								<Balancer>{`${chapter.chapter}. ${chapter.title}`}</Balancer>
 							</p>
-						</a>
+						</Link>
 					</li>
 				))}
 			</ol>

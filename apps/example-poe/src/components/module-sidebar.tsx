@@ -7,6 +7,7 @@ import {
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from "./client-components";
+import Link from "next/link";
 
 type ModuleSidebarProps = {
 	chapters: Chapter[];
@@ -33,11 +34,11 @@ export function ModuleSidebar({
 									currentLocation.section === 0,
 							})}
 						>
-							<a href={`/${chapter.url}`} className="block mb-1 p-1">
+							<Link href={`/${chapter.url}`} className="block mb-1 p-1">
 								<h5 className="font-semibold leading-relaxed">
 									<Balancer as="div">{chapter.title}</Balancer>
 								</h5>
-							</a>
+							</Link>
 						</div>
 					</CollapsibleTrigger>
 

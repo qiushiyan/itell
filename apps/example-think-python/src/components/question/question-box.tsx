@@ -157,11 +157,15 @@ export const QuestionBox = ({
 				}
 				if (session?.user && process.env.NODE_ENV === "production") {
 					await createConstructedResponse({
-						userId: session.user.id,
 						response: inputValue,
 						chapter: chapter,
 						subsection: subsection,
 						score: result.score,
+						user: {
+							connect: {
+								id: session.user.id,
+							},
+						},
 					});
 				}
 			} catch (err) {
