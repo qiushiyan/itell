@@ -149,6 +149,11 @@ export const QuestionBox = ({
 	const handleSubmit = async () => {
 		// Spinner animation when loading
 		setIsLoading(true);
+		if (inputValue == "") {
+			setIsLoading(false);
+			console.error("inputValue is an empty string");
+			return toast.error("Your response is empty. Please provide an answer.");
+		};
 		try {
 			const response = await getQAScore({
 				input: inputValue,
