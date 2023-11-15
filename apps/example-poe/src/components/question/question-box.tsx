@@ -6,6 +6,7 @@ import {
 	CardContent,
 	CardDescription,
 	CardHeader,
+	Warning,
 } from "@itell/ui/server";
 import { AlertTriangle, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
@@ -25,7 +26,7 @@ import { toast } from "sonner";
 // import shake effect
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
-import { createQuestionAnswer } from "@/lib/server-actions";
+import { createConstructedResponse } from "@/lib/server-actions";
 
 type Props = {
 	question: string;
@@ -126,56 +127,68 @@ export const QuestionBox = ({
 	};
 
 	const handleSubmit = async () => {
-		// Spinner animation when loading
-		setIsLoading(true);
-		try {
-			const response = await getQAScore({
-				input: inputValue,
-				chapter: String(chapter),
-				section: String(section),
-				subsection: String(subsection),
-			});
-
-			if (!response.success) {
-				// API response is not in correct shape
-				console.error("API Response error", response);
-				return toast.error("Answer evaluation failed, please try again later");
-			}
-
-			const result = response.data;
-
-			if (result.score === 2) {
-				passed();
-			} else if (result.score === 1) {
-				semiPassed();
-			} else {
-				failed();
-			}
-			if (session?.user) {
-				await createQuestionAnswer({
-					userId: session.user.id,
-					response: inputValue,
-					chapter: chapter,
-					section: section,
-					subsection: subsection,
-					score: result.score,
+		if (inputValue.trim() === "") {
+			toast.warning("Please enter an answer to move forward");
+			return;
+		} else {
+			// Spinner animation when loading
+			setIsLoading(true);
+			try {
+				const response = await getQAScore({
+					input: inputValue,
+					chapter: String(chapter),
+					section: String(section),
+					subsection: String(subsection),
 				});
+
+				if (!response.success) {
+					// API response is not in correct shape
+					console.error("API Response error", response);
+					return toast.error(
+						"Answer evaluation failed, please try again later",
+					);
+				}
+
+				const result = response.data;
+
+				if (result.score === 2) {
+					passed();
+				} else if (result.score === 1) {
+					semiPassed();
+				} else {
+					failed();
+				}
+				if (session?.user && process.env.NODE_ENV === "production") {
+					// when there is no session, question won't be displayed
+					await createConstructedResponse({
+						response: inputValue,
+						chapter: chapter,
+						section: section,
+						subsection: subsection,
+						score: result.score,
+						user: {
+							connect: {
+								id: session.user.id,
+							},
+						},
+					});
+				}
+			} catch (err) {
+				console.log("failed to score answer", err);
+				return toast.error(
+					"Question evaluation failed, please try again later",
+				);
+			} finally {
+				setIsLoading(false);
 			}
-		} catch (err) {
-			console.log("failed to score answer", err);
-			return toast.error("Question evaluation failed, please try again later");
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
 	if (!session?.user) {
 		return (
-			<Card>
-				<CardHeader>
-					You need to be logged in to view this question and move forward.
-				</CardHeader>
-			</Card>
+			<Warning>
+				You need to be logged in to view this question and move forward.
+			</Warning>
 		);
 	}
 
@@ -211,7 +224,7 @@ export const QuestionBox = ({
 					/>
 				</CardHeader>
 
-				<CardContent className="flex flex-col justify-center items-center space-y-4">
+				<CardContent className="flex flex-col justify-center items-center space-y-4  w-[600px] md:[850px] mx-auto">
 					{answerStatus === AnswerStatus.BOTH_INCORRECT && (
 						<div className="text-xs">
 							<p className="text-red-400 question-box-text">
@@ -319,6 +332,7 @@ export const QuestionBox = ({
 				</CardContent>
 			</Card>
 			<FeedbackModal
+				pageSlug={`${chapter}-${section}-${subsection}`}
 				open={isFeedbackModalOpen}
 				onOpenChange={setIsFeedbackModalOpen}
 				isPositive={isPositiveFeedback}

@@ -19,10 +19,18 @@ export const deleteNote = async (id: string) => {
 	});
 };
 
-export const createQuestionAnswer = async (
-	input: Prisma.ConstructedResponsesCreateInput,
+export const createConstructedResponse = async (
+	input: Prisma.ConstructedResponseCreateInput,
 ) => {
-	return await db.constructedResponses.create({
+	return await db.constructedResponse.create({
+		data: input,
+	});
+};
+
+export const createConstructedResponseFeedback = async (
+	input: Prisma.ConstructedResponseFeedbackCreateInput,
+) => {
+	return await db.constructedResponseFeedback.create({
 		data: input,
 	});
 };

@@ -38,22 +38,24 @@ model Session {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  name          String?
-  email         String?       @unique
-  emailVerified DateTime?     @map("email_verified")
-  image         String?
-  created_at    DateTime      @default(now())
-  updated_at    DateTime      @updatedAt
-  chapter       Int           @default(1)
-  classId       String?       @map("class_id")
-  timeZone      String?       @map("time_zone")
-  accounts      Account[]
-  FocusTime     FocusTime[]
-  notes         Note[]
-  sessions      Session[]
-  short_answers ShortAnswer[]
-  summaries     Summary[]
+  id                          String                        @id @default(cuid())
+  name                        String?
+  email                       String?                       @unique
+  emailVerified               DateTime?                     @map("email_verified")
+  image                       String?
+  created_at                  DateTime                      @default(now())
+  updated_at                  DateTime                      @updatedAt
+  chapter                     Int                           @default(1)
+  classId                     String?                       @map("class_id")
+  timeZone                    String?                       @map("time_zone")
+  accounts                    Account[]
+  FocusTime                   FocusTime[]
+  notes                       Note[]
+  sessions                    Session[]
+  short_answers               ShortAnswer[]
+  summaries                   Summary[]
+  ConstructedResponse         ConstructedResponse[]
+  ConstructedResponseFeedback ConstructedResponseFeedback[]
 
   @@index([classId])
   @@map("users")
@@ -177,7 +179,7 @@ model ShortAnswer {
   @@map("short_answers")
 }
 
-model ConstructedResponses {
+model ConstructedResponse {
   id String @id @default(uuid())
 
   userId     String   @map("user_id")
@@ -187,5 +189,22 @@ model ConstructedResponses {
   response   String
   created_at DateTime @default(now())
 
+  user User @relation(fields: [userId], references: [id])
+
   @@map("constructed_responses")
+}
+
+model ConstructedResponseFeedback {
+  id String @id @default(uuid())
+
+  userId     String   @map("user_id")
+  pageSlug   String   @map("page_slug")
+  isPositive Boolean  @map("is_positive")
+  feedback   String
+  tags       String[]
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("constructed_responses_feedback")
 }

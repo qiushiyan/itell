@@ -26,7 +26,7 @@ import { toast } from "sonner";
 // import shake effect
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
-import { createQuestionAnswer } from "@/lib/server-actions";
+import { createConstructedResponse } from "@/lib/server-actions";
 import { TextArea } from "@/components/client-components";
 type Props = {
 	question: string;
@@ -80,14 +80,14 @@ export const QuestionBox = ({
 	};
 
 	const positiveModal = () => {
-		setIsFeedbackModalOpen(true);
 		setIsPositiveFeedback(true);
+		setIsFeedbackModalOpen(true);
 	};
 
 	// When negative review is clicked
 	const negativeModal = () => {
-		setIsFeedbackModalOpen(true);
 		setIsPositiveFeedback(false);
+		setIsFeedbackModalOpen(true);
 	};
 
 	const passed = () => {
@@ -125,44 +125,53 @@ export const QuestionBox = ({
 	};
 
 	const handleSubmit = async () => {
-		// Spinner animation when loading
-		setIsLoading(true);
-		try {
-			const response = await getQAScore({
-				input: inputValue,
-				chapter: String(chapter),
-				subsection: String(subsection),
-			});
-
-			if (!response.success) {
-				// API response is not in correct shape
-				console.error("API Response error", response);
-				return toast.error("Answer evaluation failed, please try again later");
-			}
-
-			const result = response.data;
-
-			if (result.score === 2) {
-				passed();
-			} else if (result.score === 1) {
-				semiPassed();
-			} else {
-				failed();
-			}
-			if (session?.user) {
-				await createQuestionAnswer({
-					userId: session.user.id,
-					response: inputValue,
-					chapter: chapter,
-					subsection: subsection,
-					score: result.score,
+		if (inputValue.trim() === "") {
+			toast.warning("Please enter an answer to move forward");
+			return;
+		} else {
+			// Spinner animation when loading
+			setIsLoading(true);
+			try {
+				const response = await getQAScore({
+					input: inputValue,
+					chapter: String(chapter),
+					subsection: String(subsection),
 				});
+
+				if (!response.success) {
+					// API response is not in correct shape
+					console.error("API Response error", response);
+					return toast.error(
+						"Answer evaluation failed, please try again later",
+					);
+				}
+
+				const result = response.data;
+
+				if (result.score === 2) {
+					passed();
+				} else if (result.score === 1) {
+					semiPassed();
+				} else {
+					failed();
+				}
+				if (session?.user && process.env.NODE_ENV === "production") {
+					await createConstructedResponse({
+						userId: session.user.id,
+						response: inputValue,
+						chapter: chapter,
+						subsection: subsection,
+						score: result.score,
+					});
+				}
+			} catch (err) {
+				console.log("failed to score answer", err);
+				return toast.error(
+					"Question evaluation failed, please try again later",
+				);
+			} finally {
+				setIsLoading(false);
 			}
-		} catch (err) {
-			console.log("failed to score answer", err);
-			return toast.error("Question evaluation failed, please try again later");
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
@@ -206,7 +215,7 @@ export const QuestionBox = ({
 					/>
 				</CardHeader>
 
-				<CardContent className="flex flex-col justify-center items-center space-y-4">
+				<CardContent className="flex flex-col justify-center items-center space-y-4 w-[600px] md:[850px] mx-auto">
 					{answerStatus === AnswerStatus.BOTH_INCORRECT && (
 						<div className="text-xs">
 							<p className="text-red-400 question-box-text">
@@ -315,6 +324,7 @@ export const QuestionBox = ({
 				open={isFeedbackModalOpen}
 				onOpenChange={setIsFeedbackModalOpen}
 				isPositive={isPositiveFeedback}
+				pageSlug={`${chapter}-${subsection}`}
 			/>
 		</>
 	);
