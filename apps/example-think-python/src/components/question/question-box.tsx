@@ -7,7 +7,6 @@ import {
 	CardDescription,
 	CardHeader,
 	Warning,
-	buttonVariants,
 } from "@itell/ui/server";
 import { AlertTriangle, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
@@ -26,13 +25,12 @@ import { toast } from "sonner";
 // import shake effect
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
-import { createEvent, createConstructedResponse } from "@/lib/server-actions";
+import { createConstructedResponse } from "@/lib/server-actions";
 import { TextArea } from "@/components/client-components";
-import type { Prisma } from "@prisma/client";
-import { createEvents } from "@/lib/server-actions";
 import { NextChunkButton } from "./next-chunk-button";
 
 type Props = {
+	isPageMasked: boolean;
 	question: string;
 	answer: string;
 	chapter: number;
@@ -60,6 +58,7 @@ export const QuestionBox = ({
 	chapter,
 	subsection,
 	answer,
+	isPageMasked,
 }: Props) => {
 	const { data: session } = useSession();
 	const { goToNextChunk, currentChunk } = useQA();
@@ -76,7 +75,7 @@ export const QuestionBox = ({
 	// QA input
 	const [answerInput, setAnswerInput] = useState("");
 	// Next chunk button display
-	const [isDisplayNextButton, setIsDisplayNextButton] = useState(true);
+	const [isDisplayNextButton, setIsDisplayNextButton] = useState(isPageMasked);
 
 	const positiveModal = () => {
 		setIsPositiveFeedback(true);
@@ -169,7 +168,6 @@ export const QuestionBox = ({
 					});
 				}
 			} catch (err) {
-				console.log("failed to score answer", err);
 				return toast.error(
 					"Question evaluation failed, please try again later",
 				);

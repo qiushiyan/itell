@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { QuestionBox } from "./question-box";
 import { useQA } from "../context/qa-context";
 import { createPortal } from "react-dom";
@@ -8,11 +8,16 @@ import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
 
 type Props = {
+	isPageMasked: boolean;
 	selectedQuestions: Map<number, { question: string; answer: string }>;
 	chapter: number;
 };
 
-export const QuestionControl = ({ selectedQuestions, chapter }: Props) => {
+export const QuestionControl = ({
+	isPageMasked,
+	selectedQuestions,
+	chapter,
+}: Props) => {
 	// Ref for current chunk
 	const [nodes, setNodes] = useState<JSX.Element[]>([]);
 	const { currentChunk, chunks } = useQA();
@@ -80,6 +85,7 @@ export const QuestionControl = ({ selectedQuestions, chapter }: Props) => {
 		addNode(
 			createPortal(
 				<QuestionBox
+					isPageMasked={isPageMasked}
 					question={q.question}
 					answer={q.answer}
 					chapter={chapter}
@@ -94,12 +100,12 @@ export const QuestionControl = ({ selectedQuestions, chapter }: Props) => {
 		// set up chunks
 		if (chunks) {
 			chunks.forEach((el, index) => {
-				if (index !== 0) {
+				if (index !== 0 && isPageMasked) {
 					el.style.filter = "blur(4px)";
 				}
 				if (selectedQuestions.has(index)) {
 					insertQuestion(el, index);
-				} else if (index === chunks.length - 1) {
+				} else if (index === chunks.length - 1 && isPageMasked) {
 					insertScrollBackButton(el);
 				}
 			});
@@ -107,7 +113,7 @@ export const QuestionControl = ({ selectedQuestions, chapter }: Props) => {
 	}, [chunks]);
 
 	useEffect(() => {
-		if (chunks) {
+		if (chunks && isPageMasked) {
 			// set up currentChunk
 			const currentChunkElement = chunks.at(currentChunk);
 			const prevChunkElement = chunks.at(currentChunk - 1);

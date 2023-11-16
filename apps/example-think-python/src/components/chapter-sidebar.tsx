@@ -1,17 +1,33 @@
+"use client";
+
 import { cn } from "@itell/core/utils";
 import { Chapter } from "contentlayer/generated";
 import Link from "next/link";
+import { startTransition, useState } from "react";
 import Balancer from "react-wrap-balancer";
+import { Button } from "./client-components";
+import { useRouter } from "next/navigation";
+import { makeChapterHref } from "@/lib/utils";
 
 type ChapterSidebarProps = {
 	chapters: Chapter[];
-	currentChapter: number;
+	currentChapter: number | undefined;
 };
 
 export function ChapterSidebar({
 	chapters,
 	currentChapter,
 }: ChapterSidebarProps) {
+	const [activeChapter, setActiveChapter] = useState(currentChapter);
+	const router = useRouter();
+
+	const navigatePage = (chapter: number) => {
+		startTransition(() => {
+			setActiveChapter(chapter);
+		});
+		router.push(makeChapterHref(chapter), {});
+	};
+
 	return (
 		<nav>
 			<ol className="space-y-2">
@@ -20,16 +36,16 @@ export function ChapterSidebar({
 						className={cn(
 							"px-2 py-1 transition ease-in-out duration-200 relative rounded-md hover:bg-accent",
 							{
-								"bg-accent": chapter.chapter === currentChapter,
+								"bg-accent": chapter.chapter === activeChapter,
 							},
 						)}
 						key={chapter.url}
 					>
-						<Link href={`/${chapter.url}`}>
-							<p className="text-sm font-light">
+						<button type="button" onClick={() => navigatePage(chapter.chapter)}>
+							<p className="text-sm font-light text-left">
 								<Balancer>{`${chapter.chapter}. ${chapter.title}`}</Balancer>
 							</p>
-						</Link>
+						</button>
 					</li>
 				))}
 			</ol>
