@@ -26,8 +26,11 @@ import { toast } from "sonner";
 // import shake effect
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
-import { createConstructedResponse } from "@/lib/server-actions";
+import { createEvent, createConstructedResponse } from "@/lib/server-actions";
 import { TextArea } from "@/components/client-components";
+import type { Prisma } from "@prisma/client";
+import { createEvents } from "@/lib/server-actions";
+
 type Props = {
 	question: string;
 	answer: string;
@@ -58,7 +61,7 @@ export const QuestionBox = ({
 	answer,
 }: Props) => {
 	const { data: session } = useSession();
-	const { goToNextChunk } = useQA();
+	const { goToNextChunk, currentChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
 	const [answerStatus, setAnswerStatus] = useState(AnswerStatus.UNANSWERED);
@@ -74,9 +77,25 @@ export const QuestionBox = ({
 	// Next chunk button display
 	const [isDisplayNextButton, setIsDisplayNextButton] = useState(true);
 
-	const thenGoToNextChunk = () => {
+	// submit event
+	const submitEvent = async () => {
+		if (session) {
+			createEvent({
+				eventType: "post-question chunk reveal",
+				userId: session?.user?.id,
+				page: location.href,
+				data: {
+					qaStatus: answerStatus,
+					currentChunk: currentChunk,
+				},
+			});
+		}
+	};
+
+	const thenGoToNextChunk = async () => {
 		goToNextChunk();
 		setIsDisplayNextButton(false);
+		await submitEvent();
 	};
 
 	const positiveModal = () => {
@@ -156,6 +175,7 @@ export const QuestionBox = ({
 					failed();
 				}
 				if (session?.user && process.env.NODE_ENV === "production") {
+					// when there is no session, question won't be displayed
 					await createConstructedResponse({
 						response: inputValue,
 						chapter: chapter,
