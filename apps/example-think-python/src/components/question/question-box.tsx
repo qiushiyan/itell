@@ -61,7 +61,7 @@ export const QuestionBox = ({
 	answer,
 }: Props) => {
 	const { data: session } = useSession();
-	const { goToNextChunk } = useQA();
+	const { goToNextChunk, currentChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
 	const [answerStatus, setAnswerStatus] = useState(AnswerStatus.UNANSWERED);
@@ -77,8 +77,26 @@ export const QuestionBox = ({
 	// Next chunk button display
 	const [isDisplayNextButton, setIsDisplayNextButton] = useState(true);
 
-	const thenGoToNextChunk = () => {
+	// submit event
+	const submitEvent = async () => {
+		if (session) {const oneEvent: Prisma.EventCreateInput[] = [{
+			eventType: "post-question chunk reveal",
+			userId: session?.user?.id,
+			page: location.href,
+			data: {
+				qaStatus: answerStatus,
+				currentChunk: currentChunk,
+			},
+		  }];
+		  createEvents(oneEvent);
+		} else {
+			console.error("Session is null or undefined. Event not created!");
+		};
+	};
+
+	const thenGoToNextChunk = async () => {
 		goToNextChunk();
+		const moveReport = await submitEvent();
 		setIsDisplayNextButton(false);
 	};
 
@@ -127,24 +145,6 @@ export const QuestionBox = ({
 		setAnswerStatus(AnswerStatus.BOTH_INCORRECT);
 	};
 
-	// submit event
-	const submitEvent = async () => {
-		if (session?.user) {const oneEvent: Prisma.EventCreateInput[] = [{
-			eventType: "chunk reveal",
-			userId: session?.user?.id,
-			page: location.href,
-			data: {
-				qaStatus: answerStatus,
-				chapter: chapter,
-				section: section,
-				subsection: subsection,
-			},
-		  }];
-		  createEvents(oneEvent);
-		} else {
-			console.error("Session is null or undefined. Event not created.");
-		};
-	};
 
 	const handleSubmit = async () => {
 		// Spinner animation when loading
@@ -185,7 +185,6 @@ export const QuestionBox = ({
 					score: result.score,
 				});
 			}
-			await submitEvent();
 		} catch (err) {
 			console.log("failed to score answer", err);
 			return toast.error("Question evaluation failed, please try again later");
