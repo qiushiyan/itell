@@ -66,7 +66,18 @@ export const QuestionControl = ({ selectedQuestions, location }: Props) => {
 		el.style.filter = "none";
 		el.appendChild(buttonContainer);
 
-		addNode(createPortal(<NextChunkButton />, buttonContainer));
+		addNode(
+			createPortal(
+				<NextChunkButton
+					clickEventType="chunk reveal"
+					standalone
+					className="bg-red-400  hover:bg-red-200 text-white m-2 p-2"
+				>
+					Click here to continue reading
+				</NextChunkButton>,
+				buttonContainer,
+			),
+		);
 	};
 
 	const insertQuestion = (el: HTMLDivElement, index: number) => {

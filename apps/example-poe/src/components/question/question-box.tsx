@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
 import { createConstructedResponse, createEvent } from "@/lib/server-actions";
+import { NextChunkButton } from "./next-chunk-button";
 
 type Props = {
 	question: string;
@@ -72,30 +73,9 @@ export const QuestionBox = ({
 	// Check if feedback is positive or negative
 	const [isPositiveFeedback, setIsPositiveFeedback] = useState(false);
 	// QA input
-	const [inputValue, setInputValue] = useState("");
+	const [answerInput, setAnswerInput] = useState("");
 	// Next chunk button display
 	const [isDisplayNextButton, setIsDisplayNextButton] = useState(true);
-
-	// submit event
-	const submitEvent = async () => {
-		if (session) {
-			createEvent({
-				eventType: "post-question chunk reveal",
-				userId: session?.user?.id,
-				page: location.href,
-				data: {
-					qaStatus: answerStatus,
-					currentChunk: currentChunk,
-				},
-			});
-		}
-	};
-
-	const thenGoToNextChunk = async () => {
-		goToNextChunk();
-		setIsDisplayNextButton(false);
-		await submitEvent();
-	};
 
 	const positiveModal = () => {
 		setIsFeedbackModalOpen(true);
@@ -142,7 +122,7 @@ export const QuestionBox = ({
 		setAnswerStatus(AnswerStatus.BOTH_INCORRECT);
 	};
 	const handleSubmit = async () => {
-		if (inputValue.trim() === "") {
+		if (answerInput.trim() === "") {
 			toast.warning("Please enter an answer to move forward");
 			return;
 		} else {
@@ -150,7 +130,7 @@ export const QuestionBox = ({
 			setIsLoading(true);
 			try {
 				const response = await getQAScore({
-					input: inputValue,
+					input: answerInput,
 					chapter: String(chapter),
 					section: String(section),
 					subsection: String(subsection),
@@ -176,7 +156,7 @@ export const QuestionBox = ({
 				if (session?.user && process.env.NODE_ENV === "production") {
 					// when there is no session, question won't be displayed
 					await createConstructedResponse({
-						response: inputValue,
+						response: answerInput,
 						chapter: chapter,
 						section: section,
 						subsection: subsection,
@@ -289,8 +269,8 @@ export const QuestionBox = ({
 						<TextArea
 							rows={2}
 							className="rounded-md shadow-md  p-4"
-							value={inputValue}
-							onValueChange={setInputValue}
+							value={answerInput}
+							onValueChange={setAnswerInput}
 							onPaste={(e) => {
 								e.preventDefault();
 								toast.warning("Copy & Paste is not allowed for question");
@@ -311,13 +291,12 @@ export const QuestionBox = ({
 						)}
 						{answerStatus === AnswerStatus.BOTH_CORRECT &&
 						isDisplayNextButton ? (
-							<Button
-								variant={"secondary"}
-								onClick={thenGoToNextChunk}
-								type="button"
+							<NextChunkButton
+								clickEventType="post-question chunk reveal"
+								onClick={() => setIsDisplayNextButton(false)}
 							>
 								Click Here to Continue Reading
-							</Button>
+							</NextChunkButton>
 						) : (
 							<>
 								{answerStatus !== AnswerStatus.BOTH_CORRECT && (
@@ -335,11 +314,15 @@ export const QuestionBox = ({
 
 								{answerStatus !== AnswerStatus.UNANSWERED &&
 									isDisplayNextButton && (
-										<Button variant={"ghost"} onClick={thenGoToNextChunk}>
+										<NextChunkButton
+											clickEventType="post-question chunk reveal"
+											variant="ghost"
+											onClick={() => setIsDisplayNextButton(false)}
+										>
 											{answerStatus === AnswerStatus.SEMI_CORRECT
 												? "Continue Reading"
 												: "Skip this question"}
-										</Button>
+										</NextChunkButton>
 									)}
 							</>
 						)}
