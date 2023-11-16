@@ -25,7 +25,7 @@ import { toast } from "sonner";
 // import shake effect
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
-import { createQuestionAnswer } from "@/lib/server-actions";
+import { createEvent, createQuestionAnswer } from "@/lib/server-actions";
 import type { Prisma } from "@prisma/client";
 import { createEvents } from "@/lib/server-actions";
 
@@ -79,25 +79,23 @@ export const QuestionBox = ({
 
 	// submit event
 	const submitEvent = async () => {
-		if (session) {const oneEvent: Prisma.EventCreateInput[] = [{
-			eventType: "post-question chunk reveal",
-			userId: session?.user?.id,
-			page: location.href,
-			data: {
-				qaStatus: answerStatus,
-				currentChunk: currentChunk,
-			},
-		  }];
-		  createEvents(oneEvent);
-		} else {
-			console.error("Session is null or undefined. Event not created!");
-		};
+		if (session) {
+			createEvent({
+				eventType: "post-question chunk reveal",
+				userId: session?.user?.id,
+				page: location.href,
+				data: {
+					qaStatus: answerStatus,
+					currentChunk: currentChunk,
+				},
+			});
+		}
 	};
 
 	const thenGoToNextChunk = async () => {
 		goToNextChunk();
-		const moveReport = await submitEvent();
 		setIsDisplayNextButton(false);
+		await submitEvent();
 	};
 
 	const positiveModal = () => {
@@ -145,15 +143,14 @@ export const QuestionBox = ({
 		setAnswerStatus(AnswerStatus.BOTH_INCORRECT);
 	};
 
-
 	const handleSubmit = async () => {
 		// Spinner animation when loading
 		setIsLoading(true);
-		if (inputValue == "") {
+		if (inputValue === "") {
 			setIsLoading(false);
 			console.error("inputValue is an empty string");
 			return toast.error("Your response is empty. Please provide an answer.");
-		};
+		}
 		try {
 			const response = await getQAScore({
 				input: inputValue,

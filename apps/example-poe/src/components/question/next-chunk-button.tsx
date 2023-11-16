@@ -5,7 +5,7 @@ import { useQA } from "../context/qa-context";
 import { buttonVariants } from "@itell/ui/server";
 import { useSession } from "next-auth/react";
 import type { Prisma } from "@prisma/client";
-import { createEvents } from "@/lib/server-actions";
+import { createEvent, createEvents } from "@/lib/server-actions";
 
 export const NextChunkButton = () => {
 	const { goToNextChunk, currentChunk } = useQA();
@@ -13,23 +13,20 @@ export const NextChunkButton = () => {
 
 	// submit event
 	const submitEvent = async () => {
-		if (session) {const oneEvent: Prisma.EventCreateInput[] = [{
-			eventType: "chunk reveal",
-			userId: session?.user?.id,
-			page: location.href,
-			data: {
-				currentChunk: currentChunk,
-			},
-		  }];
-		  createEvents(oneEvent);
-		} else {
-			console.error("Session is null or undefined. Event not created.");
-		};
+		if (session)
+			createEvent({
+				eventType: "chunk reveal",
+				userId: session?.user?.id,
+				page: location.href,
+				data: {
+					currentChunk: currentChunk,
+				},
+			});
 	};
 
 	const thenGoToNextChunk = async () => {
-		const moveReport = await submitEvent();
 		goToNextChunk();
+		await submitEvent();
 	};
 
 	return (

@@ -73,6 +73,12 @@ export const createEvents = async (input: Prisma.EventCreateInput[]) => {
 	});
 };
 
+export const createEvent = async (input: Prisma.EventCreateInput) => {
+	return await db.event.create({
+		data: input,
+	});
+};
+
 export const updateUser = async (
 	userId: string,
 	data: Prisma.UserUpdateInput,
