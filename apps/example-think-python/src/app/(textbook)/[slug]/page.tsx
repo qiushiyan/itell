@@ -24,6 +24,8 @@ import { cn } from "@itell/core/utils";
 import { buttonVariants } from "@itell/ui/server";
 import { PageStatusModal } from "@/components/page-status-modal";
 
+export const dynamic = "force-dynamic";
+
 export default async function ({ params }: { params: { slug: string } }) {
 	const url = params.slug;
 	const chapterIndex = allChaptersSorted.findIndex((section) => {

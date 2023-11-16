@@ -19,8 +19,8 @@ export const QuestionControl = ({
 	chapter,
 }: Props) => {
 	// Ref for current chunk
-	const [nodes, setNodes] = useState<JSX.Element[]>([]);
 	const { currentChunk, chunks } = useQA();
+	const [nodes, setNodes] = useState<JSX.Element[]>([]);
 
 	const addNode = (node: JSX.Element) => {
 		setNodes((nodes) => [...nodes, node]);

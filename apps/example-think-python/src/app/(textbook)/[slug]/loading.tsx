@@ -1,13 +1,5 @@
-import { ChapterSidebar } from "@/components/chapter-sidebar";
-import { PageContent } from "@/components/page-content";
-import { TocSidebar } from "@/components/toc-sidebar";
-import { allChaptersSorted } from "@/lib/chapters";
-import { makeChapterHref } from "@/lib/utils";
 import { Skeleton } from "@itell/ui/server";
-import { Chapter } from "contentlayer/generated";
 import { BookmarkIcon } from "lucide-react";
-import { headers } from "next/headers";
-import Balancer from "react-wrap-balancer";
 
 export default async function () {
 	return (

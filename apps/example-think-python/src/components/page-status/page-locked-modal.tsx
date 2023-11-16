@@ -36,12 +36,10 @@ export const PageLockedModal = ({ userChapter }: Props) => {
 					<DialogTitle>You haven't unlocked this chapter yet</DialogTitle>
 				</DialogHeader>
 				<div>
-					Submit a passing summary for
-					<Link href={href}>
-						<span className="font-medium underline">
-							{` Chapter ${userChapter} `}
-						</span>
-					</Link>
+					Submit a passing summary for{" "}
+					<Link href={href} className="font-medium underline">
+						<span className="font-medium underline">Chapter {userChapter}</span>
+					</Link>{" "}
 					first.
 				</div>
 				<DialogFooter>

@@ -61,7 +61,6 @@ export const QuestionBox = ({
 	isPageMasked,
 }: Props) => {
 	const { data: session } = useSession();
-	const { goToNextChunk, currentChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
 	const [answerStatus, setAnswerStatus] = useState(AnswerStatus.UNANSWERED);
