@@ -89,14 +89,6 @@ export default async function ({ params }: { params: { slug: string } }) {
 
 	return (
 		<Fragment>
-			{chapter.qa && (
-				<QuestionControl
-					isPageMasked={isPageMasked}
-					selectedQuestions={selectedQuestions}
-					chapter={chapter.chapter}
-				/>
-			)}
-
 			<section className="relative col-span-12 md:col-span-10 lg:col-span-8">
 				<TooltipProvider>
 					<Tooltip>
@@ -150,6 +142,14 @@ export default async function ({ params }: { params: { slug: string } }) {
 			</aside>
 
 			<PageStatusModal chapter={chapter.chapter} user={user} />
+
+			{chapter.qa && (
+				<QuestionControl
+					isPageMasked={isPageMasked}
+					selectedQuestions={selectedQuestions}
+					chapter={chapter.chapter}
+				/>
+			)}
 		</Fragment>
 	);
 }
