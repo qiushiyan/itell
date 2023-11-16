@@ -16,6 +16,7 @@ import { PageVisibilityModal } from "@/components/page-visibility-modal";
 import { EventTracker } from "@/components/telemetry/event-tracker";
 import { getPageQuestions } from "@/lib/question";
 import { QuestionControl } from "@/components/question/question-control";
+import { delay } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 

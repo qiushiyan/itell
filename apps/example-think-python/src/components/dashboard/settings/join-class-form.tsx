@@ -15,7 +15,7 @@ import {
 	Button,
 } from "@/components/client-components";
 import { Errorbox, Input } from "@itell/ui/server";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
 	getTeacherWithClassId,
 	updateUserWithClassId,

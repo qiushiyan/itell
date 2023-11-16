@@ -4,8 +4,7 @@ import { cn } from "@itell/core/utils";
 import { useQA } from "../context/qa-context";
 import { buttonVariants } from "@itell/ui/server";
 import { useSession } from "next-auth/react";
-import type { Prisma } from "@prisma/client";
-import { createEvent, createEvents } from "@/lib/server-actions";
+import { createEvent } from "@/lib/server-actions";
 
 export const NextChunkButton = () => {
 	const { goToNextChunk, currentChunk } = useQA();

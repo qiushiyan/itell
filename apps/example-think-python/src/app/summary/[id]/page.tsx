@@ -8,10 +8,12 @@ import { allChaptersSorted } from "@/lib/chapters";
 import { DEFAULT_TIME_ZONE, ScoreType } from "@/lib/constants";
 import db from "@/lib/db";
 import { getUser } from "@/lib/user";
-import { relativeDate } from "@itell/core/utils";
-import { Badge } from "@itell/ui/server";
+import { cn, relativeDate } from "@itell/core/utils";
+import { Badge, buttonVariants } from "@itell/ui/server";
 import { Summary, User } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
+import Link from "next/link";
+import { makeChapterHref } from "@/lib/utils";
 
 async function getSummaryForUser(summaryId: Summary["id"], userId: User["id"]) {
 	return await db.summary.findFirst({
@@ -86,8 +88,15 @@ export default async function ({ params }: PageProps) {
 					</div>
 				</aside>
 				<div className="space-y-2 text-center">
-					<TextbookPageModal chapter={chapter} />
-
+					<Link
+						href={makeChapterHref(chapter.chapter)}
+						className={cn(
+							buttonVariants({ variant: "link" }),
+							"text-xl font-semibold",
+						)}
+					>
+						{chapter.title}
+					</Link>
 					<p className="text-sm text-muted-foreground">
 						{`Last updated at ${relativeDate(summary.updated_at)}`}
 					</p>

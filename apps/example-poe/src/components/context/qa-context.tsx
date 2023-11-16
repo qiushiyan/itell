@@ -1,3 +1,4 @@
+import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 
 type QAContextType = {
@@ -12,6 +13,7 @@ export const useQA = () => React.useContext(QAContext);
 export const QAProvider = ({ children }: { children: React.ReactNode }) => {
 	const [currentChunk, setCurrentChunk] = useState(0);
 	const [chunks, setChunks] = useState<HTMLDivElement[]>();
+	const pathname = usePathname();
 
 	const goToNextChunk = useCallback(() => {
 		setCurrentChunk((val) => val + 1);
@@ -22,7 +24,7 @@ export const QAProvider = ({ children }: { children: React.ReactNode }) => {
 		if (els.length > 0) {
 			setChunks(Array.from(els) as HTMLDivElement[]);
 		}
-	}, []);
+	}, [pathname]);
 
 	return (
 		<QAContext.Provider

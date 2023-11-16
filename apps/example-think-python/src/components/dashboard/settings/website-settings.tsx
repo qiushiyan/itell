@@ -68,7 +68,7 @@ export const WebsiteSettings = ({ user }: { user: User }) => {
 
 	return (
 		<div className="space-y-4">
-			<h3 className="mb-4 text-lg font-semibold leading-relaxed">
+			<h3 className="mb-4 text-lg font-medium leading-relaxed">
 				Website Settings
 			</h3>
 			<form action={formAction} className="space-y-2 max-w-2xl">

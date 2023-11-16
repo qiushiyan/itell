@@ -118,7 +118,7 @@ export const SummaryInput = ({ location }: { location: SectionLocation }) => {
 				lastSection.location.section !== location.section
 			) {
 				fetchSummaryCount().then(({ data: count }) => {
-					if (count && count > PAGE_SUMMARY_THRESHOLD) {
+					if (count && count >= PAGE_SUMMARY_THRESHOLD) {
 						setShowProceedModal(true);
 					}
 				});

@@ -26,7 +26,7 @@ import { toast } from "sonner";
 // import shake effect
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
-import { createEvent, createQuestionAnswer } from "@/lib/server-actions";
+import { createEvent, createConstructedResponse } from "@/lib/server-actions";
 import { TextArea } from "@/components/client-components";
 import type { Prisma } from "@prisma/client";
 import { createEvents } from "@/lib/server-actions";
@@ -99,14 +99,14 @@ export const QuestionBox = ({
 	};
 
 	const positiveModal = () => {
-		setIsFeedbackModalOpen(true);
 		setIsPositiveFeedback(true);
+		setIsFeedbackModalOpen(true);
 	};
 
 	// When negative review is clicked
 	const negativeModal = () => {
-		setIsFeedbackModalOpen(true);
 		setIsPositiveFeedback(false);
+		setIsFeedbackModalOpen(true);
 	};
 
 	const passed = () => {
@@ -144,53 +144,67 @@ export const QuestionBox = ({
 	};
 
 	const handleSubmit = async () => {
-		// Spinner animation when loading
-		setIsLoading(true);
-		if (inputValue === "") {
-			setIsLoading(false);
-			return toast.error("Your response is empty. Please provide an answer.");
-		}
-		try {
-			const response = await getQAScore({
-				input: inputValue,
-				chapter: String(chapter),
-				subsection: String(subsection),
-			});
-
-			if (!response.success) {
-				// API response is not in correct shape
-				console.error("API Response error", response);
-				return toast.error("Answer evaluation failed, please try again later");
-			}
-
-			const result = response.data;
-
-			if (result.score === 2) {
-				passed();
-			} else if (result.score === 1) {
-				semiPassed();
-			} else {
-				failed();
-			}
-			if (session?.user) {
-				await createQuestionAnswer({
-					userId: session.user.id,
-					response: inputValue,
-					chapter: chapter,
-					subsection: subsection,
-					score: result.score,
+		if (inputValue.trim() === "") {
+			toast.warning("Please enter an answer to move forward");
+			return;
+		} else {
+			// Spinner animation when loading
+			setIsLoading(true);
+			try {
+				const response = await getQAScore({
+					input: inputValue,
+					chapter: String(chapter),
+					subsection: String(subsection),
 				});
+
+				if (!response.success) {
+					// API response is not in correct shape
+					console.error("API Response error", response);
+					return toast.error(
+						"Answer evaluation failed, please try again later",
+					);
+				}
+
+				const result = response.data;
+
+				if (result.score === 2) {
+					passed();
+				} else if (result.score === 1) {
+					semiPassed();
+				} else {
+					failed();
+				}
+				if (session?.user && process.env.NODE_ENV === "production") {
+					// when there is no session, question won't be displayed
+					await createConstructedResponse({
+						response: inputValue,
+						chapter: chapter,
+						subsection: subsection,
+						score: result.score,
+						user: {
+							connect: {
+								id: session.user.id,
+							},
+						},
+					});
+				}
+			} catch (err) {
+				console.log("failed to score answer", err);
+				return toast.error(
+					"Question evaluation failed, please try again later",
+				);
+			} finally {
+				setIsLoading(false);
 			}
-		} catch (err) {
-			console.log("failed to score answer", err);
-			return toast.error("Question evaluation failed, please try again later");
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
 	if (!session?.user) {
-		return <Warning>You need to be logged in to view this question</Warning>;
+		return (
+			<Warning>
+				You need to be logged in to view this question and move forward
+			</Warning>
+		);
 	}
 
 	return (
@@ -204,29 +218,28 @@ export const QuestionBox = ({
 			>
 				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
 
-				<CardHeader className="flex flex-row justify-end items-baseline w-full p-2 gap-1">
+				<CardHeader className="flex flex-row justify-center items-baseline w-full p-2 gap-1">
+					<CardDescription className="flex justify-center items-center font-light text-zinc-500 w-10/12 mr-4">
+						<p className="inline-flex text-xs">
+							{" "}
+							<AlertTriangle className="stroke-yellow-400 mr-4" /> iTELL AI is
+							in alpha testing. It will try its best to help you but it can
+							still make mistakes. Let us know how you feel about iTELL AI's
+							performance using the feedback icons to the right (thumbs up or
+							thumbs down).{" "}
+						</p>
+					</CardDescription>
 					<ThumbsUp
 						className="hover:stroke-emerald-400 hover:cursor-pointer w-4 h-4"
 						onClick={positiveModal}
-					/>
+					/>{" "}
 					<ThumbsDown
 						className="hover:stroke-rose-700 hover:cursor-pointer w-4 h-4"
 						onClick={negativeModal}
 					/>
 				</CardHeader>
 
-				<CardDescription className="flex justify-center items-center text-sm font-light text-zinc-500">
-					<p className="inline-flex question-box-text">
-						{" "}
-						<AlertTriangle className="stroke-yellow-400 mr-2" /> iTELL AI is in
-						alpha testing. It will try its best to help you but it can still
-						make mistakes. Let us know how you feel about iTELL AI's performance
-						using the feedback icons on the top right side of this box (thumbs
-						up or thumbs down).{" "}
-					</p>
-				</CardDescription>
-
-				<CardContent className="flex flex-col justify-center items-center space-y-4">
+				<CardContent className="flex flex-col justify-center items-center space-y-4 w-[600px] md:[850px] mx-auto">
 					{answerStatus === AnswerStatus.BOTH_INCORRECT && (
 						<div className="text-xs">
 							<p className="text-red-400 question-box-text">
@@ -237,10 +250,7 @@ export const QuestionBox = ({
 								<u>
 									If you believe iTELL AI has made an error, you can click on
 									the "Skip this question" button to skip this question.
-								</u>{" "}
-								If you would like to help improve iTELL, please click on the
-								feedback icons on the top right side of this box to give us
-								feedback on this question.
+								</u>
 							</p>
 						</div>
 					)}
@@ -254,20 +264,20 @@ export const QuestionBox = ({
 					)}
 
 					{answerStatus === AnswerStatus.BOTH_CORRECT ? (
-						<>
-							<p className="text-xl2 text-emerald-600 text-center question-box-text">
+						<div className="flex items-center flex-col">
+							<p className="text-xl2 text-emerald-600 text-center">
 								Your answer was CORRECT!
 							</p>
-							<p className="text-sm question-box-text">
+							<p className="text-sm">
 								Click on the button below to continue reading. Please use the
 								thumbs-up or thumbs-down icons on the top right side of this box
 								if you have any feedback about this question that you would like
 								to provide before you continue reading.
 							</p>
-						</>
+						</div>
 					) : (
 						question && (
-							<p className="question-box-text">
+							<p>
 								<b>Question:</b> {question}
 							</p>
 						)
@@ -338,6 +348,7 @@ export const QuestionBox = ({
 				open={isFeedbackModalOpen}
 				onOpenChange={setIsFeedbackModalOpen}
 				isPositive={isPositiveFeedback}
+				pageSlug={`${chapter}-${subsection}`}
 			/>
 		</>
 	);

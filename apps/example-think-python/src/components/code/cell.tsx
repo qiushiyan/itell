@@ -118,7 +118,7 @@ export const Cell = memo(
 					"animate-border-color": isCellRunning,
 				})}
 			>
-				<div className="absolute top-2 right-2 z-10">
+				<div className="absolute bottom-2 right-2 z-10">
 					<Select
 						value={cellMode}
 						onValueChange={(val) => setCellMode(val as CellMode)}
