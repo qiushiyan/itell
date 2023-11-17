@@ -6,6 +6,7 @@ import { useQA } from "../context/qa-context";
 import { createPortal } from "react-dom";
 import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
+import { trpc } from "@/trpc/trpc-provider";
 
 type Props = {
 	selectedQuestions: Map<number, { question: string; answer: string }>;
@@ -16,6 +17,8 @@ export const QuestionControl = ({ selectedQuestions, chapter }: Props) => {
 	// Ref for current chunk
 	const [nodes, setNodes] = useState<JSX.Element[]>([]);
 	const { currentChunk, chunks } = useQA();
+	const { data: userChapter } = trpc.user.getChapter.useQuery();
+	const isChapterUnlocked = userChapter ? userChapter > chapter : false;
 
 	const addNode = (node: JSX.Element) => {
 		setNodes((nodes) => [...nodes, node]);
@@ -94,17 +97,30 @@ export const QuestionControl = ({ selectedQuestions, chapter }: Props) => {
 		// set up chunks
 		if (chunks) {
 			chunks.forEach((el, index) => {
-				if (index !== 0) {
-					el.style.filter = "blur(4px)";
-				}
 				if (selectedQuestions.has(index)) {
 					insertQuestion(el, index);
-				} else if (index === chunks.length - 1) {
-					insertScrollBackButton(el);
 				}
 			});
 		}
 	}, [chunks]);
+
+	useEffect(() => {
+		if (chunks && userChapter) {
+			const isPageUnlocked = userChapter ? userChapter > chapter : false;
+			chunks.forEach((el, index) => {
+				if (isPageUnlocked) {
+					el.style.filter = "none";
+				} else {
+					if (index !== 0) {
+						el.style.filter = "blur(4px)";
+					}
+					if (index === chunks.length - 1) {
+						insertScrollBackButton(el);
+					}
+				}
+			});
+		}
+	}, [chunks, userChapter]);
 
 	useEffect(() => {
 		if (chunks) {

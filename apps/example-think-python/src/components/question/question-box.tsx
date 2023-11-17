@@ -7,14 +7,12 @@ import {
 	CardDescription,
 	CardHeader,
 	Warning,
-	buttonVariants,
 } from "@itell/ui/server";
 import { AlertTriangle, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 import Spinner from "../spinner";
 import { getQAScore } from "@/lib/question";
-import { useQA } from "../context/qa-context";
 import { FeedbackModal } from "./feedback-modal";
 import {
 	Button,
@@ -26,10 +24,8 @@ import { toast } from "sonner";
 // import shake effect
 import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
-import { createEvent, createConstructedResponse } from "@/lib/server-actions";
+import { createConstructedResponse } from "@/lib/server-actions";
 import { TextArea } from "@/components/client-components";
-import type { Prisma } from "@prisma/client";
-import { createEvents } from "@/lib/server-actions";
 import { NextChunkButton } from "./next-chunk-button";
 
 type Props = {
@@ -62,7 +58,7 @@ export const QuestionBox = ({
 	answer,
 }: Props) => {
 	const { data: session } = useSession();
-	const { goToNextChunk, currentChunk } = useQA();
+
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
 	const [answerStatus, setAnswerStatus] = useState(AnswerStatus.UNANSWERED);
