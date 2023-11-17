@@ -102,7 +102,7 @@ export default async function ({
 
 				{children}
 			</div>
-			requireSummary && <PageSummary chapter={chapter.chapter} />;
+			{requireSummary && <PageSummary chapter={chapter.chapter} />}
 		</>
 	);
 }
