@@ -6,7 +6,6 @@ import { useQA } from "../context/qa-context";
 import { createPortal } from "react-dom";
 import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
-import { getChapterFromPathname, useCurrentChunkLocal } from "@/lib/utils";
 
 type Props = {
 	isPageMasked: boolean;
