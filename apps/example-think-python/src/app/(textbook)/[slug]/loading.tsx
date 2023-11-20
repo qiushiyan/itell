@@ -1,13 +1,21 @@
 import { Skeleton } from "@itell/ui/server";
+import { getChapterFromPathname } from "@/lib/utils";
 import { BookmarkIcon } from "lucide-react";
+import { headers } from "next/headers";
+import { allChaptersSorted } from "@/lib/chapters";
+import { PageTitle } from "@/components/page-title";
 
 export default async function () {
+	const headersList = headers();
+	const chapter = getChapterFromPathname(
+		headersList.get("x-pathname") as string,
+	);
+	const title = allChaptersSorted.find((c) => c.chapter === chapter)
+		?.title as string;
 	return (
 		<>
 			<section className="relative col-span-12 md:col-span-10 lg:col-span-8 space-y-4">
-				<div className="flex items-center justify-center">
-					<Skeleton className="w-80 h-12" />
-				</div>
+				<PageTitle>{title}</PageTitle>
 
 				{Array.from({ length: 10 }).map(() => (
 					<Skeleton className="w-full h-28 mb-4" />

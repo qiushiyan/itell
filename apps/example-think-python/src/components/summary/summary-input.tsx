@@ -63,11 +63,13 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 		pause: pauseFocusTimeCounting,
 	} = useFocusTime({
 		async mutationFn({ summaryId, focusTimeData, totalViewTime }) {
-			await createFocusTime.mutateAsync({
-				summaryId,
-				data: focusTimeData,
-				totalViewTime,
-			});
+			if (process.env.NODE_ENV === "production") {
+				await createFocusTime.mutateAsync({
+					summaryId,
+					data: focusTimeData,
+					totalViewTime,
+				});
+			}
 		},
 		chunksFn: () => {
 			return Array.from(

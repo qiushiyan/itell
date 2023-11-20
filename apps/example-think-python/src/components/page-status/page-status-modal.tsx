@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
-import { PageUnauthorizedModal } from "./page-status/page-unauthorized-modal";
-import { PageLockedModal } from "./page-status/page-locked-modal";
+import { PageUnauthorizedModal } from "./page-unauthorized-modal";
+import { PageLockedModal } from "./page-locked-modal";
 
 type Props = {
 	chapter: number;

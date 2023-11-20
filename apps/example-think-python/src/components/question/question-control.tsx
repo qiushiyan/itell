@@ -6,7 +6,7 @@ import { useQA } from "../context/qa-context";
 import { createPortal } from "react-dom";
 import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
-import { usePathname } from "next/navigation";
+import { getChapterFromPathname, useCurrentChunkLocal } from "@/lib/utils";
 
 type Props = {
 	isPageMasked: boolean;
@@ -20,7 +20,7 @@ export const QuestionControl = ({
 	chapter,
 }: Props) => {
 	// Ref for current chunk
-	const { currentChunk, chunks } = useQA();
+	const { currentChunk, chunks, setChunks } = useQA();
 	const [nodes, setNodes] = useState<JSX.Element[]>([]);
 
 	const addNode = (node: JSX.Element) => {
@@ -98,10 +98,18 @@ export const QuestionControl = ({
 	};
 
 	useEffect(() => {
+		const els = document.querySelectorAll(".content-chunk");
+		if (els.length > 0) {
+			setChunks(Array.from(els) as HTMLDivElement[]);
+		}
+	}, []);
+
+	useEffect(() => {
 		// set up chunks
 		if (chunks) {
 			chunks.forEach((el, index) => {
-				if (index !== 0 && isPageMasked) {
+				const isChunkUnvisited = index > currentChunk;
+				if (index !== 0 && isPageMasked && isChunkUnvisited) {
 					el.style.filter = "blur(4px)";
 				}
 				if (selectedQuestions.has(index)) {

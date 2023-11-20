@@ -13,7 +13,6 @@ import { useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 import Spinner from "../spinner";
 import { getQAScore } from "@/lib/question";
-import { useQA } from "../context/qa-context";
 import { FeedbackModal } from "./feedback-modal";
 import {
 	Button,
@@ -123,8 +122,7 @@ export const QuestionBox = ({
 
 	const handleSubmit = async () => {
 		if (answerInput.trim() === "") {
-			toast.warning("Please enter an answer to move forward");
-			return;
+			return toast.warning("Please enter an answer to move forward");
 		} else {
 			// Spinner animation when loading
 			setIsLoading(true);
@@ -216,7 +214,7 @@ export const QuestionBox = ({
 					/>
 				</CardHeader>
 
-				<CardContent className="flex flex-col justify-center items-center space-y-4 w-[600px] md:[850px] mx-auto">
+				<CardContent className="flex flex-col justify-center items-center space-y-4 w-4/5 mx-auto">
 					{answerStatus === AnswerStatus.BOTH_INCORRECT && (
 						<div className="text-xs">
 							<p className="text-red-400 question-box-text">

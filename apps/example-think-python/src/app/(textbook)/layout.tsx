@@ -4,7 +4,7 @@ import "@/styles/prism-one-dark.css";
 
 export const dynamic = "force-dynamic";
 
-export default async function SectionLayout({
+export default async function ({
 	children,
 }: {
 	children: React.ReactNode;

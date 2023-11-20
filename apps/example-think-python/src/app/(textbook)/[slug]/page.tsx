@@ -5,13 +5,7 @@ import { NoteList } from "@/components/note/note-list";
 import { NoteToolbar } from "@/components/note/note-toolbar";
 import { Fragment, Suspense } from "react";
 import { allChaptersSorted } from "@/lib/chapters";
-import {
-	Pager,
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/client-components";
+import { Pager } from "@/components/client-components";
 import { TocSidebar } from "@/components/toc-sidebar";
 import { PageContent } from "@/components/page-content";
 import Spinner from "@/components/spinner";
@@ -20,9 +14,10 @@ import { QuestionControl } from "@/components/question/question-control";
 import { getCurrentUser } from "@/lib/auth";
 import { getUser } from "@/lib/user";
 import { EyeIcon, LockIcon, UnlockIcon } from "lucide-react";
-import { cn } from "@itell/core/utils";
-import { buttonVariants } from "@itell/ui/server";
-import { PageStatusModal } from "@/components/page-status-modal";
+import { PageStatusModal } from "@/components/page-status/page-status-modal";
+import { PageTitle } from "@/components/page-title";
+import { NoteCount } from "@/components/note/note-count";
+import { PageStatus } from "@/components/page-status/page-status";
 
 export const dynamic = "force-dynamic";
 
@@ -90,35 +85,16 @@ export default async function ({ params }: { params: { slug: string } }) {
 	return (
 		<Fragment>
 			<section className="relative col-span-12 md:col-span-10 lg:col-span-8">
-				<TooltipProvider>
-					<Tooltip>
-						<TooltipTrigger asChild>
-							<h1
-								className={cn(
-									buttonVariants({ variant: "ghost" }),
-									"text-3xl font-semibold mb-4 text-center flex items-center justify-center gap-2 h-fit",
-								)}
-								id="page-title"
-							>
-								<Balancer>{chapter.title}</Balancer>
-								{isUserLatestPage ? (
-									<EyeIcon />
-								) : isPageUnlocked ? (
-									<UnlockIcon />
-								) : (
-									<LockIcon />
-								)}
-							</h1>
-						</TooltipTrigger>
-						<TooltipContent>
-							{isUserLatestPage
-								? "Answer questions and summarize this chapter to move forward"
-								: isPageUnlocked
-								? "You have completed this chapter. You can now view all its content"
-								: "You haven't got access to this chapter yet"}
-						</TooltipContent>
-					</Tooltip>
-				</TooltipProvider>
+				<PageTitle>
+					<Balancer>{chapter.title}</Balancer>
+					{isUserLatestPage ? (
+						<EyeIcon />
+					) : isPageUnlocked ? (
+						<UnlockIcon />
+					) : (
+						<LockIcon />
+					)}
+				</PageTitle>
 
 				<PageContent code={chapter.body.code} />
 				<NoteToolbar chapter={chapter.chapter} />
@@ -128,6 +104,18 @@ export default async function ({ params }: { params: { slug: string } }) {
 			<aside className="toc-sidebar col-span-2 relative">
 				<div className="sticky top-20">
 					<TocSidebar headings={chapter.headings} />
+					<div className="mt-8 flex flex-col gap-2">
+						<PageStatus
+							status={
+								isUserLatestPage
+									? "current"
+									: isPageUnlocked
+									? "unlocked"
+									: "locked"
+							}
+						/>
+						<NoteCount />
+					</div>
 				</div>
 				<Suspense
 					fallback={

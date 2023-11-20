@@ -2,10 +2,8 @@
 
 import { cn } from "@itell/core/utils";
 import { Chapter } from "contentlayer/generated";
-import Link from "next/link";
 import { startTransition, useState } from "react";
 import Balancer from "react-wrap-balancer";
-import { Button } from "./client-components";
 import { useRouter } from "next/navigation";
 import { makeChapterHref } from "@/lib/utils";
 
@@ -22,9 +20,7 @@ export function ChapterSidebar({
 	const router = useRouter();
 
 	const navigatePage = (chapter: number) => {
-		startTransition(() => {
-			setActiveChapter(chapter);
-		});
+		setActiveChapter(chapter);
 		router.push(makeChapterHref(chapter), {});
 	};
 
