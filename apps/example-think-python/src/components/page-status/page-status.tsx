@@ -36,7 +36,7 @@ export const PageStatus = ({ status }: Props) => {
 					)}
 				</Button>
 			</HoverCardTrigger>
-			<HoverCardContent>
+			<HoverCardContent className="w-48 text-sm">
 				{status === "current"
 					? "Answer questions and summarize this chapter to move forward"
 					: status === "unlocked"

@@ -43,7 +43,7 @@ export const NoteCount = () => {
 					</span>
 				</Button>
 			</HoverCardTrigger>
-			<HoverCardContent className="w-40 text-sm">
+			<HoverCardContent className="w-48 text-sm">
 				<div>Leave a note or highlight by selecting the text</div>
 			</HoverCardContent>
 		</HoverCard>

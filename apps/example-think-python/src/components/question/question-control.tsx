@@ -7,9 +7,11 @@ import { createPortal } from "react-dom";
 import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
 
+type Question = { question: string; answer: string };
+
 type Props = {
 	isPageMasked: boolean;
-	selectedQuestions: Map<number, { question: string; answer: string }>;
+	selectedQuestions: Map<number, Question>;
 	chapter: number;
 };
 
@@ -77,10 +79,7 @@ export const QuestionControl = ({
 		questionContainer.className = "question-container";
 		el.appendChild(questionContainer);
 
-		const q = selectedQuestions.get(index) as {
-			question: string;
-			answer: string;
-		};
+		const q = selectedQuestions.get(index) as Question;
 
 		addNode(
 			createPortal(
@@ -103,43 +102,56 @@ export const QuestionControl = ({
 		}
 	}, []);
 
+	const handleChunk = (el: HTMLDivElement, index: number) => {
+		const isChunkUnvisited = index > currentChunk;
+		if (selectedQuestions.has(index)) {
+			insertQuestion(el, index);
+		}
+
+		if (isPageMasked) {
+			if (index !== 0 && isChunkUnvisited) {
+				el.style.filter = "blur(4px)";
+			}
+
+			if (chunks && index === chunks.length - 1) {
+				insertScrollBackButton(el);
+			}
+		}
+	};
+
+	const handleChunkProgress = (
+		chunks: HTMLDivElement[],
+		currentChunk: number,
+	) => {
+		const currentChunkElement = chunks.at(currentChunk);
+		const prevChunkElement = chunks.at(currentChunk - 1);
+
+		if (currentChunkElement) {
+			currentChunkElement.style.filter = "none";
+			if (
+				!selectedQuestions.has(currentChunk) &&
+				currentChunk !== chunks.length - 1
+			) {
+				insertNextChunkButton(currentChunkElement);
+			}
+		}
+
+		// when a fresh page is loaded,. set up ref data and prepare chunk styles
+		if (currentChunk !== 0 && prevChunkElement) {
+			hideNextChunkButton(prevChunkElement);
+		}
+	};
+
 	useEffect(() => {
 		// set up chunks
 		if (chunks) {
-			chunks.forEach((el, index) => {
-				const isChunkUnvisited = index > currentChunk;
-				if (index !== 0 && isPageMasked && isChunkUnvisited) {
-					el.style.filter = "blur(4px)";
-				}
-				if (selectedQuestions.has(index)) {
-					insertQuestion(el, index);
-				} else if (index === chunks.length - 1 && isPageMasked) {
-					insertScrollBackButton(el);
-				}
-			});
+			chunks.forEach(handleChunk);
 		}
 	}, [chunks]);
 
 	useEffect(() => {
 		if (chunks && isPageMasked) {
-			// set up currentChunk
-			const currentChunkElement = chunks.at(currentChunk);
-			const prevChunkElement = chunks.at(currentChunk - 1);
-
-			if (currentChunkElement) {
-				currentChunkElement.style.filter = "none";
-				if (
-					!selectedQuestions.has(currentChunk) &&
-					currentChunk !== chunks.length - 1
-				) {
-					insertNextChunkButton(currentChunkElement);
-				}
-			}
-
-			// when a fresh page is loaded,. set up ref data and prepare chunk styles
-			if (currentChunk !== 0 && prevChunkElement) {
-				hideNextChunkButton(prevChunkElement);
-			}
+			handleChunkProgress(chunks, currentChunk);
 		}
 	}, [chunks, currentChunk]);
 

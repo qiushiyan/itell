@@ -24,6 +24,7 @@ import {
 	FOCUS_TIME_COUNT_INTERVAL,
 	FOCUS_TIME_SAVE_INTERVAL,
 	PAGE_SUMMARY_THRESHOLD,
+	isProduction,
 } from "@/lib/constants";
 import { trpc } from "@/trpc/trpc-provider";
 import { allChaptersSorted } from "@/lib/chapters";
@@ -63,7 +64,7 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 		pause: pauseFocusTimeCounting,
 	} = useFocusTime({
 		async mutationFn({ summaryId, focusTimeData, totalViewTime }) {
-			if (process.env.NODE_ENV === "production") {
+			if (isProduction) {
 				await createFocusTime.mutateAsync({
 					summaryId,
 					data: focusTimeData,
@@ -141,7 +142,7 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 	let autoSaveTimer: NodeJS.Timer | null = null;
 
 	useEffect(() => {
-		if (process.env.NODE_ENV !== "production") {
+		if (isProduction) {
 			autoSaveTimer = setInterval(() => {
 				saveFocusTime();
 			}, FOCUS_TIME_SAVE_INTERVAL);
@@ -173,7 +174,7 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 					onFocus={() => pauseFocusTimeCounting()}
 					onBlur={() => startFocusTimeCounting()}
 					onPaste={(e) => {
-						if (process.env.NODE_ENV === "production") {
+						if (isProduction) {
 							e.preventDefault();
 							toast.warning("Copy & Paste is not allowed");
 						}

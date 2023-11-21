@@ -27,6 +27,7 @@ import { useSession } from "next-auth/react";
 import { createConstructedResponse } from "@/lib/server-actions";
 import { TextArea } from "@/components/client-components";
 import { NextChunkButton } from "./next-chunk-button";
+import { isProduction } from "@/lib/constants";
 
 type Props = {
 	isPageMasked: boolean;
@@ -150,7 +151,7 @@ export const QuestionBox = ({
 				} else {
 					failed();
 				}
-				if (session?.user && process.env.NODE_ENV === "production") {
+				if (session?.user && isProduction) {
 					// when there is no session, question won't be displayed
 					await createConstructedResponse({
 						response: answerInput,
@@ -265,8 +266,10 @@ export const QuestionBox = ({
 							value={answerInput}
 							onValueChange={setAnswerInput}
 							onPaste={(e) => {
-								e.preventDefault();
-								toast.warning("Copy & Paste is not allowed for question");
+								if (isProduction) {
+									e.preventDefault();
+									toast.warning("Copy & Paste is not allowed for question");
+								}
 							}}
 						/>
 					)}
