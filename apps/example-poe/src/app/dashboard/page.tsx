@@ -10,7 +10,6 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getUser } from "@/lib/user";
 import { UserProgress } from "@/components/dashboard/user/user-progress";
-import { delay } from "@/lib/utils";
 
 const title = "Learning Statistics";
 const description = "Understand your learning journey";

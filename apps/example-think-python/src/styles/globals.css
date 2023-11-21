@@ -43,7 +43,7 @@ svg {
 }
 
 @media (max-width: 768px) {
-  .module-sidebar {
+  .chapter-sidebar {
     display: none;
   }
 }

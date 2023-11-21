@@ -27,8 +27,10 @@ import { useSession } from "next-auth/react";
 import { createConstructedResponse } from "@/lib/server-actions";
 import { TextArea } from "@/components/client-components";
 import { NextChunkButton } from "./next-chunk-button";
+import { isProduction } from "@/lib/constants";
 
 type Props = {
+	isPageMasked: boolean;
 	question: string;
 	answer: string;
 	chapter: number;
@@ -56,9 +58,9 @@ export const QuestionBox = ({
 	chapter,
 	subsection,
 	answer,
+	isPageMasked,
 }: Props) => {
 	const { data: session } = useSession();
-
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
 	const [answerStatus, setAnswerStatus] = useState(AnswerStatus.UNANSWERED);
@@ -72,7 +74,7 @@ export const QuestionBox = ({
 	// QA input
 	const [answerInput, setAnswerInput] = useState("");
 	// Next chunk button display
-	const [isDisplayNextButton, setIsDisplayNextButton] = useState(true);
+	const [isDisplayNextButton, setIsDisplayNextButton] = useState(isPageMasked);
 
 	const positiveModal = () => {
 		setIsPositiveFeedback(true);
@@ -121,8 +123,7 @@ export const QuestionBox = ({
 
 	const handleSubmit = async () => {
 		if (answerInput.trim() === "") {
-			toast.warning("Please enter an answer to move forward");
-			return;
+			return toast.warning("Please enter an answer to move forward");
 		} else {
 			// Spinner animation when loading
 			setIsLoading(true);
@@ -150,7 +151,7 @@ export const QuestionBox = ({
 				} else {
 					failed();
 				}
-				if (session?.user && process.env.NODE_ENV === "production") {
+				if (session?.user && isProduction) {
 					// when there is no session, question won't be displayed
 					await createConstructedResponse({
 						response: answerInput,
@@ -165,7 +166,6 @@ export const QuestionBox = ({
 					});
 				}
 			} catch (err) {
-				console.log("failed to score answer", err);
 				return toast.error(
 					"Question evaluation failed, please try again later",
 				);
@@ -195,15 +195,12 @@ export const QuestionBox = ({
 				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
 
 				<CardHeader className="flex flex-row justify-center items-baseline w-full p-2 gap-1">
-					<CardDescription className="flex justify-center items-center font-light text-zinc-500 w-10/12 mr-4">
-						<p className="inline-flex text-xs">
-							{" "}
-							<AlertTriangle className="stroke-yellow-400 mr-4" /> iTELL AI is
-							in alpha testing. It will try its best to help you but it can
-							still make mistakes. Let us know how you feel about iTELL AI's
-							performance using the feedback icons to the right (thumbs up or
-							thumbs down).{" "}
-						</p>
+					<CardDescription className="flex justify-center items-center font-light text-zinc-500 w-10/12 mr-4 text-xs">
+						{" "}
+						<AlertTriangle className="stroke-yellow-400 mr-4" /> iTELL AI is in
+						alpha testing. It will try its best to help you but it can still
+						make mistakes. Let us know how you feel about iTELL AI's performance
+						using the feedback icons to the right (thumbs up or thumbs down).{" "}
 					</CardDescription>
 					<ThumbsUp
 						className="hover:stroke-emerald-400 hover:cursor-pointer w-4 h-4"
@@ -215,7 +212,7 @@ export const QuestionBox = ({
 					/>
 				</CardHeader>
 
-				<CardContent className="flex flex-col justify-center items-center space-y-4 w-[600px] md:[850px] mx-auto">
+				<CardContent className="flex flex-col justify-center items-center space-y-4 w-4/5 mx-auto">
 					{answerStatus === AnswerStatus.BOTH_INCORRECT && (
 						<div className="text-xs">
 							<p className="text-red-400 question-box-text">
@@ -266,8 +263,10 @@ export const QuestionBox = ({
 							value={answerInput}
 							onValueChange={setAnswerInput}
 							onPaste={(e) => {
-								e.preventDefault();
-								toast.warning("Copy & Paste is not allowed for question");
+								if (isProduction) {
+									e.preventDefault();
+									toast.warning("Copy & Paste is not allowed for question");
+								}
 							}}
 						/>
 					)}

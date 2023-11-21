@@ -76,7 +76,7 @@ export const FeedbackModal = ({
 					/>
 					<div className="flex flex-col space-y-2">
 						{allTags.map((tag) => (
-							<div className="flex items-center space-x-2">
+							<div className="flex items-center space-x-2" key={tag}>
 								<Checkbox
 									id={tag}
 									onCheckedChange={(checked) => {

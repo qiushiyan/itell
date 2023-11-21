@@ -1,5 +1,7 @@
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { getChapterFromPathname } from "../utils";
+import { useLocalStorage } from "@itell/core/hooks";
 
 export const useCurrentChapter = () => {
 	const pathname = usePathname();
@@ -17,4 +19,11 @@ export const useCurrentChapter = () => {
 	}, [pathname]);
 
 	return chapter;
+};
+
+export const useCurrentChunkLocal = () => {
+	const chapter = getChapterFromPathname(location.pathname);
+	const key = `current-chunk-chapter-${chapter}`;
+	const [val, setVal] = useLocalStorage(key, 0);
+	return [val, setVal] as const;
 };

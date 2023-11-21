@@ -1,7 +1,10 @@
 import TextbookNavbar from "@/components/nav/textbook-nav";
 import { PageProvider } from "@/components/provider/page-provider";
 import "@/styles/prism-one-dark.css";
-export default async function SectionLayout({
+
+export const dynamic = "force-dynamic";
+
+export default async function ({
 	children,
 }: {
 	children: React.ReactNode;

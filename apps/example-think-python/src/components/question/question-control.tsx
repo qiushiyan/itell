@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { QuestionBox } from "./question-box";
 import { useQA } from "../context/qa-context";
 import { createPortal } from "react-dom";
@@ -8,17 +8,22 @@ import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
 import { trpc } from "@/trpc/trpc-provider";
 
+type Question = { question: string; answer: string };
+
 type Props = {
-	selectedQuestions: Map<number, { question: string; answer: string }>;
+	isPageMasked: boolean;
+	selectedQuestions: Map<number, Question>;
 	chapter: number;
 };
 
-export const QuestionControl = ({ selectedQuestions, chapter }: Props) => {
+export const QuestionControl = ({
+	isPageMasked,
+	selectedQuestions,
+	chapter,
+}: Props) => {
 	// Ref for current chunk
+	const { currentChunk, chunks, setChunks } = useQA();
 	const [nodes, setNodes] = useState<JSX.Element[]>([]);
-	const { currentChunk, chunks } = useQA();
-	const { data: userChapter } = trpc.user.getChapter.useQuery();
-	const isChapterUnlocked = userChapter ? userChapter > chapter : false;
 
 	const addNode = (node: JSX.Element) => {
 		setNodes((nodes) => [...nodes, node]);
@@ -75,14 +80,12 @@ export const QuestionControl = ({ selectedQuestions, chapter }: Props) => {
 		questionContainer.className = "question-container";
 		el.appendChild(questionContainer);
 
-		const q = selectedQuestions.get(index) as {
-			question: string;
-			answer: string;
-		};
+		const q = selectedQuestions.get(index) as Question;
 
 		addNode(
 			createPortal(
 				<QuestionBox
+					isPageMasked={isPageMasked}
 					question={q.question}
 					answer={q.answer}
 					chapter={chapter}
@@ -94,54 +97,62 @@ export const QuestionControl = ({ selectedQuestions, chapter }: Props) => {
 	};
 
 	useEffect(() => {
+		const els = document.querySelectorAll(".content-chunk");
+		if (els.length > 0) {
+			setChunks(Array.from(els) as HTMLDivElement[]);
+		}
+	}, []);
+
+	const handleChunk = (el: HTMLDivElement, index: number) => {
+		const isChunkUnvisited = index > currentChunk;
+		if (selectedQuestions.has(index)) {
+			insertQuestion(el, index);
+		}
+
+		if (isPageMasked) {
+			if (index !== 0 && isChunkUnvisited) {
+				el.style.filter = "blur(4px)";
+			}
+
+			if (chunks && index === chunks.length - 1) {
+				insertScrollBackButton(el);
+			}
+		}
+	};
+
+	const handleChunkProgress = (
+		chunks: HTMLDivElement[],
+		currentChunk: number,
+	) => {
+		const currentChunkElement = chunks.at(currentChunk);
+		const prevChunkElement = chunks.at(currentChunk - 1);
+
+		if (currentChunkElement) {
+			currentChunkElement.style.filter = "none";
+			if (
+				!selectedQuestions.has(currentChunk) &&
+				currentChunk !== chunks.length - 1
+			) {
+				insertNextChunkButton(currentChunkElement);
+			}
+		}
+
+		// when a fresh page is loaded,. set up ref data and prepare chunk styles
+		if (currentChunk !== 0 && prevChunkElement) {
+			hideNextChunkButton(prevChunkElement);
+		}
+	};
+
+	useEffect(() => {
 		// set up chunks
 		if (chunks) {
-			chunks.forEach((el, index) => {
-				if (selectedQuestions.has(index)) {
-					insertQuestion(el, index);
-				}
-			});
+			chunks.forEach(handleChunk);
 		}
 	}, [chunks]);
 
 	useEffect(() => {
-		if (chunks && userChapter) {
-			const isPageUnlocked = userChapter ? userChapter > chapter : false;
-			chunks.forEach((el, index) => {
-				if (isPageUnlocked) {
-					el.style.filter = "none";
-				} else {
-					if (index !== 0) {
-						el.style.filter = "blur(4px)";
-					}
-					if (index === chunks.length - 1) {
-						insertScrollBackButton(el);
-					}
-				}
-			});
-		}
-	}, [chunks, userChapter]);
-
-	useEffect(() => {
-		if (chunks) {
-			// set up currentChunk
-			const currentChunkElement = chunks.at(currentChunk);
-			const prevChunkElement = chunks.at(currentChunk - 1);
-
-			if (currentChunkElement) {
-				currentChunkElement.style.filter = "none";
-				if (
-					!selectedQuestions.has(currentChunk) &&
-					currentChunk !== chunks.length - 1
-				) {
-					insertNextChunkButton(currentChunkElement);
-				}
-			}
-
-			// when a fresh page is loaded,. set up ref data and prepare chunk styles
-			if (currentChunk !== 0 && prevChunkElement) {
-				hideNextChunkButton(prevChunkElement);
-			}
+		if (chunks && isPageMasked) {
+			handleChunkProgress(chunks, currentChunk);
 		}
 	}, [chunks, currentChunk]);
 
