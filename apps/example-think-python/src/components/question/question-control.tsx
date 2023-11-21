@@ -6,7 +6,6 @@ import { useQA } from "../context/qa-context";
 import { createPortal } from "react-dom";
 import { NextChunkButton } from "./next-chunk-button";
 import { ScrollBackButton } from "./scroll-back-button";
-import { trpc } from "@/trpc/trpc-provider";
 
 type Question = { question: string; answer: string };
 

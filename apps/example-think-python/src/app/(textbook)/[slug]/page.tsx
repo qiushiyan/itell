@@ -76,9 +76,12 @@ export default async function ({ params }: { params: { slug: string } }) {
 		}
 	}
 
+	const isPageUnlockedWithoutUser = chapter.chapter < 2;
 	const isUserLatestPage = user ? user?.chapter === chapter.chapter : false;
 	// can view page, with no blurred chunks
-	const isPageUnlocked = user ? user.chapter > chapter.chapter : false;
+	const isPageUnlocked = user
+		? user.chapter > chapter.chapter
+		: isPageUnlockedWithoutUser;
 	// can view page, but with blurred chunks
 	const isPageMasked = user ? user.chapter <= chapter.chapter : true;
 
