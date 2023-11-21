@@ -28,6 +28,7 @@ import "@/styles/shakescreen.css";
 import { useSession } from "next-auth/react";
 import { createConstructedResponse, createEvent } from "@/lib/server-actions";
 import { NextChunkButton } from "./next-chunk-button";
+import { isProduction } from "@/lib/constants";
 
 type Props = {
 	question: string;
@@ -61,7 +62,6 @@ export const QuestionBox = ({
 	answer,
 }: Props) => {
 	const { data: session } = useSession();
-	const { goToNextChunk, currentChunk } = useQA();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
 	const [answerStatus, setAnswerStatus] = useState(AnswerStatus.UNANSWERED);
@@ -153,7 +153,7 @@ export const QuestionBox = ({
 				} else {
 					failed();
 				}
-				if (session?.user && process.env.NODE_ENV === "production") {
+				if (session?.user && isProduction) {
 					// when there is no session, question won't be displayed
 					await createConstructedResponse({
 						response: answerInput,
@@ -199,15 +199,12 @@ export const QuestionBox = ({
 				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
 
 				<CardHeader className="flex flex-row justify-end items-baseline w-full p-2 gap-1">
-					<CardDescription className="flex justify-center items-center font-light text-zinc-500 w-10/12 mr-4">
-						<p className="inline-flex text-xs">
-							{" "}
-							<AlertTriangle className="stroke-yellow-400 mr-4" /> iTELL AI is
-							in alpha testing. It will try its best to help you but it can
-							still make mistakes. Let us know how you feel about iTELL AI's
-							performance using the feedback icons to the right (thumbs up or
-							thumbs down).{" "}
-						</p>
+					<CardDescription className="flex justify-center items-center font-light text-zinc-500 w-10/12 mr-4 text-xs">
+						{" "}
+						<AlertTriangle className="stroke-yellow-400 mr-4" /> iTELL AI is in
+						alpha testing. It will try its best to help you but it can still
+						make mistakes. Let us know how you feel about iTELL AI's performance
+						using the feedback icons to the right (thumbs up or thumbs down).{" "}
 					</CardDescription>
 					<ThumbsUp
 						className="hover:stroke-emerald-400 hover:cursor-pointer w-4 h-4"
@@ -272,8 +269,10 @@ export const QuestionBox = ({
 							value={answerInput}
 							onValueChange={setAnswerInput}
 							onPaste={(e) => {
-								e.preventDefault();
-								toast.warning("Copy & Paste is not allowed for question");
+								if (isProduction) {
+									e.preventDefault();
+									toast.warning("Copy & Paste is not allowed for question");
+								}
 							}}
 						/>
 					)}

@@ -1,3 +1,5 @@
+import { useLocalStorage } from "@itell/core/hooks";
+
 export const getYoutubeLinkFromEmbed = (url: string) => {
 	const regex = /embed\/([\w-]+)\?/;
 	const match = url.match(regex);
@@ -17,4 +19,9 @@ export const makeInputKey = (chapter: number) => {
 
 export const makeChapterHref = (chapter: number) => {
 	return `/chapter-${chapter}`;
+};
+
+export const getChapterFromPathname = (pathname: string) => {
+	const pathSplitted = pathname.split("-");
+	return Number(pathSplitted[1]);
 };

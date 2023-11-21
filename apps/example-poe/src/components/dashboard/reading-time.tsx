@@ -100,18 +100,13 @@ export const ReadingTime = async ({ uid, params, name }: Props) => {
 					</HoverCard>
 				</CardTitle>
 				<CardDescription>
-					<p>
-						{name ? name : "You"} spent {(totalViewTime / 60).toFixed(2)}{" "}
-						minutes reading the textbook, wrote {""}
-						<Link
-							className="font-semibold underline"
-							href="/dashboard/summaries"
-						>
-							{pluralize("summary", summaryCounts, true)}
-						</Link>{" "}
-						during{" "}
-						{`${format(startDate, "LLL, dd")}-${format(new Date(), "LLL, dd")}`}
-					</p>
+					{name ? name : "You"} spent {(totalViewTime / 60).toFixed(2)} minutes
+					reading the textbook, wrote {""}
+					<Link className="font-semibold underline" href="/dashboard/summaries">
+						{pluralize("summary", summaryCounts, true)}
+					</Link>{" "}
+					during{" "}
+					{`${format(startDate, "LLL, dd")}-${format(new Date(), "LLL, dd")}`}
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="pl-2 space-y-2">

@@ -39,8 +39,6 @@ export const StudentBadges = async ({ user }: { user: User }) => {
 				: null,
 	};
 
-	console.log(comparisons);
-
 	return (
 		<>
 			<DashboardBadge

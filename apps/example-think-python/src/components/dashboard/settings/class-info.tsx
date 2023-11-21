@@ -19,7 +19,7 @@ import { ClassRegister } from "./class-register";
 import { updateUserWithClassId } from "@/lib/server-actions";
 import { useSession } from "next-auth/react";
 
-export const ClassInfo = async ({ teacher }: { teacher: User | null }) => {
+export const ClassInfo = ({ teacher }: { teacher: User | null }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const { data: session } = useSession();
 	const router = useRouter();
