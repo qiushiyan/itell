@@ -26,7 +26,6 @@ import { NoteCount } from "@/components/note/note-count";
 export default async function ({ params }: { params: { slug: string[] } }) {
 	const sessionUser = await getCurrentUser();
 	const user = sessionUser ? await getUser(sessionUser.id) : null;
-
 	const whitelist = JSON.parse(env.SUMMARY_WHITELIST || "[]") as string[];
 	const isUserWhitelisted = whitelist.includes(user?.email || "");
 
