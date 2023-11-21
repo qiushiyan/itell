@@ -4,6 +4,7 @@ import { useQA } from "../context/qa-context";
 import { useSession } from "next-auth/react";
 import { createEvent } from "@/lib/server-actions";
 import { Button } from "../client-components";
+import { useCurrentChunkLocal } from "@/lib/hooks/utils";
 
 interface Props extends React.ComponentPropsWithRef<typeof Button> {
 	onClick?: () => void;
@@ -19,8 +20,10 @@ export const NextChunkButton = ({
 	standalone,
 	...rest
 }: Props) => {
-	const { goToNextChunk, currentChunk } = useQA();
+	const { setCurrentChunk, chunks, currentChunk } = useQA();
 	const { data: session } = useSession();
+	const [_, setCurrentChunkLocal] = useCurrentChunkLocal();
+
 	// submit event
 	const submitEvent = async () => {
 		if (session) {
@@ -36,7 +39,11 @@ export const NextChunkButton = ({
 	};
 
 	const onSubmit = async () => {
-		goToNextChunk();
+		if (chunks && currentChunk < chunks.length - 1) {
+			const nextChunk = currentChunk + 1;
+			setCurrentChunkLocal(nextChunk);
+			setCurrentChunk(nextChunk);
+		}
 		if (onClick) {
 			onClick();
 		}

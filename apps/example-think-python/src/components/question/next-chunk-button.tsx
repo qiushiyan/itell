@@ -4,7 +4,6 @@ import { useQA } from "../context/qa-context";
 import { useSession } from "next-auth/react";
 import { createEvent } from "@/lib/server-actions";
 import { Button } from "../client-components";
-import { useLocalStorage } from "@itell/core/hooks";
 import { useCurrentChunkLocal } from "@/lib/hooks/utils";
 
 interface Props extends React.ComponentPropsWithRef<typeof Button> {

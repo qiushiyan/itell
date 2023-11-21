@@ -87,13 +87,13 @@ export default async function ({
 							{requireSummary && (
 								<AnchorLink
 									icon={<PencilIcon className="w-4 h-4" />}
-									text="Write a Summary"
+									text="Write a summary"
 									href="#page-summary"
 								/>
 							)}
 							<AnchorLink
 								icon={<ArrowUpIcon className="w-4 h-4" />}
-								text="Back to Top"
+								text="Back to top"
 								href="#page-title"
 							/>
 						</div>

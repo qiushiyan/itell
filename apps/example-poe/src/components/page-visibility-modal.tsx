@@ -19,6 +19,7 @@ import Link from "next/link";
 import { makeLocationHref } from "@/lib/utils";
 import { useSectionStatus } from "@/lib/hooks/use-section-status";
 import { GoogleLoginButton } from "./auth/login-buttons";
+import { isProduction } from "@/lib/constants";
 
 export const PageVisibilityModal = () => {
 	const { status, userLocation } = useSectionStatus();
@@ -31,7 +32,7 @@ export const PageVisibilityModal = () => {
 			<Dialog
 				open={open}
 				onOpenChange={() => {
-					if (process.env.NODE_ENV === "development") {
+					if (!isProduction) {
 						setOpen(false);
 					}
 				}}
@@ -65,7 +66,7 @@ export const PageVisibilityModal = () => {
 			<Dialog
 				open={open}
 				onOpenChange={() => {
-					if (process.env.NODE_ENV === "development") {
+					if (!isProduction) {
 						setOpen(false);
 					}
 				}}

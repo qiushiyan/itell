@@ -24,6 +24,7 @@ import {
 	FOCUS_TIME_COUNT_INTERVAL,
 	FOCUS_TIME_SAVE_INTERVAL,
 	PAGE_SUMMARY_THRESHOLD,
+	isProduction,
 } from "@/lib/constants";
 import { trpc } from "@/trpc/trpc-provider";
 import { SectionLocation } from "@/types/location";
@@ -177,7 +178,7 @@ export const SummaryInput = ({ location }: { location: SectionLocation }) => {
 					onFocus={() => pauseFocusTimeCounting()}
 					onBlur={() => startFocusTimeCounting()}
 					onPaste={(e) => {
-						if (process.env.NODE_ENV === "production") {
+						if (isProduction) {
 							e.preventDefault();
 							toast.warning("Copy & Paste is not allowed");
 						}
