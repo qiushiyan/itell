@@ -22,7 +22,6 @@ import { PageStatusModal } from "@/components/page-status/page-status-modal";
 import { EyeIcon, LockIcon, UnlockIcon } from "lucide-react";
 import { PageStatus } from "@/components/page-status/page-status";
 import { NoteCount } from "@/components/note/note-count";
-import { delay } from "@/lib/utils";
 
 export default async function ({ params }: { params: { slug: string[] } }) {
 	const sessionUser = await getCurrentUser();
