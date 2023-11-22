@@ -9,6 +9,9 @@
             },
             "a11y": {
                 "useButtonType": "warn"
+            },
+            "suspicious": {
+                "noArrayIndexKey": "warn"
             }
         }
     }

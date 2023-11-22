@@ -17,8 +17,8 @@ export default async function () {
 			<section className="relative col-span-12 md:col-span-10 lg:col-span-8 space-y-4">
 				<PageTitle>{title}</PageTitle>
 
-				{Array.from({ length: 10 }).map(() => (
-					<Skeleton className="w-full h-28 mb-4" />
+				{Array.from({ length: 10 }).map((_, index) => (
+					<Skeleton className="w-full h-28 mb-4" key={index} />
 				))}
 			</section>
 
@@ -28,8 +28,8 @@ export default async function () {
 					<BookmarkIcon className="ml-2 w-4 h-4" />
 				</p>
 				<ul className="mt-2 space-y-2">
-					{Array.from({ length: 5 }).map(() => (
-						<Skeleton className="w-32 h-7" />
+					{Array.from({ length: 5 }).map((_, index) => (
+						<Skeleton className="w-32 h-7" key={index} />
 					))}
 				</ul>
 			</aside>

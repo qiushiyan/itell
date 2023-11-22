@@ -25,3 +25,10 @@ export const getChapterFromPathname = (pathname: string) => {
 	const pathSplitted = pathname.split("-");
 	return Number(pathSplitted[1]);
 };
+
+export const getCurrentChunkLocal = () => {
+	const chapter = getChapterFromPathname(location.pathname);
+	const key = `current-chunk-chapter-${chapter}`;
+	const val = localStorage.getItem(key);
+	return val ? Number(localStorage.getItem(key)) : 0;
+};
