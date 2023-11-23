@@ -324,9 +324,6 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
-      react-hook-form:
-        specifier: ^7.45.1
-        version: 7.46.1(react@18.2.0)
       react-text-selection-popover:
         specifier: ^2.0.2
         version: 2.0.2(postcss@8.4.29)(react-dom@18.2.0)(react@18.2.0)
