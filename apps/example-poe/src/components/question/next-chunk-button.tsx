@@ -29,8 +29,12 @@ export const NextChunkButton = ({
 		if (session) {
 			await createEvent({
 				eventType: clickEventType,
-				userId: session?.user?.id,
 				page: location.href,
+				user: {
+					connect: {
+						id: session.user.id,
+					},
+				},
 				data: {
 					currentChunk: currentChunk,
 				},

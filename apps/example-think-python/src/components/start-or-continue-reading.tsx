@@ -4,7 +4,7 @@ import { useLastVisitedChapterUrl } from "@/lib/hooks/use-last-visited-chapter";
 import Link from "next/link";
 import { buttonVariants } from "@itell/ui/server";
 import { useTransition } from "react";
-import Spinner from "./spinner";
+import { Spinner } from "./spinner";
 import { Button } from "./client-components";
 import { useRouter } from "next/navigation";
 

@@ -49,15 +49,14 @@ const getReadingTime = async (
 	startDate: Date,
 	intervalDates: Date[],
 ) => {
-	const data = (await db.focusTime.findMany({
+	const data = await db.focusTime.findMany({
 		where: {
 			userId: uid,
 			created_at: {
 				gte: startDate,
 			},
 		},
-		// rome-ignore lint/suspicious/noExplicitAny: <explanation>
-	})) as { data: any; totalViewTime: number; created_at: Date }[];
+	});
 	const readingTimeGrouped = await getGroupedReadingTime(data, intervalDates);
 	return readingTimeGrouped;
 };

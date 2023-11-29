@@ -2,14 +2,14 @@ import Balancer from "react-wrap-balancer";
 import { notFound } from "next/navigation";
 import { SectionLocation } from "@/types/location";
 import { getPagerLinksForSection } from "@/lib/pager";
-import NoteList from "@/components/note/note-list";
-import Highlighter from "@/components/note/note-toolbar";
+import { NoteList } from "@/components/note/note-list";
+import { NoteToolbar } from "@/components/note/note-toolbar";
 import { Fragment, Suspense } from "react";
 import { allSectionsSorted } from "@/lib/sections";
 import { Pager } from "@/components/client-components";
-import { TocSidebar } from "@/components/toc-sidebar";
+import { PageToc } from "@/components/page-toc";
 import { Section } from "contentlayer/generated";
-import Spinner from "@/components/spinner";
+import { Spinner } from "@/components/spinner";
 import { PageContent } from "@/components/section/page-content";
 import { QuestionControl } from "@/components/question/question-control";
 import { getCurrentUser } from "@/lib/auth";
@@ -22,6 +22,8 @@ import { PageStatusModal } from "@/components/page-status/page-status-modal";
 import { EyeIcon, LockIcon, UnlockIcon } from "lucide-react";
 import { PageStatus } from "@/components/page-status/page-status";
 import { NoteCount } from "@/components/note/note-count";
+import { isProduction } from "@/lib/constants";
+import { EventTracker } from "@/components/telemetry/event-tracker";
 
 export default async function ({ params }: { params: { slug: string[] } }) {
 	const sessionUser = await getCurrentUser();
@@ -57,7 +59,7 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 		{ question: string; answer: string }
 	>();
 	if (enableQA) {
-		const chooseQuestion = (question: typeof questions[0]) => {
+		const chooseQuestion = (question: (typeof questions)[0]) => {
 			let targetQuestion = question.question;
 			// band-aid solution for YouTube videos until we implement content-types via Strapi
 			if (question.slug.includes("learn-with-videos")) {
@@ -120,21 +122,21 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					)}
 				</PageTitle>
 				<PageContent code={section.body.code} />
-				<Highlighter location={currentLocation} />
+				<NoteToolbar location={currentLocation} />
 				<Pager prev={pagerLinks.prev} next={pagerLinks.next} />
 			</section>
 
 			<aside className="toc-sidebar col-span-2 relative">
 				<div className="sticky top-20">
-					<TocSidebar headings={section.headings} />
+					<PageToc headings={section.headings} />
 					<div className="mt-8 flex flex-col gap-2">
 						<PageStatus
 							status={
 								isUserLatestPage
 									? "current"
 									: isPageUnlocked
-									? "unlocked"
-									: "locked"
+									  ? "unlocked"
+									  : "locked"
 							}
 						/>
 						<NoteCount />
@@ -164,6 +166,8 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 					location={currentLocation}
 				/>
 			)}
+
+			{user && isProduction && <EventTracker user={user} />}
 		</Fragment>
 	);
 }

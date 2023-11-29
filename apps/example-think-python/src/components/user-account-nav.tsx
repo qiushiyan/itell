@@ -19,7 +19,7 @@ import {
 	LogOutIcon,
 	SettingsIcon,
 } from "lucide-react";
-import Spinner from "./spinner";
+import { Spinner } from "./spinner";
 import Link from "next/link";
 import UserAvatar from "./user-avatar";
 

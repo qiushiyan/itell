@@ -1,6 +1,5 @@
 import { ChapterSidebar } from "@/components/chapter-sidebar";
 import { PageSummary } from "@/components/summary/page-summary";
-import { EventTracker } from "@/components/telemetry/event-tracker";
 import { allChaptersSorted } from "@/lib/chapters";
 import { cn } from "@itell/core/utils";
 import { buttonVariants } from "@itell/ui/server";
@@ -75,8 +74,6 @@ export default async function ({
 	return (
 		<>
 			<div className="max-w-[1440px] mx-auto grid grid-cols-12 gap-6 px-2">
-				{!isDev && <EventTracker />}
-
 				<aside className="chapter-sidebar md:col-span-2">
 					<div className="sticky top-20">
 						<ChapterSidebar
@@ -102,6 +99,7 @@ export default async function ({
 
 				{children}
 			</div>
+
 			{requireSummary && <PageSummary chapter={chapter.chapter} />}
 		</>
 	);

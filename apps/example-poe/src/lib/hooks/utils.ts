@@ -34,8 +34,6 @@ export const useCurrentChunkLocal = () => {
 // TODO useCurrentChunkLocal throws an error (location is undefined)
 // quick fix: use getCurrentChunkLocal instead, which is simply getting the value from localStorage
 export const getCurrentChunkLocal = () => {
-	if (typeof window === "undefined") return 0;
-
 	const loc = getLocationFromPathname(location.pathname);
 	const key = `current-chunk-chapter-${loc.chapter}-${loc.section}`;
 	const val = localStorage.getItem(key);

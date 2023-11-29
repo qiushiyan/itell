@@ -3,7 +3,7 @@ import { StudentClassCount } from "@/components/dashboard/student/student-class-
 import { UserStatistics } from "@/components/dashboard/user-statistics";
 import { UserProgress } from "@/components/dashboard/user/user-progress";
 import { DashboardShell } from "@/components/shell";
-import Spinner from "@/components/spinner";
+import { Spinner } from "@/components/spinner";
 import { getCurrentUser } from "@/lib/auth";
 import { getUser } from "@/lib/user";
 import { Metadata } from "next";

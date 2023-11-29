@@ -10,7 +10,7 @@ type TocSidebarProps = {
 	headings: Heading[];
 };
 
-export function TocSidebar({ headings }: TocSidebarProps) {
+export const PageToc = ({ headings }: TocSidebarProps) => {
 	return (
 		<div>
 			<p className="font-medium text-sm flex items-center">
@@ -42,4 +42,4 @@ export function TocSidebar({ headings }: TocSidebarProps) {
 			</ul>
 		</div>
 	);
-}
+};

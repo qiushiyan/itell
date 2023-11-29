@@ -1,7 +1,7 @@
 "use client";
 
 import { getCurrentChunkLocal, useCurrentChunkLocal } from "@/lib/hooks/utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type QAContextType = {
 	chunks: HTMLDivElement[] | undefined;
@@ -14,8 +14,13 @@ const QAContext = React.createContext<QAContextType>({} as QAContextType);
 export const useQA = () => React.useContext(QAContext);
 
 export const QAProvider = ({ children }: { children: React.ReactNode }) => {
-	const [currentChunk, setCurrentChunk] = useState(getCurrentChunkLocal());
+	const [currentChunk, setCurrentChunk] = useState(0);
 	const [chunks, setChunks] = useState<HTMLDivElement[]>();
+
+	useEffect(() => {
+		const currentChunkLocal = getCurrentChunkLocal();
+		setCurrentChunk(currentChunkLocal);
+	}, []);
 
 	return (
 		<QAContext.Provider

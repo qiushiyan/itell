@@ -4,8 +4,8 @@ import { Summary } from "@prisma/client";
 import { FormEvent, useEffect, useState } from "react";
 import { Button, TextArea } from "../client-components";
 import { ScoreResponse, useSummary } from "@/lib/hooks/use-summary";
-import Feedback from "../summary/summary-feedback";
-import Spinner from "../spinner";
+import { SummaryFeedback } from "../summary/summary-feedback";
+import { Spinner } from "../spinner";
 import { useRouter } from "next/navigation";
 import { numOfWords } from "@itell/core/utils";
 
@@ -91,7 +91,7 @@ export default function (props: Props) {
 				Number of words: {numOfWords(state.input)}
 			</p>
 			<div className="text-left">
-				{state.feedback && <Feedback feedback={state.feedback} />}
+				{state.feedback && <SummaryFeedback feedback={state.feedback} />}
 			</div>
 
 			<div className="prose prose-stone dark:prose-invert max-w-2xl  space-y-4">

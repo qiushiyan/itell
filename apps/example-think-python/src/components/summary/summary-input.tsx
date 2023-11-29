@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import { useFocusTime } from "@itell/core/hooks";
 import { Warning } from "@itell/ui/server";
-import Spinner from "../spinner";
-import Feedback from "./summary-feedback";
+import { Spinner } from "../spinner";
+import { SummaryFeedback } from "./summary-feedback";
 import { makeChapterHref, makeInputKey } from "@/lib/utils";
 import { useSummary } from "@/lib/hooks/use-summary";
 import { useSession } from "next-auth/react";
@@ -21,7 +21,6 @@ import { useRouter } from "next/navigation";
 import ConfettiExplosion from "react-confetti-explosion";
 import { numOfWords } from "@itell/core/utils";
 import {
-	FOCUS_TIME_COUNT_INTERVAL,
 	FOCUS_TIME_SAVE_INTERVAL,
 	PAGE_SUMMARY_THRESHOLD,
 	isProduction,
@@ -36,7 +35,6 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 	const { state, setInput, score, create } = useSummary({
 		useLocalStorage: true,
 	});
-	const createFocusTime = trpc.focusTime.create.useMutation();
 
 	const router = useRouter();
 	const { status: sessionStatus } = useSession();
@@ -58,27 +56,6 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 	);
 
 	const incrementUserChapter = trpc.user.incrementChapter.useMutation();
-	const {
-		saveFocusTime,
-		start: startFocusTimeCounting,
-		pause: pauseFocusTimeCounting,
-	} = useFocusTime({
-		async mutationFn({ summaryId, focusTimeData, totalViewTime }) {
-			if (isProduction) {
-				await createFocusTime.mutateAsync({
-					summaryId,
-					data: focusTimeData,
-					totalViewTime,
-				});
-			}
-		},
-		chunksFn: () => {
-			return Array.from(
-				document.querySelectorAll("#page-content .content-chunk"),
-			);
-		},
-		countInterval: FOCUS_TIME_COUNT_INTERVAL,
-	});
 
 	const handleSubmit = async (e: FormEvent) => {
 		if (sessionStatus === "authenticated" && chapter) {
@@ -94,15 +71,7 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 			// score the summary
 			const response = await score(chapter);
 			if (response) {
-				const savedSummary = await create(
-					response.result,
-					response.feedback,
-					chapter,
-				);
-				if (savedSummary) {
-					// this focus-time record is associated with a summary
-					saveFocusTime(savedSummary.id);
-				}
+				await create(response.result, response.feedback, chapter);
 			}
 		} else {
 			router.push("/auth");
@@ -139,25 +108,9 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 		router.push(makeChapterHref(chapter + 1));
 	};
 
-	let autoSaveTimer: NodeJS.Timer | null = null;
-
-	useEffect(() => {
-		if (isProduction) {
-			autoSaveTimer = setInterval(() => {
-				saveFocusTime();
-			}, FOCUS_TIME_SAVE_INTERVAL);
-		}
-
-		return () => {
-			if (autoSaveTimer) {
-				clearInterval(autoSaveTimer);
-			}
-		};
-	}, []);
-
 	return (
 		<>
-			{state.feedback && <Feedback feedback={state.feedback} />}
+			{state.feedback && <SummaryFeedback feedback={state.feedback} />}
 			{state.feedback?.isPassed && (
 				<ConfettiExplosion width={window.innerWidth} />
 			)}
@@ -171,8 +124,6 @@ export const SummaryInput = ({ chapter }: { chapter: number }) => {
 					onValueChange={(val) => setInput(val)}
 					rows={10}
 					className="resize-none rounded-md shadow-md p-4 w-full"
-					onFocus={() => pauseFocusTimeCounting()}
-					onBlur={() => startFocusTimeCounting()}
 					onPaste={(e) => {
 						if (isProduction) {
 							e.preventDefault();

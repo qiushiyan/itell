@@ -75,14 +75,14 @@ export const getTeacherWithClassId = async (classId: string | null) => {
 	return user;
 };
 
-export const createEvents = async (input: Prisma.EventCreateInput[]) => {
-	return await db.event.createMany({
+export const createEvent = async (input: Prisma.EventCreateInput) => {
+	return await db.event.create({
 		data: input,
 	});
 };
 
-export const createEvent = async (input: Prisma.EventCreateInput) => {
-	return await db.event.create({
+export const createFocusTime = async (input: Prisma.FocusTimeCreateInput) => {
+	return await db.focusTime.create({
 		data: input,
 	});
 };

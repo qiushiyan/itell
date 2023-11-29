@@ -6,9 +6,9 @@ import { NoteToolbar } from "@/components/note/note-toolbar";
 import { Fragment, Suspense } from "react";
 import { allChaptersSorted } from "@/lib/chapters";
 import { Pager } from "@/components/client-components";
-import { TocSidebar } from "@/components/toc-sidebar";
+import { PageToc } from "@/components/page-toc";
 import { PageContent } from "@/components/page-content";
-import Spinner from "@/components/spinner";
+import { Spinner } from "@/components/spinner";
 import { getPageQuestions } from "@/lib/question";
 import { QuestionControl } from "@/components/question/question-control";
 import { getCurrentUser } from "@/lib/auth";
@@ -18,6 +18,8 @@ import { PageStatusModal } from "@/components/page-status/page-status-modal";
 import { PageTitle } from "@/components/page-title";
 import { NoteCount } from "@/components/note/note-count";
 import { PageStatus } from "@/components/page-status/page-status";
+import { EventTracker } from "@/components/telemetry/event-tracker";
+import { isProduction } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +47,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 		{ question: string; answer: string }
 	>();
 	if (chapter.qa) {
-		const chooseQuestion = (question: typeof questions[0]) => {
+		const chooseQuestion = (question: (typeof questions)[0]) => {
 			let targetQuestion = question.question;
 			// band-aid solution for YouTube videos until we implement content-types via Strapi
 			if (question.slug.includes("learn-with-videos")) {
@@ -106,15 +108,15 @@ export default async function ({ params }: { params: { slug: string } }) {
 
 			<aside className="toc-sidebar col-span-2 relative">
 				<div className="sticky top-20">
-					<TocSidebar headings={chapter.headings} />
+					<PageToc headings={chapter.headings} />
 					<div className="mt-8 flex flex-col gap-2">
 						<PageStatus
 							status={
 								isUserLatestPage
 									? "current"
 									: isPageUnlocked
-									? "unlocked"
-									: "locked"
+									  ? "unlocked"
+									  : "locked"
 							}
 						/>
 						<NoteCount />
@@ -141,6 +143,8 @@ export default async function ({ params }: { params: { slug: string } }) {
 					chapter={chapter.chapter}
 				/>
 			)}
+
+			{user && isProduction && <EventTracker user={user} />}
 		</Fragment>
 	);
 }

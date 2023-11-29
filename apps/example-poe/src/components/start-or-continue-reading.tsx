@@ -4,7 +4,7 @@ import { useLastVisitedSectionUrl } from "@/lib/hooks/use-last-visited-section";
 import { useTransition } from "react";
 import { Button } from "./client-components";
 import { useRouter } from "next/navigation";
-import Spinner from "./spinner";
+import { Spinner } from "./spinner";
 
 export const StartOrContinueReading = () => {
 	const url = useLastVisitedSectionUrl();

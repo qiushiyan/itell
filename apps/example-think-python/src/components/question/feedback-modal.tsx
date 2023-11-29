@@ -16,7 +16,7 @@ import {
 	TextArea,
 } from "../client-components";
 import { useState } from "react";
-import Spinner from "../spinner";
+import { Spinner } from "../spinner";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 

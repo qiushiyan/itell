@@ -13,7 +13,7 @@ import {
 	AlertDialogTrigger,
 } from "@/components/client-components";
 import { useState } from "react";
-import Spinner from "@/components/spinner";
+import { Spinner } from "@/components/spinner";
 import { useRouter } from "next/navigation";
 import { ClassRegister } from "./class-register";
 import { updateUserWithClassId } from "@/lib/server-actions";

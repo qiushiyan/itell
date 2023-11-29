@@ -1,6 +1,6 @@
 "use client";
 
-import Spinner from "@/components/spinner";
+import { Spinner } from "@/components/spinner";
 import {
 	Dialog,
 	DialogContent,

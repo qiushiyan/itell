@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Cell } from "./cell";
-import Spinner from "../spinner";
+import { Spinner } from "../spinner";
 import { usePython } from "@/lib/hooks/ues-python";
 import { CellMode } from "./types";
 import { Errorbox } from "@itell/ui/server";

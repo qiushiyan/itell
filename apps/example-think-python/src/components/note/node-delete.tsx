@@ -12,7 +12,7 @@ import {
 } from "@/components/client-components";
 
 import { Button } from "../client-components";
-import Spinner from "../spinner";
+import { Spinner } from "../spinner";
 import { useState } from "react";
 
 type Props = {

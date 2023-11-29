@@ -1,5 +1,5 @@
 import { trpc } from "@/trpc/trpc-provider";
-import { SummaryFeedback, getFeedback } from "../summary";
+import { SummaryFeedbackType, getFeedback } from "../summary";
 import { makeInputKey } from "../utils";
 import { useEffect, useReducer } from "react";
 import { toast } from "sonner";
@@ -29,7 +29,7 @@ type State = {
 	prompt: string;
 	error: string | null;
 	pending: boolean;
-	feedback: SummaryFeedback | null;
+	feedback: SummaryFeedbackType | null;
 	result: SummaryResponse | null;
 };
 
@@ -43,7 +43,7 @@ type Action =
 	| { type: "score_summary" }
 	| {
 			type: "score_summary_finished";
-			payload: { result: SummaryResponse; feedback: SummaryFeedback };
+			payload: { result: SummaryResponse; feedback: SummaryFeedbackType };
 	  }
 	| { type: "save_summary" }
 	| { type: "save_summary_finished" }
@@ -54,7 +54,7 @@ type Action =
 
 export type ScoreResponse = {
 	result: SummaryResponse;
-	feedback: SummaryFeedback;
+	feedback: SummaryFeedbackType;
 };
 
 const reducer = (state: State, action: Action) => {
@@ -267,7 +267,7 @@ export const useSummary = ({
 	}: {
 		summary: Summary;
 		score: SummaryScore | null;
-		feedback: SummaryFeedback | null;
+		feedback: SummaryFeedbackType | null;
 		chapter: number;
 	}) => {
 		if (score && feedback) {
@@ -296,7 +296,7 @@ export const useSummary = ({
 
 	const create = async (
 		result: SummaryResponse | null,
-		feedback: SummaryFeedback | null,
+		feedback: SummaryFeedbackType | null,
 		chapter: number,
 	) => {
 		if (result && feedback) {

@@ -1,31 +1,18 @@
+import { ChunkEntry, FocusTimeEventData } from "@/types/telemetry";
 import { useEffect, useRef } from "react";
 
-export type FocusTimeEntry = {
-	sectionId: string;
-	totalViewTime: number;
-	lastTick: number;
-};
-
-type MutationFnArgs = {
-	summaryId?: string;
-	focusTimeData: FocusTimeEntry[];
-	totalViewTime: number;
-};
-
 type Props = {
-	chunksFn: () => HTMLDivElement[];
-	mutationFn: (args: MutationFnArgs) => Promise<void>;
-	countInterval: number;
+	chunks: HTMLDivElement[];
+	onEvent: (data: FocusTimeEventData) => Promise<void>;
+	saveInterval: number;
 };
 
-export const useFocusTime = ({
-	mutationFn,
-	countInterval,
-	chunksFn,
-}: Props) => {
-	const data = useRef<FocusTimeEntry[]>();
+const COUNT_INTERVAL = 1000;
+
+export const useFocusTime = ({ onEvent, saveInterval, chunks }: Props) => {
+	const entries = useRef<ChunkEntry[]>();
 	const isSaving = useRef(false);
-	const visibleSections = new Set<string>();
+	const visibleChunks = new Set<string>();
 	const savedTime = useRef<Map<string, number>>(new Map());
 
 	const options: IntersectionObserverInit = {
@@ -35,22 +22,29 @@ export const useFocusTime = ({
 	};
 
 	let countTimer: NodeJS.Timeout | null = null;
+	let saveTimer: NodeJS.Timeout | null = null;
 
 	const pause = () => {
 		if (countTimer) {
 			clearInterval(countTimer);
 		}
+
+		if (saveTimer) {
+			clearInterval(saveTimer);
+		}
 	};
 
 	const start = () => {
+		// clear the previous timer
 		pause();
-		data.current?.forEach((entry) => {
+		// initiate all entries
+		entries.current?.forEach((entry) => {
 			entry.lastTick = performance.now();
 		});
 		countTimer = setInterval(() => {
-			if (data.current && !isSaving.current) {
-				data.current.forEach((entry) => {
-					if (visibleSections.has(entry.sectionId)) {
+			if (entries.current && !isSaving.current) {
+				entries.current.forEach((entry) => {
+					if (visibleChunks.has(entry.chunkId)) {
 						entry.totalViewTime += Math.round(
 							(performance.now() - entry.lastTick) / 1000,
 						);
@@ -58,19 +52,20 @@ export const useFocusTime = ({
 					entry.lastTick = performance.now();
 				});
 			}
-		}, countInterval);
+		}, COUNT_INTERVAL);
+		saveTimer = setInterval(saveFocusTime, saveInterval);
 	};
 
-	const saveFocusTime = async (summaryId?: string) => {
-		if (data.current && !isSaving.current) {
+	const saveFocusTime = async () => {
+		if (entries.current && !isSaving.current) {
 			isSaving.current = true;
 
-			const adjustedFocusTimeData = data.current.map((entry) => {
-				const previouslySaved = savedTime.current.get(entry.sectionId) || 0;
+			const updatedEntries = entries.current.map((entry) => {
+				const previouslySaved = savedTime.current.get(entry.chunkId) || 0;
 				const durationSinceLastSave = entry.totalViewTime - previouslySaved;
 
 				// Update the saved time reference
-				savedTime.current.set(entry.sectionId, entry.totalViewTime);
+				savedTime.current.set(entry.chunkId, entry.totalViewTime);
 
 				return {
 					...entry,
@@ -78,10 +73,9 @@ export const useFocusTime = ({
 				};
 			});
 
-			await mutationFn({
-				summaryId,
-				focusTimeData: adjustedFocusTimeData,
-				totalViewTime: adjustedFocusTimeData.reduce(
+			await onEvent({
+				entries: updatedEntries,
+				totalViewTime: updatedEntries.reduce(
 					(acc, entry) => acc + entry.totalViewTime,
 					0,
 				),
@@ -104,17 +98,15 @@ export const useFocusTime = ({
 		// start when the tab is visible
 		document.addEventListener("visibilitychange", handleVisibilityChange);
 
-		const chunks = chunksFn();
-
-		data.current = chunks.map((el) => ({
-			sectionId: el.dataset.subsectionId as string,
+		entries.current = chunks.map((el) => ({
+			chunkId: el.dataset.subsectionId as string,
 			totalViewTime: 0,
 			lastTick: performance.now(),
 		}));
 
 		// Initialize saved time for each section
-		data.current.forEach((entry) => {
-			savedTime.current.set(entry.sectionId, 0);
+		entries.current.forEach((entry) => {
+			savedTime.current.set(entry.chunkId, 0);
 		});
 
 		// had to create the observer inside useEffect to avoid build error
@@ -123,9 +115,9 @@ export const useFocusTime = ({
 				const target = entry.target as HTMLElement;
 				const id = target.dataset.subsectionId as string;
 				if (entry.isIntersecting) {
-					visibleSections.add(id);
+					visibleChunks.add(id);
 				} else {
-					visibleSections.delete(id);
+					visibleChunks.delete(id);
 				}
 			});
 		}, options);

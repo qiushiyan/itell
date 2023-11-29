@@ -9,7 +9,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import Spinner from "@/components/spinner";
+import { Spinner } from "@/components/spinner";
 import { Input } from "@itell/ui/server";
 import { User } from "@prisma/client";
 

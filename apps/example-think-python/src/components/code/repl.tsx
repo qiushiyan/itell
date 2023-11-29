@@ -2,7 +2,7 @@
 
 import { usePython } from "@webpy/react";
 import { useEffect, useState } from "react";
-import Spinner from "../spinner";
+import { Spinner } from "../spinner";
 import { cn } from "@itell/core/utils";
 import { isError } from "@tanstack/react-query";
 
@@ -72,8 +72,8 @@ export const Repl = () => {
 												result: isError
 													? result.error
 													: result?.output !== "undefined"
-													? result.output
-													: null,
+													  ? result.output
+													  : null,
 												isError,
 											},
 											{

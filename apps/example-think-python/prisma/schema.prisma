@@ -49,13 +49,14 @@ model User {
   classId                     String?                       @map("class_id")
   timeZone                    String?                       @map("time_zone")
   accounts                    Account[]
-  FocusTime                   FocusTime[]
   notes                       Note[]
   sessions                    Session[]
   short_answers               ShortAnswer[]
   summaries                   Summary[]
   ConstructedResponse         ConstructedResponse[]
   ConstructedResponseFeedback ConstructedResponseFeedback[]
+  Event                       Event[]
+  FocusTime                   FocusTime[]
 
   @@index([classId])
   @@map("users")
@@ -79,19 +80,18 @@ model Teacher {
 }
 
 model Summary {
-  id               String      @id @default(uuid())
-  userId           String      @map("user_id")
+  id               String   @id @default(uuid())
+  userId           String   @map("user_id")
   chapter          Int
   isPassed         Boolean
-  containmentScore Float       @map("containment_score")
-  similarityScore  Float       @map("similarity_score")
-  wordingScore     Float?      @map("wording_score")
-  contentScore     Float?      @map("content_score")
+  containmentScore Float    @map("containment_score")
+  similarityScore  Float    @map("similarity_score")
+  wordingScore     Float?   @map("wording_score")
+  contentScore     Float?   @map("content_score")
   text             String
-  created_at       DateTime    @default(now())
-  updated_at       DateTime    @updatedAt
-  FocusTime        FocusTime[]
-  user             User        @relation(fields: [userId], references: [id])
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+  user             User     @relation(fields: [userId], references: [id])
 
   @@map("summaries")
 }
@@ -114,15 +114,13 @@ model Note {
 
 model FocusTime {
   id            String   @id @default(uuid())
-  data          Json
-  totalViewTime Float
-  summaryId     String?  @map("summary_id")
   userId        String   @map("user_id")
+  totalViewTime Int      @map("total_view_time")
   created_at    DateTime @default(now())
-  summary       Summary? @relation(fields: [summaryId], references: [id])
+  updated_at    DateTime @updatedAt
   user          User     @relation(fields: [userId], references: [id])
 
-  @@map("focus_time")
+  @@map("focus_times")
 }
 
 model Event {
@@ -133,6 +131,9 @@ model Event {
   data       Json?
   created_at DateTime @default(now())
 
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([eventType])
   @@map("events")
 }
 
