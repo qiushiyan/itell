@@ -85,7 +85,11 @@ export const useFocusTime = ({ onEvent, saveInterval, chunks }: Props) => {
 		}
 	};
 
-	const handleVisibilityChange = () => {
+	const onBlur = () => {
+		pause();
+	};
+
+	const onVisibilityChange = () => {
 		if (document.hidden) {
 			pause();
 		} else {
@@ -96,7 +100,7 @@ export const useFocusTime = ({ onEvent, saveInterval, chunks }: Props) => {
 	useEffect(() => {
 		// pause when the tab is not visible
 		// start when the tab is visible
-		document.addEventListener("visibilitychange", handleVisibilityChange);
+		window.addEventListener("visibilitychange", onVisibilityChange);
 
 		entries.current = chunks.map((el) => ({
 			chunkId: el.dataset.subsectionId as string,
@@ -129,9 +133,9 @@ export const useFocusTime = ({ onEvent, saveInterval, chunks }: Props) => {
 		start();
 
 		return () => {
-			chunks.forEach((el) => observer.unobserve(el));
-			document.removeEventListener("visibilitychange", handleVisibilityChange);
 			pause();
+			chunks.forEach((el) => observer.unobserve(el));
+			window.removeEventListener("visibilitychange", onVisibilityChange);
 		};
 	}, []);
 
