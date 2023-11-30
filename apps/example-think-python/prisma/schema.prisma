@@ -117,7 +117,6 @@ model FocusTime {
   userId        String   @map("user_id")
   totalViewTime Int      @map("total_view_time")
   created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
   user          User     @relation(fields: [userId], references: [id])
 
   @@map("focus_times")

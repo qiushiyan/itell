@@ -1,4 +1,8 @@
-import { ChunkEntry, FocusTimeEventData } from "@/types/telemetry";
+import {
+	ChunkEntry,
+	ChunkEntryWithLastTick,
+	FocusTimeEventData,
+} from "@/types/telemetry";
 import { useEffect, useRef } from "react";
 
 type Props = {
@@ -10,7 +14,7 @@ type Props = {
 const COUNT_INTERVAL = 1000;
 
 export const useFocusTime = ({ onEvent, saveInterval, chunks }: Props) => {
-	const entries = useRef<ChunkEntry[]>();
+	const entries = useRef<ChunkEntryWithLastTick[]>();
 	const isSaving = useRef(false);
 	const visibleChunks = new Set<string>();
 	const savedTime = useRef<Map<string, number>>(new Map());
@@ -60,7 +64,7 @@ export const useFocusTime = ({ onEvent, saveInterval, chunks }: Props) => {
 		if (entries.current && !isSaving.current) {
 			isSaving.current = true;
 
-			const updatedEntries = entries.current.map((entry) => {
+			const updatedEntries: ChunkEntry[] = entries.current.map((entry) => {
 				const previouslySaved = savedTime.current.get(entry.chunkId) || 0;
 				const durationSinceLastSave = entry.totalViewTime - previouslySaved;
 
@@ -68,7 +72,7 @@ export const useFocusTime = ({ onEvent, saveInterval, chunks }: Props) => {
 				savedTime.current.set(entry.chunkId, entry.totalViewTime);
 
 				return {
-					...entry,
+					chunkId: entry.chunkId,
 					totalViewTime: durationSinceLastSave,
 				};
 			});
@@ -76,7 +80,7 @@ export const useFocusTime = ({ onEvent, saveInterval, chunks }: Props) => {
 			await onEvent({
 				entries: updatedEntries,
 				totalViewTime: updatedEntries.reduce(
-					(acc, entry) => acc + entry.totalViewTime,
+					(a, b) => Math.max(a, b.totalViewTime),
 					0,
 				),
 			});

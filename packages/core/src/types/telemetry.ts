@@ -14,8 +14,9 @@ export type ScrollEventData = {
 export type ChunkEntry = {
 	chunkId: string;
 	totalViewTime: number;
-	lastTick: number;
 };
+
+export type ChunkEntryWithLastTick = ChunkEntry & { lastTick: number };
 
 export type FocusTimeEventData = {
 	entries: ChunkEntry[];
