@@ -9,7 +9,7 @@ export const SummarySubmitButton = () => {
 	const { data: session } = useSession();
 	const { pending } = useFormStatus();
 	return (
-		<Button type="submit" disabled={pending}>
+		<Button disabled={pending}>
 			{pending && <Spinner className="mr-2" />}
 			{session?.user ? (
 				pending ? (
