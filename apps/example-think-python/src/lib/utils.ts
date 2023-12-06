@@ -1,5 +1,3 @@
-import { useLocalStorage } from "@itell/core/hooks";
-
 export const getYoutubeLinkFromEmbed = (url: string) => {
 	const regex = /embed\/([\w-]+)\?/;
 	const match = url.match(regex);

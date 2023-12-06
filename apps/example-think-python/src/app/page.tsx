@@ -4,6 +4,7 @@ import { Mdx } from "@/components/mdx";
 import { SiteFooter } from "@/components/site-footer";
 import { StartOrContinueReading } from "@/components/start-or-continue-reading";
 import { MainMdx } from "@/components/main-mdx";
+import { cookies } from "next/headers";
 
 const home = allSites.find((doc) => doc.slug === "home") as Site;
 

@@ -1,5 +1,18 @@
-import { SummaryResponse } from "@itell/core/summary";
-import { ScoreThreshold, ScoreType } from "./constants";
+import { SummaryResponse } from "./schema";
+
+export enum ScoreType {
+	content = "Content",
+	wording = "Wording",
+	similarity = "Topic Similarity",
+	containment = "Topic Borrowing",
+}
+
+export const ScoreThreshold: Record<ScoreType, number> = {
+	[ScoreType.content]: 0,
+	[ScoreType.wording]: -1,
+	[ScoreType.similarity]: 0.5,
+	[ScoreType.containment]: 0.6,
+};
 
 export interface Feedback {
 	isPassed: boolean;
@@ -20,14 +33,14 @@ export const containmentFeedback = (score: number): Feedback => {
 		return {
 			isPassed: false,
 			prompt:
-				"You need to depend less on the language in the text and focus more on rewriting the key ideas of the section.",
+				"You need to depend less on the language in the text and focus more on rewriting the key ideas.",
 		};
 	}
 
 	return {
 		isPassed: true,
 		prompt:
-			"You did a good job of using your own language to describe the main ideas in the section.",
+			"You did a good job of using your own language to describe the main ideas of the text.",
 	};
 };
 
@@ -59,14 +72,14 @@ export const contentFeedback = (score: number | null): Feedback => {
 		return {
 			isPassed: false,
 			prompt:
-				" You need to include more key ideas and details from the section to successfully summarize the content. Consider focusing on the main ideas of the section and providing support for those ideas in your summary.",
+				" You need to include more key ideas and details from the page to successfully summarize the content. Consider focusing on the main ideas of the text and providing support for those ideas in your summary.",
 		};
 	}
 
 	return {
 		isPassed: true,
 		prompt:
-			"You did a good job of including key ideas and details from the section.",
+			"You did a good job of including key ideas and details on this page.",
 	};
 };
 
@@ -82,14 +95,14 @@ export const wordingFeedback = (score: number | null): Feedback => {
 		return {
 			isPassed: false,
 			prompt:
-				" You need to paraphrase words and ideas in the section better. Focus on using different words and sentences than those found in the section. Also, try to use more objective language (or less emotional language).",
+				" You need to paraphrase words and ideas on this page better. Focus on using different words and sentences than those used in the text. Also, try to use more objective language (or less emotional language).",
 		};
 	}
 
 	return {
 		isPassed: true,
 		prompt:
-			"You did a good job of paraphrasing words and sentences from the section and using objective language.",
+			"You did a good job of paraphrasing words and sentences from the text and using objective language.",
 	};
 };
 
@@ -119,14 +132,14 @@ export const getFeedback = (response: SummaryResponse): SummaryFeedbackType => {
 	if (isPassed) {
 		if (passedNum > 3) {
 			prompt =
-				"Excellent job on summarizing this section. Please move forward to the next section.";
+				"Excellent job on summarizing the text. Please move forward to the next page.";
 		} else {
 			prompt =
-				"Good job on summarizing this section. Please move forward to the next section.";
+				"Good job on summarizing the text. Please move forward to the next page.";
 		}
 	} else {
 		prompt =
-			"Before moving onto the next section, you will need to revise the summary you wrote using the feedback provided.";
+			"Before moving onto the next page, you will need to revise the summary you wrote using the feedback provided.";
 	}
 
 	return {

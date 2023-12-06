@@ -2,12 +2,32 @@
 
 import { Prisma } from "@prisma/client";
 import db from "./db";
+import { cookies } from "next/headers";
+import { isLastChapter } from "./chapters";
 
 export const deleteSummary = async (id: string) => {
 	return await db.summary.delete({
 		where: {
 			id,
 		},
+	});
+};
+
+export const createSummary = async (input: Prisma.SummaryCreateInput) => {
+	return await db.summary.create({
+		data: input,
+	});
+};
+
+export const updateSummary = async (
+	id: string,
+	data: Prisma.SummaryUpdateInput,
+) => {
+	return await db.summary.update({
+		where: {
+			id,
+		},
+		data,
 	});
 };
 
@@ -35,7 +55,7 @@ export const createConstructedResponseFeedback = async (
 	});
 };
 
-export const updateUserWithClassId = async ({
+export const updateUserClassId = async ({
 	userId,
 	classId,
 }: {
@@ -48,6 +68,38 @@ export const updateUserWithClassId = async ({
 		},
 		data: {
 			classId,
+		},
+	});
+};
+
+export const incrementUserChapter = async (userId: string, chapter: number) => {
+	const user = await db.user.findUnique({ where: { id: userId } });
+	if (user) {
+		const userChapter = user.chapter;
+		// only update if the call is from the user's current chapter
+		if (userChapter === chapter && !isLastChapter(chapter)) {
+			return await db.user.update({
+				where: {
+					id: userId,
+				},
+				data: {
+					chapter: {
+						increment: 1,
+					},
+				},
+			});
+		}
+	}
+};
+
+export const getUserChapterSummaryCount = async (
+	userId: string,
+	chapter: number,
+) => {
+	return await db.summary.count({
+		where: {
+			userId,
+			chapter,
 		},
 	});
 };
@@ -97,4 +149,15 @@ export const updateUser = async (
 		},
 		data,
 	});
+};
+
+export const setClassSettings = (classId: string) => {
+	if (classId === "wes_class") {
+		cookies().set(
+			"class_settings",
+			JSON.stringify({
+				no_feedback_pages: [1, 2],
+			}),
+		);
+	}
 };

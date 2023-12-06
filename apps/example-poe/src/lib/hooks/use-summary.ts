@@ -313,7 +313,7 @@ export const useSummary = ({
 						containment: result.containment,
 						similarity: result.similarity,
 						wording: result.wording,
-						content: result.wording,
+						content: result.content,
 					},
 				});
 				if (feedback.isPassed) {

@@ -1,6 +1,16 @@
 import { env } from "@/env.mjs";
-import { SummaryResponseSchema } from "@/trpc/schema";
+import { SummaryResponse, SummaryResponseSchema } from "@itell/core/summary";
 import { TEXTBOOK_NAME } from "./constants";
+
+// for returning something when AI feedback is not enabled
+export const createEmptyScore = (): SummaryResponse => ({
+	included_keyphrases: [],
+	suggested_keyphrases: [],
+	content: -1,
+	wording: -1,
+	similarity: -1,
+	containment: -1,
+});
 
 export const getScore = async ({
 	input,

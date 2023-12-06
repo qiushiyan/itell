@@ -1,8 +1,8 @@
 export enum ScoreType {
-	content = "content",
-	wording = "wording",
-	similarity = "topic similarity",
-	containment = "topic borrowing",
+	content = "Content",
+	wording = "Wording",
+	similarity = "Topic Similarity",
+	containment = "Topic Borrowing",
 }
 
 export const ScoreThreshold: Record<ScoreType, number> = {

@@ -13,9 +13,11 @@ type Props = {
 	isPageMasked: boolean;
 	selectedQuestions: Map<number, Question>;
 	chapter: number;
+	isFeedbackEnabled: boolean;
 };
 
 export const QuestionControl = ({
+	isFeedbackEnabled,
 	isPageMasked,
 	selectedQuestions,
 	chapter,
@@ -84,6 +86,7 @@ export const QuestionControl = ({
 		addNode(
 			createPortal(
 				<QuestionBox
+					isFeedbackEnabled={isFeedbackEnabled}
 					isPageMasked={isPageMasked}
 					question={q.question}
 					answer={q.answer}

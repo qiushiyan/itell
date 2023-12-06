@@ -89,10 +89,6 @@ export const useFocusTime = ({ onEvent, saveInterval, chunks }: Props) => {
 		}
 	};
 
-	const onBlur = () => {
-		pause();
-	};
-
 	const onVisibilityChange = () => {
 		if (document.hidden) {
 			pause();

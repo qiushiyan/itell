@@ -28,22 +28,4 @@ export const userRouter = router({
 				data: input,
 			});
 		}),
-
-	incrementChapter: protectedProcedure
-		.input(
-			z.object({
-				chapter: z.number(),
-			}),
-		)
-		.mutation(async ({ ctx, input }) => {
-			const { id } = ctx.user;
-			return await ctx.prisma.user.update({
-				where: {
-					id,
-				},
-				data: {
-					chapter: input.chapter + 1,
-				},
-			});
-		}),
 });

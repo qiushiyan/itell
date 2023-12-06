@@ -1,7 +1,7 @@
 import db from "./db";
 import { env } from "@/env.mjs";
 import { TEXTBOOK_NAME } from "./constants";
-import { QAScoreSchema } from "@/trpc/schema";
+import { QAScoreSchema } from "@itell/core/qa";
 
 // async function to get QA scores from scoring API
 export const getQAScore = async ({

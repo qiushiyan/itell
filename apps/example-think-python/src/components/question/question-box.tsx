@@ -28,6 +28,7 @@ import { createConstructedResponse } from "@/lib/server-actions";
 import { TextArea } from "@/components/client-components";
 import { NextChunkButton } from "./next-chunk-button";
 import { isProduction } from "@/lib/constants";
+import { isChapterWithFeedback } from "@/lib/chapter";
 
 type Props = {
 	isPageMasked: boolean;
@@ -35,6 +36,7 @@ type Props = {
 	answer: string;
 	chapter: number;
 	subsection: number;
+	isFeedbackEnabled: boolean;
 };
 
 // state for answer correctness
@@ -59,6 +61,7 @@ export const QuestionBox = ({
 	subsection,
 	answer,
 	isPageMasked,
+	isFeedbackEnabled,
 }: Props) => {
 	const { data: session } = useSession();
 	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
@@ -124,10 +127,12 @@ export const QuestionBox = ({
 	const handleSubmit = async () => {
 		if (answerInput.trim() === "") {
 			return toast.warning("Please enter an answer to move forward");
-		} else {
-			// Spinner animation when loading
-			setIsLoading(true);
-			try {
+		}
+		// Spinner animation when loading
+		setIsLoading(true);
+		try {
+			let score: number;
+			if (isFeedbackEnabled) {
 				const response = await getQAScore({
 					input: answerInput,
 					chapter: String(chapter),
@@ -143,35 +148,37 @@ export const QuestionBox = ({
 				}
 
 				const result = response.data;
+				score = result.score;
 
-				if (result.score === 2) {
+				if (score === 2) {
 					passed();
-				} else if (result.score === 1) {
+				} else if (score === 1) {
 					semiPassed();
 				} else {
 					failed();
 				}
-				if (session?.user && isProduction) {
-					// when there is no session, question won't be displayed
-					await createConstructedResponse({
-						response: answerInput,
-						chapter: chapter,
-						subsection: subsection,
-						score: result.score,
-						user: {
-							connect: {
-								id: session.user.id,
-							},
-						},
-					});
-				}
-			} catch (err) {
-				return toast.error(
-					"Question evaluation failed, please try again later",
-				);
-			} finally {
-				setIsLoading(false);
+			} else {
+				passed();
+				score = -1;
 			}
+			if (session?.user && isProduction) {
+				// when there is no session, question won't be displayed
+				await createConstructedResponse({
+					response: answerInput,
+					chapter: chapter,
+					subsection: subsection,
+					score,
+					user: {
+						connect: {
+							id: session.user.id,
+						},
+					},
+				});
+			}
+		} catch (err) {
+			return toast.error("Question evaluation failed, please try again later");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -239,14 +246,16 @@ export const QuestionBox = ({
 					{answerStatus === AnswerStatus.BOTH_CORRECT ? (
 						<div className="flex items-center flex-col">
 							<p className="text-xl2 text-emerald-600 text-center">
-								Your answer was CORRECT!
+								Your answer was {isFeedbackEnabled ? "Correct" : "Accepted"}!
 							</p>
-							<p className="text-sm">
-								Click on the button below to continue reading. Please use the
-								thumbs-up or thumbs-down icons on the top right side of this box
-								if you have any feedback about this question that you would like
-								to provide before you continue reading.
-							</p>
+							{isPageMasked && (
+								<p className="text-sm">
+									Click on the button below to continue reading. Please use the
+									thumbs-up or thumbs-down icons on the top right side of this
+									box if you have any feedback about this question that you
+									would like to provide before you continue reading.
+								</p>
+							)}
 						</div>
 					) : (
 						question && (

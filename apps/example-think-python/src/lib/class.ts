@@ -1,4 +1,8 @@
+"use server";
+
+import { cookies } from "next/headers";
 import db from "./db";
+import { ClassSettingsSchema } from "./zod";
 
 export const getTeacherWithClassId = async (
 	classId: string | null | undefined,
@@ -28,7 +32,7 @@ export const getTeacherWithClassId = async (
 	return user;
 };
 
-export const updateUserWithClassId = async ({
+export const updateUserClassId = async ({
 	userId,
 	classId,
 }: {
@@ -43,4 +47,18 @@ export const updateUserWithClassId = async ({
 			classId,
 		},
 	});
+};
+
+export const readClassSettings = () => {
+	const data = cookies().get("class_settings");
+	if (data) {
+		const parsed = ClassSettingsSchema.safeParse(JSON.parse(data.value));
+		if (parsed.success) {
+			return parsed.data;
+		}
+	}
+};
+
+export const deleteClassSettings = () => {
+	cookies().delete("class_settings");
 };

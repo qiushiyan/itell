@@ -20,7 +20,6 @@ export const SummaryCount = async ({ chapter }: { chapter: number }) => {
 			chapter: chapter,
 		},
 	});
-	// console.log(summaryByPassing);
 	const passedSummaryCount =
 		summaryByPassing.find((item) => item.isPassed)?._count.isPassed || 0;
 	const failedSummaryCount =

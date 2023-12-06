@@ -16,6 +16,9 @@
             "suspicious": {
                 "noArrayIndexKey": "warn",
                 "noExplicitAny": "warn"
+            },
+            "style": {
+                "noUselessElse": "warn"
             }
         }
     },

@@ -1,11 +1,13 @@
-import { TextbookPageModal } from "@/components/textbook-page-modal";
-import SummaryEditor from "@/components/dashboard/summary-editor";
 import SummaryOperations from "@/components/dashboard/summary-operations";
 import { ScoreBadge } from "@/components/score/badge";
 import { SummaryBackButton } from "@/components/summary/summary-back-button";
 import { getCurrentUser } from "@/lib/auth";
-import { allChaptersSorted } from "@/lib/chapters";
-import { DEFAULT_TIME_ZONE, ScoreType } from "@/lib/constants";
+import { allChaptersSorted, isLastChapter } from "@/lib/chapters";
+import {
+	DEFAULT_TIME_ZONE,
+	PAGE_SUMMARY_THRESHOLD,
+	ScoreType,
+} from "@/lib/constants";
 import db from "@/lib/db";
 import { getUser } from "@/lib/user";
 import { cn, relativeDate } from "@itell/core/utils";
@@ -14,6 +16,22 @@ import { Summary, User } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { makeChapterHref } from "@/lib/utils";
+import {
+	ErrorType,
+	SummaryFormState,
+	getFeedback,
+	simpleFeedback,
+	validateSummary,
+} from "@itell/core/summary";
+import { getScore } from "@/lib/score";
+import { isChapterWithFeedback } from "@/lib/chapter";
+import {
+	getUserChapterSummaryCount,
+	incrementUserChapter,
+	updateSummary,
+} from "@/lib/server-actions";
+import { SummaryForm } from "@/components/summary/summary-form";
+import { revalidatePath } from "next/cache";
 
 async function getSummaryForUser(summaryId: Summary["id"], userId: User["id"]) {
 	return await db.summary.findFirst({
@@ -35,7 +53,12 @@ export default async function ({ params }: PageProps) {
 	if (!currentUser) {
 		return redirect("/auth");
 	}
-	const summary = await getSummaryForUser(params.id, currentUser.id);
+	const user = await getUser(currentUser.id);
+
+	if (!user) {
+		return notFound();
+	}
+	const summary = await getSummaryForUser(params.id, user.id);
 
 	if (!summary) {
 		return notFound();
@@ -45,8 +68,78 @@ export default async function ({ params }: PageProps) {
 	if (!chapter) {
 		return notFound();
 	}
+	const isFeedbackEnabled = isChapterWithFeedback(chapter.chapter);
 
-	const user = (await getUser(currentUser.id)) as User;
+	const onSubmit = async (
+		prevState: SummaryFormState,
+		formData: FormData,
+	): Promise<SummaryFormState> => {
+		"use server";
+		const input = formData.get("input") as string;
+
+		const error = await validateSummary(input);
+		if (error) {
+			return { error, canProceed: false, response: null, feedback: null };
+		}
+		const response = await getScore({ input, chapter: chapter.chapter });
+
+		if (!response.success) {
+			return {
+				// response parsing error
+				error: ErrorType.INTERNAL,
+				canProceed: false,
+				response: null,
+				feedback: null,
+			};
+		}
+
+		const feedback = isFeedbackEnabled
+			? getFeedback(response.data)
+			: simpleFeedback();
+
+		await updateSummary(params.id, {
+			text: input,
+			isPassed: feedback.isPassed,
+			containmentScore: response.data.containment,
+			similarityScore: response.data.similarity,
+			wordingScore: response.data.wording,
+			contentScore: response.data.content,
+		});
+
+		revalidatePath(`/summary/${params.id}`);
+
+		if (feedback.isPassed) {
+			await incrementUserChapter(user.id, chapter.chapter);
+
+			return {
+				canProceed: !isLastChapter(chapter.chapter),
+				response: response.data,
+				feedback,
+				error: null,
+			};
+		}
+
+		const summaryCount = await getUserChapterSummaryCount(
+			user.id,
+			chapter.chapter,
+		);
+		if (summaryCount >= PAGE_SUMMARY_THRESHOLD) {
+			await incrementUserChapter(user.id, chapter.chapter);
+			return {
+				canProceed: !isLastChapter(chapter.chapter),
+				response: response.data,
+				feedback,
+				error: null,
+			};
+		}
+
+		return {
+			canProceed: false,
+			response: null,
+			feedback,
+			error: null,
+		};
+	};
 
 	return (
 		<div className="px-32 py-4">
@@ -70,9 +163,7 @@ export default async function ({ params }: PageProps) {
 						</Badge>
 					</div>
 					<p className="tracking-tight text-sm text-muted-foreground">
-						Revise your summary here. After getting a new score, you can choose
-						to update the old summary. Click on the title the review this
-						section's content.
+						Revise your summary here.
 					</p>
 					<div className="flex flex-col gap-2">
 						<ScoreBadge
@@ -87,21 +178,26 @@ export default async function ({ params }: PageProps) {
 						<ScoreBadge type={ScoreType.content} score={summary.contentScore} />
 					</div>
 				</aside>
-				<div className="space-y-2 text-center">
+				<div className="space-y-2">
 					<Link
 						href={makeChapterHref(chapter.chapter)}
 						className={cn(
 							buttonVariants({ variant: "link" }),
-							"text-xl font-semibold",
+							"block text-xl font-semibold text-center underline",
 						)}
 					>
 						{chapter.title}
 					</Link>
-					<p className="text-sm text-muted-foreground">
+					<p className="text-sm text-muted-foreground text-center">
 						{`Last updated at ${relativeDate(summary.updated_at)}`}
 					</p>
 					<div className="max-w-2xl mx-auto">
-						<SummaryEditor published summary={summary} />
+						<SummaryForm
+							isFeedbackEnabled={isFeedbackEnabled}
+							chapter={chapter.chapter}
+							onSubmit={onSubmit}
+							textareaClassName="min-h-[400px]"
+						/>
 					</div>
 				</div>
 			</div>

@@ -1,5 +1,4 @@
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import SummaryCreateButton from "@/components/dashboard/summary-create-button";
 import { SummaryList } from "@/components/dashboard/summary-list";
 import { DashboardShell } from "@/components/shell";
 import { getCurrentUser } from "@/lib/auth";
@@ -39,9 +38,7 @@ export default async function ({ searchParams }: PageProps) {
 
 	return (
 		<DashboardShell>
-			<DashboardHeader heading="Summary" text="Create and manage summaries.">
-				<SummaryCreateButton />
-			</DashboardHeader>
+			<DashboardHeader heading="Summary" text="Create and manage summaries" />
 			<ChapterSelect defaultChapter={queryChapter} />
 			<div className="p-2 space-y-4">
 				{userSummaries.length === 0 ? (

@@ -20,6 +20,8 @@ import { NoteCount } from "@/components/note/note-count";
 import { PageStatus } from "@/components/page-status/page-status";
 import { EventTracker } from "@/components/telemetry/event-tracker";
 import { isProduction } from "@/lib/constants";
+import { readClassSettings } from "@/lib/class";
+import { isChapterWithFeedback } from "@/lib/chapter";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +40,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 	const sessionUser = await getCurrentUser();
 	const user = sessionUser ? await getUser(sessionUser.id) : null;
 
+	const isFeedbackEnabled = isChapterWithFeedback(chapter.chapter);
 	// get subsections
 	let questions: Awaited<ReturnType<typeof getPageQuestions>> = [];
 	const pageId = `${String(chapter.chapter).padStart(2, "0")}`;
@@ -138,6 +141,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 
 			{chapter.qa && (
 				<QuestionControl
+					isFeedbackEnabled={isFeedbackEnabled}
 					isPageMasked={isPageMasked}
 					selectedQuestions={selectedQuestions}
 					chapter={chapter.chapter}

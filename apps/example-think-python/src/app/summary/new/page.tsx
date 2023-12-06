@@ -1,4 +1,3 @@
-import NewSummary from "@/components/dashboard/new-summary";
 import { SummaryBackButton } from "@/components/summary/summary-back-button";
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -14,7 +13,6 @@ export default async function () {
 			<div className="flex justify-start">
 				<SummaryBackButton />
 			</div>
-			<NewSummary />
 		</div>
 	);
 }
