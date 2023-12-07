@@ -2,10 +2,12 @@ import { getCellCodes, readScript } from "@/lib/exercise";
 import { Errorbox } from "@itell/ui/server";
 import { CellGroup } from "./cell-group";
 import { CellMode } from "./types";
+import React from "react";
 
 type Props =
 	| { code: string; mode?: CellMode }
 	| { script: string; mode?: CellMode }
+	| { children: React.ReactNode; mode?: CellMode }
 	| undefined;
 
 export const Notebook = async (props: Props) => {
@@ -23,6 +25,12 @@ export const Notebook = async (props: Props) => {
 				return <Errorbox>failed to read script {props.script}</Errorbox>;
 			}
 			code = result.trimEnd();
+		} else if (props.children) {
+			code = React.Children.toArray(props.children)
+				// @ts-ignore
+				.map((item) => item.props.children)
+				.join("\n");
+			console.log(code);
 		}
 		codes = getCellCodes(code);
 	}
