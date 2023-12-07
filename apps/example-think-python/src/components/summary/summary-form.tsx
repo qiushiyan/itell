@@ -2,7 +2,6 @@
 
 import { Warning } from "@itell/ui/server";
 import { SummaryFeedback } from "./summary-feedback";
-import ConfettiExplosion from "react-confetti-explosion";
 import { PAGE_SUMMARY_THRESHOLD } from "@/lib/constants";
 import { ErrorFeedback, SummaryFormState } from "@itell/core/summary";
 import { SummaryInput } from "./summary-input";
@@ -11,6 +10,7 @@ import { SummarySubmitButton } from "./summary-submit-button";
 import { SummaryProceedModal } from "./summary-proceed-modal";
 import pluralize from "pluralize";
 import { makeInputKey } from "@/lib/utils";
+import { Confetti } from "../ui/confetti";
 
 type Props = {
 	isFeedbackEnabled: boolean;
@@ -40,9 +40,7 @@ export const SummaryForm = ({
 	return (
 		<>
 			{formState.feedback && <SummaryFeedback feedback={formState.feedback} />}
-			{formState.feedback?.isPassed && (
-				<ConfettiExplosion width={window.innerWidth} />
-			)}
+			<Confetti active={formState.feedback?.isPassed || false} />
 			<form
 				className="mt-2 space-y-4"
 				action={(payload) => {

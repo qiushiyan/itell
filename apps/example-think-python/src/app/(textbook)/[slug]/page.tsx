@@ -122,7 +122,7 @@ export default async function ({ params }: { params: { slug: string } }) {
 									  : "locked"
 							}
 						/>
-						<NoteCount />
+						{user && <NoteCount user={user} chapter={chapter.chapter} />}
 					</div>
 				</div>
 				<Suspense

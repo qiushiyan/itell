@@ -3,7 +3,6 @@ import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
 import { Highlight } from "./highlight";
 import { NewNoteList } from "./new-note-list";
-import { NoteCount, SetNoteCount } from "./note-count";
 
 export const NoteList = async ({ chapter }: { chapter: number }) => {
 	const user = await getCurrentUser();
@@ -25,7 +24,7 @@ export const NoteList = async ({ chapter }: { chapter: number }) => {
 	return (
 		<div>
 			{notes.map((note) => (
-				// @ts-ignore noteTdext will not be null
+				// @ts-ignore noteText will not be null
 				<NoteCard
 					key={note.id}
 					{...note}
@@ -37,12 +36,7 @@ export const NoteList = async ({ chapter }: { chapter: number }) => {
 			{highlights.map((highlight) => (
 				<Highlight key={highlight.id} {...highlight} />
 			))}
-			<div className="mt-8">
-				{/* for rendering notes that are newly created */}
-				<SetNoteCount
-					count={{ note: notes.length, highlight: highlights.length }}
-				/>
-			</div>
+			{/* for rendering notes that are newly created */}
 			<NewNoteList chapter={chapter} />
 		</div>
 	);

@@ -16,6 +16,8 @@ import { useSession } from "next-auth/react";
 import { createHighlightListeners, deleteHighlightListener } from "@/lib/note";
 import { useNotesStore } from "@/lib/store";
 import { createNoteElements, serializeRange } from "@itell/core/note";
+import { revalidatePath } from "next/cache";
+import { createNote } from "@/lib/server-actions";
 
 type SelectionData = ReturnType<typeof useTextSelection>;
 
@@ -23,10 +25,8 @@ export const NoteToolbar = ({ chapter }: { chapter: number }) => {
 	const [show, setShow] = useState(true);
 	const [target, setTarget] = useState<HTMLElement | null>(null);
 	const noteColor = useNoteColor();
-	const { createNote, incrementHighlightCount, incrementNoteCount } =
-		useNotesStore();
-	const createHighlight = trpc.note.create.useMutation();
 	const { data: session } = useSession();
+	const { createNote: createContextNote } = useNotesStore();
 
 	const handleClick = (event: Event) => {
 		if (event.target instanceof HTMLElement) {
@@ -73,15 +73,13 @@ export const NoteToolbar = ({ chapter }: { chapter: number }) => {
 						color: noteColor,
 					});
 
-					createNote({
+					createContextNote({
 						id,
 						y: clientRect.y + window.scrollY,
 						highlightedText: textContent,
 						color: noteColor,
 						serializedRange,
 					});
-
-					incrementNoteCount();
 				} else {
 					toast.warning("Please select some text to take a note");
 				}
@@ -114,19 +112,22 @@ export const NoteToolbar = ({ chapter }: { chapter: number }) => {
 						selection?.removeAllRanges();
 					}
 
-					await createHighlight.mutateAsync({
-						id: id,
+					await createNote({
+						id,
 						y: clientRect.y + window.scrollY,
 						highlightedText: textContent,
 						chapter,
 						color: defaultHighlightColor,
 						range: serializedRange,
+						user: {
+							connect: {
+								id: session?.user?.id as string,
+							},
+						},
 					});
 
-					incrementHighlightCount();
 					createHighlightListeners(id, (event) => {
 						deleteHighlightListener(event);
-						incrementHighlightCount(-1);
 					});
 				} else {
 					toast.warning("Please select some text to take a note");

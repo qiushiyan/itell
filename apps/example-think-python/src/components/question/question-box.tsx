@@ -8,9 +8,8 @@ import {
 	CardHeader,
 	Warning,
 } from "@itell/ui/server";
-import { AlertTriangle, ThumbsDown, ThumbsUp } from "lucide-react";
-import { useState } from "react";
-import ConfettiExplosion from "react-confetti-explosion";
+import { AlertTriangle } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Spinner } from "../spinner";
 import { getQAScore } from "@/lib/question";
 import { FeedbackModal } from "./feedback-modal";
@@ -28,7 +27,10 @@ import { createConstructedResponse } from "@/lib/server-actions";
 import { TextArea } from "@/components/client-components";
 import { NextChunkButton } from "./next-chunk-button";
 import { isProduction } from "@/lib/constants";
-import { isChapterWithFeedback } from "@/lib/chapter";
+import { useFormState, useFormStatus } from "react-dom";
+import { Confetti } from "../ui/confetti";
+
+type QuestionScore = 0 | 1 | 2;
 
 type Props = {
 	isPageMasked: boolean;
@@ -55,6 +57,22 @@ enum BorderColor {
 	YELLOW = "border-yellow-400",
 }
 
+type FormState = {
+	answerStatus: AnswerStatus;
+	error: string | null;
+};
+
+const SubmitButton = ({ answerStatus }: { answerStatus: AnswerStatus }) => {
+	const { pending } = useFormStatus();
+
+	return (
+		<Button variant="secondary" disabled={pending}>
+			{pending && <Spinner className="inline mr-2" />}
+			{answerStatus === AnswerStatus.UNANSWERED ? "Submit" : "Resubmit"}
+		</Button>
+	);
+};
+
 export const QuestionBox = ({
 	question,
 	chapter,
@@ -64,42 +82,9 @@ export const QuestionBox = ({
 	isFeedbackEnabled,
 }: Props) => {
 	const { data: session } = useSession();
-	const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 	const [isShaking, setIsShaking] = useState(false);
-	const [answerStatus, setAnswerStatus] = useState(AnswerStatus.UNANSWERED);
-	const [borderColor, setBorderColor] = useState(BorderColor.BLUE);
-	// If QA passed
-	const [isCelebrating, setIsCelebrating] = useState(false);
-	// Handle spinner animation when loading
-	const [isLoading, setIsLoading] = useState(false);
-	// Check if feedback is positive or negative
-	const [isPositiveFeedback, setIsPositiveFeedback] = useState(false);
-	// QA input
-	const [answerInput, setAnswerInput] = useState("");
-	// Next chunk button display
-	const [isDisplayNextButton, setIsDisplayNextButton] = useState(isPageMasked);
-
-	const positiveModal = () => {
-		setIsPositiveFeedback(true);
-		setIsFeedbackModalOpen(true);
-	};
-
-	// When negative review is clicked
-	const negativeModal = () => {
-		setIsPositiveFeedback(false);
-		setIsFeedbackModalOpen(true);
-	};
-
-	const passed = () => {
-		setAnswerStatus(AnswerStatus.BOTH_CORRECT);
-		setBorderColor(BorderColor.GREEN);
-		setIsCelebrating(true);
-
-		// Stop the confettis after a short delay
-		setTimeout(() => {
-			setIsCelebrating(false);
-		}, 750);
-	};
+	const [isNextButtonDisplayed, setIsNextButtonDisplayed] =
+		useState(isPageMasked);
 
 	// Function to trigger the shake animation
 	const shakeModal = () => {
@@ -111,63 +96,32 @@ export const QuestionBox = ({
 		}, 400);
 	};
 
-	// Semi-celebrate when response is 1
-	const semiPassed = () => {
-		setBorderColor(BorderColor.YELLOW);
-		setAnswerStatus(AnswerStatus.SEMI_CORRECT);
-	};
-
-	// Failed = response is 0
-	const failed = () => {
-		shakeModal();
-		setBorderColor(BorderColor.RED);
-		setAnswerStatus(AnswerStatus.BOTH_INCORRECT);
-	};
-
-	const handleSubmit = async () => {
-		if (answerInput.trim() === "") {
-			return toast.warning("Please enter an answer to move forward");
+	const action = async (
+		prevState: FormState,
+		formData: FormData,
+	): Promise<FormState> => {
+		const input = formData.get("input") as string;
+		if (input.trim() === "") {
+			return {
+				...prevState,
+				error: "Please enter an non-empty answer",
+			};
 		}
-		// Spinner animation when loading
-		setIsLoading(true);
-		try {
-			let score: number;
-			if (isFeedbackEnabled) {
-				const response = await getQAScore({
-					input: answerInput,
-					chapter: String(chapter),
-					subsection: String(subsection),
-				});
 
-				if (!response.success) {
-					// API response is not in correct shape
-					console.error("API Response error", response);
-					return toast.error(
-						"Answer evaluation failed, please try again later",
-					);
-				}
+		if (!session) {
+			return {
+				...prevState,
+				error: "You must be logged in to submit an answer",
+			};
+		}
 
-				const result = response.data;
-				score = result.score;
-
-				if (score === 2) {
-					passed();
-				} else if (score === 1) {
-					semiPassed();
-				} else {
-					failed();
-				}
-			} else {
-				passed();
-				score = -1;
-			}
-			if (session?.user && isProduction) {
-				// when there is no session, question won't be displayed
+		if (!isFeedbackEnabled) {
+			if (isProduction) {
 				await createConstructedResponse({
-					response: answerInput,
+					response: input,
 					chapter: chapter,
 					subsection: subsection,
-					score,
+					score: -1,
 					user: {
 						connect: {
 							id: session.user.id,
@@ -175,12 +129,99 @@ export const QuestionBox = ({
 					},
 				});
 			}
-		} catch (err) {
-			return toast.error("Question evaluation failed, please try again later");
-		} finally {
-			setIsLoading(false);
+
+			return {
+				answerStatus: AnswerStatus.BOTH_CORRECT,
+				error: null,
+			};
 		}
+
+		const response = await getQAScore({
+			input,
+			chapter: String(chapter),
+			subsection: String(subsection),
+		});
+
+		if (!response.success) {
+			// API response is not in correct shape
+			console.error("API Response error", response);
+			return {
+				...prevState,
+				error: "Answer evaluation failed, please try again later",
+			};
+		}
+
+		const score = response.data.score as QuestionScore;
+		if (isProduction) {
+			// when there is no session, question won't be displayed
+			await createConstructedResponse({
+				response: input,
+				chapter: chapter,
+				subsection: subsection,
+				score,
+				user: {
+					connect: {
+						id: session.user.id,
+					},
+				},
+			});
+		}
+
+		if (score === 2) {
+			return {
+				error: null,
+				answerStatus: AnswerStatus.BOTH_CORRECT,
+			};
+		}
+
+		if (score === 1) {
+			return {
+				error: null,
+				answerStatus: AnswerStatus.SEMI_CORRECT,
+			};
+		}
+
+		if (score === 0) {
+			return {
+				error: null,
+				answerStatus: AnswerStatus.BOTH_INCORRECT,
+			};
+		}
+
+		// for typing purposes, this should never run
+		return prevState;
 	};
+
+	const initialFormState: FormState = {
+		answerStatus: AnswerStatus.UNANSWERED,
+		error: null,
+	};
+
+	const [formState, formAction] = useFormState(action, initialFormState);
+	const answerStatus = formState.answerStatus;
+
+	const borderColor =
+		formState.answerStatus === AnswerStatus.UNANSWERED
+			? BorderColor.BLUE
+			: formState.answerStatus === AnswerStatus.BOTH_CORRECT
+			  ? BorderColor.GREEN
+			  : formState.answerStatus === AnswerStatus.SEMI_CORRECT
+				  ? BorderColor.YELLOW
+				  : BorderColor.RED;
+
+	useEffect(() => {
+		if (formState.error) {
+			toast.warning(formState.error);
+		}
+
+		if (formState.answerStatus === AnswerStatus.BOTH_CORRECT) {
+			setIsNextButtonDisplayed(true);
+		}
+
+		if (formState.answerStatus === AnswerStatus.BOTH_INCORRECT) {
+			shakeModal();
+		}
+	}, [formState]);
 
 	if (!session?.user) {
 		return (
@@ -199,7 +240,7 @@ export const QuestionBox = ({
 					`${isShaking ? "shake" : ""}`,
 				)}
 			>
-				{isCelebrating && <ConfettiExplosion width={window.innerWidth} />}
+				<Confetti active={answerStatus === AnswerStatus.BOTH_CORRECT} />
 
 				<CardHeader className="flex flex-row justify-center items-baseline w-full p-2 gap-1">
 					<CardDescription className="flex justify-center items-center font-light text-zinc-500 w-10/12 mr-4 text-xs">
@@ -209,13 +250,13 @@ export const QuestionBox = ({
 						make mistakes. Let us know how you feel about iTELL AI's performance
 						using the feedback icons to the right (thumbs up or thumbs down).{" "}
 					</CardDescription>
-					<ThumbsUp
-						className="hover:stroke-emerald-400 hover:cursor-pointer w-4 h-4"
-						onClick={positiveModal}
-					/>{" "}
-					<ThumbsDown
-						className="hover:stroke-rose-700 hover:cursor-pointer w-4 h-4"
-						onClick={negativeModal}
+					<FeedbackModal
+						type="positive"
+						pageSlug={`${chapter}-${subsection}`}
+					/>
+					<FeedbackModal
+						type="negative"
+						pageSlug={`${chapter}-${subsection}`}
 					/>
 				</CardHeader>
 
@@ -265,12 +306,11 @@ export const QuestionBox = ({
 						)
 					)}
 
-					{answerStatus !== AnswerStatus.BOTH_CORRECT && (
+					<form action={formAction} className="w-full space-y-2">
 						<TextArea
+							name="input"
 							rows={2}
-							className="rounded-md shadow-md  p-4"
-							value={answerInput}
-							onValueChange={setAnswerInput}
+							className="max-w-lg mx-auto rounded-md shadow-md p-4"
 							onPaste={(e) => {
 								if (isProduction) {
 									e.preventDefault();
@@ -278,65 +318,49 @@ export const QuestionBox = ({
 								}
 							}}
 						/>
-					)}
-
-					<div className="flex flex-col sm:flex-row justify-center items-center gap-2">
-						{answerStatus !== AnswerStatus.UNANSWERED && (
-							<HoverCard>
-								<HoverCardTrigger asChild>
-									<Button variant="secondary">Reveal Answer</Button>
-								</HoverCardTrigger>
-								<HoverCardContent className="w-80">
-									<p className="leading-relaxed">{answer}</p>
-								</HoverCardContent>
-							</HoverCard>
-						)}
-						{answerStatus === AnswerStatus.BOTH_CORRECT &&
-						isDisplayNextButton ? (
-							<NextChunkButton
-								clickEventType="post-question chunk reveal"
-								onClick={() => setIsDisplayNextButton(false)}
-							>
-								Click Here to Continue Reading
-							</NextChunkButton>
-						) : (
-							<>
-								{answerStatus !== AnswerStatus.BOTH_CORRECT && (
-									<Button
-										variant={"secondary"}
-										onClick={handleSubmit}
-										disabled={isLoading}
-									>
-										{isLoading && <Spinner className="inline mr-2" />}
-										{answerStatus === AnswerStatus.UNANSWERED
-											? "Submit"
-											: "Resubmit"}
-									</Button>
-								)}
-
-								{answerStatus !== AnswerStatus.UNANSWERED &&
-									isDisplayNextButton && (
-										<NextChunkButton
-											clickEventType="post-question chunk reveal"
-											variant="ghost"
-											onClick={() => setIsDisplayNextButton(false)}
-										>
-											{answerStatus === AnswerStatus.SEMI_CORRECT
-												? "Continue Reading"
-												: "Skip this question"}
-										</NextChunkButton>
+						<div className="flex flex-col sm:flex-row justify-center items-center gap-2">
+							{answerStatus !== AnswerStatus.UNANSWERED && (
+								<HoverCard>
+									<HoverCardTrigger asChild>
+										<Button variant="secondary">Reveal Answer</Button>
+									</HoverCardTrigger>
+									<HoverCardContent className="w-80">
+										<p className="leading-relaxed">{answer}</p>
+									</HoverCardContent>
+								</HoverCard>
+							)}
+							{answerStatus === AnswerStatus.BOTH_CORRECT &&
+							isNextButtonDisplayed ? (
+								<NextChunkButton
+									clickEventType="post-question chunk reveal"
+									onClick={() => setIsNextButtonDisplayed(false)}
+								>
+									Click Here to Continue Reading
+								</NextChunkButton>
+							) : (
+								<>
+									{formState.answerStatus !== AnswerStatus.BOTH_CORRECT && (
+										<SubmitButton answerStatus={answerStatus} />
 									)}
-							</>
-						)}
-					</div>
+
+									{answerStatus !== AnswerStatus.UNANSWERED &&
+										isNextButtonDisplayed && (
+											<NextChunkButton
+												clickEventType="post-question chunk reveal"
+												variant="ghost"
+												onClick={() => setIsNextButtonDisplayed(false)}
+											>
+												{answerStatus === AnswerStatus.SEMI_CORRECT
+													? "Continue Reading"
+													: "Skip this question"}
+											</NextChunkButton>
+										)}
+								</>
+							)}
+						</div>
+					</form>
 				</CardContent>
 			</Card>
-			<FeedbackModal
-				open={isFeedbackModalOpen}
-				onOpenChange={setIsFeedbackModalOpen}
-				isPositive={isPositiveFeedback}
-				pageSlug={`${chapter}-${subsection}`}
-			/>
 		</>
 	);
 };

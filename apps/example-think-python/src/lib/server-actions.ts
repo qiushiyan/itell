@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import db from "./db";
 import { cookies } from "next/headers";
 import { isLastChapter } from "./chapters";
+import { revalidatePath } from "next/cache";
 
 export const deleteSummary = async (id: string) => {
 	return await db.summary.delete({
@@ -32,11 +33,12 @@ export const updateSummary = async (
 };
 
 export const deleteNote = async (id: string) => {
-	return await db.note.delete({
+	await db.note.delete({
 		where: {
 			id,
 		},
 	});
+	revalidatePath(".");
 };
 
 export const createConstructedResponse = async (
@@ -52,6 +54,18 @@ export const createConstructedResponseFeedback = async (
 ) => {
 	return await db.constructedResponseFeedback.create({
 		data: input,
+	});
+};
+
+export const updateUser = async (
+	userId: string,
+	data: Prisma.UserUpdateInput,
+) => {
+	return await db.user.update({
+		where: {
+			id: userId,
+		},
+		data,
 	});
 };
 
@@ -139,16 +153,21 @@ export const createFocusTime = async (input: Prisma.FocusTimeCreateInput) => {
 	});
 };
 
-export const updateUser = async (
-	userId: string,
-	data: Prisma.UserUpdateInput,
+export const createNote = async (
+	data: Prisma.NoteCreateInput,
+	revalidate = true,
 ) => {
-	return await db.user.update({
-		where: {
-			id: userId,
-		},
-		data,
-	});
+	await db.note.create({ data });
+
+	if (revalidate) {
+		revalidatePath(".");
+	}
+};
+
+export const updateNote = async (id: string, data: Prisma.NoteUpdateInput) => {
+	await db.note.update({ where: { id }, data });
+
+	revalidatePath(".");
 };
 
 export const setClassSettings = (classId: string) => {
