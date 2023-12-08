@@ -10,6 +10,7 @@ import {
 	XIcon,
 	SquareIcon,
 	HelpCircleIcon,
+	CircleEllipsisIcon,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@itell/core/utils";
@@ -17,6 +18,10 @@ import { useTheme } from "next-themes";
 import { PythonResult, baseExtensions, createShortcuts } from "./editor-config";
 import {
 	Button,
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
 	Select,
 	SelectContent,
 	SelectItem,
@@ -104,82 +109,88 @@ export const Cell = memo(
 			drive();
 		};
 
-		const cancel = async () => {
-			// do not use interrupt buffer as it requires strict domain policy
-			// await interruptExecution();
-			// setIsCellRunning(false);
-		};
+		// const cancel = async () => {
+		// 	// do not use interrupt buffer as it requires strict domain policy
+		// 	await interruptExecution();
+		// 	setIsCellRunning(false);
+		// };
 
 		return (
 			<div
-				className={cn("cell shadow-md border relative group", {
+				className={cn("cell shadow-md border group", {
 					"border-info": status === "success",
 					"border-destructive": status === "error",
 					"animate-border-color": isCellRunning,
 				})}
 			>
-				<div className="absolute bottom-2 right-2 z-10">
-					<Select
-						value={cellMode}
-						onValueChange={(val) => setCellMode(val as CellMode)}
-					>
-						<SelectTrigger className="w-[90px]">
-							<SelectValue placeholder="Mode" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="script">Script</SelectItem>
-							<SelectItem value="repl">REPL</SelectItem>
-						</SelectContent>
-					</Select>
-				</div>
 				<div className="grid grid-cols-[40px_1fr] gap-4">
-					<div className="border-r flex flex-col gap-1">
-						<Button
-							size="sm"
-							variant="ghost"
-							disabled={isRunning}
-							onClick={async () => {
-								if (!isRunning) {
-									await run();
-								}
-							}}
-							{...register({
-								order: 2,
-								popover: {
-									title: "Run Code",
-									description:
-										"Click on this button to run your code in the editor",
-								},
-							})}
-						>
-							{isRunning ? (
-								<SquareIcon className="w-4 h-4" />
-							) : (
-								<PlayIcon className="w-4 h-4" />
-							)}
-						</Button>
-						<Button
-							size={"sm"}
-							variant={"ghost"}
-							onClick={reset}
-							{...register({
-								order: 3,
-								popover: {
-									title: "Reset Code",
-									description:
-										"Click on this button to reset your code in the editor",
-								},
-							})}
-						>
-							<RotateCcwIcon className="w-4 h-4" />
-						</Button>
-						<Button size={"sm"} variant={"ghost"} onClick={help}>
-							<HelpCircleIcon className="w-4 h-4" />
-						</Button>
+					<div className="border-r flex flex-col gap-1 justify-center">
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="ghost" className="p-0 h-full">
+									<CircleEllipsisIcon className="h-5 w-5" />
+									<span className="sr-only">Open</span>
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align="end" className="min-w-[20px] p-0">
+								<DropdownMenuItem>
+									<Button
+										size="sm"
+										variant="ghost"
+										disabled={isRunning}
+										onClick={async () => {
+											if (!isRunning) {
+												await run();
+											}
+										}}
+										{...register({
+											order: 2,
+											popover: {
+												title: "Run Code",
+												description:
+													"Click on this button to run your code in the editor",
+											},
+										})}
+									>
+										{isRunning ? (
+											<SquareIcon className="w-4 h-4 mr-2" />
+										) : (
+											<PlayIcon className="w-4 h-4 mr-2" />
+										)}
+										<span>Run</span>
+									</Button>
+								</DropdownMenuItem>
+								<DropdownMenuItem>
+									<Button
+										size={"sm"}
+										variant={"ghost"}
+										onClick={reset}
+										{...register({
+											order: 3,
+											popover: {
+												title: "Reset Code",
+												description:
+													"Click on this button to reset your code in the editor",
+											},
+										})}
+									>
+										<RotateCcwIcon className="w-4 h-4 mr-2" />
+										<span>Reset</span>
+									</Button>
+								</DropdownMenuItem>
+								<DropdownMenuItem>
+									<Button size={"sm"} variant={"ghost"} onClick={help}>
+										<HelpCircleIcon className="w-4 h-4 mr-2" />
+										<span>Help</span>
+									</Button>
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
 					</div>
 
 					<div>
 						<div
+							className="relative"
 							{...register({
 								order: 1,
 								popover: {
@@ -198,6 +209,20 @@ export const Cell = memo(
 								}}
 								ref={editorRef}
 							/>
+							<div className="absolute top-2 right-2 z-10">
+								<Select
+									value={cellMode}
+									onValueChange={(val) => setCellMode(val as CellMode)}
+								>
+									<SelectTrigger className="w-[90px]">
+										<SelectValue placeholder="Mode" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="script">Script</SelectItem>
+										<SelectItem value="repl">REPL</SelectItem>
+									</SelectContent>
+								</Select>
+							</div>
 						</div>
 
 						{result?.output && result.output !== "undefined" && (
