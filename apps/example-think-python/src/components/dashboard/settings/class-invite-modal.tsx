@@ -10,7 +10,17 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { setClassSettings, updateUserClassId } from "@/lib/server-actions";
-import { Button } from "@itell/ui/client";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	Button,
+} from "@itell/ui/client";
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -43,11 +53,11 @@ export const ClassInviteModal = ({ user, teacherToJoin, classId }: Props) => {
 	};
 
 	return (
-		<Dialog open={isOpen} onOpenChange={setIsOpen}>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Join a class</DialogTitle>
-					<DialogDescription>
+		<AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>Join a class</AlertDialogTitle>
+					<AlertDialogDescription>
 						{user.classId ? (
 							<p>
 								It looks like you are trying to join a class with class code{" "}
@@ -69,20 +79,22 @@ export const ClassInviteModal = ({ user, teacherToJoin, classId }: Props) => {
 								your teacher.
 							</p>
 						)}
-					</DialogDescription>
-				</DialogHeader>
-				<DialogFooter>
-					<Button onClick={() => setIsOpen(false)} variant="secondary">
-						Cancel
-					</Button>
+					</AlertDialogDescription>
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					<AlertDialogCancel>Cancel</AlertDialogCancel>
 					{canJoinClass && (
-						<Button onClick={joinClass} disabled={joinClassLoading}>
+						<AlertDialogAction
+							onClick={joinClass}
+							disabled={joinClassLoading}
+							className="bg-primary focus:ring-primary"
+						>
 							{joinClassLoading && <Spinner className="mr-2 inline" />}
 							Confirm
-						</Button>
+						</AlertDialogAction>
 					)}
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
 	);
 };
