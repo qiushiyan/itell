@@ -6,12 +6,12 @@ import { allChapters } from "contentlayer/generated";
 export const UserProgress = ({ user }: { user: User }) => {
 	const isBlankUser = user.chapter === 1;
 	const userIndex = allChaptersSorted.findIndex(
-		(chapter) => chapter.chapter === user.chapter,
+		(chapter) => chapter.chapter === user.chapter - 1,
 	);
 	const chaptersUnlocked = isBlankUser ? 0 : userIndex + 1;
 	const progress = isBlankUser
 		? 0
-		: ((userIndex + 1) / allChapters.length) * 100;
+		: (chaptersUnlocked / allChapters.length) * 100;
 
 	return (
 		<div className="flex items-center gap-4">
