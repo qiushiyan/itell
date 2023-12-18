@@ -1,6 +1,9 @@
 const { withContentlayer } = require("next-contentlayer");
+const {
+	withHydrationOverlay,
+} = require("@builder.io/react-hydration-overlay/next");
 
-module.exports = withContentlayer({
+const config = {
 	output: "standalone",
 	eslint: {
 		ignoreDuringBuilds: true,
@@ -25,7 +28,11 @@ module.exports = withContentlayer({
 			},
 		];
 	},
-});
+};
+
+module.exports = withContentlayer(
+	withHydrationOverlay({ appRootSelector: "main" })(config),
+);
 
 const securityHeaders = [
 	// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
