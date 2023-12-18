@@ -57,7 +57,7 @@ export const ClassInviteModal = ({ user, teacherToJoin, classId }: Props) => {
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Join a class</AlertDialogTitle>
-					<AlertDialogDescription>
+					<AlertDialogDescription asChild>
 						{user.classId ? (
 							<p>
 								It looks like you are trying to join a class with class code{" "}

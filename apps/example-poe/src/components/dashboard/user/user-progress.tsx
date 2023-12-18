@@ -3,12 +3,14 @@ import { allSectionsSorted } from "@/lib/sections";
 import { User } from "@prisma/client";
 
 export const UserProgress = ({ user }: { user: User }) => {
+	const isBlankUser = user.chapter === 1 && user.section === 1;
 	const usersIndex = allSectionsSorted.findIndex(
 		(section) =>
-			section.location.chapter === user.chapter &&
+			section.location.chapter === user.chapter - 1 &&
 			section.location.section === user.section,
 	);
-	const progress = ((usersIndex + 1) / allSectionsSorted.length) * 100;
+	const sectionsUnlocked = isBlankUser ? 0 : usersIndex + 1;
+	const progress = (sectionsUnlocked / allSectionsSorted.length) * 100;
 	return (
 		<div className="flex items-center gap-4">
 			<Progress value={progress} className="w-1/3" />

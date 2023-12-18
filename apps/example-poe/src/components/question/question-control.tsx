@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { QuestionBox } from "./question-box";
 import { SectionLocation } from "@/types/location";
 import { useQA } from "../context/qa-context";
@@ -101,6 +101,7 @@ export const QuestionControl = ({
 					chapter={location.chapter}
 					section={location.section}
 					subsection={index}
+					isPageMasked={isPageMasked}
 				/>,
 				questionContainer,
 			),

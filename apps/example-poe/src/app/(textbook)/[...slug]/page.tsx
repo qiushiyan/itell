@@ -139,7 +139,12 @@ export default async function ({ params }: { params: { slug: string[] } }) {
 									  : "locked"
 							}
 						/>
-						<NoteCount />
+						{user && (
+							<NoteCount
+								user={user}
+								location={section.location as SectionLocation}
+							/>
+						)}
 					</div>
 				</div>
 				<Suspense

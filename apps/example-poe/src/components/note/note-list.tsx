@@ -4,7 +4,6 @@ import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
 import { Highlight } from "./highlight";
 import { NewNoteList } from "./new-note-list";
-import { NoteCount, SetNoteCount } from "./note-count";
 
 export const NoteList = async ({ location }: { location: SectionLocation }) => {
 	const user = await getCurrentUser();
@@ -34,12 +33,6 @@ export const NoteList = async ({ location }: { location: SectionLocation }) => {
 			{highlights.map((highlight) => (
 				<Highlight key={highlight.y} {...highlight} />
 			))}
-			<div className="mt-8">
-				{/* for rendering notes that are newly created */}
-				<SetNoteCount
-					count={{ note: notes.length, highlight: highlights.length }}
-				/>
-			</div>
 			<NewNoteList location={location} />
 		</div>
 	);

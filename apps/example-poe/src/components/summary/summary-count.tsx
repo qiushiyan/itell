@@ -1,7 +1,7 @@
 import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
 import { SectionLocation } from "@/types/location";
-import { cn, groupby } from "@itell/core/utils";
+import { cn } from "@itell/core/utils";
 import { Skeleton, buttonVariants } from "@itell/ui/server";
 import Link from "next/link";
 import pluralize from "pluralize";
@@ -20,16 +20,20 @@ export const SummaryCount = async ({
 		},
 		where: {
 			userId: user.id,
+			module: location.module,
 			chapter: location.chapter,
 			section: location.section,
 		},
 	});
-	// console.log(summaryByPassing);
 	const passedSummaryCount =
 		summaryByPassing.find((item) => item.isPassed)?._count.isPassed || 0;
 	const failedSummaryCount =
 		summaryByPassing.find((item) => !item.isPassed)?._count.isPassed || 0;
 	const summaryCount = passedSummaryCount + failedSummaryCount;
+
+	if (!summaryCount) {
+		return null;
+	}
 
 	return (
 		<p className="text-sm">

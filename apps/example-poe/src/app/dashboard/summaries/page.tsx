@@ -55,9 +55,7 @@ export default async function () {
 
 	return (
 		<DashboardShell>
-			<DashboardHeader heading="Summary" text="Create and manage summaries.">
-				<SummaryCreateButton />
-			</DashboardHeader>
+			<DashboardHeader heading="Summary" text="Create and manage summaries." />
 			<SummaryList summariesByModule={summariesByModule} user={user as User} />
 		</DashboardShell>
 	);

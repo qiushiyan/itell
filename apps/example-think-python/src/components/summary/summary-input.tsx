@@ -6,6 +6,7 @@ import { isProduction } from "@/lib/constants";
 import { toast } from "sonner";
 import { cn, numOfWords } from "@itell/core/utils";
 import { makeInputKey } from "@/lib/utils";
+
 type Props = {
 	chapter: number;
 	textAreaClassName?: string;

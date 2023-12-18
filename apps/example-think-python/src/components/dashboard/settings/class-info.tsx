@@ -1,6 +1,5 @@
 import { User } from "@prisma/client";
 
-import { ClassRegister } from "./class-register";
 import { QuitClass } from "./quit-class";
 
 type Props = {

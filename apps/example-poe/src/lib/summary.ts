@@ -5,10 +5,14 @@ export interface Feedback {
 	isPassed: boolean;
 	prompt: string | null;
 }
+
+export type IndividualPrompt = { type: ScoreType; feedback: Feedback };
+
 export type SummaryFeedbackType = {
 	isPassed: boolean;
 	prompt: string;
-	individualPrompt: Record<ScoreType, Feedback>;
+	promptDetails: IndividualPrompt[] | null; // can be null when AI feedback is not enabled
+	suggestedKeyphrases: string[] | null;
 };
 
 export const containmentFeedback = (score: number): Feedback => {
@@ -122,11 +126,24 @@ export const getFeedback = (response: SummaryResponse): SummaryFeedbackType => {
 	return {
 		isPassed,
 		prompt,
-		individualPrompt: {
-			[ScoreType.wording]: wording,
-			[ScoreType.content]: content,
-			[ScoreType.containment]: containment,
-			[ScoreType.similarity]: similarity,
-		},
+		suggestedKeyphrases: response.suggested_keyphrases,
+		promptDetails: [
+			{
+				type: ScoreType.wording,
+				feedback: wording,
+			},
+			{
+				type: ScoreType.content,
+				feedback: content,
+			},
+			{
+				type: ScoreType.similarity,
+				feedback: similarity,
+			},
+			{
+				type: ScoreType.containment,
+				feedback: containment,
+			},
+		],
 	};
 };

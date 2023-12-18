@@ -24,17 +24,16 @@ export const incrementLocation = (location: SectionLocation) => {
 	if (nextSection) {
 		if (nextSection.summary) {
 			return nextSection.location;
-		} else {
-			// find the next section that requires a summary
-			const nextSectionWithSummary = allSectionsSorted
-				.slice(currentSectionIndex + 1)
-				.find((s) => s.summary);
-			if (nextSectionWithSummary) {
-				return nextSectionWithSummary.location;
-			} else {
-				return location;
-			}
 		}
+
+		// find the next section that requires a summary
+		const nextSectionWithSummary = allSectionsSorted
+			.slice(currentSectionIndex + 1)
+			.find((s) => s.summary);
+		if (nextSectionWithSummary) {
+			return nextSectionWithSummary.location;
+		}
+		return location;
 	}
 
 	return location;
@@ -53,4 +52,13 @@ export const isLocationAfter = (a: SectionLocation, b: SectionLocation) => {
 	);
 
 	return aIndex > bIndex;
+};
+
+export const isLastLocation = (location: SectionLocation) => {
+	const lastSection = allSectionsSorted[allSectionsSorted.length - 1];
+	return (
+		location.module === lastSection.location.module &&
+		location.chapter === lastSection.location.chapter &&
+		location.section === lastSection.location.section
+	);
 };

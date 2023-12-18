@@ -1,4 +1,3 @@
-import { getCurrentUser } from "@/lib/auth";
 import db from "@/lib/db";
 import { User } from "@prisma/client";
 import {

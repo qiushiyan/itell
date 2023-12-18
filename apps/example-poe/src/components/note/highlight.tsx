@@ -12,10 +12,6 @@ type Props = {
 };
 
 export const Highlight = ({ id, color, range }: Props) => {
-	const incrementHighlightCount = useNotesStore(
-		(store) => store.incrementHighlightCount,
-	);
-
 	useEffect(() => {
 		try {
 			createNoteElements({
@@ -24,10 +20,7 @@ export const Highlight = ({ id, color, range }: Props) => {
 				color,
 				isHighlight: true,
 			});
-			createHighlightListeners(id, (event) => {
-				deleteHighlightListener(event);
-				incrementHighlightCount(-1);
-			});
+			createHighlightListeners(id, deleteHighlightListener);
 		} catch (err) {
 			console.error("create highlight error", err);
 		}
