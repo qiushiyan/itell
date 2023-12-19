@@ -5,7 +5,6 @@ import { HighlighterIcon, CopyIcon, PencilIcon } from "lucide-react";
 import { Popover } from "react-text-selection-popover";
 import { toast } from "sonner";
 import { useTextSelection } from "use-text-selection";
-import { trpc } from "@/trpc/trpc-provider";
 import {
 	defaultHighlightColor,
 	useNoteColor,
@@ -17,7 +16,6 @@ import { createHighlightListeners, deleteHighlightListener } from "@/lib/note";
 import { useNotesStore } from "@/lib/store";
 import { createNoteElements, serializeRange } from "@itell/core/note";
 import { SectionLocation } from "@/types/location";
-import { Spinner } from "../spinner";
 import { createNote } from "@/lib/server-actions";
 
 type SelectionData = ReturnType<typeof useTextSelection>;

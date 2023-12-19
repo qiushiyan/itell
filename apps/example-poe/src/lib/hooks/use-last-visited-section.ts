@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "./utils";
 import { useLocalStorage } from "@itell/core/hooks";
 import { makeLocationHref } from "../utils";
-import { SectionLocationSchema } from "@/trpc/schema";
+import { SectionLocationSchema } from "../location";
 
 export const useTrackLastVisitedSection = () => {
 	const location = useLocation();

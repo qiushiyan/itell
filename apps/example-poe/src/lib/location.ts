@@ -1,5 +1,6 @@
 import { SectionLocation } from "@/types/location";
 import { allSectionsSorted } from "./sections";
+import { z } from "zod";
 
 export const incrementLocation = (location: SectionLocation) => {
 	const { module, chapter, section } = location;
@@ -62,3 +63,9 @@ export const isLastLocation = (location: SectionLocation) => {
 		location.section === lastSection.location.section
 	);
 };
+
+export const SectionLocationSchema = z.object({
+	module: z.number(),
+	chapter: z.number(),
+	section: z.number(),
+});

@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import type { SectionLocation } from "@/types/location";
 import { getLocationFromPathname } from "../utils";
-import { SectionLocationSchema } from "@/trpc/schema";
 import { useLocalStorage } from "@itell/core/hooks";
+import { SectionLocationSchema } from "../location";
 
 export const useLocation = () => {
 	const pathname = usePathname();

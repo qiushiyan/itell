@@ -19,7 +19,6 @@ import {
 	DropdownMenuTrigger,
 } from "@itell/ui/client";
 import { CircleEllipsisIcon, TrashIcon } from "lucide-react";
-import { trpc } from "@/trpc/trpc-provider";
 import { Spinner } from "../spinner";
 import Link from "next/link";
 import { makeLocationHref } from "@/lib/utils";
