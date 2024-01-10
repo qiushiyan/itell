@@ -5,7 +5,7 @@ import { CellMode } from "./types";
 import React from "react";
 
 type Props =
-	| { code: string; mode?: CellMode }
+	| { code: string | string[]; mode?: CellMode }
 	| { script: string; mode?: CellMode }
 	| { children: React.ReactNode; mode?: CellMode }
 	| undefined;
@@ -15,10 +15,14 @@ export const Notebook = async (props: Props) => {
 	let mode: CellMode = "script";
 	if (props) {
 		mode = props.mode || "script";
-		let code = "";
+		let code: string | string[] = "";
 		if ("code" in props) {
 			// append a new line if not present
-			code = props.code.endsWith("\n") ? props.code : `${props.code}\n`;
+			if (typeof props.code === "object") {
+				code = props.code;
+			} else {
+				code = props.code.endsWith("\n") ? props.code : `${props.code}\n`;
+			}
 		} else if ("script" in props) {
 			const result = await readScript(props.script);
 			if (!result) {
@@ -28,9 +32,7 @@ export const Notebook = async (props: Props) => {
 		} else if (props.children) {
 			code = React.Children.toArray(props.children)
 				// @ts-ignore
-				.map((item) => item.props.children)
-				.join("\n");
-			console.log(code);
+				.map((item) => item.props.children);
 		}
 		codes = getCellCodes(code);
 	}
