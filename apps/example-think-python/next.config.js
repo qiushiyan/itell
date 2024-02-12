@@ -1,7 +1,4 @@
 const { withContentlayer } = require("next-contentlayer");
-const {
-	withHydrationOverlay,
-} = require("@builder.io/react-hydration-overlay/next");
 
 const config = {
 	output: "standalone",
@@ -30,9 +27,7 @@ const config = {
 	},
 };
 
-module.exports = withContentlayer(
-	withHydrationOverlay({ appRootSelector: "main" })(config),
-);
+module.exports = withContentlayer(config);
 
 const securityHeaders = [
 	// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy

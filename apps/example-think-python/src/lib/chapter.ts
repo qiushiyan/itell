@@ -1,4 +1,3 @@
-import { allChaptersSorted } from "./chapters";
 import { readClassSettings } from "./class";
 
 export const isChapterUnlockedWithoutUser = (chapter: number) => {
